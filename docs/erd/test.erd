@@ -1,0 +1,183 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dineug/erd-editor/main/json-schema/schema.json",
+  "version": "3.0.0",
+  "settings": {
+    "width": 2000,
+    "height": 2000,
+    "scrollTop": -15,
+    "scrollLeft": 0,
+    "zoomLevel": 1,
+    "show": 447,
+    "database": 4,
+    "databaseName": "",
+    "canvasType": "ERD",
+    "language": 1,
+    "tableNameCase": 4,
+    "columnNameCase": 2,
+    "bracketType": 1,
+    "relationshipDataTypeSync": true,
+    "relationshipOptimization": false,
+    "columnOrder": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "maxWidthComment": -1,
+    "ignoreSaveSettings": 0
+  },
+  "doc": {
+    "tableIds": [
+      "ty_Gl3pmE_DzWrnjle_M6"
+    ],
+    "relationshipIds": [],
+    "indexIds": [],
+    "memoIds": []
+  },
+  "collections": {
+    "tableEntities": {
+      "ty_Gl3pmE_DzWrnjle_M6": {
+        "id": "ty_Gl3pmE_DzWrnjle_M6",
+        "name": "test",
+        "comment": "테스트",
+        "columnIds": [
+          "H8DiPgaEwNl7YDpAB6foP",
+          "M4SdzY8UMxGADePaYO8Ub",
+          "c2QtfXBL4yuLVLZqU2rqA"
+        ],
+        "seqColumnIds": [
+          "H8DiPgaEwNl7YDpAB6foP",
+          "M4SdzY8UMxGADePaYO8Ub",
+          "c2QtfXBL4yuLVLZqU2rqA"
+        ],
+        "ui": {
+          "x": 200,
+          "y": 100,
+          "zIndex": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1743387567904,
+          "createAt": 1743387529468
+        }
+      }
+    },
+    "tableColumnEntities": {
+      "H8DiPgaEwNl7YDpAB6foP": {
+        "id": "H8DiPgaEwNl7YDpAB6foP",
+        "tableId": "ty_Gl3pmE_DzWrnjle_M6",
+        "name": "id",
+        "comment": "PK",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1743387579415,
+          "createAt": 1743387534612
+        }
+      },
+      "M4SdzY8UMxGADePaYO8Ub": {
+        "id": "M4SdzY8UMxGADePaYO8Ub",
+        "tableId": "ty_Gl3pmE_DzWrnjle_M6",
+        "name": "createdAt",
+        "comment": "생성일",
+        "dataType": "DATETIME",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1743387567904,
+          "createAt": 1743387555416
+        }
+      },
+      "c2QtfXBL4yuLVLZqU2rqA": {
+        "id": "c2QtfXBL4yuLVLZqU2rqA",
+        "tableId": "ty_Gl3pmE_DzWrnjle_M6",
+        "name": "updatedAt",
+        "comment": "수정일",
+        "dataType": "DATETIME",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1743387579144,
+          "createAt": 1743387567904
+        }
+      }
+    },
+    "relationshipEntities": {},
+    "indexEntities": {},
+    "indexColumnEntities": {},
+    "memoEntities": {}
+  },
+  "lww": {
+    "ty_Gl3pmE_DzWrnjle_M6": [
+      "tableEntities",
+      1743387529465,
+      -1,
+      {
+        "name": 1743387531608,
+        "comment": 1743387534610
+      }
+    ],
+    "H8DiPgaEwNl7YDpAB6foP": [
+      "tableColumnEntities",
+      1743387534611,
+      -1,
+      {
+        "name": 1743387536138,
+        "dataType": 1743387539071,
+        "options(notNull)": 1743387540616,
+        "comment": 1743387544060,
+        "options(primaryKey)": 1743387554479,
+        "options(autoIncrement)": 1743387579415
+      }
+    ],
+    "M4SdzY8UMxGADePaYO8Ub": [
+      "tableColumnEntities",
+      1743387555415,
+      -1,
+      {
+        "name": 1743387560463,
+        "dataType": 1743387563248,
+        "options(notNull)": 1743387564248,
+        "comment": 1743387567903
+      }
+    ],
+    "c2QtfXBL4yuLVLZqU2rqA": [
+      "tableColumnEntities",
+      1743387567904,
+      -1,
+      {
+        "name": 1743387570327,
+        "dataType": 1743387573873,
+        "options(notNull)": 1743387574408,
+        "comment": 1743387579144
+      }
+    ]
+  }
+}
