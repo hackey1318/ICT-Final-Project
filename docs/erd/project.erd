@@ -1892,7 +1892,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1743662053216,
+          "updateAt": 1743662172448,
           "createAt": 1743509885285
         }
       },
@@ -5905,7 +5905,7 @@
         "options(notNull)": 1743510068340,
         "options(autoIncrement)": 1743509898036,
         "default": 1743509898036,
-        "comment": 1743662053216
+        "comment": 1743662172448
       }
     ],
     "-cL40YY0txeHAswxStJ1W": [
