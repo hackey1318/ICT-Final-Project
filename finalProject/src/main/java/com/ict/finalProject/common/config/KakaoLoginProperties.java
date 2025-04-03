@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@PropertySource("classpath:application-auth.properties")
+@PropertySource("classpath:application.properties")
 public class KakaoLoginProperties {
 
     @Value("${kakao.login.api_key}")
