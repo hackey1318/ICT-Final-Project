@@ -27,6 +27,9 @@ public class OAuth2Controller {
     public KakaoLoginResponse kakaoLogin(@RequestParam String code) {
         // 1. 카카오 로그인 처리
         KakaoUserInfoDto kakaoUserInfo = oauth2Service.loginWithKakao(code);
+        if (kakaoUserInfo == null) {
+            throw new UserAuthenticationException("카카오 회원 정보 조회에 실패하였습니다.");
+        }
 
         // 2. 기존 회원인지 확인
         Optional<Users> existingUser = userService.existUser(kakaoUserInfo.getKakaoId());

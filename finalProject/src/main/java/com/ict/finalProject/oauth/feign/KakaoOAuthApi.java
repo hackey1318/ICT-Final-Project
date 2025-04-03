@@ -1,13 +1,14 @@
-package com.ict.finalProject.testCode;
+package com.ict.finalProject.oauth.feign;
 
+import com.ict.finalProject.testCode.KakaoTokenDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "KaKaoOAuth", url = "https://kauth.kakao.com")
 public interface KakaoOAuthApi {
 
-    @PostMapping(value = "/oauth/token")
+    @GetMapping(value = "/oauth/token")
     KakaoTokenDto kakaoGetToken(
             @RequestParam("code") String code,
             @RequestParam("client_id") String clientId,
