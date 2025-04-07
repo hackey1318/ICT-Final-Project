@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -69,5 +70,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<Users> existUser(String kakaoId) {
         return usersRepository.findByKakaoId(kakaoId);
+    }
+
+    @Transactional(readOnly = true) // 데이터베이스 조회만 하므로 readOnly 설정
+    @Override
+    public boolean existsByUserId(String userId) {
+        // UsersRepository에 정의된 findById(String id) 메소드를 사용
+        // Optional 객체가 값을 가지고 있는지(isPresent()) 여부로 존재 확인
+        return usersRepository.findById(userId).isPresent();
     }
 }
