@@ -19,7 +19,8 @@ const KakaoCallback = () => {
         handleChange,
         handleIdCheck,
         handleSubmit,
-        navigate // 훅에서 반환된 navigate 사용
+        navigate, // 훅에서 반환된 navigate 사용
+        lastCheckedId
     } = useKakaoCallback();
 
     // --- 로딩 및 에러 처리 UI ---
