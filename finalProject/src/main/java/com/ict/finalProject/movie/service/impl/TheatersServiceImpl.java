@@ -1,0 +1,28 @@
+package com.ict.finalProject.movie.service.impl;
+
+import com.ict.finalProject.movie.repository.TheatersRepository;
+import com.ict.finalProject.movie.repository.domain.Theaters;
+import com.ict.finalProject.movie.service.TheatersService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class TheatersServiceImpl implements TheatersService {
+
+    private final TheatersRepository theatersRepository;
+
+    public List<String> getAllTheaterNames() {
+        return theatersRepository.findAll()
+                .stream()
+                .map(Theaters::getName)
+                .collect(Collectors.toList());
+    }
+
+    public void saveTheaterList(List<Theaters> theaters) {
+        theatersRepository.saveAll(theaters);
+    }
+}
