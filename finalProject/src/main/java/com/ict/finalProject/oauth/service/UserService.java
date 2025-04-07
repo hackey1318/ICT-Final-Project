@@ -12,4 +12,7 @@ public interface UserService {
     Optional<Users> existUser(String kakaoId);
 
     boolean registerUser(RegisterRequest request);
+
+    boolean existsByUserId(String userId);
+
 }

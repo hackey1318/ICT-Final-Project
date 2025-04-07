@@ -70,8 +70,9 @@ public class SecurityConfig {
                         (authorize) ->
 
                                 authorize.requestMatchers(permitAllWhiteList).permitAll()
-                                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/oauth/kakao/register")).permitAll()
+//                                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/oauth/kakao/register")).permitAll()
                                         // .requestMatchers("/admin/**").hasAnyRole(MemberRole.ADMIN.name())
+
                                         .requestMatchers("/admin/**").permitAll()
                                         .requestMatchers(HttpMethod.DELETE, "/user").hasAnyRole(UserRole.ADMIN.name())
                                         .anyRequest().authenticated())
