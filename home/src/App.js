@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import KakaoLogin from './js/KakaoLogin';
+import KakaoLogin from './page/user/LoginForm';
 import KakaoCallback from './page/user/KakaoCallback';
 
 

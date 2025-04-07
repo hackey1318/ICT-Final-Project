@@ -290,7 +290,8 @@ export const useKakaoCallback = () => {
                     kakaoId: user.kakaoUserInfoDto.kakaoId,
                     email: user.kakaoUserInfoDto.email,
                     knickName: user.kakaoUserInfoDto.knickName,
-                    profileImage: user.kakaoUserInfoDto.profile
+                    profile: user.kakaoUserInfoDto.profile 
+
                 }
             };
 
@@ -330,7 +331,7 @@ export const useKakaoCallback = () => {
         handleIdCheck,
         handleSubmit,
         navigate, // navigate 함수도 반환하여 뷰에서 직접 사용할 수 있게 함 (예: 에러 시 버튼 클릭)
-        lastCheckedId,
+        lastCheckedId
     };
 };
 

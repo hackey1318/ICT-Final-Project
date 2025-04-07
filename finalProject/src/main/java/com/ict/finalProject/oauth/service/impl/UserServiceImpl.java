@@ -23,17 +23,28 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
+
     private final UsersRepository usersRepository;
 
     public boolean registerUser(RegisterRequest request) {
 
         Optional<Users> existingUser = usersRepository.findByKakaoId(request.getKakaoUserInfo().getKakaoId());
 
+        log.info("Register Request Received: {}", request); // 전체 요청 객체 로그
+        if (request.getKakaoUserInfo() != null) {
+            log.info("Kakao User Info Profile URL in Request: '{}'", request.getKakaoUserInfo().getProfile()); // URL 값 명확히 확인 (null인지 빈 문자열인지)
+        } else {
+            log.error("Kakao User Info is NULL in Register Request!");
+        }
+
+
         if (existingUser.isPresent()) {
             throw new RuntimeException("이미 가입된 카카오 계정입니다.");
         }
 
         try {
+            String profileImageUrlFromKakao = request.getKakaoUserInfo().getProfile();
+
 
             Users user = Users.builder()
                     .kakaoId(request.getKakaoUserInfo().getKakaoId())
@@ -43,6 +54,7 @@ public class UserServiceImpl implements UserService {
                     .id(request.getId())
                     .password(passwordEncoder.encode(request.getPassword())) // 비밀번호 암호화
                     .gender(request.getGender())
+                    .profileImageUrl(profileImageUrlFromKakao) // 카카오 프로필 이미지 URL 저장
                     .build();
             usersRepository.save(user);
         } catch (Exception e) {
