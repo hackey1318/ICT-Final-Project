@@ -1,9 +1,15 @@
 package com.ict.finalProject.testCode;
 
+import com.ict.finalProject.movie.repository.domain.Theaters;
+import com.ict.finalProject.movie.service.TheatersService;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,21 +22,30 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Component
+@RequiredArgsConstructor
 public class CGVTheaterCrawler {
+
+    private final TheatersService theatersService;
 
     private static final String KAKAO_API_KEY = "47d3d6c7b00ecb8beb627eeafe04d4a9"; // 본인 API 키 사용
 //    private static final String KAKAO_API_KEY = "83d1dc7f3cbc27e375262210a7b0bdeb"; // 본인 API 키 사용
 
-    public static void getGeoInfo(List<String> theaterNameList) {
+    public void getGeoInfo(List<String> theaterNameList) {
 
         String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=";
 
+        List<Theaters> newTheaterList = new ArrayList<>();
+        List<String> dbTheaterNameList = theatersService.getAllTheaterNames();
         for (String theaterName : theaterNameList) {
 
             if (theaterName.contains("(임시휴업)")) {
                 theaterName = theaterName.replace("(임시휴업)", "");
             } else if (theaterName.contains("CINE de CHEF")) {
                 theaterName = theaterName.replace("CINE de CHEF", "씨네드쉐프");
+            }
+            if (dbTheaterNameList.contains(theaterName)) {
+                continue;
             }
             try {
                 System.out.print(theaterName + " 좌표: ");
@@ -49,15 +64,22 @@ public class CGVTheaterCrawler {
                 String latitude = location.getString("y");
                 String longitude = location.getString("x");
 
+                newTheaterList.add(Theaters.builder()
+                        .name(theaterName).longitude(longitude).latitude(latitude).build());
+
                 System.out.println(latitude + ", " + longitude);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
+        if (newTheaterList.size() != 0) {
+            theatersService.saveTheaterList(newTheaterList);
+        }
     }
 
-
-    public static void main(String[] args) {
+    @EventListener(ApplicationReadyEvent.class)
+    public void getTheaterList() {
         String url = "http://www.cgv.co.kr/theaters/";
 
         try {
