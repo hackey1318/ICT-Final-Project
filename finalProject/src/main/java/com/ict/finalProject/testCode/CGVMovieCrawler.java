@@ -94,7 +94,6 @@ public class CGVMovieCrawler {
                 String reservationRate = movie.path("TicketRate").asText();
                 String ageRating = movie.path("MovieGrade").path("GradeText").asText();
                 String imageSrc = movie.path("PosterImage").path("MiddleImage").asText();
-                String openText = movie.path("OpenText").asText();
 
                 LocalDate releaseDate;
                 try {
@@ -103,7 +102,9 @@ public class CGVMovieCrawler {
                     releaseDate = LocalDate.now();
                 }
 
-                MovieStatus status = openText.contains("개봉") ? MovieStatus.ACTIVE : MovieStatus.PENDING;
+                MovieStatus openStatus = releaseDate.isBefore(LocalDate.now()) || releaseDate.isEqual(LocalDate.now())
+                        ? MovieStatus.ACTIVE
+                        : MovieStatus.PENDING;
 
                 Movies movieEntity = Movies.builder()
                         .code(code)
@@ -111,7 +112,7 @@ public class CGVMovieCrawler {
                         .director(detail.getDirector())
                         .description(detail.getSynopsis())
                         .openDate(releaseDate)
-                        .openStatus(status)
+                        .openStatus(openStatus)
                         .reservationRate(reservationRate)
                         .postImage(imageSrc)
                         .ageGrade(ageRating)
@@ -183,17 +184,25 @@ public class CGVMovieCrawler {
                 MovieDetailDto detail = parseMovieDetail(detailUrl);
 
                 String title = movie.select("strong.title").text();
-                String reservationRate = movie.select("strong.percent").text();
+                String reservationRate = movie.select("strong.percent").text().replaceAll("[^\\d.]+", "");
                 String ageRating = movie.select("i.cgvIcon").text();
                 String imageSrc = movie.select("img").attr("src");
+
+                String openText = movie.select(".txt-info strong").text();
+                String dateStr = openText.split(" ")[0].replace(".", "-");
+                LocalDate openDate = LocalDate.parse(dateStr);
+
+                MovieStatus openStatus = openDate.isBefore(LocalDate.now()) || openDate.isEqual(LocalDate.now())
+                        ? MovieStatus.ACTIVE
+                        : MovieStatus.PENDING;
 
                 Movies entity = Movies.builder()
                         .code(code)
                         .name(title)
                         .director(detail.getDirector())
                         .description(detail.getSynopsis())
-                        .openDate(LocalDate.now())
-                        .openStatus(MovieStatus.PENDING)
+                        .openDate(openDate)
+                        .openStatus(openStatus)
                         .reservationRate(reservationRate)
                         .postImage(imageSrc)
                         .ageGrade(ageRating)

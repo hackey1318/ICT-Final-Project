@@ -49,6 +49,7 @@ public class SecurityConfig {
         // white list (Spring Security 체크 제외 목록)
         MvcRequestMatcher[] permitAllWhiteList = {
                 mvc.pattern("/oauth/kakao/**"),
+                mvc.pattern("/file-system/download/**"),
                 mvc.pattern("/swagger-ui/index.html")
         };
 
