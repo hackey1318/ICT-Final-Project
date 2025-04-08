@@ -1,13 +1,12 @@
-package com.ict.finalProject.fileSystem.domain;
+package com.ict.finalProject.dashboard.domain;
 
-import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.dashboard.domain.constant.Activity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -19,27 +18,21 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Images {
+public class ActiveUsers {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int no;
 
-    private String id;
+    private int userNo;
 
-    @Column(nullable = false, length = 1000)
-    private String path;
-
-    @Column(nullable = false, length = 50)
-    private String originName;
+    private String ip;
 
     @Enumerated(value = EnumType.STRING)
-    private StatusInfo status;
+    private Activity activity;
 
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 }

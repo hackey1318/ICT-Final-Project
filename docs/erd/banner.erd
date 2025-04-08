@@ -129,7 +129,7 @@
         "comment": "배경색",
         "dataType": "VARCHAR(8)",
         "default": "",
-        "options": 8,
+        "options": 0,
         "ui": {
           "keys": 0,
           "widthName": 60,
@@ -138,7 +138,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1743557126934,
+          "updateAt": 1744021958952,
           "createAt": 1743557115116
         }
       },
@@ -330,7 +330,7 @@
       {
         "name": 1743557126932,
         "dataType": 1743557126932,
-        "options(notNull)": 1743557126932,
+        "options(notNull)": 1744021958951,
         "default": 1743557126932,
         "comment": 1743557126932
       }

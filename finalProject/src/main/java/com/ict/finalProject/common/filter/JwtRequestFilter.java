@@ -8,6 +8,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +21,7 @@ import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
+@Order(Ordered.HIGHEST_PRECEDENCE + 1)
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -46,6 +49,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         Users users = usersRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
 
         return new UsernamePasswordAuthenticationToken(users.getId(), users.getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority(users.getStatus().name())));
+                Collections.singleton(new SimpleGrantedAuthority(users.getRole().name())));
     }
 }
