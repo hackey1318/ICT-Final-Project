@@ -1,7 +1,6 @@
 package com.ict.finalProject.fileSystem.domain;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
-import com.ict.finalProject.oauth.repository.domain.Users;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,7 +43,5 @@ public class Images {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_no") // DB 컬럼명 지정 및 NULL 허용 설정!
-    private Users user; // Users 엔티티 타입 사용
+
 }

@@ -46,8 +46,13 @@ public class OAuth2Controller {
 
     @PostMapping("/register")
     public SuccessOfFailResponse register(@RequestBody RegisterRequest request) {
-
-        return SuccessOfFailResponse.builder().result(userService.registerUser(request)).build();
+        // result 와 message 를 서비스 레이어에서 결정하도록 리팩토링 고려 가능
+        boolean registrationResult = userService.registerUser(request);
+        String message = registrationResult ? "회원가입이 성공적으로 완료되었습니다." : "회원가입 중 오류가 발생했습니다.";
+        return SuccessOfFailResponse.builder()
+                .result(registrationResult)
+                .message(message) // 메시지 추가
+                .build();
     }
 
     @PostMapping("/login")
