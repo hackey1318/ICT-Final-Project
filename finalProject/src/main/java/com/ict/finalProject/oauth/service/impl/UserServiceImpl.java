@@ -4,6 +4,8 @@ import com.ict.finalProject.common.config.JwtTokenProvider;
 import com.ict.finalProject.common.exception.custom.UserStatusException;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.domain.constant.UserRole;
+import com.ict.finalProject.fileSystem.domain.Images;
+import com.ict.finalProject.fileSystem.repository.FileSystemRepository;
 import com.ict.finalProject.oauth.controller.request.RegisterRequest;
 import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.oauth.repository.domain.Users;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -23,8 +26,8 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-
     private final UsersRepository usersRepository;
+    private final FileSystemRepository fileSystemRepository;
 
     public boolean registerUser(RegisterRequest request) {
 
@@ -36,14 +39,22 @@ public class UserServiceImpl implements UserService {
 
         try {
 
+            String uploadedProfileImagePath = null;
+            if (request.getUploadedProfileImageId() != null && !request.getUploadedProfileImageId().isEmpty()) {
+                List<Images> images = fileSystemRepository.findByIdIn(List.of(request.getUploadedProfileImageId()));
+                if (!images.isEmpty()) {
+                    uploadedProfileImagePath = images.get(0).getPath(); // 이미지 경로 꺼내기
+                }
+            }
+
             Users user = Users.builder()
                     .kakaoId(request.getKakaoUserInfo().getKakaoId())
                     .email(request.getKakaoUserInfo().getEmail())
                     .knickname(request.getKakaoUserInfo().getKnickName())
                     .nickname(request.getNickName())
                     .id(request.getId())
-                    .profileImageUrl(request.getUploadedProfileImageId())
-                    .password(passwordEncoder.encode(request.getPassword())) // 비밀번호 암호화
+                    .profileImageUrl(uploadedProfileImagePath) // 경로 저장
+                    .password(passwordEncoder.encode(request.getPassword()))
                     .gender(request.getGender())
                     .status(StatusInfo.ACTIVE)
                     .role(UserRole.USER)
