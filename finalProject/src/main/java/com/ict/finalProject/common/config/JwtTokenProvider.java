@@ -72,7 +72,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setId(id)
-                .setIssuer("ICT-MINI-2")
+                .setIssuer("ICT-FINAL-2")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1))// 1시간
                 .signWith(SignatureAlgorithm.HS256, key)

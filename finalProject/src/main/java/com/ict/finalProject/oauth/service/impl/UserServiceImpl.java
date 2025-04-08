@@ -63,11 +63,16 @@ public class UserServiceImpl implements UserService {
             throw new UserStatusException("활성화 되지 않은 사용자입니다. 관리자에게 문의 바랍니다.");
         }
 
-        return jwtTokenProvider.generateAccessToken(id, user.getStatus().name());
+        return jwtTokenProvider.generateAccessToken(id, user.getRole().name());
     }
 
     @Override
     public Optional<Users> existUser(String kakaoId) {
         return usersRepository.findByKakaoId(kakaoId);
+    }
+
+    public Users getUser(String userid) {
+
+        return usersRepository.findById(userid).orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
     }
 }
