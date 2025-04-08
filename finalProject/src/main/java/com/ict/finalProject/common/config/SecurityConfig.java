@@ -50,6 +50,7 @@ public class SecurityConfig {
         MvcRequestMatcher[] permitAllWhiteList = {
                 mvc.pattern("/oauth/kakao/**"),
                 mvc.pattern("/file-system/download/**"),
+                mvc.pattern("/user/**"),
                 mvc.pattern("/file-system/upload/register-image"),
                 mvc.pattern("/swagger-ui/index.html")
         };

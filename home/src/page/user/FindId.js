@@ -1,0 +1,104 @@
+import { useState } from "react";
+import '../../css/user/FindUser.css';
+import axios from "axios";
+
+function FindId(){
+    //입력한 닉네임, 이메일을 보관할 변수
+    let [idFindForm, setIdFindForm] = useState({});
+
+    //alert메세지를 보관할 변수
+    const [alertMsg, setAlertMsg] = useState({
+        nickname:'',
+        email:''
+    })
+
+    //아이디 찾기 성공 여부를 저장할 상태
+    let [idFound, setIdFound] = useState(false);
+    //찾은 아이디를 저장할 변수
+    let [userId, setUserId] = useState('');
+
+    //form의 값 유효성검사 
+    function setFormData(event){
+        let name = event.target.name;
+        let value = event.target.value;
+
+        setIdFindForm(prev=>{ //데이터가 두 개 이상이면 데이터 보존을 위해 써준다.
+            return {...prev, [name]:value};
+        });
+    }
+
+    //아이디 찾기 클릭시 폼체크
+    function formCheck(event){
+        console.log("nickname=>"+idFindForm.nickname);
+        console.log("email=>"+idFindForm.email);
+
+        //기본 이벤트 제거
+        event.preventDefault();
+
+        //이름 입력 여부 확인
+        if(idFindForm.nickname==null || idFindForm.nickname===''){
+            alert("닉네임을 입력하세요");
+            setAlertMsg((prev) => {return {...prev, nickname:'닉네임을 입력하세요'}})
+            return false;
+        }
+
+        //이메일 입력 여부 확인
+        if(idFindForm.email==null || idFindForm.email===''){
+            alert("이메일을 입력하세요.");
+            setAlertMsg((prev) => {return {...prev, email:'이메일을 입력하세요'}})
+            return false;
+        }
+
+        //비동기로 백엔드 요청
+        axios.post("http://localhost:9988/user/findIdOk",{
+            nickname: idFindForm.nickname,
+            email: idFindForm.email
+        })
+        .then(function(response){
+            console.log(response.data);
+
+            //result가 "idActive", "idDelete", "idNone"인지 확인
+            if(response.data.status === "idActive"){
+                //아이디 찾기 성공시
+                alert("아이디 찾기 성공하였습니다.");
+                setUserId(response.data.id);
+                setIdFound(true);  //아이디 찾기 성공 상태로 변경
+            }else if(response.data.status === "idDelete"){
+                //탈퇴한 사용자의 경우
+                alert("탈퇴한 사용자입니다.");
+            }else if(response.data.status === "idNone"){
+                //아이디 존재하지 않을 경우
+                alert("아이디 찾기 실패하였습니다.");
+            }
+        }).catch(function(error){
+            console.log(error);
+        });
+    }
+
+    return(
+        <div>
+            <div className="find-form">
+                {!idFound ? (
+                    <>
+                    <form onSubmit={formCheck}>
+                        <h3>아이디 찾기</h3>
+                        <span className="find-form-title">닉네임</span><input type="text" name="nickname" className="find-form-input" onChange={setFormData} placeholder="이름을 입력하세요"/><br/><br/>
+                        {/* {alertMsg.nickname!='' && <><span style={{color:'red'}}>{alertMsg.nickname}</span><br/></>} */}
+                        <span className="find-form-title">이메일</span><input type="text" name="email" className="find-form-input" onChange={setFormData} placeholder="이메일을 입력하세요"/><br/>
+                        {/* {alertMsg.email!='' && <><span style={{color:'red'}}>{alertMsg.email}</span><br/></>} */}
+                        <input type="submit" value="아이디 찾기" className="find-btn"/>
+                    </form>
+                    </>
+                ):(
+                    <div>
+                        <h3>아이디 찾기</h3>
+                        찾은 아이디는 {userId}입니다.
+                        <input type="button" value="로그인 페이지로 이동" a href="#" className="find-btn"/>
+                    </div>
+                )}
+            </div>
+        </div>
+    )
+}
+
+export default FindId;
