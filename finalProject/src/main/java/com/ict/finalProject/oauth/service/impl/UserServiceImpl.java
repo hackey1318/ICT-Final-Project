@@ -45,7 +45,14 @@ public class UserServiceImpl implements UserService {
                 if (!images.isEmpty()) {
                     uploadedProfileImagePath = images.get(0).getPath(); // 이미지 경로 꺼내기
                 }
+
             }
+
+            // 업로드 이미지가 없고, 카카오 프로필 이미지가 있는 경우
+            if (uploadedProfileImagePath == null && request.getKakaoUserInfo().getProfile() != null) {
+                uploadedProfileImagePath = request.getKakaoUserInfo().getProfile(); // 카카오 이미지 경로
+            }
+
 
             Users user = Users.builder()
                     .kakaoId(request.getKakaoUserInfo().getKakaoId())
