@@ -3,6 +3,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import KakaoLogin from './page/user/LoginForm';
 import KakaoCallback from './page/user/KakaoCallback';
 
+import KakaoLogin from './js/KakaoLogin';
+import KakaoCallback from './js/KakaoCallback';
+import FindId from './page/user/FindId';
 
 function App() {
   return (
@@ -10,6 +13,7 @@ function App() {
       <Routes>
         <Route path='/login' element={<KakaoLogin />} />
         <Route path='/kakao/callback' element={<KakaoCallback />} />
+        <Route path='/user/findId' element={<FindId />} />
       </Routes>
     </BrowserRouter>
   );
