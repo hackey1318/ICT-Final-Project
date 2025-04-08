@@ -8,6 +8,7 @@ import com.ict.finalProject.fileSystem.repository.FileSystemRepository;
 import com.ict.finalProject.fileSystem.service.FileSystemService;
 import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.oauth.repository.domain.Users;
+import com.ict.finalProject.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -28,13 +29,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FileSystemServiceImpl implements FileSystemService {
 
-    private final UsersRepository usersRepository;
+    private final UserService userService;
     private final FileSystemRepository fileSystemRepository;
 
     @Override
     public List<FileUploadResponse> uploadFile(List<MultipartFile> files, String userId) throws IOException {
 
-        Users users = this.getUser(userId);
+        Users users = userService.getUser(userId);
         Path uploadPath = new ClassPathResource("static/img").getFile().toPath(); // 실제 서버 파일 시스템 경로
         List<String> fileIdList = new ArrayList<>();
         List<Images> imageList = new ArrayList<>();
@@ -79,8 +80,5 @@ public class FileSystemServiceImpl implements FileSystemService {
         return imageList;
     }
 
-    private Users getUser(String userid) {
 
-        return usersRepository.findById(userid).orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
-    }
 }

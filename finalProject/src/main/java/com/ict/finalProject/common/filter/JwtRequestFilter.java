@@ -46,6 +46,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         Users users = usersRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
 
         return new UsernamePasswordAuthenticationToken(users.getId(), users.getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority(users.getStatus().name())));
+                Collections.singleton(new SimpleGrantedAuthority(users.getRole().name())));
     }
 }
