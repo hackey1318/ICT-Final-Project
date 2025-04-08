@@ -15,4 +15,5 @@ public interface UserService {
 
     boolean existsByUserId(String userId);
 
+    Users getUser(String userid);
 }
