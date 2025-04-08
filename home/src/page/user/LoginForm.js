@@ -2,6 +2,7 @@
 
 import React from "react"; // React import 추가 (JSX 사용)
 import { useLoginForm } from "./../../js/user/useLoginForm"; // 커스텀 훅 import (경로 확인!)
+import { Link } from "react-router-dom";
 
 const LoginForm = () => {
     // 커스텀 훅 호출하여 상태와 핸들러 가져오기
@@ -67,9 +68,10 @@ const LoginForm = () => {
 
                     {/* 아이디/비밀번호 찾기 링크 */}
                     <div className="text-center">
-                        <a href="#" className="text-decoration-none text-secondary">
+                    <Link to="/user/findId" className="text-decoration-none text-secondary">
+
                             아이디 찾기
-                        </a>
+                        </Link>
                         <span className="mx-2">|</span>
                         <a href="#" className="text-decoration-none text-secondary">
                             비밀번호 찾기
