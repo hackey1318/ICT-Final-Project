@@ -13,7 +13,5 @@ public interface UserService {
 
     boolean registerUser(RegisterRequest request);
 
-    boolean existsByUserId(String userId);
-
     Users getUser(String userid);
 }
