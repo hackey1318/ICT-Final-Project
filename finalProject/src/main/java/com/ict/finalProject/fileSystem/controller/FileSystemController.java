@@ -35,6 +35,12 @@ public class FileSystemController {
 
     private final FileSystemService fileSystemService;
 
+    @PostMapping("/upload/register-image")
+    public List<FileUploadResponse> uploadRegisterImage(@RequestParam("files") List<MultipartFile> files) throws IOException {
+
+        return fileSystemService.uploadFile(files);
+    }
+
     @AuthRequired({USER, MANAGER, ADMIN})
     @PostMapping("/upload")
     public List<FileUploadResponse> uploadFile(@RequestParam("files") List<MultipartFile> files) throws IOException {
