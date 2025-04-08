@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface FileSystemService {
 
-    List<FileUploadResponse> uploadFile(List<MultipartFile> files, String userId) throws IOException;
+    List<FileUploadResponse> uploadFile(List<MultipartFile> files) throws IOException;
 
     List<Images> getImageInfo(List<String> imageIdList);
 }
