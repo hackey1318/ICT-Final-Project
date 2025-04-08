@@ -41,8 +41,10 @@ public class UserServiceImpl implements UserService {
                     .knickname(request.getKakaoUserInfo().getKnickName())
                     .nickname(request.getNickName())
                     .id(request.getId())
+                    .profileImageUrl(request.getUploadedProfileImageId())
                     .password(passwordEncoder.encode(request.getPassword())) // 비밀번호 암호화
                     .gender(request.getGender())
+                    .status(StatusInfo.ACTIVE)
                     .build();
             usersRepository.save(user);
         } catch (Exception e) {
@@ -71,14 +73,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<Users> existUser(String kakaoId) {
         return usersRepository.findByKakaoId(kakaoId);
-    }
-
-    @Transactional(readOnly = true) // 데이터베이스 조회만 하므로 readOnly 설정
-    @Override
-    public boolean existsByUserId(String userId) {
-        // UsersRepository에 정의된 findById(String id) 메소드를 사용
-        // Optional 객체가 값을 가지고 있는지(isPresent()) 여부로 존재 확인
-        return usersRepository.findById(userId).isPresent();
     }
 
     public Users getUser(String userid) {
