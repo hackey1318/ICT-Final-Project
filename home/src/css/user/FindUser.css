@@ -10,6 +10,11 @@
     width: 80px;
     display: inline-block;
 }
+.reset-form-title{
+    text-align: left;
+    width: 120px;
+    display: inline-block;
+}
 .find-form-input{
     width: 200px;
     height: 30px;
