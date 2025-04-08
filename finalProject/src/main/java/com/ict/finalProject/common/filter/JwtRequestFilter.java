@@ -8,8 +8,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +19,6 @@ import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
-@Order(Ordered.HIGHEST_PRECEDENCE + 1)
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -33,7 +30,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         final String token = request.getHeader("Authorization");
 
         String userId = null;
-        if(token != null && !token.isEmpty()) {
+        if (token != null && !token.isEmpty()) {
             String jwtToken = token.substring(7);
 
             userId = jwtTokenProvider.getUserNameFromToken(jwtToken);

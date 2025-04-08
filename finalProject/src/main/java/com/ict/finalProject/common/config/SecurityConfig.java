@@ -1,5 +1,6 @@
 package com.ict.finalProject.common.config;
 
+import com.ict.finalProject.common.filter.ActiveUserTrackingFilter;
 import com.ict.finalProject.common.filter.JwtRequestFilter;
 import com.ict.finalProject.common.handler.CustomAccessDeniedHandler;
 import com.ict.finalProject.common.handler.CustomAuthenticationEntryPointHandler;
@@ -27,6 +28,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
+    private final ActiveUserTrackingFilter activeUserTrackingFilter;
 
     private final CustomAuthenticationEntryPointHandler customAuthenticationEntryPointHandler;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
@@ -76,6 +78,7 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.DELETE, "/user").hasAnyRole(UserRole.ADMIN.name())
                                         .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(activeUserTrackingFilter, JwtRequestFilter.class)
                 .exceptionHandling(conf -> conf
                         .authenticationEntryPoint(customAuthenticationEntryPointHandler)
                         .accessDeniedHandler(customAccessDeniedHandler))
