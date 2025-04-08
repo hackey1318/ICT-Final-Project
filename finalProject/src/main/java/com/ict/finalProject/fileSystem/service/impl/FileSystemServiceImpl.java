@@ -33,9 +33,8 @@ public class FileSystemServiceImpl implements FileSystemService {
     private final FileSystemRepository fileSystemRepository;
 
     @Override
-    public List<FileUploadResponse> uploadFile(List<MultipartFile> files, String userId) throws IOException {
+    public List<FileUploadResponse> uploadFile(List<MultipartFile> files) throws IOException {
 
-        Users users = userService.getUser(userId);
         Path uploadPath = new ClassPathResource("static/img").getFile().toPath(); // 실제 서버 파일 시스템 경로
         List<String> fileIdList = new ArrayList<>();
         List<Images> imageList = new ArrayList<>();
@@ -52,7 +51,6 @@ public class FileSystemServiceImpl implements FileSystemService {
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
             Images image = Images.builder()
                     .id(fileId)
-                    .userNo(users.getNo())
                     .path(filePath.toString())
                     .originName(fileName)
                     .status(StatusInfo.ACTIVE)

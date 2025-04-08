@@ -27,8 +27,6 @@ public class Images {
 
     private String id;
 
-    private int userNo;
-
     @Column(nullable = false, length = 1000)
     private String path;
 

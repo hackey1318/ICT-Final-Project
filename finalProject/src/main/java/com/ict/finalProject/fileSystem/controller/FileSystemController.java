@@ -39,8 +39,7 @@ public class FileSystemController {
     @PostMapping("/upload")
     public List<FileUploadResponse> uploadFile(@RequestParam("files") List<MultipartFile> files) throws IOException {
 
-        String userId = AuthCheck.getUserId(USER, MANAGER, ADMIN);
-        return fileSystemService.uploadFile(files, userId);
+        return fileSystemService.uploadFile(files);
     }
 
     @GetMapping("/download/{imageId}")
