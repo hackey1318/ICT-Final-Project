@@ -71,8 +71,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         (authorize) ->
+
                                 authorize.requestMatchers(permitAllWhiteList).permitAll()
                                         // .requestMatchers("/admin/**").hasAnyRole(MemberRole.ADMIN.name())
+
                                         .requestMatchers("/admin/**").permitAll()
                                         .requestMatchers(HttpMethod.DELETE, "/user").hasAnyRole(UserRole.ADMIN.name())
                                         .anyRequest().authenticated())
