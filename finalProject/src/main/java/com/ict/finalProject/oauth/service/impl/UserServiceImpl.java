@@ -3,6 +3,7 @@ package com.ict.finalProject.oauth.service.impl;
 import com.ict.finalProject.common.config.JwtTokenProvider;
 import com.ict.finalProject.common.exception.custom.UserStatusException;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.oauth.controller.request.RegisterRequest;
 import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.oauth.repository.domain.Users;
@@ -45,6 +46,7 @@ public class UserServiceImpl implements UserService {
                     .password(passwordEncoder.encode(request.getPassword())) // 비밀번호 암호화
                     .gender(request.getGender())
                     .status(StatusInfo.ACTIVE)
+                    .role(UserRole.USER)
                     .build();
             usersRepository.save(user);
         } catch (Exception e) {
@@ -78,5 +80,13 @@ public class UserServiceImpl implements UserService {
     public Users getUser(String userid) {
 
         return usersRepository.findById(userid).orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
+    }
+
+    @Transactional(readOnly = true) // 데이터베이스 조회만 하므로 readOnly 설정
+    @Override
+    public boolean existsByUserId(String userId) {
+        // UsersRepository에 정의된 findById(String id) 메소드를 사용
+        // Optional 객체가 값을 가지고 있는지(isPresent()) 여부로 존재 확인
+        return usersRepository.findById(userId).isPresent();
     }
 }
