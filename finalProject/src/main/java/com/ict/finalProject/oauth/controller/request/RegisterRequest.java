@@ -18,4 +18,8 @@ public class RegisterRequest {
     UserGender gender;
     String nickName;
     KakaoUserInfoDto kakaoUserInfo;
+
+    //Users에서 변경하면 할 때 마다 Users 테이블을 변경해야 돼서 번거로워짐, 그래서 DTO에 삽입
+    String uploadedProfileImageId;
+
 }
