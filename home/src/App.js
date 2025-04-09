@@ -9,9 +9,15 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<Main />} />
+          <Route path='login' element={<Main />} />
+          <Route path='kakao/callback' element={<Main />} />
+          <Route path='user/findId' element={<Main />} />
         </Route>
         <Route path='/manager' element={<Layout />}>
           <Route index element={<Main />} />
+          <Route path='login' element={<Main />} />
+          <Route path='kakao/callback' element={<Main />} />
+          <Route path='user/findId' element={<Main />} />
         </Route>
       </Routes>
     </BrowserRouter>
