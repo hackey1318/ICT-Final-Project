@@ -1,6 +1,7 @@
 package com.ict.finalProject.banner.controller.response;
 
 import com.ict.finalProject.banner.repository.constant.BannerType;
+import com.ict.finalProject.domain.constant.StatusInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,4 +28,6 @@ public class BannerResponse {
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
+
+    private StatusInfo status;
 }
