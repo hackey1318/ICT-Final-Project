@@ -73,7 +73,7 @@ const LoginForm = () => {
                             아이디 찾기
                         </Link>
                         <span className="mx-2">|</span>
-                        <a href="#" className="text-decoration-none text-secondary">
+                        <a href="/user/findPwd" className="text-decoration-none text-secondary">
                             비밀번호 찾기
                         </a>
                     </div>
