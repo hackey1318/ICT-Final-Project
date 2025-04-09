@@ -1,0 +1,293 @@
+/* 네비게이션 바 기본 스타일 */
+.navbars {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1000;
+}
+
+.navbar-containers {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* 좌우 정렬을 위한 설정 */
+    padding: 0 20px;
+    height: 70px;
+    /* max-width: 1200px; */
+    /* margin: 0 auto; */
+}
+
+/* 좌측 섹션 (로고 + 네비게이션 메뉴) */
+.navbar-lefts {
+    display: flex;
+    align-items: center;
+}
+
+/* 로고 스타일 */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
+    /* 로고와 메뉴 사이 간격 */
+}
+
+.navbar-logo img {
+    height: 40px;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.logo-highlight {
+    color: #0066cc;
+}
+
+/* 네비게이션 메뉴 스타일 */
+.navbar-menus {
+    display: flex;
+}
+
+.navbar-navs {
+    display: flex;
+    flex-direction: row;
+    /* 명시적으로 가로 방향 지정 */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-items {
+    position: relative;
+    margin-right: 10px;
+    /* 메뉴 항목 간 간격 추가 */
+}
+
+.nav-links {
+    display: block;
+    padding: 0 15px;
+    line-height: 70px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+    white-space: nowrap;
+    /* 텍스트 줄바꿈 방지 */
+}
+
+.nav-links:hover {
+    color: #0066cc;
+}
+
+/* 드롭다운 메뉴 스타일 */
+.dropdown-arrow {
+    font-size: 10px;
+    margin-left: 5px;
+}
+
+.dropdown-container {
+    position: fixed;
+    z-index: 2000; /* 높은 z-index 값 */
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 180px;
+    border-radius: 4px;
+    padding: 10px 0;
+}
+
+.dropdown-container li {
+    list-style: none;
+}
+
+.dropdown-container a {
+    display: block;
+    padding: 8px 15px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.dropdown-container a:hover {
+    background-color: #f5f5f5;
+}
+
+/* 사용자 섹션 스타일 - 우측 정렬 */
+.navbar-user {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    /* 우측 정렬을 위해 auto 마진 적용 */
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.welcome-text {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.username {
+    font-weight: 600;
+    color: #333;
+}
+
+.profile-circle {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.profile-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 로그인/회원가입 버튼 스타일 */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.btn-login {
+    color: #0066cc;
+    border: 1px solid #0066cc;
+    background-color: transparent;
+}
+
+.btn-login:hover {
+    background-color: rgba(0, 102, 204, 0.1);
+}
+
+.btn-register {
+    color: #fff;
+    background-color: #0066cc;
+    border: 1px solid #0066cc;
+}
+
+.btn-register:hover {
+    background-color: #0055aa;
+}
+
+/* 모바일 토글 버튼 */
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+}
+
+.toggle-icon {
+    width: 100%;
+    height: 3px;
+    background-color: #333;
+    transition: all 0.3s;
+}
+
+/* 테스트 버튼 스타일 */
+.test-buttons {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: #f5f5f5;
+}
+
+.test-btn {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.test-btn.login {
+    background-color: #0066cc;
+    color: white;
+}
+
+.test-btn.logout {
+    background-color: #666;
+    color: white;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 991px) {
+    .navbar-toggle {
+        display: flex;
+        margin-left: auto;
+        /* 토글 버튼을 우측으로 밀기 */
+        margin-right: 15px;
+        /* 토글 버튼과 사용자 섹션 사이 간격 */
+    }
+
+    .navbar-lefts {
+        flex: 1;
+        /* 좌측 섹션이 가능한 공간 차지 */
+    }
+
+    .navbar-menus {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        flex-direction: column;
+        padding: 20px;
+        display: none;
+    }
+
+    .navbar-menu.active {
+        display: block;
+    }
+
+    .navbar-navs {
+        flex-direction: column;
+        /* 모바일에서 세로 방향으로 변경 */
+    }
+
+    .nav-items {
+        margin-right: 0;
+        /* 모바일에서 오른쪽 마진 제거 */
+        margin-bottom: 5px;
+        /* 모바일에서 아래 마진 추가 */
+    }
+
+    .nav-links {
+        line-height: 40px;
+        padding: 5px 0;
+    }
+
+    .dropdown-container {
+        position: static;
+        box-shadow: none;
+        padding-left: 20px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .dropdown-container a {
+        padding: 5px 0;
+    }
+}

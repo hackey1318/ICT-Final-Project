@@ -52,6 +52,7 @@ public class SecurityConfig {
         MvcRequestMatcher[] permitAllWhiteList = {
                 mvc.pattern("/oauth/kakao/**"),
                 mvc.pattern("/file-system/download/**"),
+                mvc.pattern("/user/**"),
                 mvc.pattern("/file-system/upload/register-image"),
                 mvc.pattern("/swagger-ui/index.html")
         };
@@ -72,8 +73,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         (authorize) ->
+
                                 authorize.requestMatchers(permitAllWhiteList).permitAll()
                                         // .requestMatchers("/admin/**").hasAnyRole(MemberRole.ADMIN.name())
+
                                         .requestMatchers("/admin/**").permitAll()
                                         .requestMatchers(HttpMethod.DELETE, "/user").hasAnyRole(UserRole.ADMIN.name())
                                         .anyRequest().authenticated())
