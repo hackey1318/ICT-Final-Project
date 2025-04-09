@@ -5,7 +5,6 @@ import com.ict.finalProject.common.config.AuthRequired;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.inquiry.controller.request.InquiryRequest;
-import com.ict.finalProject.inquiry.controller.response.InquiryResponse;
 import com.ict.finalProject.inquiry.service.InquiryService;
 import com.ict.finalProject.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +32,8 @@ public class InquiryController {
 
     //문의리스트
     @GetMapping("/getInquiry")
-    public List<InquiryRequest> getInquiry(@RequestBody InquiryRequest request) {
-        List<InquiryRequest> inquiries = inquiryService.getInquiry(request);
+    public List<InquiryRequest> getInquiry(@RequestParam String status) {
+        List<InquiryRequest> inquiries = inquiryService.getInquiry(status);
         return inquiries;
     }
 
