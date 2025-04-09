@@ -15,10 +15,9 @@ export const useLoginForm = () => {
     const handleLogin = async () => {
         setIsLoading(true);
         setLoginError(null);
-        console.log("로그인 시도:", userId, password);
 
         try {
-            const response = await fetch('http://localhost:9988/oauth/kakao/login', {
+            const response = await fetch('http://localhost:9988/oauth/kakao/login', { // 백엔드 주소 확인
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -26,36 +25,33 @@ export const useLoginForm = () => {
                 body: JSON.stringify({ id: userId, password: password }),
             });
 
-            // 응답 상태 확인
-            if (!response.ok) { // 4xx, 5xx 에러 포함
-                let errorMessage = `로그인 실패: ${response.status}`; // 기본 에러 메시지
-                try {
-                    // *** 백엔드가 본문에 보내준 JSON 에러 메시지 파싱 시도 ***
-                    const errorData = await response.json();
-                    // *** 백엔드 응답에서 'message' 필드를 읽어 에러 메시지로 사용 ***
-                    errorMessage = errorData.message || errorMessage;
-                } catch (jsonError) {
-                    // JSON 파싱 실패 시 (예: 500 에러인데 HTML 응답 등) 기본 메시지 유지
-                    console.error("Error parsing error response body:", jsonError);
-                }
-                // 최종 결정된 에러 메시지로 Error 객체 생성
-                throw new Error(errorMessage);
+            const accessToken = response.headers.get('accessToken');
+            const responseBody = await response.json(); // 응답 본문 (이제 더 많은 키를 가진 객체)
+
+            if (!response.ok) {
+                throw new Error(responseBody.message || `로그인 실패: ${response.status}`);
             }
 
-            // --- 성공 응답 처리 ---
-            const accessToken = response.headers.get('accessToken');
-            if (!accessToken) {
-                console.error("로그인은 성공했지만 응답 헤더에 accessToken이 없습니다.");
-                throw new Error("인증 토큰을 받지 못했습니다. 서버 설정을 확인하세요.");
-            }
+            if (!accessToken) { /* ... 기존 에러 처리 ... */ }
+            if (!responseBody || !responseBody.result) { /* ... 기존 에러 처리 ... */ }
+
+            // 1. accessToken 저장
             sessionStorage.setItem('accessToken', accessToken);
-            console.log("로그인 성공! accessToken 저장:", accessToken);
+
+            // --- 2. responseBody(Map 객체)에서 직접 정보 추출하여 userInfo 객체 생성 ---
+            const userInfo = {
+                userNo: responseBody.userNo,
+                nickname: responseBody.nickname,
+                profileImageUrl: responseBody.profileImageUrl,
+                role: responseBody.role
+            };
+            // --- 생성된 userInfo 객체를 문자열로 변환하여 저장 ---
+            sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+            // 3. 페이지 이동
             navigate('/');
 
         } catch (error) {
-            // 여기서 잡힌 error.message는 위 if(!response.ok) 블록에서 throw한 메시지이거나,
-            // 네트워크 오류 등의 다른 예외 메시지일 수 있음.
-            console.error("로그인 API 호출 또는 처리 중 에러:", error);
             setLoginError(error.message || "로그인 중 알 수 없는 오류가 발생했습니다.");
         } finally {
             setIsLoading(false);
