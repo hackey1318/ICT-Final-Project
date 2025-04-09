@@ -6,13 +6,26 @@
     padding: 10px;
     margin: 200px auto;
 }
+.find-form-subject{
+    margin: 20px 0;
+}
 .find-form-title{
     width: 80px;
     display: inline-block;
 }
+.reset-form-title{
+    text-align: left;
+    width: 120px;
+    display: inline-block;
+}
+.find-form-line{
+    margin-bottom: 15px;
+}
 .find-form-input{
+    font-size: 0.8em;
     width: 200px;
     height: 30px;
+    padding: 5px;
     border: 1px solid #ddd;
     border-radius: 5px;
 }
@@ -21,7 +34,7 @@
     height: 35px;
     border: none;
     border-radius: 5px;
-    margin: 10px;
+    margin: 20px;
     cursor: pointer;
 }
 .find-btn:hover{
