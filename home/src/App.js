@@ -1,14 +1,18 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import KakaoLogin from './js/KakaoLogin';
-import KakaoCallback from './js/KakaoCallback';
+import Main from './page/user/Main';
+import Layout from './page/user/Layout';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<KakaoLogin />} />
-        <Route path='/kakao/callback' element={<KakaoCallback />} />
+        <Route path='/' element={<Layout />}>
+          <Route index element={<Main />} />
+        </Route>
+        <Route path='/manager' element={<Layout />}>
+          <Route index element={<Main />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
