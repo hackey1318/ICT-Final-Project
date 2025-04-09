@@ -54,7 +54,7 @@ function FindPwd(){
 
             setPwdFoundCheck(true); //비밀번호 찾기 실행 여부 true로 변경
 
-            //result가 "idActive", "idDelete", "idNone"인지 확인
+            //result가 "userActive", "userDelete", "userNone"인지 확인
             if(response.data.status === "userActive"){
                 //일치하는 정보 찾기 성공시
                 alert("일치하는 정보 찾기 성공. 메일로 비밀번호 재설정 링크 발송");
@@ -76,33 +76,39 @@ function FindPwd(){
         <div className="find-form">
             {!pwdFoundCheck ? (
                 <form onSubmit={formCheck}>
-                    <h3>비밀번호 찾기</h3>
+                    <h3 className="find-form-subject">비밀번호 찾기</h3>
                     <p>아이디와 이메일을 입력하세요.</p>
-                    <span className="find-form-title">아이디</span><input type="text" name="id" className="find-form-input" onChange={setFormData} placeholder="아이디를 입력하세요"/><br/><br/>
-                    {/* {alertMsg.nickname!='' && <><span style={{color:'red'}}>{alertMsg.nickname}</span><br/></>} */}
-                    <span className="find-form-title">이메일</span><input type="text" name="email" className="find-form-input" onChange={setFormData} placeholder="이메일을 입력하세요"/><br/>
-                    {/* {alertMsg.email!='' && <><span style={{color:'red'}}>{alertMsg.email}</span><br/></>} */}
-                    <input type="submit" value="비밀번호 찾기" className="find-btn"/>
+                    <div className="find-form-line">
+                        <span className="find-form-title">아이디</span><input type="text" name="id" className="find-form-input" onChange={setFormData} placeholder="아이디를 입력하세요"/>
+                        {/* {alertMsg.nickname!='' && <><span style={{color:'red'}}>{alertMsg.nickname}</span><br/></>} */}
+                    </div>
+                    <div>
+                    <span className="find-form-title">이메일</span><input type="text" name="email" className="find-form-input" onChange={setFormData} placeholder="이메일을 입력하세요"/>
+                        {/* {alertMsg.email!='' && <><span style={{color:'red'}}>{alertMsg.email}</span><br/></>} */}
+                        <input type="submit" value="비밀번호 찾기" className="find-btn"/>
+                    </div>
                 </form>
             ):(
-                <>
                 <div>
-                    <h3>비밀번호 찾기 결과</h3>
-                    {!pwdFound ? (
+                    <h3 className="find-form-subject">비밀번호 찾기 결과</h3>
+                    {!pwdFound ? ( 
                         //일치하는 정보가 없을 때
                         <>
                         입력하신 내역과 일치하는 정보가 없습니다.
-                        <input type="button" value="회원가입" a href="#" className="find-btn"/>
+                        <button onClick={() => window.location.href='/register'} className="find-btn">
+                            회원가입
+                        </button>
                         </>
                     ):(
-                        //일치하는 정보가 있어서 메일로 재설정 링크 보낼 때
+                        //일치하는 정보가 있고 사용자 status가 ACTIVE일 때, 메일로 재설정 링크 발송
                         <>
                         메일로 비밀번호 재설정 링크를 전송하였습니다.
-                        <input type="button" value="로그인" a href="#" className="find-btn"/>
+                        <button onClick={() => window.location.href='/login'} className="find-btn">
+                            로그인
+                        </button>
                         </>
                     )}
                 </div>
-                </>
             )}
         </div>
     )

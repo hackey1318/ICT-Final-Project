@@ -11,8 +11,6 @@ public interface FindUserService {
 
     Users findPwd(UserFindRequest userFindRequest);
 
-    void pwdReset(PwdReset pwdReset);
-
     PwdReset findPwdReset(String token, Integer userNo);
 
     void pwdDelete(Integer id);
@@ -20,4 +18,7 @@ public interface FindUserService {
     Optional<Users> findUser(Integer no);
 
     Users insertUser(Users user);
+
+    //비밀번호 재설정 링크 이메일 발송
+    void sendPwdResetEmail(String email, Integer userno);
 }

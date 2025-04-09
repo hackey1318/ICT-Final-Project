@@ -77,7 +77,7 @@ function PwdReset(){
             console.log(response.data);
             if(response.data === "ok"){
                 alert("비밀번호 변경 완료");
-                window.location.href = "/";
+                window.location.href = "/login";
             }
         }).catch(function(error){
             console.log(error);
@@ -87,11 +87,15 @@ function PwdReset(){
     return(
         <div className="find-form">
             <form onSubmit={formCheck}>
-                <h3>비밀번호 재설정</h3>
-                <span className="reset-form-title">비밀번호</span><input type="text" name="pwd" className="find-form-input" onChange={setFormData} placeholder="비밀번호를 입력하세요"/><br/><br/>
-                {/* {alertMsg.nickname!='' && <><span style={{color:'red'}}>{alertMsg.nickname}</span><br/></>} */}
-                <span className="reset-form-title">비밀번호 확인</span><input type="text" name="pwdCheck" className="find-form-input" onChange={setFormData} placeholder="비밀번호를 한번 더 입력하세요"/><br/>
-                {/* {alertMsg.email!='' && <><span style={{color:'red'}}>{alertMsg.email}</span><br/></>} */}
+                <h3 className="find-form-subject">비밀번호 재설정</h3>
+                <div className="find-form-line">
+                    <span className="reset-form-title">비밀번호</span><input type="password" name="pwd" className="find-form-input" onChange={setFormData} placeholder="비밀번호를 입력하세요"/>
+                    {/* {alertMsg.nickname!='' && <><span style={{color:'red'}}>{alertMsg.nickname}</span><br/></>} */}
+                </div>
+                <div>
+                    <span className="reset-form-title">비밀번호 확인</span><input type="password" name="pwdCheck" className="find-form-input" onChange={setFormData} placeholder="비밀번호를 한번 더 입력하세요"/>
+                    {/* {alertMsg.email!='' && <><span style={{color:'red'}}>{alertMsg.email}</span><br/></>} */}
+                </div>
                 <input type="submit" value="비밀번호 재설정" className="find-btn"/>
             </form>
         </div>
