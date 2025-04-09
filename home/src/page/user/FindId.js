@@ -57,18 +57,20 @@ function FindId(){
         .then(function(response){
             console.log(response.data);
 
-            //result가 "idActive", "idDelete", "idNone"인지 확인
-            if(response.data.status === "idActive"){
+            //result가 "userActive", "userDelete", "userNone"인지 확인
+            if(response.data.status === "userActive"){
                 //아이디 찾기 성공시
                 alert("아이디 찾기 성공하였습니다.");
                 setUserId(response.data.id);
                 setIdFound(true);  //아이디 찾기 성공 상태로 변경
-            }else if(response.data.status === "idDelete"){
+            }else if(response.data.status === "userDelete"){
                 //탈퇴한 사용자의 경우
-                alert("탈퇴한 사용자입니다.");
-            }else if(response.data.status === "idNone"){
+                alert("탈퇴한 사용자입니다. 회원가입 후 이용하세요.");
+                window.location.href = "/register";
+            }else if(response.data.status === "userNone"){
                 //아이디 존재하지 않을 경우
-                alert("아이디 찾기 실패하였습니다.");
+                alert("아이디 찾기 실패하였습니다. 회원가입 페이지로 이동합니다.");
+                window.location.href = "/register";
             }
         }).catch(function(error){
             console.log(error);
@@ -81,7 +83,7 @@ function FindId(){
                 {!idFound ? (
                     <>
                     <form onSubmit={formCheck}>
-                        <h3>아이디 찾기</h3>
+                        <h3 className="find-form-subject">아이디 찾기</h3>
                         <span className="find-form-title">닉네임</span><input type="text" name="nickname" className="find-form-input" onChange={setFormData} placeholder="이름을 입력하세요"/><br/><br/>
                         {/* {alertMsg.nickname!='' && <><span style={{color:'red'}}>{alertMsg.nickname}</span><br/></>} */}
                         <span className="find-form-title">이메일</span><input type="text" name="email" className="find-form-input" onChange={setFormData} placeholder="이메일을 입력하세요"/><br/>
@@ -91,9 +93,16 @@ function FindId(){
                     </>
                 ):(
                     <div>
-                        <h3>아이디 찾기</h3>
+                        <h3 className="find-form-subject">아이디 찾기</h3>
                         찾은 아이디는 {userId}입니다.
-                        <input type="button" value="로그인 페이지로 이동" a href="#" className="find-btn"/>
+                        <div className="find-btn-wrap">
+                            <button onClick={() => window.location.href='/login'} className="find-btn find-btn-id">
+                                로그인
+                            </button>
+                            <button onClick={() => window.location.href='/user/findPWd'} className="find-btn find-btn-id">
+                                비밀번호 찾기
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>
