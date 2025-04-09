@@ -1,6 +1,7 @@
 package com.ict.finalProject.oauth.controller;
 
 import com.ict.finalProject.common.exception.custom.UserAuthenticationException;
+import com.ict.finalProject.common.exception.custom.UserStatusException;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.oauth.controller.request.LoginRequest;
 import com.ict.finalProject.oauth.controller.request.RegisterRequest;
@@ -11,12 +12,15 @@ import com.ict.finalProject.oauth.service.Oauth2Service;
 import com.ict.finalProject.oauth.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/oauth/kakao")
@@ -56,17 +60,32 @@ public class OAuth2Controller {
     }
 
     @PostMapping("/login")
-    public SuccessOfFailResponse login(@RequestBody LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            String accessToken = userService.login(request.getId(), request.getPassword());
 
-        String accessToken = userService.login(request.getId(), request.getPassword());
+            return ResponseEntity.ok()
+                    .header("accessToken", accessToken)
+                    .body(Map.of("result", true, "message", "로그인 성공"));
 
-        if (accessToken == null || accessToken.trim().isEmpty()) {
-            throw new UserAuthenticationException("로그인에 실패하였습니다.");
+            // --- UserStatusException을 먼저 catch ---
+        } catch (UserStatusException e) {
+            log.warn("비활성 사용자 로그인 시도 ({}): {}", request.getId(), e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN) // 비활성 사용자는 403 Forbidden
+                    .body(Map.of("result", false, "message", e.getMessage()));
+
+            // --- 그 다음에 RuntimeException catch (아이디 없음, 비밀번호 불일치 등) ---
+        } catch (RuntimeException e) {
+            log.warn("로그인 실패 ({}): {}", request.getId(), e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED) // 인증 실패는 401 Unauthorized
+                    .body(Map.of("result", false, "message", e.getMessage()));
+
+            // --- 마지막으로 가장 일반적인 Exception catch ---
+        } catch (Exception e) {
+            log.error("로그인 처리 중 예상치 못한 오류 발생 [{}]", request.getId(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) // 서버 내부는 500
+                    .body(Map.of("result", false, "message", "로그인 처리 중 서버 오류가 발생했습니다."));
         }
-        // 헤더에 accessToken 저장 (클라이언트가 쉽게 사용할 수 있도록)
-        response.setHeader("accessToken", accessToken);
-
-        return SuccessOfFailResponse.builder().result(true).build();
     }
 
     // --- 아이디 중복검사 하는 코드 추가주웅 ---
