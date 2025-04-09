@@ -80,7 +80,7 @@ const LoginForm = () => {
                             )}
                         </button>
 
-                        
+
                         <button
                             onClick={handleKakaoLogin}
                             className="btn w-100 mb-3 d-flex align-items-center justify-content-center" // 아이콘/텍스트 정렬 위해 flex 추가
@@ -107,7 +107,7 @@ const LoginForm = () => {
                             아이디 찾기
                         </Link>
                         <span className="mx-2">|</span>
-                        <a href="#" className="text-decoration-none text-secondary"> {/* TODO: 비밀번호 찾기 경로 설정 */}
+                        <a href="/user/findPwd" className="text-decoration-none text-secondary">
                             비밀번호 찾기
                         </a>
                     </div>
