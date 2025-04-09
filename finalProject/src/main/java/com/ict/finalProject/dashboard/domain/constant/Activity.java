@@ -33,6 +33,7 @@ public enum Activity {
     static {
         LOOKUP_MAP = new HashMap<>();
         for (Activity activity : values()) {
+            if (LOGIN.equals(activity)) continue;
             LOOKUP_MAP.put(activity.method.name() + ":" + activity.path, activity);
         }
     }

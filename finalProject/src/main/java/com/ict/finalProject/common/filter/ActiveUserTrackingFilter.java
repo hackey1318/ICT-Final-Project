@@ -31,8 +31,11 @@ public class ActiveUserTrackingFilter extends OncePerRequestFilter {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Activity.from(request).ifPresent(activity -> {
-            Users users = usersRepository.findById((String) auth.getPrincipal()).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
-            activeUsersService.saveActivateLog((auth == null ? null : users), request.getRemoteAddr(), activity);
+            Users users = null;
+            if (auth != null) {
+                users = usersRepository.findById((String) auth.getPrincipal()).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+            }
+            activeUsersService.saveActivateLog(users, request.getRemoteAddr(), activity);
         });
 
         filterChain.doFilter(request, response);
