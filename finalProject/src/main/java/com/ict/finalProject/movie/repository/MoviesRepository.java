@@ -11,4 +11,6 @@ import java.util.List;
 public interface MoviesRepository extends JpaRepository<Movies, Integer> {
 
     List<Movies> findByOpenStatusIn(List<MovieStatus> statuses);
+
+    List<Movies> findAllByNameContaining(String movieSearch);
 }
