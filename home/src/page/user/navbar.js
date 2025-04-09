@@ -116,7 +116,6 @@ function Navbar() {
                         </ul>
                     </div>
                 </div>
-            </div>
             {/* 사용자 섹션 */}
             <div className="navbar-user">
                 {isLoggedIn ? (
@@ -163,6 +162,7 @@ function Navbar() {
                 <button onClick={handleLogout} className="test-btn logout">
                     로그아웃 테스트
                 </button>
+            </div>
             </div>
 
         </nav>
