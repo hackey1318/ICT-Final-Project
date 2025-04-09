@@ -1,12 +1,12 @@
 /* 네비게이션 바 기본 스타일 */
-.navbar {
+.navbars {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
     z-index: 1000;
 }
 
-.navbar-container {
+.navbar-containers {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -18,7 +18,7 @@
 }
 
 /* 좌측 섹션 (로고 + 네비게이션 메뉴) */
-.navbar-left {
+.navbar-lefts {
     display: flex;
     align-items: center;
 }
@@ -46,11 +46,11 @@
 }
 
 /* 네비게이션 메뉴 스타일 */
-.navbar-menu {
+.navbar-menus {
     display: flex;
 }
 
-.navbar-nav {
+.navbar-navs {
     display: flex;
     flex-direction: row;
     /* 명시적으로 가로 방향 지정 */
@@ -59,13 +59,13 @@
     padding: 0;
 }
 
-.nav-item {
+.nav-items {
     position: relative;
     margin-right: 10px;
     /* 메뉴 항목 간 간격 추가 */
 }
 
-.nav-link {
+.nav-links {
     display: block;
     padding: 0 15px;
     line-height: 70px;
@@ -77,7 +77,7 @@
     /* 텍스트 줄바꿈 방지 */
 }
 
-.nav-link:hover {
+.nav-links:hover {
     color: #0066cc;
 }
 
@@ -241,12 +241,12 @@
         /* 토글 버튼과 사용자 섹션 사이 간격 */
     }
 
-    .navbar-left {
+    .navbar-lefts {
         flex: 1;
         /* 좌측 섹션이 가능한 공간 차지 */
     }
 
-    .navbar-menu {
+    .navbar-menus {
         position: absolute;
         top: 70px;
         left: 0;
@@ -262,19 +262,19 @@
         display: block;
     }
 
-    .navbar-nav {
+    .navbar-navs {
         flex-direction: column;
         /* 모바일에서 세로 방향으로 변경 */
     }
 
-    .nav-item {
+    .nav-items {
         margin-right: 0;
         /* 모바일에서 오른쪽 마진 제거 */
         margin-bottom: 5px;
         /* 모바일에서 아래 마진 추가 */
     }
 
-    .nav-link {
+    .nav-links {
         line-height: 40px;
         padding: 5px 0;
     }
