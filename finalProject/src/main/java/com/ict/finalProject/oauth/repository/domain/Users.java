@@ -58,4 +58,7 @@ public class Users {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt; // 수정일
+
+    @Column // 제약조건 필요 시 추가 (nullable 등)
+    private String profileImageUrl; // 프로필 이미지 URL 저장 필드 추가
 }
