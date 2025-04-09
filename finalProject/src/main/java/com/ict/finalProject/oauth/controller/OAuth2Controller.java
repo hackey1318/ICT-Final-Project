@@ -62,11 +62,20 @@ public class OAuth2Controller {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
+            Users loggedInUser = userService.getUser(request.getId());
             String accessToken = userService.login(request.getId(), request.getPassword());
+
 
             return ResponseEntity.ok()
                     .header("accessToken", accessToken)
-                    .body(Map.of("result", true, "message", "로그인 성공"));
+                    .body(Map.of(
+                            "result", true,
+                            "message", "로그인 성공",
+                            "userNo", loggedInUser.getNo(),
+                            "nickname", loggedInUser.getNickname(),
+                            "profileImageUrl", loggedInUser.getProfileImageUrl() == null ? "" : loggedInUser.getProfileImageUrl(), // null 체크 추가 (선택적)
+                            "role", loggedInUser.getRole()
+                    ));
 
             // --- UserStatusException을 먼저 catch ---
         } catch (UserStatusException e) {
