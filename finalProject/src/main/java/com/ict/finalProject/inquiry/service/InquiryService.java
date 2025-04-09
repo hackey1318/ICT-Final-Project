@@ -8,7 +8,7 @@ public interface InquiryService {
 
     boolean inquiryWrite(InquiryRequest request);  //문의등록
 
-    List<InquiryRequest> getInquiry(InquiryRequest request);  //문의리스트
+    List<InquiryRequest> getInquiry(String request);  //문의리스트
 
     /*List<InquiryResponse> getInquiry(int no);*/
 }

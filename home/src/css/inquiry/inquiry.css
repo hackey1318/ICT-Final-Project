@@ -1,0 +1,132 @@
+/* 문의목록 */
+.container {
+    width: 95%;
+    margin: 0 auto;
+}
+
+thead {
+    border-bottom: 1px solid gray;
+}
+
+tr {
+    border-bottom: 1px solid gray;
+}
+
+#write {
+    text-decoration-line: none;
+    color: black;
+    position: relative;
+    left: 90%;
+    top: 100px;
+    cursor: pointer;
+}
+
+#write:not(:hover) {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+    transition: all 0.500s;
+}
+
+#write:hover {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: gray;
+    transition: all 0.500s;
+    color: white;
+}
+
+/* 문의작성 */
+.inquiry-container {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.inquiry-title {
+    width: 98%;
+    margin: 5px auto 15px;
+    height: 28px;
+    line-height: 28px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#inquiry-submit {
+    margin-top: 15px;
+    text-decoration-line: none;
+    color: black;
+    cursor: pointer;
+}
+
+#inquiry-submit:not(:hover) {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+    transition: all 0.500s;
+}
+
+#inquiry-submit:hover {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: gray;
+    transition: all 0.500s;
+    color: white;
+}
+
+#inquiry-cancel {
+    margin: 15px 0 0 10px;
+    text-decoration-line: none;
+    color: black;
+    cursor: pointer;
+}
+
+#inquiry-cancel:not(:hover) {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+    transition: all 0.500s;
+}
+
+#inquiry-cancel:hover {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: gray;
+    transition: all 0.500s;
+    color: white;
+}
+
+#inquiry-box {
+    border-radius: 0 0 10px 10px;
+}
+
+#inquiryModal {
+    position: absolute;
+    top: 25%;
+    left: 10%;
+    width: 80%;
+    min-width: 560px;
+    background-color: white;
+    z-index: 10;
+    border: 3px solid #ddd;
+    border-radius: 20px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+#noInquiryMsg {
+    position: absolute;
+    left: 5%;
+    width: 90%;
+    height: 50px;
+    line-height: 50px;
+    margin: 30px auto;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+/* .ql-container, .ql-toolbar {
+    min-width: 100px;
+} */

@@ -50,7 +50,7 @@ public class InquiryServiceImpl implements InquiryService {
 
     //문의리스트
     @Override
-    public List<InquiryRequest> getInquiry(InquiryRequest request) {
+    public List<InquiryRequest> getInquiry(String request) {
         return List.of();
     }
 
