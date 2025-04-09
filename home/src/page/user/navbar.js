@@ -65,10 +65,10 @@ function Navbar() {
     }
 
     return (
-        <nav className="navbar">
-            <div className="navbar-container">
+        <nav className="navbars">
+            <div className="navbar-containers">
                 {/* 좌측 섹션 (로고 + 네비게이션 메뉴) */}
-                <div className="navbar-left">
+                <div className="navbar-lefts">
                     {/* 로고 */}
                     <div className="navbar-logo">
                         <Link to="/">
@@ -89,26 +89,26 @@ function Navbar() {
                     </div>
 
                     {/* 네비게이션 메뉴 */}
-                    <div className={`navbar-menu ${isNavOpen ? "active" : ""}`}>
-                        <ul className="navbar-nav">
-                            <li className="nav-item" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                                <a href="#" className="nav-link" ref={movieMenuRef}>
+                    <div className={`navbar-menus ${isNavOpen ? "active" : ""}`}>
+                        <ul className="navbar-navs">
+                            <li className="nav-items" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                                <a href="#" className="nav-links" ref={movieMenuRef}>
                                     영화찾기 <i className="dropdown-arrow">▼</i>
                                 </a>
                             </li>
-                            <li className="nav-item">
-                                <Link to="/store" className="nav-link">
+                            <li className="nav-items">
+                                <Link to="/store" className="nav-links">
                                     스토어
                                 </Link>
                             </li>
-                            <li className="nav-item">
-                                <Link to="/community" className="nav-link">
+                            <li className="nav-items">
+                                <Link to="/community" className="nav-links">
                                     커뮤니티
                                 </Link>
                             </li>
                             {isLoggedIn && (
-                                <li className="nav-item">
-                                    <Link to="/mypage" className="nav-link">
+                                <li className="nav-items">
+                                    <Link to="/mypage" className="nav-links">
                                         마이페이지
                                     </Link>
                                 </li>
