@@ -1,4 +1,4 @@
-package com.ict.finalProject.md.repository.domain;
+package com.ict.finalProject.mdShop.repository.domain;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;

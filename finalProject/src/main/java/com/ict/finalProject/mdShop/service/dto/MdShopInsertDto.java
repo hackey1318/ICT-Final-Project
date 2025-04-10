@@ -1,10 +1,10 @@
-package com.ict.finalProject.md.service.dto;
+package com.ict.finalProject.mdShop.service.dto;
 
 import lombok.Data;
 
 
 @Data
-public class MdInsertDto {
+public class MdShopInsertDto {
     private String name;
     private int movieNo;
     private String type;

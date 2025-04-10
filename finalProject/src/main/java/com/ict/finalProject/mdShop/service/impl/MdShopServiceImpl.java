@@ -1,12 +1,12 @@
-package com.ict.finalProject.md.service.impl;
+package com.ict.finalProject.mdShop.service.impl;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
-import com.ict.finalProject.md.repository.domain.Goods;
-import com.ict.finalProject.md.repository.MdRepository;
-import com.ict.finalProject.md.service.MdService;
-import com.ict.finalProject.md.service.dto.MdDto;
-import com.ict.finalProject.md.service.dto.MdInsertDto;
-import com.ict.finalProject.md.service.dto.MovieNameDto;
+import com.ict.finalProject.mdShop.repository.domain.Goods;
+import com.ict.finalProject.mdShop.repository.MdShopRepository;
+import com.ict.finalProject.mdShop.service.MdShopService;
+import com.ict.finalProject.mdShop.service.dto.MdShopDto;
+import com.ict.finalProject.mdShop.service.dto.MdShopInsertDto;
+import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
 import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.domain.Movies;
 import lombok.RequiredArgsConstructor;
@@ -18,25 +18,25 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class MdServiceImpl implements MdService {
-    private final MdRepository mdRepository;
+public class MdShopServiceImpl implements MdShopService {
+    private final MdShopRepository mdShopRepository;
     private final MoviesRepository moviesRepository;
 
     //임시리스트
     @Override
-    public List<MdDto> getMdList() {
-        List<Goods> entityList = mdRepository.findAll();
-        List<MdDto> dtoList = new ArrayList<>();
+    public List<MdShopDto> getMdList() {
+        List<Goods> entityList = mdShopRepository.findAll();
+        List<MdShopDto> dtoList = new ArrayList<>();
 
         for(Goods entity : entityList){
-            MdDto dto = new MdDto(entity);
+            MdShopDto dto = new MdShopDto(entity);
             dtoList.add(dto);
         }
         return dtoList;
     }
 
     @Override
-    public void insertMd(MdInsertDto dto) {
+    public void insertMd(MdShopInsertDto dto) {
         Goods entity = new Goods();
         entity.setName(dto.getName());
         entity.setMovieNo(dto.getMovieNo());
@@ -45,7 +45,7 @@ public class MdServiceImpl implements MdService {
         entity.setOptions(dto.getOptions());
         entity.setStatus(StatusInfo.ACTIVE);
 
-        mdRepository.save(entity);
+        mdShopRepository.save(entity);
     }
 
     @Override

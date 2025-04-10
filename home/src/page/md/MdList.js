@@ -34,10 +34,10 @@ function MdList() {
 
   const getMdList = () => {
     axios
-      .post("http://localhost:9988/md/list",{
-        header:{
+      .get("http://localhost:9988/md/items",{
+        headers:{
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          "Authorization": `Bearer ${accessToken}`,
         }
       })
       .then((res) => setMdList(res.data))
@@ -47,9 +47,13 @@ function MdList() {
   const fetchMovieList = async () => {
     if (!modalOpen) return
     try {
-      const response = await axios.get(`http://localhost:9988/md/movies?movieSearch=${movieSearch}`)
+      const response = await axios.get(`http://localhost:9988/md/insert-moviename?movieSearch=${encodeURIComponent(movieSearch)}`,{
+        headers:{
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
+        }
+      })
       setMovieList(response.data)
-      console.log("API 응답:", response.data)
     } catch (err) {
       console.error("영화 리스트 가져오기 실패:", err)
     }
@@ -71,6 +75,11 @@ function MdList() {
       .post("http://localhost:9988/md/insert", {
         ...form,
         price: Number(form.price),
+      },{
+        headers:{
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
+        }
       })
       .then(() => {
         alert("등록 완료!")
@@ -179,7 +188,7 @@ function MdList() {
                         <div
                           key={item.no}
                           className="movie-option"
-                          onMouseDown={(e) => {
+                          onClick={(e) => {
                             e.preventDefault()
                             handleMovieSelect(item)
                           }}

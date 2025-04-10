@@ -1,4 +1,4 @@
-package com.ict.finalProject.md.service.dto;
+package com.ict.finalProject.mdShop.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

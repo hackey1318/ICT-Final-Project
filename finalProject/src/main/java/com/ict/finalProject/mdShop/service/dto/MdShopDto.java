@@ -1,6 +1,6 @@
-package com.ict.finalProject.md.service.dto;
+package com.ict.finalProject.mdShop.service.dto;
 
-import com.ict.finalProject.md.repository.domain.Goods;
+import com.ict.finalProject.mdShop.repository.domain.Goods;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 //임시 리스트
-public class MdDto {
+public class MdShopDto {
     private int id;
     private String name;
     private int movieNo;
@@ -18,7 +18,7 @@ public class MdDto {
     private int price;
     private String options;
 
-    public MdDto(Goods goods){
+    public MdShopDto(Goods goods){
         this.id = goods.getId();
         this.name = goods.getName();
         this.movieNo = goods.getMovieNo();

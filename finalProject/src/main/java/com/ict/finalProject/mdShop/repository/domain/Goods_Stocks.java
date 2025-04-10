@@ -1,4 +1,4 @@
-package com.ict.finalProject.md.repository.domain;
+package com.ict.finalProject.mdShop.repository.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
