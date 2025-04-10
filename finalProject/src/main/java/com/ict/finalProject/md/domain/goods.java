@@ -1,11 +1,11 @@
 package com.ict.finalProject.md.domain;
 
+import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "goods")
 @EntityListeners(AuditingEntityListener.class)
-public class MdEntity {
+public class goods {
 
     @Id
     @Column(name = "no")
@@ -39,10 +39,8 @@ public class MdEntity {
     @Column(nullable = true)
     private String goods_option;
 
-    //재고?상황
-//    @Column(nullable = false)
-//    private String status;
-
+    @Enumerated(value = EnumType.STRING)
+    private StatusInfo status;
 
     @CreationTimestamp
     @Column(updatable = false)

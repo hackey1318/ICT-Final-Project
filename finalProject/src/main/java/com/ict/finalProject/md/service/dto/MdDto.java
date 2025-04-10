@@ -1,10 +1,14 @@
 package com.ict.finalProject.md.service.dto;
 
-import com.ict.finalProject.md.domain.MdEntity;
+import com.ict.finalProject.md.domain.goods;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 //임시 리스트
 public class MdDto {
     private int id;
@@ -14,7 +18,7 @@ public class MdDto {
     private int price;
     private String option;
 
-    public MdDto(MdEntity e){
+    public MdDto(goods e){
         this.id = e.getId();
         this.goods_name = e.getGoods_name();
         this.movie_name = e.getMovie_name();
