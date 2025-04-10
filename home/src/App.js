@@ -7,6 +7,11 @@ import KakaoCallback from './page/user/KakaoCallback';
 import FindId from './page/user/FindId';
 import FindPwd from './page/user/FindPwd';
 import PwdReset from './page/user/PwdReset';
+import Payment from './js/payment/Payment';
+import TossPayment from './js/payment/TossPayment';
+import TossPaymentSuccess from './js/payment/TossPaymentSuccess';
+import TossPaymentFail from './js/payment/TossPaymentFail';
+import PaymentResult from './js/payment/PaymentResult';
 
 function App() {
   return (
@@ -19,6 +24,11 @@ function App() {
           <Route path='user/findId' element={<FindId />} />
           <Route path='user/findPwd' element={<FindPwd />} />
           <Route path='user/pwdReset' element={<PwdReset />} />
+          <Route path='payment' element={<Payment />} />
+          <Route path='payment/tossPayment' element={<TossPayment />} />
+          <Route path='payment/tossPaymentSuccess' element={<TossPaymentSuccess />} />
+          <Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
+          <Route path='payment/result' element={<PaymentResult />} />
         </Route>
         <Route path='/manager' element={<Layout />}>
           <Route index element={<Main />} />
