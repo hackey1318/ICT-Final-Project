@@ -18,26 +18,26 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class InquiryImages {
+@EntityListeners(AuditingEntityListener.class)  //CreateDate최신화 기능
+public class ImageInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int no;
 
-    private String inquiryNo;
+    @Column(nullable = false, length = 20)
+    private String type;
 
-    @Column(nullable = false, length = 1000)
-    private String path;
+    private int boardNo;
 
-    @Column(nullable = false, length = 50)
-    private String originName;
+    @Column(nullable = false, length = 16)
+    private String field;
 
     @Enumerated(value = EnumType.STRING)
     private StatusInfo status;
 
     @CreatedDate
-    @Column(updatable = false)
+    @Column
     private LocalDateTime createdAt;
 
     @LastModifiedDate
