@@ -74,7 +74,7 @@ function InquiryPage() {
             <p>1:1문의하기</p>
             <div className="container mt-3">
                 <table className="table table-hover" style={{width: '100%'}}>
-                    <thead>
+                    <thead style={{borderBottom: '1px solid #ddd'}}>
                         <tr>
                             <th style={{width:'10%', textAlign:'center'}}>번호</th>
                             <th style={{width:'50%'}}>제목</th>
@@ -97,7 +97,7 @@ function InquiryPage() {
                                 })
                             ) : (
                                 <tr>
-                                    <td>
+                                    <td style={{border: 'none'}}>
                                         <div id='noInquiryMsg'>문의 내역이 없습니다.</div>
                                     </td>
                                 </tr>
@@ -128,13 +128,13 @@ function InquiryPage() {
                 <div id="paging">
                     
                 </div>
-                <button id="write" 
+                <div style={{textAlign: 'right'}}><button id="write" 
                         title='문의하기' 
                         onClick={() => setWriteModalOpen(true)}
                         disabled={writeModalOpen || inquiryModalOpen}
                         style={{pointerEvents: (writeModalOpen||inquiryModalOpen) ? 'none' : 'auto'}}>
                     문의하기
-                </button>
+                </button></div>
             </div>
         </div>
     )

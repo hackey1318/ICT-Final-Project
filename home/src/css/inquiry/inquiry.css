@@ -16,7 +16,6 @@ tr {
     text-decoration-line: none;
     color: black;
     position: relative;
-    left: 90%;
     top: 100px;
     cursor: pointer;
 }
@@ -52,8 +51,36 @@ tr {
     border-radius: 5px;
 }
 
+#addImgDiv {
+    width: 55px;
+    height: 55px;
+    text-align: center;
+    line-height: 47px;
+    border: 2px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.500s;
+}
+
+#addImgDiv:hover {
+    background-color: #ddd;
+    transition: all 0.500s;
+}
+
+.imgList {
+    display: flex;
+    margin-left: 20px;
+}
+
+.imgList>div {
+    margin-left: 10px;
+    width: 60px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 #inquiry-submit {
-    margin-top: 15px;
     text-decoration-line: none;
     color: black;
     cursor: pointer;
@@ -76,7 +103,7 @@ tr {
 }
 
 #inquiry-cancel {
-    margin: 15px 0 0 10px;
+    margin-left: 10px;
     text-decoration-line: none;
     color: black;
     cursor: pointer;
@@ -117,13 +144,12 @@ tr {
 
 #noInquiryMsg {
     position: absolute;
-    left: 5%;
-    width: 90%;
+    left: 10%;
+    width: 80%;
     height: 50px;
     line-height: 50px;
     margin: 30px auto;
     text-align: center;
-    border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
 }
 
