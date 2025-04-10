@@ -1,9 +1,9 @@
-package com.ict.finalProject.md.controller;
+package com.ict.finalProject.mdShop.controller;
 
-import com.ict.finalProject.md.service.dto.MdDto;
-import com.ict.finalProject.md.service.dto.MdInsertDto;
-import com.ict.finalProject.md.service.dto.MovieNameDto;
-import com.ict.finalProject.md.service.MdService;
+import com.ict.finalProject.mdShop.service.dto.MdShopDto;
+import com.ict.finalProject.mdShop.service.dto.MdShopInsertDto;
+import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
+import com.ict.finalProject.mdShop.service.MdShopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,22 +14,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/md")
 @RequiredArgsConstructor
-public class MdController {
+public class MdShopController {
 
-    private final MdService md_service;
+    private final MdShopService md_service;
 
     //임시 리스트
-    @PostMapping("/list")
-    public List<MdDto> getMdList(){
+    @GetMapping("/items")
+    public List<MdShopDto> getMdList(){
         return md_service.getMdList();
     }
 
     @PostMapping("/insert")
-    public void insertMd(@RequestBody MdInsertDto dto){
+    public void insertMd(@RequestBody MdShopInsertDto dto){
         md_service.insertMd(dto);
     }
 
-    @GetMapping("/movies")
+    @GetMapping("/insert-moviename")
     public ResponseEntity<List<MovieNameDto>> getMovieNames(String movieSearch){
         System.out.println(movieSearch);
         List<MovieNameDto> no_search = new ArrayList<>();
