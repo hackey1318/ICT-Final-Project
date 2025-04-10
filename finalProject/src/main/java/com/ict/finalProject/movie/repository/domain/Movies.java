@@ -41,11 +41,15 @@ public class Movies {
     @Enumerated(value = EnumType.STRING)
     private MovieStatus openStatus; // 공개 상태
 
+    @Builder.Default
     @Column(length = 20, nullable = false)
     private String reservationRate = "0"; // 예매율 (기본값 '0')
 
     @Column(length = 255, nullable = false)
     private String postImage; // 포스터 URL
+
+    @Column(length = 100, nullable = false)
+    private String genre; // 영화 장르
 
     @Column(length = 10, nullable = false)
     private String ageGrade; // 연령 등급
@@ -70,6 +74,7 @@ public class Movies {
         this.openStatus = other.openStatus;
         this.reservationRate = other.reservationRate;
         this.postImage = other.postImage;
+        this.genre = other.genre;
         this.ageGrade = other.ageGrade;
     }
 }
