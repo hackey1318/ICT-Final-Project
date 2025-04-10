@@ -115,6 +115,7 @@ public class CGVMovieCrawler {
                         .openStatus(openStatus)
                         .reservationRate(reservationRate)
                         .postImage(imageSrc)
+                        .genre(detail.getGenre())
                         .ageGrade(ageRating)
                         .build();
 
@@ -136,18 +137,25 @@ public class CGVMovieCrawler {
         String director = directorEl != null ? directorEl.text() : "정보 없음";
 
         Element synopsisEl = detailDoc.selectFirst(".sect-story-movie");
-        String synopsis = synopsisEl != null ? synopsisEl.text().replaceAll("\\s+", " ").trim() : "정보 없음";
+        String synopsis = (synopsisEl != null && !synopsisEl.text().replaceAll("\\s+", " ").trim().isEmpty()) ? synopsisEl.text().replaceAll("\\s+", " ").trim() : "정보 없음";
 
         Elements stillCutEls = detailDoc.select("#still_motion img[data-src]");
         List<String> stillCutUrls = new ArrayList<>();
         for (Element img : stillCutEls) {
             stillCutUrls.add(img.attr("data-src"));
         }
+        // ✅ 4. 장르 추출 (dt 태그에서 직접 파싱)
+        Element genreEl = detailDoc.select(".spec dt").stream()
+                .filter(dt -> dt.text().contains("장르"))
+                .findFirst()
+                .orElse(null);
+        String genre = (genreEl != null && !genreEl.text().replace("장르 :", "").trim().isEmpty()) ? genreEl.text().replace("장르 :", "").trim() : "정보 없음";
 
         return MovieDetailDto.builder()
                 .director(director)
                 .synopsis(synopsis)
                 .imageList(stillCutUrls)
+                .genre(genre)
                 .build();
     }
 
@@ -205,6 +213,7 @@ public class CGVMovieCrawler {
                         .openStatus(openStatus)
                         .reservationRate(reservationRate)
                         .postImage(imageSrc)
+                        .genre(detail.getGenre())
                         .ageGrade(ageRating)
                         .build();
 

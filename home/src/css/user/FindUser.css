@@ -29,6 +29,11 @@
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+.find-btn-wrap{
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
 .find-btn{
     width: 200px;
     height: 35px;
@@ -36,6 +41,9 @@
     border-radius: 5px;
     margin: 20px;
     cursor: pointer;
+}
+.find-btn-id{
+    width: 130px;
 }
 .find-btn:hover{
     color: #fff;
