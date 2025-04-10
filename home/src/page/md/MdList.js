@@ -5,86 +5,84 @@ import { useEffect, useState } from "react"
 import "../../css/md/MdList.css"
 
 function MdList() {
-  const [mdList, setMdList] = useState([]) // 리스트 상태
+  const [mdList, setMdList] = useState([])
+
   const [form, setForm] = useState({
-    // 입력 폼 상태
-    goods_name: "",
-    movie_name: "",
+    name: "",
+    movieNo: "",
     type: "",
     price: "",
-    goods_option: "",
+    options: "",
   })
-  const [modalOpen, setModalOpen] = useState(false) // 모달 상태
-  const [movieList, setMovieList] = useState([]) // 영화(등록검색용용)
-  const [movieSearch, setMovieSearch] = useState("") // 영화 검색 상태
-  const [showDropdown, setShowDropdown] = useState(false) // 드롭다운 표시 상태 추가
 
-  // 페이지 로딩 시 리스트 가져오기
+  const [modalOpen, setModalOpen] = useState(false)
+  const [movieList, setMovieList] = useState([])
+  const [movieSearch, setMovieSearch] = useState("")
+  const [showDropdown, setShowDropdown] = useState(false)
+  const accessToken = sessionStorage.getItem("accessToken")
+
   useEffect(() => {
     getMdList()
-    fetchMovieList() // 영화 리스트 가져오기
   }, [])
 
-  // 리스트 불러오기(수정예정 확인용)
+  useEffect(() => {
+    if (modalOpen && movieSearch.length > 0) {
+      fetchMovieList()
+      setShowDropdown(true)
+    }
+  }, [movieSearch])
+
   const getMdList = () => {
     axios
-      .post("http://localhost:9988/md/list")
+      .post("http://localhost:9988/md/list",{
+        header:{
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        }
+      })
       .then((res) => setMdList(res.data))
       .catch((err) => console.error(err))
   }
 
-  useEffect(() => {
-    fetchMovieList()
-    // 검색어가 있을 때 드롭다운 표시
-    if (movieSearch.length > 0) {
-      setShowDropdown(true)
-    }
-    console.log("영화 리스트:", movieList)
-    console.log("검색어:", movieSearch)
-    console.log("드롭다운 표시:", showDropdown)
-  }, [movieSearch])
-
   const fetchMovieList = async () => {
+    if (!modalOpen) return
     try {
       const response = await axios.get(`http://localhost:9988/md/movies?movieSearch=${movieSearch}`)
-      setMovieList(response.data) // 영화 리스트 상태 업데이트
+      setMovieList(response.data)
       console.log("API 응답:", response.data)
     } catch (err) {
       console.error("영화 리스트 가져오기 실패:", err)
     }
   }
 
-  // 영화 선택 핸들러
-  const handleMovieSelect = (movieName) => {
-    setForm({ ...form, movie_name: movieName })
-    setMovieSearch(movieName)
+  const handleMovieSelect = (movie) => {
+    setForm({ ...form, movieNo: movie.no })
+    setMovieSearch(movie.name)
     setShowDropdown(false)
   }
 
-  // 폼 제출 (등록)
   const handleSubmit = () => {
-    // 유효성 검사
-    if (!form.goods_name || !form.type || !form.price || !form.movie_name) {
-      alert("굿즈이름, 종류, 가격, 영화이름은 필수입력입니다.")
+    if (!form.name || !form.type || !form.price || !form.movieNo) {
+      alert("굿즈이름, 종류, 가격, 영화선택은 필수입력입니다.")
       return
     }
 
     axios
       .post("http://localhost:9988/md/insert", {
         ...form,
-        price: Number(form.price), // 문자열을 숫자로 변환 (int형 필드와 맞춤)
+        price: Number(form.price),
       })
       .then(() => {
         alert("등록 완료!")
-        getMdList() // 등록 후 리스트 갱신
-        setModalOpen(false) // 모달 닫기
+        getMdList()
+        setModalOpen(false)
         setForm({
-          goods_name: "",
-          movie_name: "",
+          name: "",
+          movieNo: "",
           type: "",
           price: "",
-          goods_option: "",
-        }) // 폼 초기화
+          options: "",
+        })
         setMovieSearch("")
       })
       .catch((err) => {
@@ -98,21 +96,24 @@ function MdList() {
     setForm({ ...form, [name]: value })
   }
 
-  const openModal = () => setModalOpen(true) // 모달 열기
+  const openModal = () => {
+    setModalOpen(true)
+    setMovieSearch("")
+  }
+
   const closeModal = () => {
-    setModalOpen(false) // 모달 닫기
+    setModalOpen(false)
     setForm({
-      goods_name: "",
-      movie_name: "",
+      name: "",
+      movieNo: "",
       type: "",
       price: "",
-      goods_option: "",
-    }) // 폼 초기화
+      options: "",
+    })
     setMovieSearch("")
     setShowDropdown(false)
   }
 
-  // 검색창 외부 클릭 시 드롭다운 닫기
   const handleClickOutside = () => {
     setTimeout(() => {
       setShowDropdown(false)
@@ -124,16 +125,14 @@ function MdList() {
       <h2>📋 굿즈 리스트</h2>
       {mdList.map((item, idx) => (
         <div key={idx}>
-          {item.goods_name} / {item.type} / {item.price}원 / {item.goods_option} / {item.movie_name}
+          {item.name} / {item.type} / {item.price}원 / {item.options} / {item.movie_name}
         </div>
       ))}
 
-      {/* 등록 */}
       <button id="md-register-btn" className="btn btn-primary" onClick={openModal}>
         등록하기
       </button>
 
-      {/* 등록모달 */}
       {modalOpen && (
         <div className="md_modal-overlay">
           <div className="md_modal-wrapper">
@@ -150,9 +149,9 @@ function MdList() {
                   <label>굿즈명</label>
                   <input
                     type="text"
-                    name="goods_name"
+                    name="name"
                     className="md_form-input"
-                    value={form.goods_name}
+                    value={form.name}
                     onChange={handleChange}
                     placeholder="굿즈명을 입력하세요"
                   />
@@ -171,7 +170,9 @@ function MdList() {
                     onBlur={handleClickOutside}
                     placeholder="영화명을 입력하세요"
                   />
-                  {form.movie_name && <div className="selected-movie">선택된 영화: {form.movie_name}</div>}
+                  {form.movieNo && (
+                    <div className="selected-movie">선택된 영화: {movieSearch}</div>
+                  )}
                   {showDropdown && movieList.length > 0 && (
                     <div className="movie-dropdown">
                       {movieList.map((item) => (
@@ -179,8 +180,8 @@ function MdList() {
                           key={item.no}
                           className="movie-option"
                           onMouseDown={(e) => {
-                            e.preventDefault() // onBlur 이벤트 방지
-                            handleMovieSelect(item.name)
+                            e.preventDefault()
+                            handleMovieSelect(item)
                           }}
                         >
                           {item.name}
@@ -197,14 +198,18 @@ function MdList() {
 
                 <div className="md_form-group">
                   <label>종류</label>
-                  <input
-                    type="text"
+                  <select
                     name="type"
                     className="md_form-input"
                     value={form.type}
                     onChange={handleChange}
-                    placeholder="종류를 입력하세요"
-                  />
+                  >
+                    <option value="">종류를 선택하세요</option>
+                    <option value="포스터">포스터</option>
+                    <option value="인형">인형</option>
+                    <option value="머그컵">머그컵</option>
+                    <option value="기타">기타</option>
+                  </select>
                 </div>
 
                 <div className="md_form-group">
@@ -223,9 +228,9 @@ function MdList() {
                   <label>옵션</label>
                   <input
                     type="text"
-                    name="goods_option"
+                    name="options"
                     className="md_form-input"
-                    value={form.goods_option}
+                    value={form.options}
                     onChange={handleChange}
                     placeholder="옵션을 입력하세요"
                   />

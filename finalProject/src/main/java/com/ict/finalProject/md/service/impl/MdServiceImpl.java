@@ -1,7 +1,7 @@
 package com.ict.finalProject.md.service.impl;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
-import com.ict.finalProject.md.domain.goods;
+import com.ict.finalProject.md.repository.domain.Goods;
 import com.ict.finalProject.md.repository.MdRepository;
 import com.ict.finalProject.md.service.MdService;
 import com.ict.finalProject.md.service.dto.MdDto;
@@ -19,16 +19,16 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MdServiceImpl implements MdService {
-    private final MdRepository mdRepo;
+    private final MdRepository mdRepository;
     private final MoviesRepository moviesRepository;
 
     //임시리스트
     @Override
     public List<MdDto> getMdList() {
-        List<goods> entityList = mdRepo.findAll();
+        List<Goods> entityList = mdRepository.findAll();
         List<MdDto> dtoList = new ArrayList<>();
 
-        for(goods entity : entityList){
+        for(Goods entity : entityList){
             MdDto dto = new MdDto(entity);
             dtoList.add(dto);
         }
@@ -37,15 +37,15 @@ public class MdServiceImpl implements MdService {
 
     @Override
     public void insertMd(MdInsertDto dto) {
-        goods entity = new goods();
-        entity.setGoods_name(dto.getGoods_name());
-        entity.setMovie_name(dto.getMovie_name());
+        Goods entity = new Goods();
+        entity.setName(dto.getName());
+        entity.setMovieNo(dto.getMovieNo());
         entity.setType(dto.getType());
         entity.setPrice(dto.getPrice());
-        entity.setGoods_option(dto.getGoods_option());
+        entity.setOptions(dto.getOptions());
         entity.setStatus(StatusInfo.ACTIVE);
 
-        mdRepo.save(entity);
+        mdRepository.save(entity);
     }
 
     @Override

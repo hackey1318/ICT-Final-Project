@@ -25,9 +25,8 @@ public class MdController {
     }
 
     @PostMapping("/insert")
-    public ResponseEntity<String> insertMd(@RequestBody MdInsertDto dto){
+    public void insertMd(@RequestBody MdInsertDto dto){
         md_service.insertMd(dto);
-        return ResponseEntity.ok("굳굳");
     }
 
     @GetMapping("/movies")
