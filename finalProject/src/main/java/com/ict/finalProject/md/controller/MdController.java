@@ -21,7 +21,6 @@ public class MdController {
     //임시 리스트
     @PostMapping("/list")
     public List<MdDto> getMdList(){
-        System.out.println("요청 ㅇㅇ");
         return md_service.getMdList();
     }
 
