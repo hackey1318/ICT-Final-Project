@@ -15,5 +15,6 @@ public class MovieDetailDto {
 
     String director;
     String synopsis;
+    String genre;
     List<String> imageList;
 }
