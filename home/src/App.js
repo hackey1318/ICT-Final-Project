@@ -1,6 +1,9 @@
 import './App.css';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Main from './page/user/Main';
+import Main from './page/user/Main'
 import Layout from './page/user/Layout';
 import KakaoLogin from './page/user/LoginForm';
 import KakaoCallback from './page/user/KakaoCallback';
