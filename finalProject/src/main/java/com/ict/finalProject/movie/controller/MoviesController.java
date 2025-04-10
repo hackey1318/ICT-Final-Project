@@ -1,21 +1,18 @@
 package com.ict.finalProject.movie.controller;
 
 import com.ict.finalProject.movie.controller.response.MovieCardResponse;
-import com.ict.finalProject.movie.repository.constant.movie.MovieSearchType;
 import com.ict.finalProject.movie.repository.constant.movie.MovieStatus;
 import com.ict.finalProject.movie.repository.domain.Movies;
 import com.ict.finalProject.movie.service.MoviesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +50,7 @@ public class MoviesController {
 
     @GetMapping("/{type}")
     public Page<MovieCardResponse> getMovieList(@PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable,
-                             @PathVariable String type) {
+                                                @PathVariable String type) {
 
         List<MovieStatus> statusList = new ArrayList<>(List.of(MovieStatus.ACTIVE, MovieStatus.PENDING));
         switch (valueOf(type)) {
