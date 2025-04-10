@@ -1,4 +1,4 @@
-package com.ict.finalProject.md.domain;
+package com.ict.finalProject.md.repository.domain;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "goods")
 @EntityListeners(AuditingEntityListener.class)
-public class goods {
+public class Goods {
 
     @Id
     @Column(name = "no")
@@ -25,10 +25,13 @@ public class goods {
     private int id;
 
     @Column(nullable = false)
-    private String goods_name;
+    private String name;
 
     @Column(nullable = false)
-    private String movie_name;
+    private Integer movieNo;
+
+    @Column(nullable = true)
+    private Integer seriesNo;
 
     @Column(nullable = false)
     private String type;
@@ -37,7 +40,7 @@ public class goods {
     private int price;
 
     @Column(nullable = true)
-    private String goods_option;
+    private String options;
 
     @Enumerated(value = EnumType.STRING)
     private StatusInfo status;

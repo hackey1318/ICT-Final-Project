@@ -1,6 +1,6 @@
 package com.ict.finalProject.md.service.dto;
 
-import com.ict.finalProject.md.domain.goods;
+import com.ict.finalProject.md.repository.domain.Goods;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,18 +12,18 @@ import lombok.NoArgsConstructor;
 //임시 리스트
 public class MdDto {
     private int id;
-    private String goods_name;
-    private String movie_name;
+    private String name;
+    private int movieNo;
     private String type;
     private int price;
-    private String option;
+    private String options;
 
-    public MdDto(goods e){
-        this.id = e.getId();
-        this.goods_name = e.getGoods_name();
-        this.movie_name = e.getMovie_name();
-        this.type = e.getType();
-        this.price = e.getPrice();
-        this.option = e.getGoods_option();
+    public MdDto(Goods goods){
+        this.id = goods.getId();
+        this.name = goods.getName();
+        this.movieNo = goods.getMovieNo();
+        this.type = goods.getType();
+        this.price = goods.getPrice();
+        this.options = goods.getOptions();
     }
 }
