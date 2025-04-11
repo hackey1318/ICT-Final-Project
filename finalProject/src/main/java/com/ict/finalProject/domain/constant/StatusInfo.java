@@ -12,4 +12,9 @@ public enum StatusInfo {
     DELETE("삭제");
 
     private final String description;
+
+    public StatusInfo toggle() {
+        return this == ACTIVE ? DELETE : ACTIVE;
+    }
+
 }
