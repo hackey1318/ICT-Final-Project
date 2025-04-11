@@ -7,7 +7,7 @@ import logo from "../../img/cinetogether.png"
 
 function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [username, setUsername] = useState("")
+    const [userInfo, setUserInfo] = useState(null);
     const [isNavOpen, setIsNavOpen] = useState(false)
     const [showDropdown, setShowDropdown] = useState(false)
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
@@ -16,10 +16,17 @@ function Navbar() {
 
     // 컴포넌트 마운트 시 로그인 상태 확인
     useEffect(() => {
-        const token = sessionStorage.getItem("userToken")
+        const token = sessionStorage.getItem("accessToken")
         if (token) {
             setIsLoggedIn(true)
-            setUsername(sessionStorage.getItem("username") || "myname")
+            const storedUser = sessionStorage.getItem("userInfo");
+            if (storedUser) {
+                try {
+                    setUserInfo(JSON.parse(storedUser));
+                } catch (e) {
+                    console.error("유저 정보 파싱 오류", e);
+                }
+            }
         }
     }, [])
 
@@ -44,19 +51,11 @@ function Navbar() {
         setShowDropdown(false)
     }
 
-    // 테스트용 로그인/로그아웃 함수
-    const handleLogin = () => {
-        sessionStorage.setItem("userToken", "sample-token-value")
-        sessionStorage.setItem("username", "myname")
-        setIsLoggedIn(true)
-        setUsername("myname")
-    }
-
     const handleLogout = () => {
-        sessionStorage.removeItem("userToken")
-        sessionStorage.removeItem("username")
+        sessionStorage.removeItem("accessToken")
+        sessionStorage.removeItem("userInfo")
         setIsLoggedIn(false)
-        setUsername("")
+        setUserInfo(null)
     }
 
     // 모바일 화면인지 확인
@@ -98,12 +97,12 @@ function Navbar() {
                             </li>
                             <li className="nav-items">
                                 <Link to="/store" className="nav-links">
-                                    스토어
+                                    MD Shop
                                 </Link>
                             </li>
                             <li className="nav-items">
-                                <Link to="/community" className="nav-links">
-                                    커뮤니티
+                                <Link to="/cinemate" className="nav-links">
+                                    시네메이트
                                 </Link>
                             </li>
                             {isLoggedIn && (
@@ -121,11 +120,14 @@ function Navbar() {
                 {isLoggedIn ? (
                     <div className="user-profile">
                         <div className="welcome-text">
-                            환영합니다 <span className="username">{username}</span> 님
+                            환영합니다 <span className="username">{userInfo.nickname}</span> 님
                         </div>
                         <div className="profile-circle">
-                            <img src="https://via.placeholder.com/35" alt="프로필 이미지" />
+                            <img src={userInfo.profileImageUrl ? userInfo.profileImageUrl : "https://via.placeholder.com/35"} alt="프로필 이미지" />
                         </div>
+                        <button onClick={handleLogout} className="test-btn logout">
+                            로그아웃
+                        </button>
                     </div>
                 ) : (
                     <div className="auth-buttons">
@@ -149,20 +151,10 @@ function Navbar() {
                             <Link to="/movies/upcoming">상영 예정작</Link>
                         </li>
                         <li>
-                            <Link to="/movies/local">지역별 영화</Link>
+                            <Link to="/movies">장르별 영화</Link>
                         </li>
                     </ul>
                 )}
-
-            {/* 테스트 버튼 - 개발 중에만 사용 */}
-            <div className="test-buttons">
-                <button onClick={handleLogin} className="test-btn login">
-                    로그인 테스트
-                </button>
-                <button onClick={handleLogout} className="test-btn logout">
-                    로그아웃 테스트
-                </button>
-            </div>
             </div>
 
         </nav>
