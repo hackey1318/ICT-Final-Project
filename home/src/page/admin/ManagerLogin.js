@@ -10,15 +10,56 @@ import { Alert, Spinner } from "react-bootstrap";
 
 
 export default function ManagerLogin() {
-	const {
-			userId,
-			setUserId,
-			password,
-			setPassword,
-			handleLogin,
-			isLoading,    // 로딩 상태 가져오기
-			loginError,   // 에러 상태 가져오기
-		} = useLoginForm();
+	const [userId, setUserId] = useState("");
+    const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+    const [loginError, setLoginError] = useState(null); // 에러 상태 추가
+
+	const handleLogin = async () => {
+        setIsLoading(true);
+        setLoginError(null);
+
+        try {
+            const response = await fetch('http://localhost:9988/oauth/kakao/login', { // 백엔드 주소 확인
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: userId, password: password }),
+            });
+
+            const accessToken = response.headers.get('accessToken');
+            const responseBody = await response.json(); // 응답 본문 (이제 더 많은 키를 가진 객체)
+
+            if (!response.ok) {
+                throw new Error(responseBody.message || `로그인 실패: ${response.status}`);
+            }
+
+            if (!accessToken) { /* ... 기존 에러 처리 ... */ }
+            if (!responseBody || !responseBody.result) { /* ... 기존 에러 처리 ... */ }
+
+            // 1. accessToken 저장
+            sessionStorage.setItem('accessToken', accessToken);
+
+            // --- 2. responseBody(Map 객체)에서 직접 정보 추출하여 userInfo 객체 생성 ---
+            const userInfo = {
+                userNo: responseBody.userNo,
+                nickname: responseBody.nickname,
+                profileImageUrl: responseBody.profileImageUrl,
+                role: responseBody.role
+            };
+            // --- 생성된 userInfo 객체를 문자열로 변환하여 저장 ---
+            sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+            // 3. 페이지 이동
+            window.location.href = "/manager/home";
+
+        } catch (error) {
+            setLoginError(error.message || "로그인 중 알 수 없는 오류가 발생했습니다.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
 	return (
 		<div className="container d-flex justify-content-center align-items-center vh-100">
