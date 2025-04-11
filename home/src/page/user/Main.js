@@ -10,6 +10,8 @@ import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
 import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import axios from "axios"
 
 // Banner data
 const dummyBannerList = [
@@ -22,6 +24,27 @@ const dummyBannerList = [
 const BASE_URL = "http://localhost:9988/file-system/download/"
 
 function Main() {
+
+  const [bannerList, setBannerList] = useState([])
+
+  useEffect(() => {
+    // 배너 리스트를 가져오는 함수 호출
+    readBannerList()
+  }, [])
+
+  function readBannerList() {
+
+    axios.get("http://localhost:9988/banner/MOVIE")
+      .then((response) => {
+        const data = response.data
+        console.log("배너 리스트:", data)
+        setBannerList(data)
+      })
+      .catch((error) => {
+        console.error("배너 리스트 가져오기 오류:", error)
+      })
+  }
+
   return (
     <div className="Main_fullpage-container">
       {/* --- 섹션 1: 메인 배너 (Swiper) --- */}
@@ -34,17 +57,15 @@ function Main() {
           loop
           spaceBetween={0} // Remove space between slides for full-bleed effect
         >
-          {dummyBannerList.map((banner, index) => (
+          {bannerList.map((banner, index) => (
             <SwiperSlide
               key={banner.imageId || index}
               style={{ backgroundColor: banner.color || "#1a3b6d" }} // 배경색 사용 일단 보류중
             >
               <div className="Main_banner-overlay"></div> {/* Overlay for better text visibility */}
-              <Link to={banner.bannerUrl} className="Main_banner-link">
+              <Link to={`/movie/${banner.targetNo}`} className="Main_banner-link">
                 <div className="Main_banner-image-container">
-                  <img src={`${BASE_URL}${banner.imageId}`} alt={banner.title} className="Main_banner-image" />
-                  {/* Title positioned as overlay */}
-                  <div className="Main_banner-title" hidden>{banner.title}</div>
+                  <img src={`${BASE_URL}${banner.fileId}`} alt={`movie-${banner.targetNo}`} className="Main_banner-image" />
                 </div>
               </Link>
             </SwiperSlide>
