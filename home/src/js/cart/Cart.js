@@ -5,7 +5,8 @@ import checkMark from '../../img/checkMark.png';
 function Cart() {
 
     const [goods, setGoods] = useState([]);
-    const [totalPrice, setTotalPrice] = useState(1);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [deliveryCharge, setDeliveryCharge] = useState(0);
 
     // 테스트 데이터
     const test_goods_1 = {
@@ -41,12 +42,6 @@ function Cart() {
     const selectGoods = (e) => {
         const index = e.target.getAttribute("goodsIndex");
 
-        if (e.target.style.backgroundImage === "") {
-            e.target.style.backgroundImage = `url(${checkMark})`;
-        } else {
-            e.target.style.backgroundImage = "";
-        }
-
         setGoods(prev =>
             prev.map((item, idx) =>
                 idx == index ? { ...item, selected: !(item.selected) } : item
@@ -55,20 +50,36 @@ function Cart() {
     }
 
     useEffect(() => {
-        console.log(goods);
+        updateTotalPrice();
+        updateCheckBox();
+        updateDeliveryCharge();
+    }, [goods]);
 
+    const updateTotalPrice = () => {
         let totalPrice = 0;
 
         goods.forEach((item) => {
-            console.log("ㅋㅋ");
             if (item.selected) {
                 totalPrice += item.price * item.quantity;
-                console.log(item.price);
             }
         });
 
         setTotalPrice(totalPrice);
-    }, [goods])
+    }
+
+    const updateCheckBox = () => {
+        goods.forEach((item, index) => {
+            if (item.selected) {
+                document.getElementsByClassName("select_goods")[index].style.backgroundImage = `url(${checkMark})`;
+            } else {
+                document.getElementsByClassName("select_goods")[index].style.backgroundImage = "";
+            }
+        })
+    }
+
+    const updateDeliveryCharge = () => {
+        goods.filter((item) => item.selected).length === 0 ? setDeliveryCharge(0) : setDeliveryCharge(2500);
+    }
 
     const subQuantity = (e) => {
         const index = e.target.getAttribute("goodsIndex");
@@ -93,7 +104,7 @@ function Cart() {
     const selectAll = (e) => {
         document.querySelectorAll(".select_goods").forEach((item) => {
             item.style.backgroundImage = `url(${checkMark})`;
-        })
+        });
 
         setGoods(prev =>
             prev.map((item) =>
@@ -109,8 +120,14 @@ function Cart() {
 
     const order = () => {
         const selectedGoods = goods.filter(item => item.selected);
+        if (selectedGoods.length === 0 ) {
+            alert("선택된 상품이 없습니다.");
+            return;
+        }
+
+        // axios 주문 구현 부분
         console.log(selectedGoods);
-        console.log(totalPrice);
+        console.log(totalPrice + deliveryCharge);
     }
 
     return (
@@ -159,9 +176,6 @@ function Cart() {
                                 <button onClick={deleteSelected}>선택 삭제</button>
                             </div>
                         </div>
-                        {/* <div className="total_price">총 상품 금액: {totalPrice.toLocaleString() + "원"}</div>
-                        <div className="total_price">배송비: {"2,500원"}</div>
-                        <div className="total_price">총 결제 금액: {(totalPrice + 2500).toLocaleString() + "원"}</div> */}
                     </div>
                 </div>
             </div>
@@ -179,13 +193,13 @@ function Cart() {
                     </div>
                     <div>
                         <div className="order_info_goods_label">배송비</div>
-                        <div className="order_info_goods_quantity">{goods.filter(item => item.selected).length == 0 ? "0원" : "2500원"}</div>
+                        <div className="order_info_goods_quantity">{deliveryCharge.toLocaleString() + "원"}</div>
                     </div>
                     <hr/>
                     <div>
                         <div className="order_info_goods_label">결제 금액</div>
                         <div className="order_info_goods_quantity"></div>
-                        <div className="order_info_goods_quantity">{goods.filter(item => item.selected).length == 0 ? "0원" : (totalPrice + 2500).toLocaleString() + "원"}</div>
+                        <div className="order_info_goods_quantity">{(totalPrice + deliveryCharge).toLocaleString() + "원"}</div>
                     </div>
                     <button id="orderButton" onClick={order}>주문하기</button>
                 </div>
