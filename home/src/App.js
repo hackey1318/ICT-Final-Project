@@ -12,6 +12,7 @@ import TossPayment from './js/payment/TossPayment';
 import TossPaymentSuccess from './js/payment/TossPaymentSuccess';
 import TossPaymentFail from './js/payment/TossPaymentFail';
 import PaymentResult from './js/payment/PaymentResult';
+import Cart from './js/cart/Cart';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path='payment/tossPaymentSuccess' element={<TossPaymentSuccess />} />
           <Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
           <Route path='payment/result' element={<PaymentResult />} />
+          <Route path='cart' element={<Cart />} />
         </Route>
         <Route path='/manager' element={<Layout />}>
           <Route index element={<Main />} />
