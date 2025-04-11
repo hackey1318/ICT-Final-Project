@@ -36,7 +36,7 @@ public class MdShopServiceImpl implements MdShopService {
             goodsPage = mdShopRepository.findByStatusIn(allowed, pageable);
         }
 
-        return mdShopRepository.findByStatusIn(allowed, pageable)
+        return goodsPage
                 .map(goods -> {
                     String movieName = moviesRepository.findById(goods.getMovieNo())
                             .map(Movies::getName)

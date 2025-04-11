@@ -1,6 +1,6 @@
 /* 모든 클래스에 md_ 접두사를 추가하여 네임스페이스 생성 */
-.md_container {
-  width: 50%;
+.md-yes-container {
+  width: 80%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
@@ -17,6 +17,10 @@
 }
 
 /* 등록 버튼 스타일 */
+#md-button-wrapper{
+  text-align: right;
+}
+
 .md_register-btn {
   background-color: #4a6ebd;
   color: white;
@@ -304,7 +308,7 @@
 
 .md_table th:nth-child(2),
 .md_table td:nth-child(2) {
-  width: 30%;
+  width: 10%;
 }
 
 .md_table th:nth-child(4),
@@ -322,8 +326,17 @@
   width: 20%;
 }
 
-.md_text-ellipsis {
-  max-width: 150px; /* 너비 조정 가능 */
+.md_text-ellipsis-name {
+  max-width: 100%; /* 너비 조정 가능 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.md_text-ellipsis-moviename {
+  max-width: 80%; /* 너비 조정 가능 */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
