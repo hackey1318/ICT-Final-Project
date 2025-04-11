@@ -2,7 +2,7 @@ import './App.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Main from './page/user/Main'
 import Layout from './page/user/Layout';
 import KakaoLogin from './page/user/LoginForm';
@@ -11,10 +11,18 @@ import FindId from './page/user/FindId';
 import FindPwd from './page/user/FindPwd';
 import PwdReset from './page/user/PwdReset';
 import ManagerLogin from './page/admin/ManagerLogin';
+import { useEffect } from 'react';
 
 function App() {
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const isManagerPage = location.pathname.startsWith('/manager');
+    document.body.classList.toggle('manager-page', isManagerPage);
+  }, [location.pathname]);
+
   return (
-    <BrowserRouter>
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<Main />} />
@@ -31,7 +39,6 @@ function App() {
           <Route path='user/pwdReset' element={<PwdReset />} />
         </Route>
       </Routes>
-    </BrowserRouter>
   );
 }
 
