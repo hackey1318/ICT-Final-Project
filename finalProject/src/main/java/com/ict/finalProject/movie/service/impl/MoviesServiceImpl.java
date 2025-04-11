@@ -5,6 +5,7 @@ import com.ict.finalProject.movie.repository.constant.movie.MovieSearchType;
 import com.ict.finalProject.movie.repository.constant.movie.MovieStatus;
 import com.ict.finalProject.movie.repository.domain.Movies;
 import com.ict.finalProject.movie.service.MoviesService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,5 +32,12 @@ public class MoviesServiceImpl implements MoviesService {
     public Page<Movies> getMovieTypeList(Pageable pageable, List<MovieStatus> statusList) {
 
         return moviesRepository.findByOpenStatusIn(statusList, pageable);
+    }
+
+
+    @Override
+    public Movies getMovieDetail(Integer movieNo) {
+        return moviesRepository.findById(movieNo)
+                .orElseThrow(() -> new EntityNotFoundException("Movie not found with id: " + movieNo));
     }
 }
