@@ -164,8 +164,44 @@ function MdList() {
   }, [modalOpen])
 
   return (
-    <div className="md-container">
+    <div className="md-yes-container">
       <h2>굿즈 리스트</h2>
+      {/* 👇 검색/정렬 UI */}
+      <div className="md_search-sort-controls">
+        <div className="md_search-container">
+          <input
+            type="text"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            placeholder="굿즈명을 검색하세요"
+            className="md_search-input"
+          />
+          <button
+            className="md_search-btn"
+            onClick={() => {
+              setPage(0)
+              getMdList()
+            }}
+          >
+            검색
+          </button>
+        </div>
+
+        <div className="md_sort-container">
+          <label>정렬 기준: </label>
+          <select value={sortField} onChange={(e) => setSortField(e.target.value)}>
+            <option value="updatedAt">등록일</option>
+            <option value="name">이름</option>
+            <option value="price">가격</option>
+          </select>
+
+          <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)}>
+            <option value="desc">내림차순</option>
+            <option value="asc">오름차순</option>
+          </select>
+        </div>
+      </div>
+
       {/*굿즈리스트 */}
       <div className="md_table-container">
         <table className="md_table">
@@ -183,8 +219,8 @@ function MdList() {
             {mdList.map((item, idx) => (
               <tr key={idx} className="md_item">
                 <td>{page*size + idx+1}</td>
-                <td><span className="md_text-ellipsis" title={item.name}>{item.name}</span></td>
-                <td><span className="md_text-ellipsis" title={item.movieName}>{item.movieName}</span></td>
+                <td><span className="md_text-ellipsis-name" title={item.name}>{item.name}</span></td>
+                <td><span className="md_text-ellipsis-moviename" title={item.movieName}>{item.movieName}</span></td>
                 <td>{item.type}</td>
                 <td>{item.price.toLocaleString()}원</td>
                 <td>{item.updatedAt ? new Date(item.updatedAt).toLocaleDateString() : "-"}</td>
@@ -201,6 +237,12 @@ function MdList() {
         </table>
       </div>
 
+      <div id ="md-button-wrapper">
+      <button id="md-register-btn" className="btn btn-primary" onClick={openModal}>
+        등록하기
+      </button>
+      </div>
+
       <div className="md_pagination">
         <button className="md_pagination-btn" onClick={() => handlePageChange(0)} disabled={page === 0}>
           처음
@@ -209,7 +251,7 @@ function MdList() {
           &lt;
         </button>
 
-        {/* 페이지네이션 버튼튼 */}
+        {/* 페이지네이션 버튼 */}
         {(() => {
           const pageButtons = []
           const pageGroup = Math.floor(page / 5)
@@ -245,46 +287,6 @@ function MdList() {
         >
           마지막
         </button>
-      </div>
-
-      <button id="md-register-btn" className="btn btn-primary" onClick={openModal}>
-        등록하기
-      </button>
-
-      {/* 👇 검색/정렬 UI */}
-      <div className="md_search-sort-controls">
-        <div className="md_search-container">
-          <input
-            type="text"
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-            placeholder="굿즈명을 검색하세요"
-            className="md_search-input"
-          />
-          <button
-            className="md_search-btn"
-            onClick={() => {
-              setPage(0)
-              getMdList()
-            }}
-          >
-            검색
-          </button>
-        </div>
-
-        <div className="md_sort-container">
-          <label>정렬 기준: </label>
-          <select value={sortField} onChange={(e) => setSortField(e.target.value)}>
-            <option value="updatedAt">등록일</option>
-            <option value="name">이름</option>
-            <option value="price">가격</option>
-          </select>
-
-          <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)}>
-            <option value="desc">내림차순</option>
-            <option value="asc">오름차순</option>
-          </select>
-        </div>
       </div>
 
       {modalOpen && (
