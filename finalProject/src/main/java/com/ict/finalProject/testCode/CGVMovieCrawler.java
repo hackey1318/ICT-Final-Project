@@ -215,6 +215,7 @@ public class CGVMovieCrawler {
                         .postImage(imageSrc)
                         .genre(detail.getGenre())
                         .ageGrade(ageRating)
+                        .externalLink(detailUrl) // <--- 이 부분 추가!
                         .build();
 
                 saveOrUpdateMovie(code, entity, detail, stillCuts, existingMap);
