@@ -54,6 +54,7 @@ public class SecurityConfig {
                 mvc.pattern("/file-system/download/**"),
                 mvc.pattern("/user/**"),
                 mvc.pattern("/banner/**"),
+                mvc.pattern("/movies/**"),
                 mvc.pattern("/file-system/upload/register-image"),
                 mvc.pattern("/swagger-ui/index.html"),
                 mvc.pattern("/dashboard/**")
