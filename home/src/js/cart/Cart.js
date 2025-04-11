@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import '../../css/cart/Cart.css';
 import checkMark from '../../img/checkMark.png';
+import axios from 'axios';
 
 function Cart() {
 
     const [goods, setGoods] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
-    const [deliveryCharge, setDeliveryCharge] = useState(0);
+    // const [deliveryCharge, setDeliveryCharge] = useState(0);
 
     // 테스트 데이터
     const test_goods_1 = {
+        id: 1,
         image: "https://img.danawa.com/prod_img/500000/185/173/img/49173185_1.jpg?shrink=130:130&_v=20250407171230",
         name: "스티치 인형",
         quantity: 1,
@@ -18,6 +20,7 @@ function Cart() {
     }
 
     const test_goods_2 = {
+        id: 2,
         image: "https://img.danawa.com/prod_img/500000/443/941/img/6941443_1.jpg?shrink=130:130&_v=20181227122347",
         name: "묠니르 망치 스피커",
         quantity: 2,
@@ -26,6 +29,7 @@ function Cart() {
     }
 
     const test_goods_3 = {
+        id: 3,
         image: "https://cimg.cowave.kr/image/vendor_inventory/e317/70193a0bcc148a37695d2780f84fee6caac3acc9321c9288dde86f3e9c48.jpeg",
         name: "주먹왕 랄프 피규어 세트",
         quantity: 3,
@@ -52,7 +56,7 @@ function Cart() {
     useEffect(() => {
         updateTotalPrice();
         updateCheckBox();
-        updateDeliveryCharge();
+        // updateDeliveryCharge();
     }, [goods]);
 
     const updateTotalPrice = () => {
@@ -77,9 +81,9 @@ function Cart() {
         })
     }
 
-    const updateDeliveryCharge = () => {
-        goods.filter((item) => item.selected).length === 0 ? setDeliveryCharge(0) : setDeliveryCharge(2500);
-    }
+    // const updateDeliveryCharge = () => {
+    //     goods.filter((item) => item.selected).length === 0 ? setDeliveryCharge(0) : setDeliveryCharge(2500);
+    // }
 
     const subQuantity = (e) => {
         const index = e.target.getAttribute("goodsIndex");
@@ -126,8 +130,54 @@ function Cart() {
         }
 
         // axios 주문 구현 부분
-        console.log(selectedGoods);
-        console.log(totalPrice + deliveryCharge);
+        let orderName = "";
+        let orderId = "";
+
+        if (goods.length === 1) {
+            orderName = `${goods[0].name}`;
+        } else {
+            orderName = `${goods[0].name} 외 ${goods.length - 1}건`;
+        }
+
+        const date = Date.now();
+
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const randomChar = Array.from({length : 6 }, () => 
+            chars[Math.floor(Math.random() * chars.length)]
+        ).join('');
+
+        orderId = date + randomChar;
+
+        const popupWidth = 600;
+        const popupHeight = 500;
+
+        // 서버에 결제 정보 저장하기
+        axios.post("http://localhost:9988/payment/save", {
+            orderId: orderId,
+            orderName: orderName,
+            totalPrice : totalPrice,
+            customerEmail: "customer123@gmail.com",
+            customerName: "김씨네마투게더",
+            customerMobilePhone: "01012341234",
+            customerAddress: "서울 성동구 왕십리로",
+            goods: goods
+        })
+        .then((response) => {
+            if (response.data === "success") {
+                // 결제 ui 열기
+                window.open(
+                    `http://localhost:3000/payment/tossPayment?&totalPrice=${totalPrice}&orderName=${orderName}&orderId=${orderId}`,
+                    "PaymentWindow",
+                    `width=${popupWidth},
+                    height=${popupHeight},
+                    top=${window.screen.height / 2 - popupHeight / 2},
+                    left=${window.screen.width / 2 - popupWidth / 2}`
+                );
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     return (
@@ -191,15 +241,15 @@ function Cart() {
                         <div className="order_info_goods_label">상품 금액</div>
                         <div className="order_info_goods_quantity">{totalPrice.toLocaleString() + "원"}</div>
                     </div>
-                    <div>
+                    {/* <div>
                         <div className="order_info_goods_label">배송비</div>
                         <div className="order_info_goods_quantity">{deliveryCharge.toLocaleString() + "원"}</div>
-                    </div>
+                    </div> */}
                     <hr/>
                     <div>
                         <div className="order_info_goods_label">결제 금액</div>
                         <div className="order_info_goods_quantity"></div>
-                        <div className="order_info_goods_quantity">{(totalPrice + deliveryCharge).toLocaleString() + "원"}</div>
+                        <div className="order_info_goods_quantity">{(totalPrice).toLocaleString() + "원"}</div>
                     </div>
                     <button id="orderButton" onClick={order}>주문하기</button>
                 </div>

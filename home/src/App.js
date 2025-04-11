@@ -26,7 +26,7 @@ function App() {
           <Route path='user/findPwd' element={<FindPwd />} />
           <Route path='user/pwdReset' element={<PwdReset />} />
           <Route path='payment' element={<Payment />} />
-          <Route path='payment/tossPayment' element={<TossPayment />} />
+          {/* <Route path='payment/tossPayment' element={<TossPayment />} /> */}
           <Route path='payment/tossPaymentSuccess' element={<TossPaymentSuccess />} />
           <Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
           <Route path='payment/result' element={<PaymentResult />} />
@@ -38,6 +38,9 @@ function App() {
           <Route path='kakao/callback' element={<KakaoCallback />} />
           <Route path='user/findId' element={<FindId />} />
         </Route>
+
+        <Route path='/payment/tossPayment' element={<TossPayment />} />
+
       </Routes>
     </BrowserRouter>
   );
