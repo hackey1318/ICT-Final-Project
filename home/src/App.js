@@ -13,6 +13,8 @@ import PwdReset from './page/user/PwdReset';
 import UserDau from './page/dashboard/UserDau';
 import ManagerLogin from './page/admin/ManagerLogin';
 import { useEffect } from 'react';
+import MdList from './page/md/MdList';
+import GenreMovie from './page/movie/GenreMovie';
 
 function App() {
 
@@ -32,14 +34,13 @@ function App() {
           <Route path='user/findId' element={<FindId />} />
           <Route path='user/findPwd' element={<FindPwd />} />
           <Route path='user/pwdReset' element={<PwdReset />} />
+          <Route path='movies' element={<GenreMovie />} />
         </Route>
-        <Route path='/manager' element={<ManagerLogin />}>
+        <Route path='/manager'>
           <Route index element={<ManagerLogin />} />
           <Route path='user/findId' element={<FindId />} />
           <Route path='user/findPwd' element={<FindPwd />} />
           <Route path='user/pwdReset' element={<PwdReset />} />
-        </Route>
-        <Route path='/admin' element={<Layout />}>
           <Route path='dashboard/userdau' element={<UserDau />} />
         </Route>
       </Routes>
