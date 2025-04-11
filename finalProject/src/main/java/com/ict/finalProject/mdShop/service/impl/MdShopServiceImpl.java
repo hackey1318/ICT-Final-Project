@@ -26,8 +26,15 @@ public class MdShopServiceImpl implements MdShopService {
 
 
     @Override
-    public Page<MdShopDto> getMdList(Pageable pageable) {
+    public Page<MdShopDto> getMdList(String name, Pageable pageable) {
         List<StatusInfo> allowed = List.of(StatusInfo.ACTIVE, StatusInfo.PENDING);
+        Page<Goods> goodsPage;
+
+        if (name != null && !name.isEmpty()) {
+            goodsPage = mdShopRepository.findByStatusInAndNameContaining(allowed, name, pageable);
+        } else {
+            goodsPage = mdShopRepository.findByStatusIn(allowed, pageable);
+        }
 
         return mdShopRepository.findByStatusIn(allowed, pageable)
                 .map(goods -> {

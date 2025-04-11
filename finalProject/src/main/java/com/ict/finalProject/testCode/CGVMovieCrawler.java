@@ -192,7 +192,7 @@ public class CGVMovieCrawler {
                 String title = movie.select("strong.title").text();
                 String reservationRate = movie.select("strong.percent").text().replaceAll("[^\\d.]+", "");
                 String ageRating = movie.select("i.cgvIcon").text();
-                String imageSrc = movie.select("static/img").attr("src");
+                String imageSrc = movie.select("img").attr("src");
 
                 String openText = movie.select(".txt-info strong").text();
                 String dateStr = openText.split(" ")[0].replace(".", "-");

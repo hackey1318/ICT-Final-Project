@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface MdShopService {
 
-    Page<MdShopDto> getMdList(Pageable pageable);
+    Page<MdShopDto> getMdList(String naem, Pageable pageable);
 
     void insertMd(MdShopInsertDto dto);
 

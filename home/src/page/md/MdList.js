@@ -22,11 +22,14 @@ function MdList() {
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10)
   const [totalPages, setTotalPages] = useState(0)
+  const [sortField, setSortField] = useState("updatedAt")
+  const [sortDirection, setSortDirection] = useState("desc")
+  const [searchKeyword, setSearchKeyword] = useState("")
   const accessToken = sessionStorage.getItem("accessToken")
 
   useEffect(() => {
     getMdList()
-  }, [page])
+  }, [page, sortField, sortDirection])
 
   useEffect(() => {
     if (modalOpen && movieSearch.length > 0) {
@@ -37,7 +40,7 @@ function MdList() {
 
   const getMdList = () => {
     axios
-      .get(`http://localhost:9988/md/items?page=${page}&size=${size}`, {
+      .get(`http://localhost:9988/md/items?page=${page}&size=${size}&sort=${sortField},${sortDirection}&name=${encodeURIComponent(searchKeyword)}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -163,7 +166,7 @@ function MdList() {
   return (
     <div className="md-container">
       <h2>굿즈 리스트</h2>
-
+      {/*굿즈리스트 */}
       <div className="md_table-container">
         <table className="md_table">
           <thead>
@@ -180,8 +183,8 @@ function MdList() {
             {mdList.map((item, idx) => (
               <tr key={idx} className="md_item">
                 <td>{page*size + idx+1}</td>
-                <td>{item.name}</td>
-                <td>{item.movieName}</td>
+                <td><span className="md_text-ellipsis" title={item.name}>{item.name}</span></td>
+                <td><span className="md_text-ellipsis" title={item.movieName}>{item.movieName}</span></td>
                 <td>{item.type}</td>
                 <td>{item.price.toLocaleString()}원</td>
                 <td>{item.updatedAt ? new Date(item.updatedAt).toLocaleDateString() : "-"}</td>
@@ -206,7 +209,7 @@ function MdList() {
           &lt;
         </button>
 
-        {/* Numbered pagination buttons */}
+        {/* 페이지네이션 버튼튼 */}
         {(() => {
           const pageButtons = []
           const pageGroup = Math.floor(page / 5)
@@ -247,6 +250,42 @@ function MdList() {
       <button id="md-register-btn" className="btn btn-primary" onClick={openModal}>
         등록하기
       </button>
+
+      {/* 👇 검색/정렬 UI */}
+      <div className="md_search-sort-controls">
+        <div className="md_search-container">
+          <input
+            type="text"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            placeholder="굿즈명을 검색하세요"
+            className="md_search-input"
+          />
+          <button
+            className="md_search-btn"
+            onClick={() => {
+              setPage(0)
+              getMdList()
+            }}
+          >
+            검색
+          </button>
+        </div>
+
+        <div className="md_sort-container">
+          <label>정렬 기준: </label>
+          <select value={sortField} onChange={(e) => setSortField(e.target.value)}>
+            <option value="updatedAt">등록일</option>
+            <option value="name">이름</option>
+            <option value="price">가격</option>
+          </select>
+
+          <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)}>
+            <option value="desc">내림차순</option>
+            <option value="asc">오름차순</option>
+          </select>
+        </div>
+      </div>
 
       {modalOpen && (
         <div className="md_modal-overlay">
