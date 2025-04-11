@@ -13,7 +13,6 @@ import PwdReset from './page/user/PwdReset';
 import UserDau from './page/dashboard/UserDau';
 import ManagerLogin from './page/admin/ManagerLogin';
 import { useEffect } from 'react';
-import MdList from './page/md/MdList';
 import GenreMovie from './page/movie/GenreMovie';
 
 function App() {
