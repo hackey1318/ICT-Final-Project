@@ -1,8 +1,17 @@
 .userdau-wrap{
+    background: #fff;
+    border-radius: 10px;
+    width: 90%;
+    height: 90%;
+    margin: 0 auto;
     padding: 40px;
+}
+.userdau-title{
+    font-weight: bold;
 }
 .userdau-data-wrap{
     display: flex;
+    justify-content: center;
     padding: 30px;
 }
 .data-select-btn{
@@ -23,8 +32,10 @@
     color: #fff;
     background: #888;
 }
+
+/* 목록 부분 */
 .userdau-left{
-    width: 60%;
+    width: 55%;
 }
 .userdau-list{
     height: 500px;
@@ -43,6 +54,8 @@
     border-bottom: 1px solid #888;
     padding: 10px;
 }
+
+/* 페이지 버튼 부분 */
 .paging-container{
     width: 500px;
     margin: 20px auto;
@@ -59,8 +72,8 @@
     transition: background-color 0.3s ease;
 }
 .paging-container > div > button.active {
-    background-color: navy;
     color: white;
+    background-color: navy;
     font-weight: bold;
     border-radius: 5px;
 }
@@ -72,8 +85,10 @@
     color: #fff;
     background-color: rgba(0, 0, 128);
 }
+
+/* 그래프 부분 */
 .userdau-right{
-    width: 40%;
+    width: 35%;
     height: 500px;
 }
 .userdat-chart-totaluser{

@@ -15,15 +15,15 @@ public interface ActiveUsersRepository extends JpaRepository<ActiveUsers, Intege
     @Query(value = "SELECT DISTINCT DATE_FORMAT(created_at, '%Y-%m-%d') FROM shopping.active_users", nativeQuery = true)
     List<String> getAllDates();
 
-    //날짜별로 그룹화해서 해당 날짜 활동인원수 조회(일별)
-    @Query(value = "SELECT DATE_FORMAT(created_at, '%Y-%m-%d') AS date, COUNT(*) AS user_count " +
+    //날짜별로 그룹화해서 해당 날짜 활동인원수 조회(일별, 중복 유저 제거)
+    @Query(value = "SELECT DATE_FORMAT(created_at, '%Y-%m-%d') AS date, COUNT(DISTINCT user_no) AS user_count " +
             "FROM shopping.active_users " +
             "WHERE created_at BETWEEN :startDate AND :endDate " +
             "GROUP BY DATE_FORMAT(created_at, '%Y-%m-%d')", nativeQuery = true)
     List<ActiveUsersResponse> getDayActiveUsersList(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
-    //월별로 그룹화해서 해당 월 활동인원수 조회(월별)
-    @Query(value = "SELECT DATE_FORMAT(created_at, '%Y-%m') AS date, COUNT(*) AS user_count " +
+    //월별로 그룹화해서 해당 월 활동인원수 조회(월별, 중복 유저 제거)
+    @Query(value = "SELECT DATE_FORMAT(created_at, '%Y-%m') AS date, COUNT(DISTINCT user_no) AS user_count " +
             "FROM shopping.active_users " +
             "WHERE created_at BETWEEN :startDate AND :endDate " +
             "GROUP BY DATE_FORMAT(created_at, '%Y-%m')", nativeQuery = true)

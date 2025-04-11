@@ -52,29 +52,33 @@ function UserDau(){
             setChartTitle('월별');
         }
 
-        axios.get(`http://localhost:9988/dashboard/${urlType}`)
-        .then((response)=>{
-            console.log("불러온 데이터",response.data);
 
-            const dataList = response.data.activeUsers; //원본 데이터
-            const reverseList = [...dataList].reverse(); //원본 데이터를 복사한 후 역순 정렬
+        if(sessionStorage.getItem("userInfo").role==="ADMIN"){
+            axios.get(`http://localhost:9988/dashboard/${urlType}`)
+            .then((response)=>{
+                console.log("불러온 데이터",response.data);
 
-            //목록은 역순으로, 차트는 순서대로 보여주는 것으로 설정.
-            setAllDauList(reverseList); //전체 데이터 저장(목록용)
-            setPage(0); //페이지 번호 초기화. 이걸 해야 버튼 눌러서 목록 바뀔때 페이지 번호 초기화됨.
-            setChartDauList(dataList); //전체 데이터(차트용)
-            setTotalCount(response.data.totalCount); //총 활동 인원수
+                const dataList = response.data.activeUsers; //원본 데이터
+                const reverseList = [...dataList].reverse(); //원본 데이터를 복사한 후 역순 정렬
 
-            const pages = Math.ceil(dataList.length / pageSize); // 전체 페이지 수 계산
-            setTotalPages(pages);
+                //목록은 역순으로, 차트는 순서대로 보여주는 것으로 설정.
+                setAllDauList(reverseList); //전체 데이터 저장(목록용)
+                setPage(0); //페이지 번호 초기화. 이걸 해야 버튼 눌러서 목록 바뀔때 페이지 번호 초기화됨.
+                setChartDauList(dataList); //전체 데이터(차트용)
+                setTotalCount(response.data.totalCount); //총 활동 인원수
 
-            //처음 페이지의 데이터 설정
-            const firstPageData = reverseList.slice(0, pageSize); //목록 첫페이지
-            setDauList(firstPageData);
+                const pages = Math.ceil(dataList.length / pageSize); // 전체 페이지 수 계산
+                setTotalPages(pages);
 
-        }).catch((error)=>{
-            console.log(error);
-        });
+                //처음 페이지의 데이터 설정
+                const firstPageData = reverseList.slice(0, pageSize); //목록 첫페이지
+                setDauList(firstPageData);
+
+            }).catch((error)=>{
+                console.log(error);
+            });
+        }
+
     };
 
     //처음 페이지 접속시 일별 데이터 불러오기
@@ -141,8 +145,11 @@ function UserDau(){
     };
     //그래프 LineChart 끝 ---------------------------------------------------------------
 
+    //해당 데이터 목록의 인원수 합계
+    const totalVisitCount = chartDauList.reduce((sum, item) => sum + item.count, 0);
+
     return(
-        <div className='userdau-wrap' style={{backgroundColor: 'white'}}>
+        <div className='userdau-wrap' >
             <h3 className='userdau-title'>Admin Page - User's {dataType}</h3>
             {/* 일별, 월별 선택 버튼 */}
             <div className='data-select-btn'>
@@ -198,7 +205,7 @@ function UserDau(){
                     {/* 그래프 */}
                     <div className="userdau-chart">
                         <Line options={options} data={data}/>
-                        <div className="userdat-chart-totaluser">총인원수 : {totalCount}명</div>
+                        <div className="userdat-chart-totaluser">활동유저수 : {totalVisitCount }명</div>
                     </div>
                 </div>
             </div>
