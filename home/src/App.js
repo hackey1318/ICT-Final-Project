@@ -7,6 +7,7 @@ import KakaoCallback from './page/user/KakaoCallback';
 import FindId from './page/user/FindId';
 import FindPwd from './page/user/FindPwd';
 import PwdReset from './page/user/PwdReset';
+import MdList from './page/md/MdList';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path='login' element={<KakaoLogin />} />
           <Route path='kakao/callback' element={<KakaoCallback />} />
           <Route path='user/findId' element={<FindId />} />
+          <Route path='mdlists' element={<MdList />} />
         </Route>
       </Routes>
     </BrowserRouter>
