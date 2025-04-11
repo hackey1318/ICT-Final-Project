@@ -76,6 +76,7 @@ public class SecurityConfig {
                         (authorize) ->
 
                                 authorize.requestMatchers(permitAllWhiteList).permitAll()
+                                        .requestMatchers(HttpMethod.GET, "/movies/detail/{id}").permitAll()
                                         // .requestMatchers("/admin/**").hasAnyRole(MemberRole.ADMIN.name())
 
                                         .requestMatchers("/admin/**").permitAll()
