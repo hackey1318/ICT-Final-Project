@@ -1,0 +1,46 @@
+/* 전체 배경 */
+.manager-page #root {
+	background: linear-gradient(to bottom, #3c4ba3, #0a0d26);
+	min-height: 100vh;
+}
+
+/* 카드 박스 */
+.manager-page .card {
+	background-color: #fff;
+	border-radius: 15px;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+	padding: 40px 120px;
+	max-width: 800px;
+	width: 100%;
+	min-height: 360px;
+}
+
+/* input */
+.manager-page .card input.form-control {
+	border-radius: 999px;
+	height: 48px;
+	font-size: 15px;
+	padding-left: 18px;
+}
+
+/* 버튼 */
+.manager-page .card .btn-light {
+	border-radius: 999px;
+	height: 48px;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+/* 하단 링크 */
+.manager-page .card .small {
+	font-size: 13px;
+}
+
+/* 중앙 정렬 */
+.manager-page .container {
+	padding: 0 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}

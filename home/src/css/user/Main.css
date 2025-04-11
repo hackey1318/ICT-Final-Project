@@ -1,0 +1,73 @@
+/* Existing CSS remains the same, I'll just add/modify the banner-specific styles */
+
+/* Banner section specific styles */
+.Main_section-banner {
+  padding: 0; /* Remove padding for full-width effect */
+  max-width: 100%; /* Ensure full width */
+  overflow: hidden; /* Prevent any overflow */
+}
+
+/* Update the Swiper container for banner */
+.Main_section-banner .swiper {
+  width: 100%;
+  max-width: 100%; /* Remove max-width limitation */
+  padding-bottom: 30px; /* Space for pagination */
+}
+
+/* Banner image container adjustments */
+.Main_section .Main_banner-image-container {
+  width: 100%; /* Full width */
+  max-height: 70vh; /* Adjust height as needed */
+  margin: 0; /* Remove margins */
+  position: relative; /* For overlay text positioning */
+}
+
+/* Banner image style */
+.Main_section .Main_banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover the entire area */
+  border-radius: 0; /* Remove border radius for full-bleed effect */
+  box-shadow: none; /* Remove shadow for cleaner look */
+}
+
+/* Banner title overlay style */
+.Main_section .Main_banner-title {
+  position: absolute;
+  right: 10%; /* Position on the right side */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%);
+  font-weight: bold;
+  font-size: 2.5rem; /* Larger font size */
+  color: white; /* White text like in the image */
+  text-align: right;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Text shadow for better visibility */
+  max-width: 40%; /* Limit width of text */
+}
+
+/* Custom slide background for banner */
+.Main_section-banner .swiper-slide {
+  position: relative; /* For proper positioning of content */
+  height: auto; /* Fixed height for banner */
+  overflow: hidden; /* Hide overflow */
+}
+
+/* Add overlay gradient for better text visibility */
+.Main_banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%);
+  z-index: 1;
+}
+
+/* Ensure link covers the entire slide */
+.Main_banner-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2; /* Above the overlay */
+}
