@@ -142,7 +142,7 @@ function UserDau(){
     //그래프 LineChart 끝 ---------------------------------------------------------------
 
     return(
-        <div className='userdau-wrap'>
+        <div className='userdau-wrap' style={{backgroundColor: 'white'}}>
             <h3 className='userdau-title'>Admin Page - User's {dataType}</h3>
             {/* 일별, 월별 선택 버튼 */}
             <div className='data-select-btn'>
