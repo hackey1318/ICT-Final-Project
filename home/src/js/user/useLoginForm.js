@@ -49,7 +49,7 @@ export const useLoginForm = () => {
             sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
 
             // 3. 페이지 이동
-            navigate('/');
+            window.location.href = "/";
 
         } catch (error) {
             setLoginError(error.message || "로그인 중 알 수 없는 오류가 발생했습니다.");
