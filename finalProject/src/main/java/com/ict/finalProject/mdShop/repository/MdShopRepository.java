@@ -13,4 +13,6 @@ import java.util.List;
 public interface MdShopRepository extends JpaRepository<Goods, Integer> {
 
     Page<Goods> findByStatusIn(List<StatusInfo> statuses, Pageable pageable);
+
+    Page<Goods> findByStatusInAndNameContaining(List<StatusInfo> allowed, String name, Pageable pageable);
 }
