@@ -5,6 +5,10 @@ import com.ict.finalProject.mdShop.service.dto.MdShopInsertDto;
 import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
 import com.ict.finalProject.mdShop.service.MdShopService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +22,15 @@ public class MdShopController {
 
     private final MdShopService md_service;
 
-    //임시 리스트
     @GetMapping("/items")
-    public List<MdShopDto> getMdList(){
-        return md_service.getMdList();
+    public ResponseEntity<Page<MdShopDto>> getMdList(
+        @RequestParam(value = "name", required = false) String name,
+        @PageableDefault(page = 0, size = 10, sort = {"updatedAt"}, direction = Sort.Direction.DESC) Pageable pageable
+        ){
+        return ResponseEntity.ok(md_service.getMdList(name,pageable));
     }
+
+
 
     @PostMapping("/insert")
     public void insertMd(@RequestBody MdShopInsertDto dto){

@@ -3,13 +3,14 @@ package com.ict.finalProject.mdShop.service;
 import com.ict.finalProject.mdShop.service.dto.MdShopDto;
 import com.ict.finalProject.mdShop.service.dto.MdShopInsertDto;
 import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface MdShopService {
 
-    //임시 리스트
-    List<MdShopDto> getMdList();
+    Page<MdShopDto> getMdList(String naem, Pageable pageable);
 
     void insertMd(MdShopInsertDto dto);
 

@@ -19,11 +19,17 @@ function MdList() {
   const [movieList, setMovieList] = useState([])
   const [movieSearch, setMovieSearch] = useState("")
   const [showDropdown, setShowDropdown] = useState(false)
+  const [page, setPage] = useState(0)
+  const [size, setSize] = useState(10)
+  const [totalPages, setTotalPages] = useState(0)
+  const [sortField, setSortField] = useState("updatedAt")
+  const [sortDirection, setSortDirection] = useState("desc")
+  const [searchKeyword, setSearchKeyword] = useState("")
   const accessToken = sessionStorage.getItem("accessToken")
 
   useEffect(() => {
     getMdList()
-  }, [])
+  }, [page, sortField, sortDirection])
 
   useEffect(() => {
     if (modalOpen && movieSearch.length > 0) {
@@ -34,25 +40,32 @@ function MdList() {
 
   const getMdList = () => {
     axios
-      .get("http://localhost:9988/md/items",{
-        headers:{
+      .get(`http://localhost:9988/md/items?page=${page}&size=${size}&sort=${sortField},${sortDirection}&name=${encodeURIComponent(searchKeyword)}`, {
+        headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`,
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
-      .then((res) => setMdList(res.data))
+      .then((res) => {
+        console.log("정보", res.data)
+        setMdList(res.data.content)
+        setTotalPages(res.data.totalPages)
+      })
       .catch((err) => console.error(err))
   }
 
   const fetchMovieList = async () => {
     if (!modalOpen) return
     try {
-      const response = await axios.get(`http://localhost:9988/md/insert-moviename?movieSearch=${encodeURIComponent(movieSearch)}`,{
-        headers:{
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`,
-        }
-      })
+      const response = await axios.get(
+        `http://localhost:9988/md/insert-moviename?movieSearch=${encodeURIComponent(movieSearch)}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      )
       setMovieList(response.data)
     } catch (err) {
       console.error("영화 리스트 가져오기 실패:", err)
@@ -72,15 +85,19 @@ function MdList() {
     }
 
     axios
-      .post("http://localhost:9988/md/insert", {
-        ...form,
-        price: Number(form.price),
-      },{
-        headers:{
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`,
-        }
-      })
+      .post(
+        "http://localhost:9988/md/insert",
+        {
+          ...form,
+          price: Number(form.price),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      )
       .then(() => {
         alert("등록 완료!")
         getMdList()
@@ -129,18 +146,148 @@ function MdList() {
     }, 200)
   }
 
-  return (
-    <div className="md-container">
-      <h2>📋 굿즈 리스트</h2>
-      {mdList.map((item, idx) => (
-        <div key={idx}>
-          {item.name} / {item.type} / {item.price}원 / {item.options} / {item.movie_name}
-        </div>
-      ))}
+  const handlePageChange = (newPage) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      setPage(newPage)
+    }
+  }
 
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (modalOpen && !e.target.closest(".md_modal-wrapper")) {
+        closeModal()
+      }
+    }
+
+    document.addEventListener("mousedown", handleOutsideClick)
+    return () => document.removeEventListener("mousedown", handleOutsideClick)
+  }, [modalOpen])
+
+  return (
+    <div className="md-yes-container">
+      <h2>굿즈 리스트</h2>
+      {/* 👇 검색/정렬 UI */}
+      <div className="md_search-sort-controls">
+        <div className="md_search-container">
+          <input
+            type="text"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            placeholder="굿즈명을 검색하세요"
+            className="md_search-input"
+          />
+          <button
+            className="md_search-btn"
+            onClick={() => {
+              setPage(0)
+              getMdList()
+            }}
+          >
+            검색
+          </button>
+        </div>
+
+        <div className="md_sort-container">
+          <label>정렬 기준: </label>
+          <select value={sortField} onChange={(e) => setSortField(e.target.value)}>
+            <option value="updatedAt">등록일</option>
+            <option value="name">이름</option>
+            <option value="price">가격</option>
+          </select>
+
+          <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)}>
+            <option value="desc">내림차순</option>
+            <option value="asc">오름차순</option>
+          </select>
+        </div>
+      </div>
+
+      {/*굿즈리스트 */}
+      <div className="md_table-container">
+        <table className="md_table">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>굿즈명</th>
+              <th>영화</th>
+              <th>종류</th>
+              <th>가격</th>
+              <th>등록일</th>
+            </tr>
+          </thead>
+          <tbody>
+            {mdList.map((item, idx) => (
+              <tr key={idx} className="md_item">
+                <td>{page*size + idx+1}</td>
+                <td><span className="md_text-ellipsis-name" title={item.name}>{item.name}</span></td>
+                <td><span className="md_text-ellipsis-moviename" title={item.movieName}>{item.movieName}</span></td>
+                <td>{item.type}</td>
+                <td>{item.price.toLocaleString()}원</td>
+                <td>{item.updatedAt ? new Date(item.updatedAt).toLocaleDateString() : "-"}</td>
+              </tr>
+            ))}
+            {mdList.length === 0 && (
+              <tr>
+                <td colSpan={7} className="md_no-data">
+                  데이터가 없습니다.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div id ="md-button-wrapper">
       <button id="md-register-btn" className="btn btn-primary" onClick={openModal}>
         등록하기
       </button>
+      </div>
+
+      <div className="md_pagination">
+        <button className="md_pagination-btn" onClick={() => handlePageChange(0)} disabled={page === 0}>
+          처음
+        </button>
+        <button className="md_pagination-btn" onClick={() => handlePageChange(page - 1)} disabled={page === 0}>
+          &lt;
+        </button>
+
+        {/* 페이지네이션 버튼 */}
+        {(() => {
+          const pageButtons = []
+          const pageGroup = Math.floor(page / 5)
+          const startPage = pageGroup * 5
+          const endPage = Math.min(startPage + 4, totalPages - 1)
+
+          for (let i = startPage; i <= endPage; i++) {
+            pageButtons.push(
+              <button
+                key={i}
+                className={`md_pagination-btn ${page === i ? "md_pagination-active" : ""}`}
+                onClick={() => handlePageChange(i)}
+              >
+                {i + 1}
+              </button>,
+            )
+          }
+
+          return pageButtons
+        })()}
+
+        <button
+          className="md_pagination-btn"
+          onClick={() => handlePageChange(page + 1)}
+          disabled={page === totalPages - 1}
+        >
+          &gt;
+        </button>
+        <button
+          className="md_pagination-btn"
+          onClick={() => handlePageChange(totalPages - 1)}
+          disabled={page === totalPages - 1}
+        >
+          마지막
+        </button>
+      </div>
 
       {modalOpen && (
         <div className="md_modal-overlay">
@@ -179,9 +326,7 @@ function MdList() {
                     onBlur={handleClickOutside}
                     placeholder="영화명을 입력하세요"
                   />
-                  {form.movieNo && (
-                    <div className="selected-movie">선택된 영화: {movieSearch}</div>
-                  )}
+                  {form.movieNo && <div className="selected-movie">선택된 영화: {movieSearch}</div>}
                   {showDropdown && movieList.length > 0 && (
                     <div className="movie-dropdown">
                       {movieList.map((item) => (
@@ -207,12 +352,7 @@ function MdList() {
 
                 <div className="md_form-group">
                   <label>종류</label>
-                  <select
-                    name="type"
-                    className="md_form-input"
-                    value={form.type}
-                    onChange={handleChange}
-                  >
+                  <select name="type" className="md_form-input" value={form.type} onChange={handleChange}>
                     <option value="">종류를 선택하세요</option>
                     <option value="포스터">포스터</option>
                     <option value="인형">인형</option>
