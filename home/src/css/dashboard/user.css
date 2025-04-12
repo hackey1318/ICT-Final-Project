@@ -1,0 +1,87 @@
+.userdau-wrap{
+    padding: 40px;
+}
+.userdau-data-wrap{
+    display: flex;
+    padding: 30px;
+}
+.data-select-btn{
+    width: 200px;
+    margin-top: 20px;
+    margin-left: 50px;
+    display: flex;
+    justify-content: center;
+}
+.select-btn{
+    cursor: pointer;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+}
+.select-btn:hover, .select-btn.active{
+    color: #fff;
+    background: #888;
+}
+.userdau-left{
+    width: 60%;
+}
+.userdau-list{
+    height: 500px;
+}
+.userdau-list>ul{
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    justify-content: center;
+}
+.userdau-list>ul>li{
+    width: 33%;
+    text-align: center;
+    border-bottom: 1px solid #888;
+    padding: 10px;
+}
+.paging-container{
+    width: 500px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+}
+.paging-container>button, .paging-container>div>button{
+    cursor: pointer;
+    padding: 8px 15px;
+    margin: 0 5px;
+    border: none;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.paging-container > div > button.active {
+    background-color: navy;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+}
+.paging-container > div > button:hover {
+    color: #fff;
+    background-color: rgba(0, 0, 128);
+}
+.paging-container > button:hover {
+    color: #fff;
+    background-color: rgba(0, 0, 128);
+}
+.userdau-right{
+    width: 40%;
+    height: 500px;
+}
+.userdat-chart-totaluser{
+    text-align: center;
+    line-height: 40px;
+    width: 150px;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin: 20px auto;
+}

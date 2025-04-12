@@ -1,8 +1,10 @@
 package com.ict.finalProject.inquiry.service.impl;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
-import com.ict.finalProject.fileSystem.domain.InquiryImages;
+import com.ict.finalProject.fileSystem.domain.ImageInfo;
+import com.ict.finalProject.fileSystem.repository.FileSystemRepository;
 import com.ict.finalProject.inquiry.controller.request.InquiryRequest;
+import com.ict.finalProject.inquiry.controller.response.InquiryResponse;
 import com.ict.finalProject.inquiry.repository.InquiryRepository;
 import com.ict.finalProject.inquiry.repository.domain.Inquiry;
 import com.ict.finalProject.inquiry.service.InquiryService;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -20,10 +23,13 @@ import java.util.List;
 public class InquiryServiceImpl implements InquiryService {
 
     private final InquiryRepository inquiryRepository;
-    
+    private final ImageInfoRepository imageInfoRepository;
+    private final FileSystemRepository fileSystemRepository;
+
+    //문의등록
     @Override
     @Transactional
-    public boolean inquiryWrite(InquiryRequest request) {  //문의등록
+    public boolean inquiryWrite(InquiryRequest request) {
         try {
             Inquiry saveInquiry = inquiryRepository.save(Inquiry.builder()
                     .userNo(request.getUserNo())
@@ -31,14 +37,16 @@ public class InquiryServiceImpl implements InquiryService {
                     .content(request.getContent())
                     .status(StatusInfo.ACTIVE).build());
 
-            List<InquiryImages> inquiryImagesList = new ArrayList<>();
+            List<ImageInfo> inquiryImagesList = new ArrayList<>();
             if(request.getImageList() != null) {
                 for (String imageId : request.getImageList()) {
-                    inquiryImagesList.add(InquiryImages.builder()
-                            .no(saveInquiry.getNo())
-                            .originName(imageId)
+                    inquiryImagesList.add(ImageInfo.builder()
+                                    .type(ImageWriteType.INQUIRY)
+                                    .boardNo(saveInquiry.getNo())
+                                    .fileId(imageId)
                             .status(StatusInfo.ACTIVE).build());
                 }
+                imageInfoRepository.saveAll(inquiryImagesList);
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -50,8 +58,19 @@ public class InquiryServiceImpl implements InquiryService {
 
     //문의리스트
     @Override
-    public List<InquiryRequest> getInquiry(String request) {
-        return List.of();
+    public List<InquiryResponse> getInquiry() {
+        List<Inquiry> inquiries = inquiryRepository.findAllByOrderByNoDesc();
+
+        return inquiries.stream()
+                .map(inquiry -> InquiryResponse.builder()
+                        .no(inquiry.getNo())
+                        .subject(inquiry.getSubject())
+                        .content(inquiry.getContent())
+                        .createdAt(inquiry.getCreatedAt())
+                        .status(StatusInfo.ACTIVE)
+                        //.nickname(userFindResponse.getNickname())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     /*@Override

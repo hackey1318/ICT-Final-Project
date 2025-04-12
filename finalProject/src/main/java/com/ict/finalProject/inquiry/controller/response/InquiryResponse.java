@@ -1,10 +1,18 @@
 package com.ict.finalProject.inquiry.controller.response;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class InquiryResponse {
 
     private int no;
@@ -22,4 +30,6 @@ public class InquiryResponse {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private String nickname;
 }

@@ -31,6 +31,7 @@ public class FileSystemServiceImpl implements FileSystemService {
 
     private final UserService userService;
     private final FileSystemRepository fileSystemRepository;
+    private final ImageInfoRepository imageInfoRepository;
 
     @Override
     public List<FileUploadResponse> uploadFile(List<MultipartFile> files) throws IOException {
@@ -38,14 +39,16 @@ public class FileSystemServiceImpl implements FileSystemService {
         Path uploadPath = new ClassPathResource("static/img").getFile().toPath(); // 실제 서버 파일 시스템 경로
         List<String> fileIdList = new ArrayList<>();
         List<Images> imageList = new ArrayList<>();
+        List<ImageInfo> imageInfos = new ArrayList<>();
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
         for (MultipartFile file : files) {
             String fileId = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
             fileIdList.add(fileId);
             String fileName = file.getOriginalFilename();
-
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
 
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
