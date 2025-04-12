@@ -21,21 +21,32 @@ public class InquiryController {
     private final UserService userService;
 
     //문의등록
-    @AuthRequired({UserRole.USER, UserRole.MANAGER, UserRole.ADMIN})
+    @AuthRequired({UserRole.USER, UserRole.ADMIN})
     @PostMapping("/inquiryWrite")
     public SuccessOfFailResponse inquiryWrite(@RequestBody InquiryRequest request) {
-
-        int userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER, UserRole.MANAGER, UserRole.ADMIN)).getNo();
+        int userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER, UserRole.ADMIN)).getNo();
         request.setUserNo(userNo);
         return SuccessOfFailResponse.builder().result(inquiryService.inquiryWrite(request)).build();
     }
 
     //문의리스트
-    @GetMapping("/getInquiry")
-    public List<InquiryRequest> getInquiry(@RequestParam String status) {
-        List<InquiryRequest> inquiries = inquiryService.getInquiry(status);
+    /*@GetMapping("/getInquiry")
+    public List<InquiryResponse> getInquiry(@RequestParam int no) {
+        List<InquiryResponse> inquiries = inquiryService.getInquiries();
         return inquiries;
+    }*/
+
+    //문의리스트
+    @GetMapping("/getInquiry") // URL 변경 (getReplies -> getInquiries)
+    public List<InquiryResponse> getInquiry() { // 메소드명 변경 (getReplies -> getInquiries)
+        return inquiryService.getInquiry();
     }
+
+    // 기존에 eventNo로 조회하는 메소드가 있다면 유지
+    /*@GetMapping("/getInquiriesBy/{no}") // 필요하다면 특정 번호로 조회하는 엔드포인트 유지
+    public List<InquiryResponse> getInquiriesByNo(@RequestParam int no) {
+        return inquiryService.getInquiriesByNo(no);
+    }*/
 
     //문의이미지리스트
     /*@GetMapping("/getInquiry")

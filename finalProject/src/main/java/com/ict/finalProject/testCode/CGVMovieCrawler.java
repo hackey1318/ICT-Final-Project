@@ -35,22 +35,27 @@ public class CGVMovieCrawler {
     private final MoviesRepository moviesRepository;
     private final MovieStillCutsRepository movieStillCutsRepository;
 
-    @PostConstruct
+    //    @PostConstruct
     @Scheduled(cron = "0 10 0 * * *")
     public void crawlAndSyncAllMovies() {
-        Map<Integer, Movies> existingMoviesMap = moviesRepository.findByOpenStatusIn(List.of(MovieStatus.ACTIVE, MovieStatus.PENDING))
+        Map<Integer, Movies> allMoviesMap = moviesRepository.findAll()
                 .stream()
+                .collect(Collectors.toMap(Movies::getCode, m -> m));
+
+        Map<Integer, Movies> existingMoviesMap = allMoviesMap.values().stream()
+                .filter(m -> m.getOpenStatus() == MovieStatus.ACTIVE || m.getOpenStatus() == MovieStatus.PENDING)
                 .collect(Collectors.toMap(Movies::getCode, m -> m));
 
         Set<Integer> updatedMovieCodes = new HashSet<>();
 
-        crawlAndSyncMovies(existingMoviesMap, updatedMovieCodes); // 메인 페이지
-        getMovieMore(existingMoviesMap, updatedMovieCodes); // 더보기 페이지
+        crawlAndSyncMovies(existingMoviesMap, updatedMovieCodes, allMoviesMap);
+        getMovieMore(existingMoviesMap, updatedMovieCodes, allMoviesMap);
+
 
         // CLOSE 처리
-        for (Integer code : existingMoviesMap.keySet()) {
+        for (Integer code : allMoviesMap.keySet()) {
             if (!updatedMovieCodes.contains(code)) {
-                Movies movie = existingMoviesMap.get(code);
+                Movies movie = allMoviesMap.get(code);
                 movie.updateStatus(MovieStatus.CLOSE);
                 moviesRepository.save(movie);
                 log.info("🔒 CLOSED: {}", movie.getName());
@@ -58,7 +63,7 @@ public class CGVMovieCrawler {
         }
     }
 
-    private void getMovieMore(Map<Integer, Movies> existingMap, Set<Integer> updatedCodes) {
+    private void getMovieMore(Map<Integer, Movies> existingMoviesMap, Set<Integer> updatedCodes, Map<Integer, Movies> allMoviesMap) {
         String url = "http://www.cgv.co.kr/common/ajax/movies.aspx/GetMovieMoreList"
                 + "?listType=1&orderType=1&filterType=0&_=" + System.currentTimeMillis();
 
@@ -117,9 +122,10 @@ public class CGVMovieCrawler {
                         .postImage(imageSrc)
                         .genre(detail.getGenre())
                         .ageGrade(ageRating)
+                        .externalLink(detailUrl) // <--- 이 부분 추가!
                         .build();
 
-                saveOrUpdateMovie(code, movieEntity, detail, stillCuts, existingMap);
+                saveOrUpdateMovie(code, movieEntity, detail, stillCuts, existingMoviesMap, allMoviesMap);
                 updatedCodes.add(code);
             }
 
@@ -159,12 +165,18 @@ public class CGVMovieCrawler {
                 .build();
     }
 
-    private void saveOrUpdateMovie(int code, Movies newMovie, MovieDetailDto detail, List<MovieStillCuts> stillCuts, Map<Integer, Movies> existingMap) {
+    private void saveOrUpdateMovie(int code, Movies newMovie, MovieDetailDto detail, List<MovieStillCuts> stillCuts, Map<Integer, Movies> existingMap, Map<Integer, Movies> allMoviesMap) {
         if (existingMap.containsKey(code)) {
             Movies existing = existingMap.get(code);
-            existing.updateFrom(newMovie); // 엔티티에 update 메서드 만들면 깔끔함
+            existing.updateFrom(newMovie);
             moviesRepository.save(existing);
             log.info("🔁 UPDATED: {}", existing.getName());
+        } else if (allMoviesMap.containsKey(code)) {
+            // 이미 존재하지만 현재 상태가 CLOSE였던 영화 => 상태 변경
+            Movies closedMovie = allMoviesMap.get(code);
+            closedMovie.updateFrom(newMovie);
+            moviesRepository.save(closedMovie);
+            log.info("♻️ REOPENED: {}", closedMovie.getName());
         } else {
             Movies saved = moviesRepository.save(newMovie);
             for (String url : detail.getImageList()) {
@@ -174,7 +186,7 @@ public class CGVMovieCrawler {
         }
     }
 
-    private void crawlAndSyncMovies(Map<Integer, Movies> existingMap, Set<Integer> updatedCodes) {
+    private void crawlAndSyncMovies(Map<Integer, Movies> existingMoviesMap, Set<Integer> updatedCodes, Map<Integer, Movies> allMoviesMap) {
         String url = "http://www.cgv.co.kr/movies/?lt=1&ft=0";
         List<MovieStillCuts> stillCuts = new ArrayList<>();
 
@@ -215,9 +227,10 @@ public class CGVMovieCrawler {
                         .postImage(imageSrc)
                         .genre(detail.getGenre())
                         .ageGrade(ageRating)
+                        .externalLink(detailUrl) // <--- 이 부분 추가!
                         .build();
 
-                saveOrUpdateMovie(code, entity, detail, stillCuts, existingMap);
+                saveOrUpdateMovie(code, entity, detail, stillCuts, existingMoviesMap, allMoviesMap);
                 updatedCodes.add(code);
             }
 

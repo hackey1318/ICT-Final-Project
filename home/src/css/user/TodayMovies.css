@@ -1,0 +1,205 @@
+/* TodayMovies 섹션 전체 */
+.TodayMovies_section {
+    padding: 40px 20px; /* 내부 여백 */
+    background-color: #fff; /* 배경색 */
+    /* 필요에 따라 다른 스타일 추가 */
+  }
+  
+  /* 헤더 영역 */
+  .TodayMovies_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* 상단 정렬 */
+    margin-bottom: 30px;
+  }
+  
+  .TodayMovies_header-left h2 {
+    font-size: 24px;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .TodayMovies_header-left p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.5;
+  }
+  
+  .TodayMovies_header-right {
+    margin-top: 10px; /* '모두 보기' 링크 위치 조정 */
+  }
+  
+  .TodayMovies_seeAll {
+    font-size: 16px;
+    color: #337ab7; /* 링크 색상 */
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .TodayMovies_seeAll:hover {
+    text-decoration: underline;
+  }
+  
+  
+  /* 영화 그리드 */
+  .TodayMovies_grid {
+    display: grid;
+    /* grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 반응형 그리드 */
+
+    grid-template-columns: repeat(3, 1fr);
+
+
+    gap: 20px; /* 그리드 아이템 간격 */
+    margin-bottom: 30px;
+    max-width: 30%; /* 예시: 그리드의 최대 너비를 700px로 제한합니다. 원하는 크기로 조절하세요. */
+    width: 100%;     /* 기본적으로 부모 너비를 채우려고 하지만, max-width 제한을 받습니다. */
+    margin-left: auto;  /* max-width가 적용될 때 그리드를 가운데 정렬합니다. */
+    margin-right: auto; /* max-width가 적용될 때 그리드를 가운데 정렬합니다. */
+  }
+  
+  /* 그리드 아이템 */
+  .TodayMovies_item {
+    border: 1px solid #eee;
+    border-radius: 4px;
+    overflow: hidden; /* 내부 요소가 넘치지 않도록 */
+    background-color: #f9f9f9;
+  }
+  
+  .TodayMovies_poster-container {
+    width: 100%;
+    aspect-ratio: 2 / 3; /* 포스터 비율 (가로 2 : 세로 3) */
+    overflow: hidden;
+  }
+  
+  .TodayMovies_poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지가 비율 유지하며 꽉 차게 */
+    display: block;
+  }
+  
+  .TodayMovies_info {
+    padding: 10px;
+    font-size: 13px;
+  }
+  
+  .TodayMovies_rating {
+    font-weight: bold;
+    color: #f0ad4e; /* 별점 색상 */
+    margin-bottom: 4px;
+  }
+  
+  .TodayMovies_title {
+    font-weight: bold;
+    margin-bottom: 6px;
+    /* 제목이 길 경우 말줄임 처리 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .TodayMovies_shortDesc {
+    color: #666;
+    line-height: 1.4;
+    /* 여러 줄 말줄임 (브라우저 호환성 주의) */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 보여줄 줄 수 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: calc(1.4em * 2); /* line-height * 줄 수 */
+  }
+  
+  /* 접기/펴기 버튼 영역 */
+  .TodayMovies_controls {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    margin-bottom: 40px;
+  }
+  
+  .TodayMovies_toggleButton {
+    padding: 8px 20px;
+    font-size: 14px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  .TodayMovies_toggleButton:hover {
+    background-color: #e0e0e0;
+  }
+  
+  /* 하단 추천 영화 */
+  .FeaturedMovie_container {
+    position: relative; /* ⭐ 자식 absolute 요소의 기준점 */
+    max-width: 50%;
+    display: flex;
+    gap: 30px; /* 이미지와 내용 간격 */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+  }
+
+  
+  
+  .FeaturedMovie_poster-container {
+    flex-shrink: 0; /* 내용이 길어져도 줄어들지 않음 */
+    width: 200px; /* 포스터 너비 고정 (조정 가능) */
+  }
+  
+  .FeaturedMovie_poster {
+    width: 100%;
+    height: auto; /* 비율 유지 */
+    display: block;
+    border-radius: 4px;
+  }
+  
+  .FeaturedMovie_details {
+    flex-grow: 1; /* 남은 공간 차지 */
+  }
+  
+  .FeaturedMovie_details h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .FeaturedMovie_details p {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
+  
+  .FeaturedMovie_story {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 15px; /* 필요하면 유지 또는 조정 */
+    line-height: 1.6; /* 줄 높이 유지 */
+  
+    /* --- 여기에 줄 수 제한 및 말줄임 스타일 추가 --- */
+    display: -webkit-box; /* 웹킷 브라우저용 박스 모델 */
+    -webkit-box-orient: vertical; /* 박스 방향 수직 */
+    -webkit-line-clamp: 5; /* 보여줄 최대 줄 수 (예: 4줄) - 이 숫자를 조절하세요 */
+    overflow: hidden; /* 넘치는 내용 숨기기 */
+    text-overflow: ellipsis; /* 말줄임표(...) 표시 (line-clamp와 함께 사용) */
+  }
+
+  .TodayMovies_info_detail {
+    position: absolute; /* ⭐ 컨테이너 기준 절대 위치 */
+    top: 15px;          /* ⭐ 위쪽 여백 (padding 고려) */
+    right: 15px;         /* ⭐ 오른쪽 여백 (padding 고려) */
+    display: inline-block;
+    padding: 5px 10px;  /* 클릭 영역 확보 */
+    font-size: 20px;    /* 아이콘 크기 */
+    font-weight: bold;
+    color: #888;        /* 아이콘 색상 */
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.7); /* 배경 약간 추가 (선택 사항) */
+    border-radius: 50%; /* 원형 모양 (선택 사항) */
+    line-height: 1;
+    transition: color 0.2s ease; /* 부드러운 색상 변경 */
+  }
+  
+  .TodayMovies_info_detail:hover {
+    color: #333; /* 호버 시 색상 진하게 */
+  }
