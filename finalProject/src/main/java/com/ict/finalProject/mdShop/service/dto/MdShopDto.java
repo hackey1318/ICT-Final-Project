@@ -5,11 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.format.DateTimeFormatter;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//임시 리스트
 public class MdShopDto {
     private int id;
     private String name;
@@ -17,6 +18,8 @@ public class MdShopDto {
     private String type;
     private int price;
     private String options;
+    private String movieName;
+    private String updatedAt;
 
     public MdShopDto(Goods goods){
         this.id = goods.getId();
@@ -25,5 +28,7 @@ public class MdShopDto {
         this.type = goods.getType();
         this.price = goods.getPrice();
         this.options = goods.getOptions();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.updatedAt = goods.getUpdatedAt().format(formatter);
     }
 }

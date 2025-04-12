@@ -10,6 +10,8 @@ import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
 import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.domain.Movies;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,17 +24,27 @@ public class MdShopServiceImpl implements MdShopService {
     private final MdShopRepository mdShopRepository;
     private final MoviesRepository moviesRepository;
 
-    //임시리스트
-    @Override
-    public List<MdShopDto> getMdList() {
-        List<Goods> entityList = mdShopRepository.findAll();
-        List<MdShopDto> dtoList = new ArrayList<>();
 
-        for(Goods entity : entityList){
-            MdShopDto dto = new MdShopDto(entity);
-            dtoList.add(dto);
+    @Override
+    public Page<MdShopDto> getMdList(String name, Pageable pageable) {
+        List<StatusInfo> allowed = List.of(StatusInfo.ACTIVE, StatusInfo.PENDING);
+        Page<Goods> goodsPage;
+
+        if (name != null && !name.isEmpty()) {
+            goodsPage = mdShopRepository.findByStatusInAndNameContaining(allowed, name, pageable);
+        } else {
+            goodsPage = mdShopRepository.findByStatusIn(allowed, pageable);
         }
-        return dtoList;
+
+        return goodsPage
+                .map(goods -> {
+                    String movieName = moviesRepository.findById(goods.getMovieNo())
+                            .map(Movies::getName)
+                            .orElse("영화명 없음");
+                    MdShopDto dto = new MdShopDto(goods);
+                    dto.setMovieName(movieName);
+                    return dto;
+                });
     }
 
     @Override
