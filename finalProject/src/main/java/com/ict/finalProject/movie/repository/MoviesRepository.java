@@ -21,4 +21,7 @@ public interface MoviesRepository extends JpaRepository<Movies, Integer> {
 
     @Query("SELECT m FROM Movies AS m WHERE (:genre IS NULL OR m.genre LIKE %:genre%) AND (:searchDate IS NULL OR m.openDate <= :searchDate) AND m.openStatus IN (:statuses)")
     Page<Movies> searchMovies(@Param("genre") String genre, @Param("searchDate") LocalDate searchDate, @Param("statuses") List<MovieStatus> statuses, Pageable pageable);
+
+    //Md 등록 시 영화이름검색을 위한
+    List<Movies> findAllByNameContaining(String movieSearch);
 }
