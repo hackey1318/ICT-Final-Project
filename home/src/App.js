@@ -27,7 +27,6 @@ function App() {
   }, [location.pathname]);
 
   return (
-    <BrowserRouter>
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<Main />} />
