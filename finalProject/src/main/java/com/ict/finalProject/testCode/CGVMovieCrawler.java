@@ -35,7 +35,7 @@ public class CGVMovieCrawler {
     private final MoviesRepository moviesRepository;
     private final MovieStillCutsRepository movieStillCutsRepository;
 
-    //    @PostConstruct
+//    @PostConstruct
     @Scheduled(cron = "0 10 0 * * *")
     public void crawlAndSyncAllMovies() {
         Map<Integer, Movies> allMoviesMap = moviesRepository.findAll()

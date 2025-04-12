@@ -25,7 +25,7 @@ public class MoviesServiceImpl implements MoviesService {
 
     @Override
     public Page<Movies> getGenreMovieList(Pageable pageable, String genre, LocalDate searchDate, List<MovieStatus> statusList) {
-        return moviesRepository.searchMovies(genre, searchDate, statusList, pageable);
+        return moviesRepository.searchMovies("전체".equals(genre) ? null : genre, searchDate, statusList, pageable);
     }
 
     @Override
