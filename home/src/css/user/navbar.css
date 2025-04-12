@@ -12,7 +12,7 @@
     justify-content: space-between;
     /* 좌우 정렬을 위한 설정 */
     padding: 0 20px;
-    height: 70px;
+    height: 100px;
     /* max-width: 1200px; */
     /* margin: 0 auto; */
 }
@@ -32,7 +32,7 @@
 }
 
 .navbar-logo img {
-    height: 40px;
+    height: 80px;
 }
 
 .logo-text {
@@ -74,6 +74,8 @@
     font-weight: 500;
     transition: color 0.3s;
     white-space: nowrap;
+    font-size: 1.3rem;
+    font-weight: bold;
     /* 텍스트 줄바꿈 방지 */
 }
 
@@ -83,7 +85,7 @@
 
 /* 드롭다운 메뉴 스타일 */
 .dropdown-arrow {
-    font-size: 10px;
+    font-size: 15px;
     margin-left: 5px;
 }
 
@@ -94,11 +96,13 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     min-width: 180px;
     border-radius: 4px;
-    padding: 10px 0;
+    padding: 12px 0;
 }
 
 .dropdown-container li {
     list-style: none;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 .dropdown-container a {
@@ -247,19 +251,20 @@
     }
 
     .navbar-menus {
-        position: absolute;
-        top: 70px;
-        left: 0;
-        right: 0;
-        background-color: #fff;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        flex-direction: column;
-        padding: 20px;
         display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
     }
 
-    .navbar-menu.active {
-        display: block;
+    .navbar-menus.active {
+        display: flex;
     }
 
     .navbar-navs {
