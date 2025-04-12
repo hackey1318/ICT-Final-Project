@@ -62,6 +62,9 @@ public class Movies {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(length = 512) // URL 길이를 고려하여 적절한 길이 설정
+    private String externalLink; // 또는 cgvDetailUrl
+
     public void updateStatus(MovieStatus status) {
         this.openStatus = status;
     }
@@ -76,6 +79,8 @@ public class Movies {
         this.postImage = other.postImage;
         this.genre = other.genre;
         this.ageGrade = other.ageGrade;
+        this.externalLink = other.externalLink;
+
     }
 }
 
