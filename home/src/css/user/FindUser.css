@@ -1,17 +1,21 @@
 .find-form{
     text-align: center;
-    width: 400px;
-    border: 1px solid #ddd;
+    width: 480px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     padding: 10px;
     margin: 200px auto;
 }
 .find-form-subject{
-    margin: 20px 0;
+    margin: 30px 0;
+    font-size: 1.5em;
+    font-weight: bold;
 }
 .find-form-title{
     width: 80px;
     display: inline-block;
+    text-align: left;
+    font-weight: bold; 
 }
 .reset-form-title{
     text-align: left;
@@ -23,7 +27,7 @@
 }
 .find-form-input{
     font-size: 0.8em;
-    width: 200px;
+    width: 250px;
     height: 30px;
     padding: 5px;
     border: 1px solid #ddd;
@@ -35,15 +39,17 @@
     margin-top: 15px;
 }
 .find-btn{
-    width: 200px;
+    width: 350px;
     height: 35px;
     border: none;
     border-radius: 5px;
     margin: 20px;
     cursor: pointer;
+    font-size: 0.9em;
+    font-weight: bold;
 }
 .find-btn-id{
-    width: 130px;
+    width: 200px;
 }
 .find-btn:hover{
     color: #fff;
