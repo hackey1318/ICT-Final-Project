@@ -26,6 +26,6 @@ public interface FindUserService {
     //아이디 마스킹 처리
     String maskId(String id);
 
-    //전체 아이디 메일 발송
-    void sendFullId(String userId, String email);
+    //아이디 마스킹 해제 후, 메일 발송
+    void unmaskId(String userId, String email);
 }

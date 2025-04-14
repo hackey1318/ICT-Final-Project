@@ -77,9 +77,9 @@ function FindId(){
         });
     }
 
-    //전체 아이디 이메일로 받기 버튼 클릭시 동작함.
-    function sendFullId(){
-        axios.post("http://localhost:9988/user/sendFullId",{
+    //전체 아이디 이메일로 받기 버튼 클릭시 동작함(마스킹 해제된 아이디 이메일로 발송)
+    function unmaskId(){
+        axios.post("http://localhost:9988/user/unmask-id",{
             nickname: idFindForm.nickname,
             email: idFindForm.email
         })
@@ -111,7 +111,7 @@ function FindId(){
                         <h3 className="find-form-subject">아이디 찾기</h3>
                         찾은 아이디는 {userId}입니다.
                         <div className="find-btn-wrap">
-                            <button onClick={sendFullId} className="find-btn find-btn-id">
+                            <button onClick={unmaskId} className="find-btn find-btn-id">
                                 전체 아이디 이메일로 받기
                             </button>
                         </div>

@@ -116,9 +116,9 @@ public class FindUserServiceImpl implements FindUserService {
         }
     }
 
-    //전체 아이디 메일 발송
+    //아이디 마스킹 해제 후, 메일 발송
     @Override
-    public void sendFullId(String userId, String email) {
+    public void unmaskId(String userId, String email) {
         String subject = "전체 아이디 안내";
         String content = "<html><body style='font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333;'>"
                 + "<div style='max-width: 600px; margin: 100px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);'>"
