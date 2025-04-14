@@ -3,6 +3,8 @@ import '../../css/inquiry/inquiry.css';
 import axios from 'axios';
 import addFile from '../../img/plus.jpg';
 import InquiryEditor from '../../js/inquiry/InquiryEditor.js';
+import apiClient from '../../js/public/axiosConfig.js';
+import apiNoAccessClient from '../../js/public/axiosConfigNoAccess.js';
 
 const InquiryWrite = ({ onClose }) => {
     let [subject, setSubject] = useState();
@@ -38,13 +40,7 @@ const InquiryWrite = ({ onClose }) => {
             imageList: addedImg
         }
 
-        const token = sessionStorage.getItem('accessToken'); // sessionStorage에서 Authorization 값 가져오기
-        axios.post('http://localhost:9988/inquiry/inquiryWrite', inquiryData, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json; charset=utf-8'
-            }
-        })
+        apiClient.post('/inquiry/inquiryWrite', inquiryData)
             .then(function (response) {
                 //console.log("문의 전송 성공 : ", response.data);
                 alert("문의 작성이 완료되었습니다.");
