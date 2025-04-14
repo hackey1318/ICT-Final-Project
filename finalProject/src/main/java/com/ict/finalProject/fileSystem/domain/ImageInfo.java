@@ -1,5 +1,6 @@
 package com.ict.finalProject.fileSystem.domain;
 
+import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,12 +27,12 @@ public class ImageInfo {
     private int no;
 
     @Column(nullable = false, length = 20)
-    private String type;
+    private ImageWriteType type;
 
     private int boardNo;
 
     @Column(nullable = false, length = 16)
-    private String field;
+    private String fileId;
 
     @Enumerated(value = EnumType.STRING)
     private StatusInfo status;

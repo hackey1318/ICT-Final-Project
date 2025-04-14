@@ -2,6 +2,8 @@ package com.ict.finalProject.fileSystem.repository;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.fileSystem.domain.ImageInfo;
+import com.ict.finalProject.domain.constant.ImageWriteType;
+import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.fileSystem.domain.Images;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

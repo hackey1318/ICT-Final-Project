@@ -1,6 +1,6 @@
 /* 문의목록 */
 .container {
-    width: 95%;
+    width: 95;
     margin: 0 auto;
 }
 
@@ -81,6 +81,7 @@ tr {
 }
 
 #inquiry-submit {
+    margin-top: 15px;
     text-decoration-line: none;
     color: black;
     cursor: pointer;
@@ -142,6 +143,18 @@ tr {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 }
 
+#toDetail {
+    cursor: pointer;
+}
+
+#toDetail {
+    text-decoration: none;
+    transition: color 0.3s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 #noInquiryMsg {
     position: absolute;
     left: 10%;
@@ -150,9 +163,9 @@ tr {
     line-height: 50px;
     margin: 30px auto;
     text-align: center;
+    border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
 }
 
-/* .ql-container, .ql-toolbar {
-    min-width: 100px;
-} */
+/*문의 디테일*/
+
