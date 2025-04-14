@@ -2,6 +2,7 @@ package com.ict.finalProject.fileSystem.controller;
 
 import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.common.config.AuthRequired;
+import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.fileSystem.controller.request.ImageRequest;
 import com.ict.finalProject.fileSystem.controller.response.FileUploadResponse;
 import com.ict.finalProject.fileSystem.domain.Images;
@@ -35,16 +36,17 @@ public class FileSystemController {
 
     private final FileSystemService fileSystemService;
 
+    @AuthRequired({UserRole.USER, UserRole.ADMIN})
     @PostMapping("/upload/register-image")
     public List<FileUploadResponse> uploadRegisterImage(@RequestParam("files") List<MultipartFile> files) throws IOException {
 
+        String userId = AuthCheck.getUserId(UserRole.USER, UserRole.ADMIN);
         return fileSystemService.uploadFile(files);
     }
 
     @AuthRequired({USER, MANAGER, ADMIN})
     @PostMapping("/upload")
     public List<FileUploadResponse> uploadFile(@RequestParam("files") List<MultipartFile> files) throws IOException {
-
         return fileSystemService.uploadFile(files);
     }
 

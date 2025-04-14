@@ -25,6 +25,7 @@ public class Images {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int no;
 
+    @Column(nullable = false, length = 16)
     private String id;
 
     @Column(nullable = false, length = 1000)

@@ -16,4 +16,7 @@ public interface MoviesService {
     Page<Movies> getGenreMovieList(Pageable pageable, String genre, LocalDate searchDate, List<MovieStatus> statusList);
 
     Page<Movies> getMovieTypeList(Pageable pageable, List<MovieStatus> statusList);
+
+    Movies getMovieDetail(Integer movieNo);
+
 }
