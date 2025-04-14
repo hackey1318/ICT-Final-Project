@@ -54,6 +54,7 @@ public class SecurityConfig {
                 mvc.pattern("/file-system/download/**"),
                 mvc.pattern("/user/**"),
                 mvc.pattern("/banner/**"),
+                mvc.pattern("/movies/**"),
                 mvc.pattern("/file-system/upload/register-image"),
                 mvc.pattern("/swagger-ui/index.html"),
                 mvc.pattern("/dashboard/**")
@@ -77,6 +78,7 @@ public class SecurityConfig {
                         (authorize) ->
 
                                 authorize.requestMatchers(permitAllWhiteList).permitAll()
+                                        .requestMatchers(HttpMethod.GET, "/movies/detail/{id}").permitAll()
                                         // .requestMatchers("/admin/**").hasAnyRole(MemberRole.ADMIN.name())
 
                                         .requestMatchers("/admin/**").permitAll()
