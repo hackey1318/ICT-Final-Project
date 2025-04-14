@@ -57,7 +57,8 @@ public class SecurityConfig {
                 mvc.pattern("/movies/**"),
                 mvc.pattern("/file-system/upload/register-image"),
                 mvc.pattern("/swagger-ui/index.html"),
-                mvc.pattern("/dashboard/**")
+                mvc.pattern("/dashboard/**"),
+                mvc.pattern("/payment/**")
         };
 
         return http

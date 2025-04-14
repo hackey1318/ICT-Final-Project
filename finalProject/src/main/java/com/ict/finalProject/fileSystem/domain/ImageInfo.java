@@ -1,5 +1,6 @@
 package com.ict.finalProject.fileSystem.domain;
 
+import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,33 +17,30 @@ import java.time.LocalDateTime;
 @Table
 @Entity
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class Images {
+@NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)  //CreateDate최신화 기능
+public class ImageInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int no;
 
+    @Column(nullable = false, length = 20)
+    private ImageWriteType type;
+
+    private int boardNo;
+
     @Column(nullable = false, length = 16)
-    private String id;
-
-    @Column(nullable = false, length = 1000)
-    private String path;
-
-    @Column(nullable = false, length = 50)
-    private String originName;
+    private String fileId;
 
     @Enumerated(value = EnumType.STRING)
     private StatusInfo status;
 
     @CreatedDate
-    @Column(updatable = false)
+    @Column
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
-
 }
