@@ -43,6 +43,8 @@ public class CGVTheaterCrawler {
                 theaterName = theaterName.replace("(임시휴업)", "");
             } else if (theaterName.contains("CINE de CHEF")) {
                 theaterName = theaterName.replace("CINE de CHEF", "씨네드쉐프");
+            } else if (theaterName.contains("CGV고덕강일")) {
+                theaterName = theaterName.replace("강일", "점");
             }
             if (dbTheaterNameList.contains(theaterName)) {
                 continue;
