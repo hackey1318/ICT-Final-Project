@@ -1,3 +1,4 @@
+/*
 package com.ict.finalProject.testCode;
 
 import com.ict.finalProject.movie.repository.domain.Theaters;
@@ -116,3 +117,4 @@ public class CGVTheaterCrawler {
         }
     }
 }
+*/
