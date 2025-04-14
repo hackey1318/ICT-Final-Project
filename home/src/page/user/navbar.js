@@ -91,18 +91,18 @@ function Navbar() {
                     <div className={`navbar-menus ${isNavOpen ? "active" : ""}`}>
                         <ul className="navbar-navs">
                             <li className="nav-items" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                                <a href="#" className="nav-links" ref={movieMenuRef}>
+                                <div className="nav-links" ref={movieMenuRef}>
                                     영화찾기 <i className="dropdown-arrow">▼</i>
-                                </a>
+                                </div>
                             </li>
                             <li className="nav-items">
                                 <Link to="/store" className="nav-links">
-                                    스토어
+                                    MD Shop
                                 </Link>
                             </li>
                             <li className="nav-items">
-                                <Link to="/community" className="nav-links">
-                                    커뮤니티
+                                <Link to="/cinemate" className="nav-links">
+                                    시네메이트
                                 </Link>
                             </li>
                             {isLoggedIn && (
@@ -151,7 +151,7 @@ function Navbar() {
                             <Link to="/movies/upcoming">상영 예정작</Link>
                         </li>
                         <li>
-                            <Link to="/movies/local">지역별 영화</Link>
+                            <Link to="/movies">장르별 영화</Link>
                         </li>
                     </ul>
                 )}
