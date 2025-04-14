@@ -10,14 +10,12 @@ import KakaoCallback from './page/user/KakaoCallback';
 import FindId from './page/user/FindId';
 import FindPwd from './page/user/FindPwd';
 import PwdReset from './page/user/PwdReset';
-import Payment from './js/payment/Payment';
-import TossPayment from './js/payment/TossPayment';
-import TossPaymentSuccess from './js/payment/TossPaymentSuccess';
-import TossPaymentFail from './js/payment/TossPaymentFail';
-import PaymentResult from './js/payment/PaymentResult';
+import UserDau from './page/dashboard/UserDau';
 import ManagerLogin from './page/admin/ManagerLogin';
 import { useEffect } from 'react';
-import Cart from './js/cart/Cart';
+import MovieDetail from './page/movie/MovieDetail';
+import GenreMovie from './page/movie/GenreMovie';
+import MdList from './page/md/MdList';
 
 function App() {
 
@@ -36,23 +34,17 @@ function App() {
           <Route path='kakao/callback' element={<KakaoCallback />} />
           <Route path='user/findId' element={<FindId />} />
           <Route path='user/findPwd' element={<FindPwd />} />
-          <Route path='user/pwdReset' element={<PwdReset />} />
-          <Route path='payment' element={<Payment />} />
-          {/* <Route path='payment/tossPayment' element={<TossPayment />} /> */}
-          <Route path='payment/tossPaymentSuccess' element={<TossPaymentSuccess />} />
-          <Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
-          <Route path='payment/result' element={<PaymentResult />} />
-          <Route path='cart' element={<Cart />} />
+          <Route path='user/pwdReset' element={<PwdReset />} /><Route path='movies' element={<GenreMovie />} />
+          <Route path='movies/:id' element={<MovieDetail />} />
         </Route>
-        <Route path='/manager' element={<ManagerLogin />}>
+        <Route path='/manager'>
           <Route index element={<ManagerLogin />} />
           <Route path='user/findId' element={<FindId />} />
           <Route path='user/findPwd' element={<FindPwd />} />
           <Route path='user/pwdReset' element={<PwdReset />} />
+          <Route path='dashboard/userdau' element={<UserDau />} />
+          <Route path='mdlists' element={<MdList />} />
         </Route>
-
-        <Route path='/payment/tossPayment' element={<TossPayment />} />
-
       </Routes>
   );
 }
