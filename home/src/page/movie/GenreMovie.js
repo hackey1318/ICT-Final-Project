@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import GenreFilter from "../../js/movie/Genre-filter"
-//import MoviePagination from "../../js/movie/MoviePagination";
+import MoviePagination from "../../js/movie/MoviePagination";
 import axios from "axios";
 import TypeFilter from "../../js/movie/MovieType";
 
@@ -72,7 +72,7 @@ function GenreMovie() {
                 </div>
                 <div className="filter-pagination-wrapper">
                     <TypeFilter type={type} setType={setType} />
-                    {/* <MoviePagination page={page} totalPages={totalPages} onPageChange={setPage} /> */}
+                    <MoviePagination page={page} totalPages={totalPages} onPageChange={setPage} />
                 </div>
 
                 {/* 영화 카드 영역 */}
