@@ -5,12 +5,15 @@ import com.ict.finalProject.common.config.AuthRequired;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.inquiry.controller.request.InquiryRequest;
+import com.ict.finalProject.inquiry.controller.response.InquiryResponse;
+import com.ict.finalProject.inquiry.repository.domain.Inquiry;
 import com.ict.finalProject.inquiry.service.InquiryService;
 import com.ict.finalProject.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/inquiry")
@@ -30,23 +33,25 @@ public class InquiryController {
     }
 
     //문의리스트
-    /*@GetMapping("/getInquiry")
-    public List<InquiryResponse> getInquiry(@RequestParam int no) {
-        List<InquiryResponse> inquiries = inquiryService.getInquiries();
-        return inquiries;
-    }*/
-
-    //문의리스트
     @GetMapping("/getInquiry") // URL 변경 (getReplies -> getInquiries)
     public List<InquiryResponse> getInquiry() { // 메소드명 변경 (getReplies -> getInquiries)
         return inquiryService.getInquiry();
     }
 
-    // 기존에 eventNo로 조회하는 메소드가 있다면 유지
-    /*@GetMapping("/getInquiriesBy/{no}") // 필요하다면 특정 번호로 조회하는 엔드포인트 유지
-    public List<InquiryResponse> getInquiriesByNo(@RequestParam int no) {
-        return inquiryService.getInquiriesByNo(no);
-    }*/
+    // 문의디테일페이지
+    @GetMapping("/getInquiryBy/{no}")
+    public Optional<Inquiry> getInquiryByNo(@PathVariable("no") int no) {
+
+        return inquiryService.getInquiryByNo(no);
+    }
+
+    //문의삭제
+    @GetMapping("/inquiryDel/{no}")
+    public String inquiryDel(@PathVariable("no") int no) {
+
+        inquiryService.inquiryDel(no);
+        return "deleted";
+    }
 
     //문의이미지리스트
     /*@GetMapping("/getInquiry")

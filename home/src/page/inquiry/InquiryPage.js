@@ -2,14 +2,16 @@ import styled from 'styled-components';
 import '../../css/inquiry/inquiry.css';
 import { Link } from 'react-router-dom';
 import InquiryWrite from './InquiryWrite';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import axios from 'axios';
 import InquiryView from './InquiryView';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
+import apiClient from '../../js/public/axiosConfig';
 
 function InquiryPage() {
     let [inquiryModalOpen, setInquiryModalOpen] = useState(false);
     let [writeModalOpen, setWriteModalOpen] = useState(false);
     let [inquiryList, setInquiryList] = useState([]);
+    let [no, setNo] = useState(1);  //페이징
 
     const StyledLink = styled(Link)`
         text-decoration: none;
@@ -23,16 +25,20 @@ function InquiryPage() {
     `;
     
     //문의리스트 호출
-    const mounted = useRef(false);
     useEffect (() => {
-        if(!mounted.current==false) {
-            mounted.current=true;
-            getInquiryList();
+        const getInquiryList = async () => {
+            try {
+                const listData = await apiNoAccessClient.get("/inquiry/getInquiry")
+                setInquiryList(listData.data);
+            } catch(error) {
+                console.log("error발생 : ", error);
+            }
         }
+        getInquiryList();
     }, []);
 
     function getInquiryList() {
-        axios.get("http://192.168.1.252:9988/inquiry/getInquiry")
+        apiClient.get("http://192.168.1.252:9988/inquiry/getInquiry")
         .then(function(response) {
             console.log(response.data);
             setInquiryList((prev) => {
@@ -85,13 +91,15 @@ function InquiryPage() {
                     <tbody>
                         {
                             Array.isArray(inquiryList) && inquiryList.length > 0 ? (
-                                inquiryList.map((item) => {
+                                inquiryList
+                                    .filter(item => item.status == "ACTIVE")
+                                    .map((item) => {
                                     return (
                                         <tr>
                                             <td style={{width:'10%', textAlign:'center'}}>{item.no}</td>
-                                            <td style={{width:'50%'}} onClick={() => setInquiryModalOpen(true)}>{item.subject}</td>
+                                            <td style={{width:'50%'}}><Link id="toDetail" to={`/inquiryView/${item.no}`}>{item.subject}</Link></td>
                                             <td style={{width:'20%', textAlign:'center'}}>{item.nickname}</td>
-                                            <td style={{width:'20%', textAlign:'center'}}>{item.createdAt}</td>
+                                            <td style={{width:'20%', textAlign:'center'}}>{new Date(item.createdAt).toLocaleDateString()}</td>
                                         </tr>
                                     )
                                 })

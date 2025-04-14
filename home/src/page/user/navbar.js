@@ -105,6 +105,11 @@ function Navbar() {
                                     시네메이트
                                 </Link>
                             </li>
+                            <li className="nav-items">
+                                    <Link to="/inquiry" className="nav-links">
+                                        1:1 문의
+                                    </Link>
+                                </li>
                             {isLoggedIn && (
                                 <li className="nav-items">
                                     <Link to="/mypage" className="nav-links">

@@ -1,8 +1,10 @@
 package com.ict.finalProject.inquiry.service.impl;
 
+import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.fileSystem.domain.ImageInfo;
 import com.ict.finalProject.fileSystem.repository.FileSystemRepository;
+import com.ict.finalProject.fileSystem.repository.ImageInfoRepository;
 import com.ict.finalProject.inquiry.controller.request.InquiryRequest;
 import com.ict.finalProject.inquiry.controller.response.InquiryResponse;
 import com.ict.finalProject.inquiry.repository.InquiryRepository;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,6 +74,18 @@ public class InquiryServiceImpl implements InquiryService {
                         //.nickname(userFindResponse.getNickname())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    //문의상세페이지
+    @Override
+    public Optional<Inquiry> getInquiryByNo(int no) {
+        return inquiryRepository.findByNo(no);
+    }
+
+    //문의삭제
+    @Override
+    public void inquiryDel(int no) {
+        inquiryRepository.deleteByNo(no);
     }
 
     /*@Override
