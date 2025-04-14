@@ -3,11 +3,11 @@ package com.ict.finalProject.fileSystem.service.impl;
 import com.ict.finalProject.common.exception.custom.NotFoundException;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.fileSystem.controller.response.FileUploadResponse;
+import com.ict.finalProject.fileSystem.domain.ImageInfo;
 import com.ict.finalProject.fileSystem.domain.Images;
 import com.ict.finalProject.fileSystem.repository.FileSystemRepository;
+import com.ict.finalProject.fileSystem.repository.ImageInfoRepository;
 import com.ict.finalProject.fileSystem.service.FileSystemService;
-import com.ict.finalProject.oauth.repository.UsersRepository;
-import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +31,7 @@ public class FileSystemServiceImpl implements FileSystemService {
 
     private final UserService userService;
     private final FileSystemRepository fileSystemRepository;
+    private final ImageInfoRepository imageInfoRepository;
 
     @Override
     public List<FileUploadResponse> uploadFile(List<MultipartFile> files) throws IOException {
@@ -38,14 +39,16 @@ public class FileSystemServiceImpl implements FileSystemService {
         Path uploadPath = new ClassPathResource("static/img").getFile().toPath(); // 실제 서버 파일 시스템 경로
         List<String> fileIdList = new ArrayList<>();
         List<Images> imageList = new ArrayList<>();
+        List<ImageInfo> imageInfos = new ArrayList<>();
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
         for (MultipartFile file : files) {
             String fileId = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
             fileIdList.add(fileId);
             String fileName = file.getOriginalFilename();
-
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
 
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
@@ -56,6 +59,15 @@ public class FileSystemServiceImpl implements FileSystemService {
                     .status(StatusInfo.ACTIVE)
                     .build();
             imageList.add(image);
+
+            /*
+            ImageInfo imageInfo = ImageInfo.builder()
+                    .type(ImageInfo.getType())
+                    .boardNo(boardNo)
+                    .field(fileId) // Images의 ID를 외래키로 사용 (예시)
+                    .status(StatusInfo.ACTIVE)
+                    .build();
+            imageInfoList.add(imageInfo);*/
         }
 
         List<Images> saveEntity = fileSystemRepository.saveAll(imageList);
