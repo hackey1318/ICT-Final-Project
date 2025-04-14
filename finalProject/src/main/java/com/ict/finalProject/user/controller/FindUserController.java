@@ -38,9 +38,9 @@ public class FindUserController {
         return response;
     }
 
-    //전체 아이디 이메일로 발송
-    @PostMapping("sendFullId")
-    public String sendFullId(@RequestBody UserFindRequest userFindRequest){
+    //아이디 마스킹 해제 후, 이메일로 발송
+    @PostMapping("unmask-id")
+    public String unmaskId(@RequestBody UserFindRequest userFindRequest){
         Users user = findUserService.FindId(userFindRequest);
 
         if(user == null){
@@ -48,7 +48,7 @@ public class FindUserController {
         }
 
         //전체 아이디를 DB에 저장된 이메일로 발송
-        findUserService.sendFullId(user.getId(), user.getEmail());
+        findUserService.unmaskId(user.getId(), user.getEmail());
 
         return "ok";
     }
