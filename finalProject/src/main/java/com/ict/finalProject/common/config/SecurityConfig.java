@@ -54,8 +54,10 @@ public class SecurityConfig {
                 mvc.pattern("/file-system/download/**"),
                 mvc.pattern("/user/**"),
                 mvc.pattern("/banner/**"),
+                mvc.pattern("/movies/**"),
                 mvc.pattern("/file-system/upload/register-image"),
                 mvc.pattern("/swagger-ui/index.html"),
+                mvc.pattern("/dashboard/**"),
                 mvc.pattern("/payment/**")
         };
 
@@ -75,8 +77,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         (authorize) ->
+
                                 authorize.requestMatchers(permitAllWhiteList).permitAll()
+                                        .requestMatchers(HttpMethod.GET, "/movies/detail/{id}").permitAll()
                                         // .requestMatchers("/admin/**").hasAnyRole(MemberRole.ADMIN.name())
+
                                         .requestMatchers("/admin/**").permitAll()
                                         .requestMatchers(HttpMethod.DELETE, "/user").hasAnyRole(UserRole.ADMIN.name())
                                         .anyRequest().authenticated())

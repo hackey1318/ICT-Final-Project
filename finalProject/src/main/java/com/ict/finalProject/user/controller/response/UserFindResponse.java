@@ -11,5 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserFindResponse {
     String status; //상태값 담을 변수
+
     String id; //사용자 아이디
+
+    String nickname; //사용자 닉네임
 }
