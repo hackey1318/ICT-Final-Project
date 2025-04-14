@@ -1,0 +1,190 @@
+    /* 영화 상세 페이지 스타일 */
+    .movie_detail_container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px 15px;
+        }
+    
+        /* 헤더 스타일 */
+        .movie_detail_header {
+        margin-bottom: 30px;
+        }
+    
+        .movie_detail_top_nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        }
+    
+        .movie_detail_logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        }
+    
+        .movie_detail_menu {
+        display: flex;
+        justify-content: flex-end;
+        }
+    
+        .movie_detail_menu_item {
+        margin-left: 15px;
+        font-size: 0.9rem;
+        }
+    
+        .movie_detail_sub_header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        }
+    
+        .movie_detail_back_btn {
+        color: #000;
+        text-decoration: none;
+        }
+    
+        .movie_detail_title {
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin: 0;
+        }
+    
+        .movie_detail_actions {
+        display: flex;
+        justify-content: flex-end;
+        }
+    
+        .movie_detail_icon {
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+        cursor: pointer;
+        }
+    
+        .movie_detail_icon_rotate {
+        transform: rotate(180deg);
+        }
+    
+        /* 영화 콘텐츠 스타일 */
+        .movie_detail_content {
+        margin-bottom: 40px;
+        }
+    
+        .movie_detail_poster {
+        margin-bottom: 20px;
+        }
+    
+        .movie_detail_poster_img {
+        width: 100%;
+        border-radius: 8px;
+        object-fit: cover;
+        }
+    
+        .movie_detail_info {
+        display: flex;
+        flex-direction: column;
+        }
+    
+        .movie_detail_section_title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        }
+    
+        .movie_detail_description {
+        color: #555;
+        margin-bottom: 20px;
+        line-height: 1.6;
+        }
+    
+        .movie_detail_buttons {
+        display: flex;
+        gap: 10px;
+        }
+    
+        .movie_detail_btn_primary {
+        border-radius: 4px;
+        }
+    
+        .movie_detail_btn_secondary {
+        border-radius: 4px;
+        }
+    
+        /* 관련 상품 섹션 */
+        .movie_detail_related_section,
+        .movie_detail_similar_section {
+        margin-bottom: 40px;
+        }
+    
+        .movie_detail_section_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        }
+    
+        .movie_detail_see_more {
+        display: flex;
+        align-items: center;
+        color: #000;
+        text-decoration: none;
+        font-size: 0.9rem;
+        }
+    
+        .movie_detail_items {
+        margin-bottom: 20px;
+        }
+    
+        .movie_detail_item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        }
+    
+        .movie_detail_item_img {
+        width: 100%;
+        max-width: 120px;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        object-fit: cover;
+        }
+    
+        .movie_detail_item_name {
+        font-size: 0.9rem;
+        text-align: center;
+        margin-bottom: 4px;
+        }
+    
+        .movie_detail_item_price {
+        font-size: 0.9rem;
+        font-weight: 500;
+        }
+    
+        .movie_detail_see_all_container {
+        display: flex;
+        justify-content: center;
+        }
+    
+        .movie_detail_see_all {
+        border-radius: 20px;
+        font-size: 0.9rem;
+        padding: 5px 15px;
+        }
+    
+        /* 로딩 및 에러 상태 */
+        .movie_detail_loading,
+        .movie_detail_error,
+        .movie_detail_not_found {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 300px;
+        font-size: 1.2rem;
+        }
+    
+        .movie_detail_error {
+        color: #dc3545;
+        }
+    
