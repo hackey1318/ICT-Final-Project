@@ -16,6 +16,7 @@ import ManagerLogin from './page/admin/ManagerLogin';
 import { useEffect } from 'react';
 import MovieDetail from './page/movie/MovieDetail';
 import GenreMovie from './page/movie/GenreMovie';
+import MdList from './page/md/MdList';
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
           <Route path='user/findPwd' element={<FindPwd />} />
           <Route path='user/pwdReset' element={<PwdReset />} />
           <Route path='dashboard/userdau' element={<UserDau />} />
+          <Route path='mdlists' element={<MdList />} />
         </Route>
       </Routes>
   );

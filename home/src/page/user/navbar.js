@@ -91,9 +91,9 @@ function Navbar() {
                     <div className={`navbar-menus ${isNavOpen ? "active" : ""}`}>
                         <ul className="navbar-navs">
                             <li className="nav-items" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                                <a href="#" className="nav-links" ref={movieMenuRef}>
+                                <div className="nav-links" ref={movieMenuRef}>
                                     영화찾기 <i className="dropdown-arrow">▼</i>
-                                </a>
+                                </div>
                             </li>
                             <li className="nav-items">
                                 <Link to="/store" className="nav-links">
