@@ -63,7 +63,7 @@ function Main() {
               style={{ backgroundColor: banner.color || "#1a3b6d" }} // 배경색 사용 일단 보류중
             >
               <div className="Main_banner-overlay"></div> {/* Overlay for better text visibility */}
-              <Link to={`/movie/${banner.targetNo}`} className="Main_banner-link">
+              <Link to={`/movies/${banner.targetNo}`} className="Main_banner-link">
                 <div className="Main_banner-image-container">
                   <img src={`${BASE_URL}${banner.fileId}`} alt={`movie-${banner.targetNo}`} className="Main_banner-image" />
                 </div>
