@@ -1,4 +1,3 @@
-/*
 package com.ict.finalProject.testCode;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -240,4 +239,3 @@ public class CGVMovieCrawler {
         }
     }
 }
-*/
