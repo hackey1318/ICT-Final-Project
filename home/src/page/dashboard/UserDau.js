@@ -52,8 +52,9 @@ function UserDau(){
             setChartTitle('월별');
         }
 
+        const userInfo = JSON.parse(sessionStorage.getItem("userInfo")); //JSON형태로 반환되므로 문자열로 바꿔줘야함.
 
-        if(sessionStorage.getItem("userInfo").role==="ADMIN"){
+        if(userInfo.role==="ADMIN"){
             axios.get(`http://localhost:9988/dashboard/${urlType}`)
             .then((response)=>{
                 console.log("불러온 데이터",response.data);
@@ -205,7 +206,7 @@ function UserDau(){
                     {/* 그래프 */}
                     <div className="userdau-chart">
                         <Line options={options} data={data}/>
-                        <div className="userdat-chart-totaluser">활동유저수 : {totalVisitCount }명</div>
+                        <div className="userdat-chart-totaluser">{chartTitle} 합계 : {totalVisitCount }명</div>
                     </div>
                 </div>
             </div>
