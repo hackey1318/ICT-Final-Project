@@ -1,9 +1,11 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AdminSidebar from "../../js/sidebar/AdminSidebar";
 import arrow from '../../img/arrow.png';
+import { useEffect } from "react";
 
 function Admin(){
     const location = useLocation();
+    const navigate = useNavigate();
 
     //현재 활성화된 메뉴 항목 확인
     const getActiveMenu = ()=>{
@@ -13,6 +15,13 @@ function Admin(){
 
         return "manager/info"
     }
+
+    //처음 관리자페이지 접속시 보여줄 페이지 *** 나중에 첫페이지 보여줄 곳으로 설정할 것***
+    useEffect(() => {
+        if (location.pathname === "/manager/home") {
+            navigate("/manager/home/dashboard/userdau");
+        }
+    }, [location.pathname, navigate]);
 
     return(
         <div className="admin-container">
