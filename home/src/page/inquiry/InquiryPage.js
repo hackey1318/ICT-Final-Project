@@ -123,7 +123,7 @@ function InquiryPage() {
             }
             <div>
                 <div id="paging">
-                    <ul className="pagination">
+                    {/* <ul className="pagination">
                         {
                             (function() {
                                 if(nowPage>1){
@@ -146,7 +146,7 @@ function InquiryPage() {
                                 }
                             })()
                         }
-                    </ul>
+                    </ul> */}
                 </div>
                 <div style={{textAlign: 'right'}}><button id="write" 
                         title='문의하기' 
