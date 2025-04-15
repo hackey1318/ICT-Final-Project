@@ -42,15 +42,13 @@ function App() {
           <Route path='/inquiry' element={<InquiryPage />} />
           <Route path='/inquiryView/:no' element={<InquiryView />} />
         </Route>
-        <Route path='/manager'>
+        <Route path='/manager/user'>
           <Route index element={<ManagerLogin />} />
-          <Route path='user/findId' element={<FindId />} />
-          <Route path='user/findPwd' element={<FindPwd />} />
-          <Route path='user/pwdReset' element={<PwdReset />} />
-          {/* <Route path='dashboard/userdau' element={<UserDau />} /> */}
-          {/* <Route path='mdlists' element={<MdList />} /> */}
+          <Route path='findId' element={<FindId />} />
+          <Route path='findPwd' element={<FindPwd />} />
+          <Route path='pwdReset' element={<PwdReset />} />
         </Route>
-        <Route path='manager' element={<Admin />}>
+        <Route path='manager/home' element={<Admin />}>
           <Route path='dashboard/userdau' element={<UserDau />} />
           <Route path='mdlists' element={<MdList />} />
         </Route>
