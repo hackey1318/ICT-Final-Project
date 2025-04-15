@@ -124,6 +124,11 @@ function UserDau(){
                 text: `${chartTitle} 활동인원수`,
             },
         },
+        scales: {
+            y: {
+                suggestedMin: 0, //y축 최소값 0으로 설정
+            },
+        },
     };
 
     const labels = chartDauList.map(item => item.dateTime); //x축 => 날짜
@@ -156,9 +161,9 @@ function UserDau(){
                     {/* 목록 */}
                     <div className="userdau-list">
                         <ul>
-                            <li>날짜</li>
-                            <li>총활동인원수</li>
-                            <li>일별 시네메이트 완료</li>
+                            <li><div className="userdau-list-title">날짜</div></li>
+                            <li><div className="userdau-list-title">총활동인원수</div></li>
+                            <li><div className="userdau-list-title">일별 시네메이트 완료</div></li>
                         </ul>
                         {
                             dauList.map((item, index)=>{
