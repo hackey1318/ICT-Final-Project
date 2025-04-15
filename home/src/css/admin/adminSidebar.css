@@ -1,0 +1,82 @@
+/* 관리자페이지 전체 감싸고 있음(사이드바, 컨텐츠 전체 포함) */
+.admin-container{
+    display: flex;
+    gap: 20px;
+    padding-top: 50px;
+}
+
+.container-content{
+    width: 80%;
+    border-radius: 15px;
+    background: #fff;
+    padding: 10px;
+}
+
+.back-button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+/* 사이드바 */
+.admin-sidebar{
+    width: 300px;
+    height: 800px;
+    background: #fff;
+    border-radius: 0 15px 15px 0;
+    position: sticky;
+    padding: 20px 0;
+}
+
+/* 배너 부분 */
+.admin-banner{
+    width: 200px;
+    margin: 0 auto;
+    display: block;
+}
+
+/* 관리자 닉네임, role 부분 */
+.admin-info{
+    text-align: center;
+    width: 230px;
+    height: 40px;
+    line-height: 40px;
+    background: #ddd;
+    border-radius: 10px;
+    margin: 10px auto;
+}
+
+/* 사이드바 탑메뉴 */
+.admin-top-menu{ 
+    list-style: none;
+}
+.top-menu-div{
+    width: 100px;
+    height: 40px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 40px;
+    background: #ddd;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+/* 사이드바 서브메뉴 */
+.admin-sub-menu>li{
+    height: 35px;
+    list-style: disc;
+    margin-left: 20px;
+}
+
+/* 서브메뉴의 링크 부분 */
+.admin-nav-link{
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+}
+.admin-nav-link:hover, .admin-nav-link.active{
+    font-weight: bold;
+    border-bottom: 1px solid black;
+}
