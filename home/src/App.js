@@ -10,6 +10,8 @@ import KakaoCallback from './page/user/KakaoCallback';
 import FindId from './page/user/FindId';
 import FindPwd from './page/user/FindPwd';
 import PwdReset from './page/user/PwdReset';
+import InquiryPage from './page/inquiry/InquiryPage';
+import InquiryView from './page/inquiry/InquiryView';
 import UserDau from './page/dashboard/UserDau';
 import ManagerLogin from './page/admin/ManagerLogin';
 import { useEffect } from 'react';
@@ -36,6 +38,8 @@ function App() {
           <Route path='user/findPwd' element={<FindPwd />} />
           <Route path='user/pwdReset' element={<PwdReset />} /><Route path='movies' element={<GenreMovie />} />
           <Route path='movies/:id' element={<MovieDetail />} />
+          <Route path='/inquiry' element={<InquiryPage />} />
+          <Route path='/inquiryView/:no' element={<InquiryView />} />
         </Route>
         <Route path='/manager'>
           <Route index element={<ManagerLogin />} />

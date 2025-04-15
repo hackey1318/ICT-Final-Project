@@ -1,4 +1,4 @@
-package com.ict.finalProject.fileSystem.domain;
+package com.ict.finalProject.inquiry.repository.domain;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
@@ -16,33 +16,31 @@ import java.time.LocalDateTime;
 @Table
 @Entity
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Images {
+public class Inquiry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int no;
+    private int no;  //문의번호
 
-    @Column(nullable = false, length = 16)
-    private String id;
+    private int userNo;  //유저번호
 
-    @Column(nullable = false, length = 1000)
-    private String path;
+    @Column(nullable = false)
+    private String subject;  //문의제목
 
-    @Column(nullable = false, length = 50)
-    private String originName;
+    @Column(nullable = false)
+    private String content;  //문의내용
 
-    @Enumerated(value = EnumType.STRING)
-    private StatusInfo status;
+    @Column(nullable = false)
+    private StatusInfo status;  //문의상태
 
     @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private LocalDateTime createdAt;  //문의생성일
 
     @LastModifiedDate
-    private LocalDateTime updatedAt;
-
-
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;  //문의수정일
 }
