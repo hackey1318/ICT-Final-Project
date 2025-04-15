@@ -19,6 +19,7 @@ import MovieDetail from './page/movie/MovieDetail';
 import GenreMovie from './page/movie/GenreMovie';
 import MdList from './page/md/MdList';
 import Admin from './page/admin/Admin';
+import DashBoard from './page/dashboard/UserDau';
 
 function App() {
 
@@ -42,16 +43,22 @@ function App() {
           <Route path='/inquiry' element={<InquiryPage />} />
           <Route path='/inquiryView/:no' element={<InquiryView />} />
         </Route>
-        <Route path='/manager/user'>
+
+        {/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
+        <Route path="/manager">
           <Route index element={<ManagerLogin />} />
-          <Route path='findId' element={<FindId />} />
-          <Route path='findPwd' element={<FindPwd />} />
-          <Route path='pwdReset' element={<PwdReset />} />
+          <Route path="findId" element={<FindId />} />
+          <Route path="findPwd" element={<FindPwd />} />
+          <Route path="pwdReset" element={<PwdReset />} />
+          
+          {/* 로그인 이후 관리자 레이아웃 (사이드바 포함) */}
+          <Route path="home" element={<Admin />}>
+            <Route index element={<DashBoard/>} />
+            <Route path="dau" element={<UserDau />} />
+            <Route path="mdlists" element={<MdList />} />
+          </Route>
         </Route>
-        <Route path='manager/home' element={<Admin />}>
-          <Route path='dashboard/userdau' element={<UserDau />} />
-          <Route path='mdlists' element={<MdList />} />
-        </Route>
+
       </Routes>
   );
 }

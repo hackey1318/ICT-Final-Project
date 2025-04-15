@@ -89,7 +89,7 @@ function AdminSidebar({activeMenu}){
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="/manager/dashboard/userdau" className={`admin-nav-link ${activeMenu === "userdau" ? "active":""}`}>
+                                    <Link to="/manager/home/dau" className={`admin-nav-link ${activeMenu === "dau" ? "active":""}`}>
                                         일별/월별 활동 정보 차트
                                     </Link>
                                 </li>
@@ -105,7 +105,7 @@ function AdminSidebar({activeMenu}){
                         <div className="top-menu-div" onClick={()=>{toggleMenu(1)}}>상품 조회</div>
                         {adminOpenMenus[1] && (
                             <ul className="admin-sub-menu">
-                                <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>상품 목록 조회</Link></li>
+                                <li><Link to="/manager/home/mdlists" className={`admin-nav-link ${activeMenu === "mdlists" ? "active":""}`}>상품 목록 조회</Link></li>
                                 <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>상품 구매 정보 조회</Link></li>
                                 <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>상품별 매출 조회</Link></li>
                             </ul>
@@ -147,7 +147,7 @@ function AdminSidebar({activeMenu}){
                         <div className="top-menu-div" onClick={()=>{toggleMenu(2)}}>상품 조회</div>
                         {managerOpenMenus[2] && (
                             <ul className="admin-sub-menu">
-                                <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>상품 목록 조회</Link></li>
+                                <li><Link to="/manager/home/mdlists" className={`admin-nav-link ${activeMenu === "mdlists" ? "active":""}`}>상품 목록 조회</Link></li>
                                 <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>상품 구매 정보 조회</Link></li>
                             </ul>
                         )}
