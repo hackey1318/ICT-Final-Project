@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import MoviePagination from "../../js/movie/MoviePagination"; // 경로가 올바른지 확인하세요
+import errorImageSrc from '../../img/loaderror.jpg';
 import axios from "axios";
 
 function UpcomingMovie() { // 컴포넌트 이름 변경: UpcomingMovie
@@ -114,11 +115,11 @@ function UpcomingMovie() { // 컴포넌트 이름 변경: UpcomingMovie
 
                                         {/* 영화 포스터 */}
                                         <img
-                                            src={movie.postImage || '/path/to/default/placeholder.png'} // 대체 이미지 경로 추가
+                                            src={movie.postImage || errorImageSrc} // 대체 이미지 경로 추가
                                             alt={`${movie.name} 포스터`}
                                             className="card-img-top"
                                             style={{ height: "300px", objectFit: "cover" }}
-                                            onError={(e) => { e.target.onerror = null; e.target.src='/path/to/default/placeholder.png'; }} // 이미지 로드 오류 처리
+                                            onError={(e) => { e.target.onerror = null; e.target.src=errorImageSrc; }} // 이미지 로드 오류 처리
                                         />
 
                                         {/* 영화 정보 */}
