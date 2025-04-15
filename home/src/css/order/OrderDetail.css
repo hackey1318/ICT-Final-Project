@@ -1,0 +1,111 @@
+.order_container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 30%;
+}
+
+#back_button {
+    width: 30px;
+    height: 30px;
+    background: url('./../../img/leftArrow.png');
+    background-size: cover;
+    border: none;
+    margin-top: 50px;
+}
+
+.order_container > p {
+    margin-top: 10px;
+    font-size: 1.5em;
+}
+
+.order_info_table {
+    width:60%;
+    border-top: 3px solid rgb(77, 77, 77);
+    margin-top: 10px;
+}
+
+.order_info_content_goods {
+    display: flex;
+    flex-direction: column;
+}
+
+.order_info_content_goods > div {
+    height: 110px;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.order_info_content_goods_img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.order_info_content_goods_img > img{
+    width: 90px;
+    height: 90px;
+}
+
+.order_info_content_goods_detail {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 0.8em;
+}
+
+.order_info_content_goods_detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-left: 10px;
+    font-size: 0.8em;
+}
+
+.order_info_content_goods_detail > span{
+    width: 100%;
+}
+
+.order_info_content_goods > div:hover .goods_name {
+    color: royalblue;
+}
+
+.info_container {
+    margin-top: 30px;
+    margin-left: 50px;
+}
+
+.info_container > b {
+    margin-left: 5px;
+    font-size: 1.2em;
+}
+
+.order_info_content {
+    display: flex;
+    flex-direction: row;
+}
+
+.order_info_content > div {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    padding-left: 5px;
+    font-size: 0.9em;
+}
+
+.order_info_content > div:first-child {
+    padding-right: 10px;
+    border-right: 2px solid black;
+    height: 35px;
+    width: 90px;
+    justify-content: center;
+}
+
+.order_info_content > div:nth-child(2) {
+    padding-left: 10px;
+    justify-content: left;
+    flex: 1;
+}

@@ -91,7 +91,7 @@ function Payment() {
         // 서버에 결제 정보 저장하기
         axios.post("http://localhost:9988/payment/save", {
             orderId: "orderid1234567890r",
-            orderName: orderName,
+            orderName: "orderName",
             totalPrice : totalPrice,
             customerEmail: "customer123@gmail.com",
             customerName: "김씨네마투게더",

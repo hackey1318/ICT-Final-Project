@@ -24,6 +24,9 @@ import MovieDetail from './page/movie/MovieDetail';
 import GenreMovie from './page/movie/GenreMovie';
 import MdList from './page/md/MdList';
 import Cart from './js/cart/Cart';
+import OrderList from './js/order/OrderList';
+import OrderDetail from './js/order/OrderDetail';
+import OrderError from './js/order/OrderError';
 
 function App() {
 
@@ -53,6 +56,11 @@ function App() {
           <Route path='/inquiry' element={<InquiryPage />} />
           <Route path='/inquiryView/:no' element={<InquiryView />} />
           <Route path='cart' element={<Cart />} />
+          <Route path='order/list' element={<OrderList />} />
+          <Route path='order/detail' element={<OrderDetail />} />
+          <Route path='order/error' element={<OrderError />} />
+
+
         </Route>
         <Route path='/manager'>
           <Route index element={<ManagerLogin />} />
