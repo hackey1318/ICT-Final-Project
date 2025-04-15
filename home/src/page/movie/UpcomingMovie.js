@@ -137,17 +137,6 @@ function UpcomingMovie() { // 컴포넌트 이름 변경: UpcomingMovie
                         </div>
                     )}
                 </div>
-
-                 {/* 페이지네이션 (선택 사항: 영화 목록 아래에도/대신 배치) */}
-                 <div className="d-flex justify-content-center mt-4"> {/* 페이지네이션 중앙 정렬 */}
-                   { totalPages > 1 && ( // 페이지가 1개 이상일 때만 페이지네이션 표시
-                     <MoviePagination
-                        page={page}
-                        totalPages={totalPages}
-                        onPageChange={setPage}
-                     />
-                    )}
-                </div>
             </div>
         </main>
     );
