@@ -18,10 +18,10 @@ function MovieDetail() {
 
   // 관련 상품 데이터 (임시 데이터 - 실제로는 API에서 가져와야 함)
   const relatedItems = [
-    { id: 1, name: "팝업 손거울", imageId: 'e3445feb46cd4b88', price: 7000, productUrl: '#' },
-    { id: 2, name: "폭싹 손거울", imageId: 'e3445feb46cd4b88', price: 9000, productUrl: '#' },
-    { id: 3, name: "폭싹 손거울", imageId: 'e3445feb46cd4b88', price: 6000, productUrl: '#' },
-    { id: 4, name: "팝업 포스터", imageId: 'e3445feb46cd4b88', price: 7000, productUrl: '#' },
+    { id: 1, name: "팝업 손거울", imageId: '6a267a1d0d6347c1', price: 7000, productUrl: '#' },
+    { id: 2, name: "폭싹 손거울", imageId: '68bc03e2c6924c95', price: 9000, productUrl: '#' },
+    { id: 3, name: "폭싹 손거울", imageId: '5d22918f8207486a', price: 6000, productUrl: '#' },
+    { id: 4, name: "팝업 포스터", imageId: 'b2928a3719a14173', price: 7000, productUrl: '#' },
   ]
 
   // 비슷한 영화 데이터 (임시 데이터 - 실제로는 API에서 가져와야 함)
