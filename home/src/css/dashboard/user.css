@@ -40,8 +40,17 @@
 .userdau-list>ul>li{
     width: 33%;
     text-align: center;
-    border-bottom: 1px solid #888;
+    border-bottom: 1px solid #aaa;
     padding: 10px;
+}
+.userdau-list>ul:first-child>li{
+    border: none;
+}
+.userdau-list-title{
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 7px 20px;
 }
 .paging-container{
     width: 500px;
