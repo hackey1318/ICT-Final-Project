@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MovieStillCutsRepository extends JpaRepository<MovieStillCuts, Integer> {
+
+    void deleteByMovieNo(int movieNo);
 }
