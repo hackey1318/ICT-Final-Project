@@ -5,23 +5,16 @@ import { useEffect } from "react";
 
 function Admin(){
     const location = useLocation();
-    const navigate = useNavigate();
 
     //현재 활성화된 메뉴 항목 확인
     const getActiveMenu = ()=>{
         const path = location.pathname;
         
-        if(path.includes("/dashboard/userdau")) return "userdau"
+        if(path.includes("/home/dau")) return "dau"
+        if(path.includes("/home/mdlists")) return "mdlists"
 
         return "manager/info"
     }
-
-    //처음 관리자페이지 접속시 보여줄 페이지 *** 나중에 첫페이지 보여줄 곳으로 설정할 것***
-    useEffect(() => {
-        if (location.pathname === "/manager/home") {
-            navigate("/manager/home/dashboard/userdau");
-        }
-    }, [location.pathname, navigate]);
 
     return(
         <div className="admin-container">
