@@ -76,7 +76,7 @@
     width: 100%;
 }
 
-.goods_info > div > img {
+.goods_info > img {
     width: 100px;
     height: 100px;
     background-size: cover;
@@ -149,7 +149,7 @@
 .order_info_container {
     text-align: center;
     border: 1px solid rgb(219, 219, 219);
-    margin-top: 195.5px;
+    margin-top: 240px;
     padding-top: 10px;
     width: 300px;
     height: 270px;
