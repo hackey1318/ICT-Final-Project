@@ -63,7 +63,7 @@ public class CGVMovieCrawler {
 
     private void getMovieMore(Map<Integer, Movies> existingMoviesMap, Set<Integer> updatedCodes, Map<Integer, Movies> allMoviesMap) {
         String url = "http://www.cgv.co.kr/common/ajax/movies.aspx/GetMovieMoreList"
-                + "?listType=1&orderType=1&filterType=0&_=" + System.currentTimeMillis();
+                + "?listType=1&orderType=1&filterType=1&_=" + System.currentTimeMillis();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
@@ -185,7 +185,7 @@ public class CGVMovieCrawler {
     }
 
     private void crawlAndSyncMovies(Map<Integer, Movies> existingMoviesMap, Set<Integer> updatedCodes, Map<Integer, Movies> allMoviesMap) {
-        String url = "http://www.cgv.co.kr/movies/?lt=1&ft=0";
+        String url = "http://www.cgv.co.kr/movies/?lt=1&ft=1";
         List<MovieStillCuts> stillCuts = new ArrayList<>();
 
         try {
