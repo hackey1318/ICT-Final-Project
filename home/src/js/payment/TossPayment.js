@@ -121,7 +121,16 @@ function CheckoutPage() {
                             console.error(error);
                         }
                     }}
-                >
+                style={{
+                    border: '1px solid #ddd',
+                    borderRadius: '5px',
+                    marginLeft: '25px',
+                    marginBottom: '25px',
+                    width: '100px',
+                    height: '30px',
+                    color: 'rgb(39, 39, 39)',
+                    fontSize: '0.9em'
+                }}>
                     결제하기
                 </button>
             </div>
