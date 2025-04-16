@@ -36,7 +36,9 @@ function InquiryView() {
                 content: response.data.inquiry.content,
                 createdAt: response.data.inquiry.createdAt,
                 imageList: response.data.image_list,
-                userNo: response.data.userNo
+                userNo: response.data.userNo,
+                proceed: response.data.inquiry.proceed,
+                status: response.data.inquiry.status
             });
         })
         .catch(function(error) {
@@ -106,7 +108,7 @@ function InquiryView() {
                         inquiryVO.imageList.map((item) => {
                             return (
                                 <img key={item}
-                                        src={`${IMAGE_BASE_URL}${item}`}
+                                        src={`http://192.168.1.252:9988/file-system/showImage/${item}`}
                                         style={{width: '100px', marginLeft: '15px'}}
                                 />
                             )

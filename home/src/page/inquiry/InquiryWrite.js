@@ -1,27 +1,23 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import '../../css/inquiry/inquiry.css';
-import axios from 'axios';
 import addFile from '../../img/plus.jpg';
 import InquiryEditor from '../../js/inquiry/InquiryEditor.js';
-import apiClient from '../../js/public/axiosConfig.js';
-import apiNoAccessClient from '../../js/public/axiosConfigNoAccess.js';
+import  apiClient from '../../js/public/axiosConfig.js';
+import axios from 'axios';
 
 const InquiryWrite = ({ onClose, onSuccess }) => {
     let [subject, setSubject] = useState();
     let [content, setContent] = useState();
     let [addedImg, setAddedImg] = useState([]);
-    const runfile = useRef([]);  //file실행 준비 및 사진 갯수제한용
+    const runfile = useRef([]);
     const accessToken = sessionStorage.getItem("accessToken");
 
     const setSubjectValue = useCallback((e) => {
         setSubject(e.target.value);
-        //console.log("[InquiryWrite] setSubjectValue - subject : ", e.target.value);
     }, []);
 
     const handleGetContent = useCallback((value) => {
-        //console.log("[InquiryWrite] hadleGetContent - 받은 value(정확히) : ", value);
         setContent(value);
-        //console.log("[InquiryWrite] hadleGetContent - content 최신화 : ", value);
     }, [setContent]);
 
     const submitInquiry = useCallback(async () => {
@@ -40,9 +36,9 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
         }
 
         let formData = new FormData();
-        for (let i=0; i<runfile.current.files.length; i++) {
-            formData.append("files", runfile.current.files[i]);
-        }
+        addedImg.forEach((img) => {
+            formData.append("files", img);
+        })
 
         const fileUpload = await axios.post("http://192.168.1.252:9988/file-system/upload", formData, {
             headers: {
@@ -51,11 +47,10 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
             }
         })
     
-        inquiryData.imageList = fileUpload.data.map(item => item.files);
+        inquiryData.imageList = fileUpload.data.map(item => item.imageId);
 
         apiClient.post('/inquiry/inquiryWrite', inquiryData)
             .then(function (response) {
-                //console.log("문의 전송 성공 : ", response.data);
                 alert("문의 작성이 완료되었습니다.");
                 console.log(inquiryData);
                 if (onSuccess) {
@@ -74,12 +69,12 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
     }, [subject, content, addedImg, onClose]);
 
     const handleRealSubmit = useCallback(() => {
-        submitInquiry(); // content 업데이트를 유발하여 useEffect에서 submitInquiry 실행
+        submitInquiry(); 
     }, [submitInquiry]);
 
-    const addImg = useCallback((event) => {  //type=file 실행
+    const addImg = useCallback((event) => {
         if(runfile.current) {
-            runfile.current.click();  //file 선택창 열기
+            runfile.current.click();  
         }
 
         const files = event.target.files;
@@ -95,8 +90,8 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
                     break;
                 }
     
-                const file = files[i]; // 각 파일을 변수에 할당하여 안전하게 접근
-                if (file) { // 파일 객체가 존재하는지 확인
+                const file = files[i];
+                if (file) { 
                     const reader = new FileReader();
                     reader.onload = (e) => {
                         const div = document.createElement('div');
@@ -107,12 +102,12 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
                         if (imgList) {
                             imgList.appendChild(div);
                         }
-                        setAddedImg((prevAddedImg) => [...prevAddedImg, file.name]);
+                        setAddedImg((prevAddedImg) => [...prevAddedImg, file]);
                     };
                     reader.readAsDataURL(file);
                 }
             }
-            event.target.value = ""; // 파일 선택 후 input 값 초기화
+            event.target.value = ""; 
         }
     }, [addedImg, setAddedImg, delImg]);
 
@@ -139,15 +134,15 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
         const imgList = document.querySelector('.imgList');
     
         if (imgList && imgList.contains(imgDiv)) {
-            const clickedImageIndex = Array.from(imgList.children).indexOf(imgDiv); // 클릭된 이미지의 인덱스 찾기
+            const clickedImageIndex = Array.from(imgList.children).indexOf(imgDiv); 
     
             if (clickedImageIndex !== -1) {
                 setAddedImg((prevAddedImg) => {
                     const newAddedImg = [...prevAddedImg];
-                    newAddedImg.splice(clickedImageIndex, 1); // 해당 인덱스의 이미지 이름 제거
+                    newAddedImg.splice(clickedImageIndex, 1); 
                     return newAddedImg;
                 });
-                imgList.removeChild(imgDiv); // DOM에서 이미지 제거
+                imgList.removeChild(imgDiv); 
             }
         }
     }
@@ -159,7 +154,7 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
     }, [onClose]);
 
     return (
-        <div className='inquiry-container'>
+        <div className='inquiry-modal'>
             <input type='text'
                 placeholder='문의 제목을 입력해주세요.'
                 className="inquiry-title"
@@ -172,12 +167,10 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
                 <div style={{ display: 'flex', textAlign: 'left' }}>
                     <input type='file' multiple ref={runfile} style={{ display: 'none' }} />
-                    {/* <div id='addImgDiv' onClick={addImg}><img src={addFile} id='addFile' style={{ cursor: 'pointer', width: '20px' }} /></div> */}
                     <div id='addImgDiv' onClick={addImgClick}><img src={addFile} id='addFile' style={{ cursor: 'pointer', width: '20px' }} /></div>
                     <div className='imgList'></div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                    {/* <input type='submit' value='작성하기' id='inquiry-submit' onClick={submitInquiry} /> */}
                     <input type='submit' value='작성하기' id='inquiry-submit' onClick={handleRealSubmit} />
                     <input type='button' value='취소하기' id='inquiry-cancel' onClick={closeInquiry} />
                 </div>
