@@ -1,0 +1,273 @@
+.cart_container {
+    display: flex;
+    gap: 50px;
+}
+
+.cart_list {
+    display: flex;
+    margin-top: 100px;
+    flex-direction: column;
+    margin-left: 20%;
+    /* margin-right: 20%; */
+    width: 40%;
+    min-width: 500px;
+}
+
+#back_button {
+    width: 30px;
+    height: 30px;
+    background: url('./../../img/leftArrow.png');
+    background-size: cover;
+    border: none;
+}
+
+#cart_text {
+    font-size: 1.5em;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.table_container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.table_head {
+    display: flex;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+#check_image {
+    width: 25px;
+    height: 25px;
+    background-image: url('./../../img/checkMark.png');
+    background-size: cover;
+}
+
+.select_goods {
+    width: 20px;
+    height: 20px;
+    /* background-image: url('./../../img/checkMark.png'); */
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.check_image_container, .goods_quantity, .goods_price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.check_image_container {
+    flex: 1 1 10%;
+}
+
+.goods_info {
+    flex: 1 1 65%;
+    padding: 10px;
+}
+
+.goods_info > div {
+    width: 100%;
+}
+
+.goods_info > img {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+}
+
+.goods_quantity {
+    flex: 1 1 15%;
+    padding: 10px;
+}
+
+.goods_quantity > button {
+    border: none;
+    background-color: #fcfcfc;
+}
+
+.goods_price {
+    flex: 1 1 15%;
+    padding: 10px;
+}
+
+.goods_container {
+    width: 100%;
+}
+
+.goods {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+}
+
+.button_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: right;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.button_container > div {
+    display: flex;
+    gap: 5px;
+}
+
+.button_container > div > button{
+    border: 2px solid rgb(219, 219, 219);
+    border-radius: 5px;
+    background-color: white;
+}
+
+.button_container button {
+    border: 2px solid rgb(219, 219, 219);
+    border-radius: 5px;
+    background-color: white;
+    display: flex;
+    margin-left: auto;
+}
+
+.button_container button:hover {
+    border: 2px solid rgb(219, 219, 219);
+    border-radius: 5px;
+    background-color: rgb(189, 189, 189);
+    display: flex;
+    margin-left: auto;
+    color: white;
+}
+
+.total_price {
+    margin-top: 3px;
+}
+
+.order_info_container {
+    text-align: center;
+    border: 1px solid rgb(219, 219, 219);
+    margin-top: 240px;
+    padding-top: 10px;
+    width: 300px;
+    height: 320px;
+}
+
+.order_info_container > p {
+    font-size: 1.2em;
+}
+
+.order_info_container hr {
+    margin-left: 15px;
+    width: 270px;
+    color: rgb(114, 114, 114);
+}
+
+.order_info > div {
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+}
+
+.order_info_goods_label {
+    margin-left: 20px;
+}
+
+.order_info_goods_quantity {
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+#orderButton {
+    margin-top: 25px;
+    border: 2px solid rgb(219, 219, 219);
+    border-radius: 5px;
+    background-color: white;
+    width: 180px;
+    height: 40px;
+}
+
+#orderButton:hover {
+    color: white;
+    margin-top: 25px;
+    border: 2px solid rgb(219, 219, 219);
+    border-radius: 5px;
+    background-color: rgb(189, 189, 189);
+    width: 180px;
+    height: 40px;
+}
+
+button {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.modal_overlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.paymentModal_container {
+    width: 600px;
+    background-color: white;
+    border: 3px solid #ddd;
+    border-radius: 30px;
+    position: fixed;
+    top: 20%;
+    left: 35%;
+}
+
+.paymentModal_container > button {
+    margin-top: 15px;
+    margin-left: 91%;
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    color: gray;
+}
+
+#theaterList {
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    width: 100px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 0.8em;
+    text-align: center;
+    outline: none;
+}
+
+.theaterModal_container {
+    width: 600px;
+    height: 500px;
+    background-color: white;
+    border: 3px solid #ddd;
+    border-radius: 30px;
+    position: fixed;
+    top: 20%;
+    left: 35%;
+}
+
+#theaterSuggestion {
+    width: 100px;
+    min-height: 25px;
+    max-height: 100px;
+    border: 2px solid #ddd;
+    background-color: white;
+    position: absolute;
+    top: 100%;
+    left: 60%;
+    overflow-y: auto;
+    font-size: 0.8em;
+    cursor: default;
+    white-space: nowrap;
+    overflow-x: hidden;
+}
+
