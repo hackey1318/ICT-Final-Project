@@ -6,6 +6,7 @@ import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.domain.Movies;
 import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.oauth.repository.domain.Users;
+import com.ict.finalProject.user.controller.response.LikeResponse;
 import com.ict.finalProject.user.repository.domain.Likes;
 import com.ict.finalProject.user.repository.domain.LikesRepository;
 import com.ict.finalProject.user.repository.domain.constant.LikeType;
@@ -15,6 +16,7 @@ import com.ict.finalProject.user.service.dto.LikedMovieDto;
 import com.ict.finalProject.user.service.dto.LikedUserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class LikesServiceImpl implements LikesService {
+
+    private final ModelMapper modelMapper;
 
     private final UsersRepository usersRepository;
     private final LikesRepository likesRepository;
@@ -74,31 +78,31 @@ public class LikesServiceImpl implements LikesService {
     }
 
     @Override
-    public boolean likeItem(LikeType type, Integer userNo, Integer targetNo) {
+    public LikeResponse getLikeItem(LikeType type, Integer userNo, Integer targetNo) {
+        if (!this.checkLikeItem(type, targetNo)) return null;
 
-        if (!this.checkLikeItem(type, targetNo)) return false;
-        try {
-            likesRepository.save(Likes.builder()
+        Likes likes = likesRepository.findByTypeAndUserNoAndTargetNo(type, userNo, targetNo).orElse(null);
+
+        if (likes == null) {
+            likes = likesRepository.save(Likes.builder()
                     .type(type)
                     .userNo(userNo)
                     .targetNo(targetNo)
-                    .status(StatusInfo.ACTIVE).build());
-        } catch (Exception e) {
-            return false;
+                    .status(StatusInfo.DELETE).build());
         }
-        return true;
+        return modelMapper.map(likes, LikeResponse.class);
     }
 
     @Override
     @Transactional
-    public boolean updatelikeItem(Integer likeNo, Integer userNo) {
+    public LikeResponse updateLikeItem(Integer likeNo, Integer userNo) {
         try {
             Likes like = likesRepository.findByNoAndUserNo(likeNo, userNo).orElseThrow(() -> new NotFoundException("정보를 찾을 수 없습니다."));
-//            like.update();
+            like.update();
+            return modelMapper.map(likesRepository.save(like), LikeResponse.class);
         } catch (Exception e) {
-            return false;
+            return null;
         }
-        return true;
     }
 
     private boolean checkLikeItem(LikeType type, Integer targetNo) {
