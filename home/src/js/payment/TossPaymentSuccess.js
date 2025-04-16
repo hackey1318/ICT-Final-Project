@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+const accessToken = sessionStorage.getItem("accessToken");
+
 
 function SuccessPage() {
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ function SuccessPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`
         },
         body: JSON.stringify(requestData),
       });
@@ -34,7 +37,9 @@ function SuccessPage() {
       // 결제 성공 비즈니스 로직을 구현하세요.
       // 부모 창을 이동시키는 부분 (팝업 창에서 부모 창을 제어)
       if (window.opener) {
-        window.opener.location.href = `/payment/result?orderId=${requestData.orderId}&amount=${requestData.amount}&paymentKey=${requestData.paymentKey}`; // 부모 창을 /payment/result 이동
+        // window.opener.location.href = `/payment/result?orderId=${requestData.orderId}&amount=${requestData.amount}&paymentKey=${requestData.paymentKey}`; // 부모 창을 /payment/result 이동
+        window.opener.location.href = `/payment/result?orderId=${requestData.orderId}&amount=${requestData.amount}`; // 부모 창을 /payment/result 이동
+
         window.close(); // 현재 팝업 창을 닫기
       }
     }

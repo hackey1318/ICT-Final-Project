@@ -13,7 +13,6 @@ import PwdReset from './page/user/PwdReset';
 import InquiryPage from './page/inquiry/InquiryPage';
 import InquiryView from './page/inquiry/InquiryView';
 import UserDau from './page/dashboard/UserDau';
-import Payment from './js/payment/Payment';
 import TossPayment from './js/payment/TossPayment';
 import TossPaymentSuccess from './js/payment/TossPaymentSuccess';
 import TossPaymentFail from './js/payment/TossPaymentFail';
@@ -27,6 +26,10 @@ import UpcomingMovie from './page/movie/UpcomingMovie';
 import MdList from './page/md/MdList';
 import Admin from './page/admin/Admin';
 import DashBoard from './page/dashboard/UserDau';
+import Cart from './js/cart/Cart';
+import OrderList from './js/order/OrderList';
+import OrderDetail from './js/order/OrderDetail';
+import OrderError from './js/order/OrderError';
 
 function App() {
 
@@ -47,7 +50,6 @@ function App() {
           <Route path='user/findPwd' element={<FindPwd />} />
           <Route path='user/pwdReset' element={<PwdReset />} />
           <Route path='movies' element={<GenreMovie />} />
-          <Route path='payment' element={<Payment />} />
           <Route path='payment/tossPayment' element={<TossPayment />} />
           <Route path='payment/tossPaymentSuccess' element={<TossPaymentSuccess />} />
           <Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
@@ -57,6 +59,10 @@ function App() {
           <Route path='movies/upcoming' element={<UpcomingMovie />} />
           <Route path='/inquiry' element={<InquiryPage />} />
           <Route path='/inquiryView/:no' element={<InquiryView />} />
+          <Route path='cart' element={<Cart />} />
+          <Route path='order/list' element={<OrderList />} />
+          <Route path='order/detail' element={<OrderDetail />} />
+          <Route path='order/error' element={<OrderError />} />
         </Route>
 
         {/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
