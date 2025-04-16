@@ -16,6 +16,8 @@ public interface LikesRepository extends JpaRepository<Likes, Integer> {
 
     Optional<Likes> findByNoAndUserNo(Integer no, Integer userNo);
 
+    Optional<Likes> findByTypeAndUserNoAndTargetNo(LikeType type, Integer userNo, int targetNo);
+
     @Query("SELECT l FROM Likes AS l WHERE l.type = :type AND l.userNo = :userNo AND status = :status")
     Page<Likes> getLikeInfo(@Param("userNo") Integer userNo, @Param("type") LikeType type, @Param("status") StatusInfo statusInfo, Pageable pageable);
 }
