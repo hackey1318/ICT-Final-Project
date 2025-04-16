@@ -16,16 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -56,10 +52,9 @@ public class OrderController {
         String orderNumber = "";
         long requestTotalPrice = 0;
         long userNo = 0;
-        long theaterNo = 0;
+        String theaterName = "";
+        int theaterNo = 0;
         boolean isCorrectData = true;
-
-
 
         List<Object[]> mdList = new ArrayList<>();
         JSONParser parser = new JSONParser();
@@ -68,7 +63,8 @@ public class OrderController {
             orderNumber = (String) requestData.get("orderNumber");
             requestTotalPrice = (long) requestData.get("totalPrice");
             userNo = (long) requestData.get("userNo");
-            theaterNo = (long) requestData.get("theaterNo");
+            theaterName = (String) requestData.get("theaterName");
+            theaterNo = theatersService.getTheaterNo(theaterName);
 
             JSONArray goods = (JSONArray) requestData.get("goods");
 
@@ -81,7 +77,6 @@ public class OrderController {
 
                 // id기반으로 상품테이블 DB조회, 상품명과 가격 일치하는지 확인
                 Goods dbGoods = mdShopService.getMd(id).get();
-                System.out.println(dbGoods);
 //                int dbGoods_Stocks = mdShopService.getMdQuantity(id);
 
 //                if (dbGoods.getName().equals(name) &&
@@ -95,24 +90,18 @@ public class OrderController {
                 }
             }
 
-            System.out.println(requestTotalPrice);
-            System.out.println((int)requestTotalPrice);
-
             if (isCorrectData) {
-
                 // 기존 주문 있는지 확인
-                Orders checkOrder = ordersService.getPendingOrders((int) userNo, (int) requestTotalPrice, (int) theaterNo);
+                Orders checkOrder = ordersService.getPendingOrders((int) userNo, (int) requestTotalPrice, theaterNo);
                 if (checkOrder != null) {
                     return "success";
                 } else {
                     // pending상태인 기존 주문 있다면 삭제
                     ordersService.deletePendingOrders((int) userNo);
-
-                    // 250415 작성, theater 값 추가 필요
                     Users user = userService.getUser(userId);
                     Orders orders = new Orders();
                     orders.setUserNo(user.getNo());
-                    orders.setTheaterNo((int)theaterNo);
+                    orders.setTheaterNo(theaterNo);
                     orders.setOrderNumber(orderNumber);
                     orders.setStatus("Pending");
                     orders.setTotalPrice((int)requestTotalPrice);
@@ -122,12 +111,8 @@ public class OrderController {
             } else {
                 return "fail";
             }
-
         } catch (Exception e) {
-            // 취소 시 그냥 주문 상태를 취소로 바꿈
             throw new RuntimeException(e);
         }
     }
 }
-
-
