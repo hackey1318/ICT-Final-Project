@@ -1,9 +1,9 @@
 package com.ict.finalProject.user.controller;
 
 import com.ict.finalProject.common.config.AuthCheck;
-import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.oauth.service.UserService;
+import com.ict.finalProject.user.controller.response.LikeResponse;
 import com.ict.finalProject.user.repository.domain.constant.LikeType;
 import com.ict.finalProject.user.service.LikesService;
 import com.ict.finalProject.user.service.dto.LikeItemDto;
@@ -23,9 +23,9 @@ public class LikeController {
     private final UserService userService;
     private final LikesService likesService;
 
-    @GetMapping("/{type}")
+    @GetMapping
     public Page<LikeItemDto> getLike(@PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable,
-                                     @PathVariable String type) {
+                                     @RequestParam String type) {
 
         Integer userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
         LikeType likeType = LikeType.valueOf(type.toUpperCase());
@@ -41,20 +41,18 @@ public class LikeController {
         return null;
     }
 
-    @PostMapping("/{type}")
-    public SuccessOfFailResponse likeItem(@PathVariable String type, Integer no) {
+    @GetMapping("/{type}")
+    public LikeResponse getLikeItem(@PathVariable String type, @RequestParam("no") Integer targetNo) {
         Integer userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
         LikeType likeType = LikeType.valueOf(type.toUpperCase());
 
-        return SuccessOfFailResponse.builder()
-                .result(likesService.likeItem(likeType, userNo, no)).build();
+        return likesService.getLikeItem(likeType, userNo, targetNo);
     }
 
     @PatchMapping("/{no}")
-    public SuccessOfFailResponse ChangelikeItem(@PathVariable Integer no) {
+    public LikeResponse ChangelikeItem(@PathVariable Integer no) {
         Integer userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
 
-        return SuccessOfFailResponse.builder()
-                .result(likesService.updatelikeItem(no, userNo)).build();
+        return likesService.updateLikeItem(no, userNo);
     }
 }
