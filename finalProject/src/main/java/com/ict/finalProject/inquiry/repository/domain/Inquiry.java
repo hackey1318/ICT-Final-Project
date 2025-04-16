@@ -31,7 +31,7 @@ public class Inquiry {
     @Column(nullable = false)
     private String subject;  //문의제목
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;  //문의내용
 
     @Enumerated(EnumType.STRING)

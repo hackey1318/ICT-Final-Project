@@ -33,8 +33,8 @@ public class ImageInfo {
 
     private int boardNo;
 
-    @Column(nullable = false, length = 16)
-    private String fileId;
+    @Column(nullable = false, length = 16, name = "file_id")
+    private String imageId;
 
     @Enumerated(value = EnumType.STRING)
     private StatusInfo status;

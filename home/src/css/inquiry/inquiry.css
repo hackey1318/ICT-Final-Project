@@ -46,6 +46,12 @@ tr {
     /* min-width: 827px; */
 }
 
+.inquiry-modal {
+    width: 80%;
+    margin: 20px auto;
+
+}
+
 .inquiry-title {
     width: 98%;
     margin: 5px auto 15px;
@@ -135,7 +141,7 @@ tr {
 }
 
 #inquiryModal {
-    position: absolute;
+    position: fixed;
     top: 25%;
     left: 10%;
     width: 80%;

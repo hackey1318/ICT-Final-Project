@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.w3c.dom.Text;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,13 +19,9 @@ public class InquiryRequest {
 
     private int userNo;  //작성자
 
-    private int adminNo;  //관리자
-
     private String subject;  //글제목
 
     private String content;  //글내용
-
-    private String fileId;  //파일명
 
     private List<String> imageList;  //문의이미지
 

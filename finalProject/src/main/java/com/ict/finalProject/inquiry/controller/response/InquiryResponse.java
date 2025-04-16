@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.w3c.dom.Text;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,8 +27,6 @@ public class InquiryResponse {
     private String subject;
 
     private String content;
-
-    private String fileId;
 
     private List<String> imageIdList;
 
