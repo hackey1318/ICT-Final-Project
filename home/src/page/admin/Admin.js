@@ -11,6 +11,7 @@ function Admin(){
         const path = location.pathname;
         
         if(path.includes("/home/dau")) return "dau"
+        if(path.includes("/home/member-list")) return "member-list"
         if(path.includes("/home/mdlists")) return "mdlists"
 
         return "manager/info"
