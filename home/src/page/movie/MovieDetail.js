@@ -1,9 +1,11 @@
+import axios from "../../js/public/axiosConfig"
 import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
-import { ArrowLeft, Bookmark, Share2 } from "lucide-react"
+import { ArrowLeft, Bookmark, Share2, Heart, HeartOff } from "lucide-react"
 import "./../../css/movie/MovieDetail.css" // CSS 파일 경로는 실제 프로젝트 구조에 맞게 조정하세요
+import LikeType from "../../js/common/LikeType"
 
-const BASE_URL = 'http://localhost:9988/file-system/download/';
+const BASE_URL = 'http://192.168.1.252:9988/file-system/download/';
 
 
 function MovieDetail() {
@@ -16,12 +18,15 @@ function MovieDetail() {
   // 에러 정보를 저장할 상태
   const [error, setError] = useState(null)
 
+  const [liked, setLiked] = useState(false); // 현재 좋아요 여부
+  const [likeId, setLikeId] = useState(null); // 좋아요 ID (DB에서 받은 값)
+
   // 관련 상품 데이터 (임시 데이터 - 실제로는 API에서 가져와야 함)
   const relatedItems = [
-    { id: 1, name: "팝업 손거울", imageId: 'e3445feb46cd4b88', price: 7000, productUrl: '#' },
-    { id: 2, name: "폭싹 손거울", imageId: 'e3445feb46cd4b88', price: 9000, productUrl: '#' },
-    { id: 3, name: "폭싹 손거울", imageId: 'e3445feb46cd4b88', price: 6000, productUrl: '#' },
-    { id: 4, name: "팝업 포스터", imageId: 'e3445feb46cd4b88', price: 7000, productUrl: '#' },
+    { id: 1, name: "팝업 손거울", imageId: 'baef2f6262044487', price: 7000, productUrl: '#' },
+    { id: 2, name: "폭싹 손거울", imageId: '8fae8ccb208a4e69', price: 9000, productUrl: '#' },
+    { id: 3, name: "폭싹 손거울", imageId: 'ad893823440444df', price: 6000, productUrl: '#' },
+    { id: 4, name: "팝업 포스터", imageId: 'e6534f190e9b4f99', price: 7000, productUrl: '#' },
   ]
 
   // 비슷한 영화 데이터 (임시 데이터 - 실제로는 API에서 가져와야 함)
@@ -32,12 +37,30 @@ function MovieDetail() {
 
   // 컴포넌트가 마운트되거나 URL의 id 값이 변경될 때 실행됩니다.
   useEffect(() => {
+
+    const fetchLikeStatus = async () => {
+      try {
+        const response = await axios.get(`http://192.168.1.252:9988/likes/${LikeType.MOVIE}?no=${id}`);
+        const likeData = response.data;
+  
+        // 예: 좋아요 상태가 ACTIVE인지 여부에 따라 아이콘을 채우거나 비우기
+        setLikeId(likeData.no); // likeId를 설정합니다.
+        if (likeData.status === "ACTIVE") {
+          setLiked(true);
+        } else {
+          setLiked(false);
+        }
+      } catch (err) {
+        console.error("좋아요 상태 불러오기 실패:", err);
+      }
+    };
+
     // 영화 상세 정보를 비동기적으로 가져오는 함수
     const fetchMovieDetail = async () => {
       try {
         setLoading(true) // 로딩 시작
         setError(null) // 이전 에러 상태 초기화
-        const backendApiUrl = `http://localhost:9988/movies/detail/${id}` // '/detail' 추가!
+        const backendApiUrl = `http://192.168.1.252:9988/movies/detail/${id}` // '/detail' 추가!
 
         // fetch API를 사용하여 백엔드에 GET 요청을 보냅니다.
         const response = await fetch(backendApiUrl)
@@ -72,6 +95,7 @@ function MovieDetail() {
     // URL 파라미터 'id' 값이 존재할 때만 API 호출 함수를 실행합니다.
     if (id) {
       fetchMovieDetail()
+      fetchLikeStatus();
     } else {
       // id 값이 없는 경우 (예: URL이 잘못된 경우)
       setError("영화 ID가 유효하지 않습니다.")
@@ -98,6 +122,22 @@ function MovieDetail() {
     return <div className="movie_detail_not_found">영화 정보를 찾을 수 없습니다.</div>
   }
 
+  const toggleLike = async () => {
+    try {
+        const res = await axios.patch(`http://192.168.1.252:9988/likes/${likeId}`);
+        const likeData = res.data;
+        // 예: 좋아요 상태가 ACTIVE인지 여부에 따라 아이콘을 채우거나 비우기
+        if (likeData.status === "ACTIVE") {
+          setLiked(true);
+        } else {
+          setLiked(false);
+        }
+    } catch (err) {
+      console.error("좋아요 처리 중 오류:", err);
+    }
+  };
+  
+
   // --- 성공 상태 UI ---
   // 로딩이 끝나고 에러 없이 movie 데이터가 성공적으로 로드된 경우
   return (
@@ -123,7 +163,13 @@ function MovieDetail() {
           </div>
           <div className="movie_detail_actions col-2 d-flex justify-content-end">
             {/* 북마크 및 공유 아이콘 (기능 구현 필요) */}
-            <Bookmark className="movie_detail_icon" />
+            <div onClick={toggleLike} style={{ cursor: 'pointer' }}>
+              <Heart
+                className="movie_detail_icon"
+                color={liked ? 'red' : 'gray'}
+                fill={liked ? 'red' : 'none'}
+              />
+            </div>
             <Share2 className="movie_detail_icon ms-2" />
           </div>
         </div>
