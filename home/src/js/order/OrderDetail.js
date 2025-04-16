@@ -120,11 +120,11 @@ function OrderDetail() {
                         <div>{pickupData?.tel}</div>
                     </div>
                     <div className="order_info_content">
-                        <div>배송지</div>
+                        <div>주소</div>
                         <div>{pickupData?.address}</div>
                     </div>
                     <div className="order_info_content">
-                        <div>배송 메모</div>
+                        <div>메모</div>
                         <div>{pickupData?.memo}</div>
                     </div>
                 </div>

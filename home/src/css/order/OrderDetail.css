@@ -1,7 +1,7 @@
 .order_container {
     display: flex;
     flex-direction: column;
-    margin-left: 30%;
+    margin-left: 25%;
 }
 
 #back_button {
@@ -20,6 +20,7 @@
 
 .order_info_table {
     width:60%;
+    min-width: 340px;
     border-top: 3px solid rgb(77, 77, 77);
     margin-top: 10px;
 }
@@ -100,7 +101,7 @@
     padding-right: 10px;
     border-right: 2px solid black;
     height: 35px;
-    width: 90px;
+    min-width: 90px;
     justify-content: center;
 }
 
@@ -108,4 +109,8 @@
     padding-left: 10px;
     justify-content: left;
     flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 250px;
 }
