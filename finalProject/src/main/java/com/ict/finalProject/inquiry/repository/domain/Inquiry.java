@@ -1,5 +1,6 @@
 package com.ict.finalProject.inquiry.repository.domain;
 
+import com.ict.finalProject.domain.constant.InquiryProceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,10 @@ public class Inquiry {
 
     @Column(nullable = false)
     private String content;  //문의내용
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 15)
+    private InquiryProceed proceed;  //문의처리상태
 
     @Column(nullable = false)
     private StatusInfo status;  //문의상태

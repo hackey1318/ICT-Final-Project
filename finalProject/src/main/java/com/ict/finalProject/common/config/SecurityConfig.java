@@ -58,7 +58,8 @@ public class SecurityConfig {
                 mvc.pattern("/file-system/upload/register-image"),
                 mvc.pattern("/swagger-ui/index.html"),
                 mvc.pattern("/dashboard/**"),
-                mvc.pattern("/payment/**")
+                mvc.pattern("/payment/**"),
+                mvc.pattern("/inquiry/**")
         };
 
         return http

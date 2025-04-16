@@ -1,6 +1,7 @@
 package com.ict.finalProject.fileSystem.domain;
 
 import com.ict.finalProject.domain.constant.ImageWriteType;
+import com.ict.finalProject.domain.constant.InquiryProceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class ImageInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int no;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 20)
     private ImageWriteType type;
 

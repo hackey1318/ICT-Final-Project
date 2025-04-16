@@ -1,14 +1,21 @@
 import { useParams } from 'react-router-dom';
 import '../../css/inquiry/inquiry.css';
 import { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
 import apiClient from '../../js/public/axiosConfig';
 
 function InquiryView() {
     const {no} = useParams();
-    let [inquiryVO, setInquiryVO] = useState({});
-    let [imageList, setImageList] = useState([]);
-
+    const IMAGE_BASE_URL = '/file-system/showImage/';
+    let [inquiryVO, setInquiryVO] = useState({
+        no: null,
+        nickname: '',
+        subject: '',
+        content: '',
+        imageList: [],
+        createdAt: '',
+        userNo: null,
+        writedate: ''
+    });
     const mounted = useRef(false);
     useEffect(() => {
         if(!mounted) { 
@@ -16,28 +23,20 @@ function InquiryView() {
         } else { 
             getInquiryView();
         }
-    }, [])
+    }, [no])
 
     function getInquiryView() {
-        axios.get(`http://192.168.1.252:9988/getInquiryBy/${no}`)
+        apiClient.get(`inquiry/getInquiryBy/${no}`)
         .then(function(response) {
             console.log(response.data);
-
             setInquiryVO({
                 no: response.data.inquiry.no,
+                nickname: response.data.inquiry.nickname  || 'User Unknowned',
                 subject: response.data.inquiry.subject,
                 content: response.data.inquiry.content,
-                createdAt: response.data.inquiry.createdAt
-            });
-
-            setImageList([]);
-            response.data.imageList.map((image) => {
-                setImageList((prev) => {
-                    return [...prev, {
-                        id: image.id,
-                        filename: image.originName
-                    }]
-                })
+                createdAt: response.data.inquiry.createdAt,
+                imageList: response.data.image_list,
+                userNo: response.data.userNo
             });
         })
         .catch(function(error) {
@@ -47,7 +46,7 @@ function InquiryView() {
 
     function inquiryDel() {
         if(window.confirm("글을 삭제하시겠습니까?")) {
-            apiClient.get(`http://192.168.1.252:9988/inquiry/inquiryDel/${inquiryVO.no}`, )
+            apiClient.get(`/inquiry/inquiryDel/${inquiryVO.no}`, )
             .then(function(response){
                 console.log(response.data);
                 
@@ -61,13 +60,24 @@ function InquiryView() {
         }
     }
 
+    const loginUserInfo = sessionStorage.getItem("userInfo");
+    let loginUserId = null;
+    if(loginUserInfo) {
+        try {
+            const userInfoObject = JSON.parse(loginUserInfo);
+            loginUserId = userInfoObject.userNo;
+        } catch(error) {
+            console.log("sessionStorage의 userInfo 파싱오류 : ", error);
+        }
+    }
+    const isWriter = loginUserId && String(loginUserId) === String(inquiryVO.userNo);
+
     return (
         <div className='inquiry-container'>
             <h2>{inquiryVO.subject}</h2>
             {
-                sessionStorage.getItem("logUserid")==inquiryVO.userNo && 
-                (<div>
-                    <a href={`/boardEdit/${inquiryVO.no}`} style={{cursor: 'pointer'}}>수정</a>
+                isWriter && 
+                (<div style={{textAlign: 'right'}}>
                     <a onClick={inquiryDel} style={{cursor: 'pointer'}}>삭제</a>
                 </div>)
             }
@@ -84,29 +94,25 @@ function InquiryView() {
 
             <div className="row" style={{borderBottom: '1px solid gray'}}>
                 <div className="col-sm-2 p-2">등록일</div>
-                <div className="col-sm-10 p-2">{inquiryVO.writedate}</div>
+                <div className="col-sm-10 p-2">{new Date(inquiryVO.createdAt).toLocaleString('ko-KO')}</div>
             </div>
 
-            <div className="row" style={{borderBottom: '1px solid gray'}}>
-                <div className="col-sm-2 p-2">제목</div>
-                <div className="col-sm-10 p-2">{inquiryVO.subject}</div>
-            </div>
-
-            <div className="row" style={{borderBottom: '1px solid gray'}}>
+            <div className="row" style={{borderBottom: 'none',marginTop: '10px'}}>
                 <div className="col-sm-2 p-2">이미지</div>
                 <div className="col-sm-10 p-2">
                 {
-                    Array.isArray(imageList) && (imageList.length > 0) ? (
+                    Array.isArray(inquiryVO.imageList) && (inquiryVO.imageList.length > 0) ? (
                     
-                        imageList.map((item) => {
+                        inquiryVO.imageList.map((item) => {
                             return (
-                                <>
-
-                                </>
+                                <img key={item}
+                                        src={`${IMAGE_BASE_URL}${item}`}
+                                        style={{width: '100px', marginLeft: '15px'}}
+                                />
                             )
                         })
                     ) : (
-                        <span>No image</span>
+                        <span>No Image</span>
                     )
                 }
                 </div>
