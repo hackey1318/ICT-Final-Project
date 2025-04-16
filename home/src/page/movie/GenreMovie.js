@@ -33,13 +33,13 @@ function GenreMovie() {
         setPage(0);
         setType('ALL');
         window.scrollTo(0, 0); // 페이지 최상단으로 이동
-    }, [genre, type]);
+    }, [genre]);
 
     useEffect(() => {
         // 장르 선택 시 API 호출
         const fetchMovies = async () => {
             try {
-                const response = await axios.get('http://localhost:9988/movies', {
+                const response = await axios.get('http://192.168.1.252:9988/movies', {
                     params: {
                         genre: genre.name,
                         type: type,
