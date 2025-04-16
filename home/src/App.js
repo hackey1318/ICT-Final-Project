@@ -17,6 +17,8 @@ import ManagerLogin from './page/admin/ManagerLogin';
 import { useEffect } from 'react';
 import MovieDetail from './page/movie/MovieDetail';
 import GenreMovie from './page/movie/GenreMovie';
+import CurrentMovie from './page/movie/CurrentMovie';
+import UpcomingMovie from './page/movie/UpcomingMovie';
 import MdList from './page/md/MdList';
 import Admin from './page/admin/Admin';
 import DashBoard from './page/dashboard/UserDau';
@@ -38,8 +40,11 @@ function App() {
           <Route path='kakao/callback' element={<KakaoCallback />} />
           <Route path='user/findId' element={<FindId />} />
           <Route path='user/findPwd' element={<FindPwd />} />
-          <Route path='user/pwdReset' element={<PwdReset />} /><Route path='movies' element={<GenreMovie />} />
+          <Route path='user/pwdReset' element={<PwdReset />} />
+          <Route path='movies' element={<GenreMovie />} />
           <Route path='movies/:id' element={<MovieDetail />} />
+          <Route path='movies/current' element={<CurrentMovie />} />
+          <Route path='movies/upcoming' element={<UpcomingMovie />} />
           <Route path='/inquiry' element={<InquiryPage />} />
           <Route path='/inquiryView/:no' element={<InquiryView />} />
         </Route>
