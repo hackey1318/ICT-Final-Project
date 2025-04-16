@@ -25,4 +25,9 @@ public class TheatersServiceImpl implements TheatersService {
     public void saveTheaterList(List<Theaters> theaters) {
         theatersRepository.saveAll(theaters);
     }
+
+    public int getTheaterNo(String theaterName) {
+        Theaters theaters = theatersRepository.findByName(theaterName);
+        return theaters.getNo();
+    }
 }
