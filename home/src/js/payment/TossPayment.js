@@ -1,16 +1,10 @@
 import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
 
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
 const customerKey = "wOfHfcxrkJZoJaAatKMfO";
 
-function CheckoutPage() {
-    const [searchParams] = useSearchParams();
-    const totalPrice = searchParams.get('totalPrice');
-    const orderName = searchParams.get('orderName');
-
+function CheckoutPage({totalPrice, orderName, orderNumber}) {
     const [amount, setAmount] = useState({
         currency: "KRW",
         value: parseInt(totalPrice),
@@ -26,10 +20,11 @@ function CheckoutPage() {
             const widgets = tossPayments.widgets({
                 customerKey,
             });
+            setWidgets(widgets);
+
             // 비회원 결제
             // const widgets = tossPayments.widgets({ customerKey: ANONYMOUS });
 
-            setWidgets(widgets);
         }
 
         fetchPaymentWidgets();
@@ -80,7 +75,7 @@ function CheckoutPage() {
                 {/* 쿠폰 체크박스 */}
                 <div>
                     <div>
-                        <label htmlFor="coupon-box">
+                        {/* <label htmlFor="coupon-box">
                             <input
                                 id="coupon-box"
                                 type="checkbox"
@@ -92,7 +87,7 @@ function CheckoutPage() {
                                 }}
                             />
                             <span>5,000원 쿠폰 적용</span>
-                        </label>
+                        </label> */}
                     </div>
                 </div>
 
@@ -108,7 +103,7 @@ function CheckoutPage() {
                             // (Payment.js에 구현)
 
                             await widgets.requestPayment({
-                                orderId: "orderid1234567890r",
+                                orderId: orderNumber, // 토스페이먼츠API 변수명 변경 불가
                                 orderName: orderName,
                                 successUrl: window.location.origin + "/payment/tossPaymentSuccess",
                                 failUrl: window.location.origin + "/payment/tossPaymentFail",
@@ -118,10 +113,18 @@ function CheckoutPage() {
                             });
                         } catch (error) {
                             // 에러 처리하기
-                            console.error(error);
                         }
                     }}
-                >
+                    style={{
+                        border: '1px solid #ddd',
+                        borderRadius: '5px',
+                        marginLeft: '25px',
+                        marginBottom: '25px',
+                        width: '100px',
+                        height: '30px',
+                        color: 'rgb(39, 39, 39)',
+                        fontSize: '0.9em'
+                    }}>
                     결제하기
                 </button>
             </div>
