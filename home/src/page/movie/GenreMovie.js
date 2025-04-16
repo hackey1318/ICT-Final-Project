@@ -39,7 +39,7 @@ function GenreMovie() {
         // 장르 선택 시 API 호출
         const fetchMovies = async () => {
             try {
-                const response = await axios.get('http://192.168.1.252:9988/movies', {
+                const response = await axios.get('http://localhost:9988/movies', {
                     params: {
                         genre: genre.name,
                         type: type,

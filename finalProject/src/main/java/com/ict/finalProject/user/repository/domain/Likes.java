@@ -40,7 +40,7 @@ public class Likes {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-//    public void update() {
-//        this.status = this.status.toggle();
-//    }
+    public void update() {
+        this.status = this.status.toggle();
+    }
 }
