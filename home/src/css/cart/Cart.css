@@ -152,7 +152,7 @@
     margin-top: 240px;
     padding-top: 10px;
     width: 300px;
-    height: 270px;
+    height: 320px;
 }
 
 .order_info_container > p {
@@ -202,3 +202,72 @@
 button {
     transition: background-color 0.3s, color 0.3s;
 }
+
+.modal_overlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.paymentModal_container {
+    width: 600px;
+    background-color: white;
+    border: 3px solid #ddd;
+    border-radius: 30px;
+    position: fixed;
+    top: 20%;
+    left: 35%;
+}
+
+.paymentModal_container > button {
+    margin-top: 15px;
+    margin-left: 91%;
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    color: gray;
+}
+
+#theaterList {
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    width: 100px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 0.8em;
+    text-align: center;
+    outline: none;
+}
+
+.theaterModal_container {
+    width: 600px;
+    height: 500px;
+    background-color: white;
+    border: 3px solid #ddd;
+    border-radius: 30px;
+    position: fixed;
+    top: 20%;
+    left: 35%;
+}
+
+#theaterSuggestion {
+    width: 100px;
+    min-height: 25px;
+    max-height: 100px;
+    border: 2px solid #ddd;
+    background-color: white;
+    position: absolute;
+    top: 100%;
+    left: 60%;
+    overflow-y: auto;
+    font-size: 0.8em;
+    cursor: default;
+    white-space: nowrap;
+    overflow-x: hidden;
+}
+

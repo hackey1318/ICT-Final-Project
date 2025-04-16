@@ -13,7 +13,6 @@ import PwdReset from './page/user/PwdReset';
 import InquiryPage from './page/inquiry/InquiryPage';
 import InquiryView from './page/inquiry/InquiryView';
 import UserDau from './page/dashboard/UserDau';
-import Payment from './js/payment/Payment';
 import TossPayment from './js/payment/TossPayment';
 import TossPaymentSuccess from './js/payment/TossPaymentSuccess';
 import TossPaymentFail from './js/payment/TossPaymentFail';
@@ -51,7 +50,6 @@ function App() {
           <Route path='user/findPwd' element={<FindPwd />} />
           <Route path='user/pwdReset' element={<PwdReset />} />
           <Route path='movies' element={<GenreMovie />} />
-          <Route path='payment' element={<Payment />} />
           <Route path='payment/tossPayment' element={<TossPayment />} />
           <Route path='payment/tossPaymentSuccess' element={<TossPaymentSuccess />} />
           <Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
