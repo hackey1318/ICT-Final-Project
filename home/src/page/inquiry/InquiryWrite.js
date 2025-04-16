@@ -6,11 +6,12 @@ import InquiryEditor from '../../js/inquiry/InquiryEditor.js';
 import apiClient from '../../js/public/axiosConfig.js';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess.js';
 
-const InquiryWrite = ({ onClose }) => {
+const InquiryWrite = ({ onClose, onSuccess }) => {
     let [subject, setSubject] = useState();
     let [content, setContent] = useState();
     let [addedImg, setAddedImg] = useState([]);
     const runfile = useRef([]);  //file실행 준비 및 사진 갯수제한용
+    const accessToken = sessionStorage.getItem("accessToken");
 
     const setSubjectValue = useCallback((e) => {
         setSubject(e.target.value);
@@ -23,27 +24,44 @@ const InquiryWrite = ({ onClose }) => {
         //console.log("[InquiryWrite] hadleGetContent - content 최신화 : ", value);
     }, [setContent]);
 
-    const submitInquiry = useCallback(() => {
+    const submitInquiry = useCallback(async () => {
         if (!subject) {
             alert("제목을 입력해주세요.");
             return;
         } else if(!content) {
             alert("내용을 입력해주세요.");
             return;
-        }
-
-        //console.log("최종 content값 : ", content);
+        }        
 
         let inquiryData = {
             subject: subject,
             content: content,
-            imageList: addedImg
+            imageList: []
         }
+
+        let formData = new FormData();
+        for (let i=0; i<runfile.current.files.length; i++) {
+            formData.append("files", runfile.current.files[i]);
+        }
+
+        const fileUpload = await axios.post("http://192.168.1.252:9988/file-system/upload", formData, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+    
+        inquiryData.imageList = fileUpload.data.map(item => item.files);
 
         apiClient.post('/inquiry/inquiryWrite', inquiryData)
             .then(function (response) {
                 //console.log("문의 전송 성공 : ", response.data);
                 alert("문의 작성이 완료되었습니다.");
+                console.log(inquiryData);
+                if (onSuccess) {
+                    onSuccess();
+                }
+
                 if (onClose) {
                     onClose();
                 }

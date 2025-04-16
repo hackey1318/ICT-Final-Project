@@ -5,30 +5,33 @@
 }
 
 thead {
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid #ddd;
 }
 
 tr {
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid #ddd;
+}
+
+.td-container {
+    height: 40px;
+    line-height: 40px;
 }
 
 #write {
     text-decoration-line: none;
     color: black;
-    position: relative;
-    top: 100px;
     cursor: pointer;
 }
 
 #write:not(:hover) {
-    border: 2px solid gray;
+    border: 2px solid #ddd;
     border-radius: 10px;
     padding: 5px;
     transition: all 0.500s;
 }
 
 #write:hover {
-    border: 2px solid gray;
+    border: 2px solid #ddd;
     border-radius: 10px;
     padding: 5px;
     background-color: gray;
@@ -40,6 +43,7 @@ tr {
 .inquiry-container {
     width: 80%;
     margin: 20px auto;
+    /* min-width: 827px; */
 }
 
 .inquiry-title {
@@ -145,27 +149,26 @@ tr {
 
 #toDetail {
     cursor: pointer;
-}
-
-#toDetail {
     text-decoration: none;
     transition: color 0.3s;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: black;
 }
 
-#noInquiryMsg {
+.noInquiryMsg {
     position: absolute;
     left: 10%;
     width: 80%;
     height: 50px;
-    line-height: 50px;
-    margin: 30px auto;
+    line-height: 30px;
+    margin: 0 auto;
     text-align: center;
-    border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
 }
 
 /*문의 디테일*/
+
+
 

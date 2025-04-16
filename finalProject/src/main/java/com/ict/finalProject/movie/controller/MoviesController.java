@@ -1,10 +1,13 @@
 package com.ict.finalProject.movie.controller;
 
+import com.ict.finalProject.common.config.AuthCheck;
+import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.movie.controller.response.MovieCardResponse;
 import com.ict.finalProject.movie.controller.response.MovieDetailResponse;
 import com.ict.finalProject.movie.repository.constant.movie.MovieStatus;
 import com.ict.finalProject.movie.repository.domain.Movies;
 import com.ict.finalProject.movie.service.MoviesService;
+import com.ict.finalProject.oauth.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +33,7 @@ public class MoviesController {
     private final ModelMapper modelMapper;
 
     private final MoviesService moviesService;
+    private final UserService userService;
 
     @GetMapping
     public Page<MovieCardResponse> getMovieList(@PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable,
@@ -99,4 +103,23 @@ public class MoviesController {
             // 또는 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error message");
         }
     }
+
+    // 로그인 안한 사용자 추천
+
+    // 로그인 사용자 추천
+
+    // 1. 내가 좋아요한 영화의 장르로 좋아요 많이 받은 영화
+
+    // 2. 그냥 랜덤
+
+    // 3. 전체 좋아요 순
+
+    @GetMapping("/recommendation")
+    public List<MovieCardResponse> getRecommendationMovie() {
+        Integer userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
+
+        moviesService.getRecommendationMovie(userNo);
+        return null;
+    }
+
 }

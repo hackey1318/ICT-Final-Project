@@ -24,12 +24,11 @@ public class InquiryRequest {
 
     private String content;  //글내용
 
-    //private String nickname;  //작성자별명
-    
-    private LocalDateTime createdAt;  //작성일
-    
-    private LocalDateTime updatedAt;  //수정일
+    private String fileId;  //파일명
 
     private List<String> imageList;  //문의이미지
 
+    private LocalDateTime createdAt;  //작성일
+
+    private LocalDateTime updatedAt;  //수정일
 }
