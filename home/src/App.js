@@ -20,6 +20,7 @@ import GenreMovie from './page/movie/GenreMovie';
 import MdList from './page/md/MdList';
 import Admin from './page/admin/Admin';
 import DashBoard from './page/dashboard/UserDau';
+import MemberList from './page/admin/MemberList';
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
           <Route path="home" element={<Admin />}>
             <Route index element={<DashBoard/>} />
             <Route path="dau" element={<UserDau />} />
+            <Route path="member-list" element={<MemberList />} />
             <Route path="mdlists" element={<MdList />} />
           </Route>
         </Route>
