@@ -1,40 +1,66 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import '../../css/cart/Cart.css';
 import checkMark from '../../img/checkMark.png';
 import axios from 'axios';
+import TossPayment from "./../payment/TossPayment";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
 function Cart() {
     const [goods, setGoods] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [orderName, setOrderName] = useState();
+    const [orderNumber, setOrderNumber] = useState();
     const [loading, setLoading] = useState(true);
+    const [paymentModalOpen, setPaymentModalOpen] = useState();
+    const [theaterSuggestion, setTheaterSuggestion] = useState(false);
+    const [theaterData, setTheaterData] = useState([]);
+    const [filteredTheaters, setFilteredTheaters] = useState([]);
+    const theaterRef = useRef();
+
+    useEffect(() => {
+        axios.post("http://localhost:9988/order/theaterList", {}, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+            .then((response) => {
+                setTheaterData(prev => [...prev, ...response.data]);
+                setFilteredTheaters(prev => [...prev, ...response.data]);
+            })
+            .catch((error) => {
+                console.error("API 호출 중 오류 발생:", error);
+            });
+
+            
+    }, []);
 
     // 테스트 데이터
     const test_goods_1 = {
         id: 1,
         image: "https://img.danawa.com/prod_img/500000/185/173/img/49173185_1.jpg?shrink=130:130&_v=20250407171230",
-        name: "스티치 인형",
+        name: "머그컵",
         quantity: 1,
-        price: 19440,
+        price: 1000,
         selected: true
     }
 
     const test_goods_2 = {
         id: 2,
         image: "https://img.danawa.com/prod_img/500000/443/941/img/6941443_1.jpg?shrink=130:130&_v=20181227122347",
-        name: "묠니르 망치 스피커",
+        name: "머그컵2",
         quantity: 2,
-        price: 328000,
+        price: 10000,
         selected: true
     }
 
     const test_goods_3 = {
         id: 3,
         image: "https://cimg.cowave.kr/image/vendor_inventory/e317/70193a0bcc148a37695d2780f84fee6caac3acc9321c9288dde86f3e9c48.jpeg",
-        name: "주먹왕 랄프 피규어 세트",
+        name: "머그컵3",
         quantity: 3,
-        price: 65890,
+        price: 90000,
         selected: true
     }
 
@@ -123,28 +149,33 @@ function Cart() {
             return;
         }
 
-        let orderName = selectedGoods.length === 1
+        if (!theaterData.includes(theaterRef.current.value)) {
+            alert("올바른 영화관을 선택해주세요.");
+            return;
+        }
+
+        setOrderName(selectedGoods.length === 1
             ? selectedGoods[0].name
-            : `${selectedGoods[0].name} 외 ${selectedGoods.length - 1}건`;
+            : `${selectedGoods[0].name} 외 ${selectedGoods.length - 1}건`);
 
-        const orderId = `${Date.now()}${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+        const length = 25;
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let randomChars = "";
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * length);
+            randomChars += chars[randomIndex];
+        }
+        setOrderNumber(randomChars);
 
-        // 결제 UI 띄우기
-        window.open(
-            `http://localhost:3000/payment/tossPayment?&totalPrice=${totalPrice}&orderName=${orderName}&orderId=${orderId}`,
-            "PaymentWindow",
-            `width=600,height=500,top=${window.screen.height / 2 - 250},left=${window.screen.width / 2 - 300}`
-        );
-
-        // axios로 결제 정보 서버에 저장
-        axios.post("http://localhost:9988/payment/save", {
-            orderId: orderId,
-            orderName: orderName,
+        const userInfoStr = sessionStorage.getItem("userInfo");
+        const userInfo = JSON.parse(userInfoStr);
+        console.log(accessToken);
+        // axios로 주문 정보 서버에 저장
+        axios.post("http://localhost:9988/order/save", {
+            orderNumber: randomChars,
             totalPrice: totalPrice,
-            customerEmail: "customer123@gmail.com",
-            customerName: "김씨네마투게더",
-            customerMobilePhone: "01012341234",
-            customerAddress: "서울 성동구 왕십리로",
+            userNo: userInfo.userNo,
+            theaterNo: 0, // 임시 0값
             goods: selectedGoods
         }, {
             headers: {
@@ -154,12 +185,24 @@ function Cart() {
         })
             .then((response) => {
                 if (response.data === "success") {
-                    console.log("주문 성공!");
+                    console.log("주문 저장 성공!");
+                    setPaymentModalOpen(true);
                 }
             })
             .catch((error) => {
-                console.log("주문 실패:", error);
+                // paymentUi.close();
+                alert("상품 정보 오류");
             });
+    }
+
+    const searchTheater = (e) => {
+        const filtered = theaterData.filter((theater) => 
+            theater.includes(e.target.value));
+        setFilteredTheaters(filtered);
+    }
+
+    const selectTheater = (e) => {
+        theaterRef.current.value = e.target.innerText;
     }
 
     if (loading) {
@@ -224,8 +267,38 @@ function Cart() {
                         <div className="order_info_goods_label">결제 금액</div>
                         <div className="order_info_goods_quantity">{totalPrice.toLocaleString()}원</div>
                     </div>
+                    <hr />
+                    <div style={{ position: 'relative' }}>
+                        <div className="order_info_goods_label">수령 장소</div>
+                        <div className="order_info_goods_quantity"><input type="text" id="theaterList" ref={theaterRef} placeholder="영화관 찾기" onChange={searchTheater} onFocus={() => setTheaterSuggestion(true)} onBlur={() => setTimeout(() => setTheaterSuggestion(false), 100)} /></div>
+                        {theaterSuggestion &&
+                            <div id="theaterSuggestion">
+                                {filteredTheaters.length != 0 ? filteredTheaters.map((element, idx) => (
+                                    <div key={idx} onClick={selectTheater}>{element}</div>
+                                )) : <div>결과가 없습니다.</div>}
+                                
+                            </div>
+                        }
+                    </div>
                     <button id="orderButton" onClick={order}>주문하기</button>
                 </div>
+            </div>
+
+            <div>
+                {
+                    (paymentModalOpen) &&
+                    <div>
+                        <div className="modal_overlay"></div>
+                        <div className="paymentModal_container">
+                            <button onClick={() => setPaymentModalOpen(false)}>X</button>
+                            <TossPayment
+                                totalPrice={totalPrice}
+                                orderName={orderName}
+                                orderNumber={orderNumber}
+                            />
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     );
