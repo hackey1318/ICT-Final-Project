@@ -1,8 +1,10 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
+import axios from "axios";
+
+const accessToken = sessionStorage.getItem("accessToken");
 
 function Gender(){
     //데이터를 담을 변수
@@ -56,7 +58,12 @@ function Gender(){
     };
 
     useEffect(()=>{
-        axios.get("http://localhost:9988/manager/home/gender-ratio")
+        axios.get("http://localhost:9988/manager/home/gender-ratio", {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
         .then((response)=>{
             console.log(response.data);
             setData(response.data);
