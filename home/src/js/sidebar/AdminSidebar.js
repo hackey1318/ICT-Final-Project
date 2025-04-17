@@ -69,7 +69,7 @@ function AdminSidebar({activeMenu}){
                         {adminOpenMenus[0] && (
                             <ul className="admin-sub-menu">
                                 <li>
-                                    <Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>
+                                    <Link to="/manager/home/member-list" className={`admin-nav-link ${activeMenu === "member-list" ? "active":""}`}>
                                         회원 목록 조회
                                     </Link>
                                 </li>
