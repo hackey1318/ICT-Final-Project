@@ -4,6 +4,7 @@ import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.common.config.AuthRequired;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.domain.constant.UserRole;
+import com.ict.finalProject.fileSystem.service.FileSystemService;
 import com.ict.finalProject.inquiry.controller.request.InquiryRequest;
 import com.ict.finalProject.inquiry.controller.response.InquiryResponse;
 import com.ict.finalProject.inquiry.repository.domain.Inquiry;
@@ -12,7 +13,9 @@ import com.ict.finalProject.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -22,6 +25,7 @@ public class InquiryController {
 
     private final InquiryService inquiryService;
     private final UserService userService;
+    private final FileSystemService fileSystemService;
 
     //문의등록
     @AuthRequired({UserRole.USER, UserRole.ADMIN})
@@ -40,9 +44,12 @@ public class InquiryController {
 
     // 문의디테일페이지
     @GetMapping("/getInquiryBy/{no}")
-    public Optional<Inquiry> getInquiryByNo(@PathVariable("no") int no) {
-
-        return inquiryService.getInquiryByNo(no);
+    public Map getInquiryByNo(@PathVariable("no") int no) {
+        System.out.println(fileSystemService.getInquiryFileIds(no));
+        Map map = new HashMap();
+        map.put("inquiry", inquiryService.getInquiryByNo(no));
+        map.put("image_list", fileSystemService.getInquiryFileIds(no));
+        return map;
     }
 
     //문의삭제
@@ -52,11 +59,4 @@ public class InquiryController {
         inquiryService.inquiryDel(no);
         return "deleted";
     }
-
-    //문의이미지리스트
-    /*@GetMapping("/getInquiry")
-    public List<InquiryResponse> getInquiry(@RequestParam int no) {
-        List<InquiryResponse> inquiries = inquiryService.getInquiry(no);
-        return inquiries;
-    }*/
 }

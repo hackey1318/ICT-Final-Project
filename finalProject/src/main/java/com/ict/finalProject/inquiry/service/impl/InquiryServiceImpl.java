@@ -1,23 +1,34 @@
 package com.ict.finalProject.inquiry.service.impl;
 
 import com.ict.finalProject.domain.constant.ImageWriteType;
+import com.ict.finalProject.domain.constant.InquiryProceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.fileSystem.controller.response.FileUploadResponse;
 import com.ict.finalProject.fileSystem.domain.ImageInfo;
+import com.ict.finalProject.fileSystem.domain.Images;
 import com.ict.finalProject.fileSystem.repository.FileSystemRepository;
 import com.ict.finalProject.fileSystem.repository.ImageInfoRepository;
+import com.ict.finalProject.fileSystem.service.FileSystemService;
 import com.ict.finalProject.inquiry.controller.request.InquiryRequest;
 import com.ict.finalProject.inquiry.controller.response.InquiryResponse;
 import com.ict.finalProject.inquiry.repository.InquiryRepository;
 import com.ict.finalProject.inquiry.repository.domain.Inquiry;
 import com.ict.finalProject.inquiry.service.InquiryService;
+import com.ict.finalProject.oauth.repository.domain.Users;
+import com.ict.finalProject.user.service.FindUserService;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +38,7 @@ public class InquiryServiceImpl implements InquiryService {
 
     private final InquiryRepository inquiryRepository;
     private final ImageInfoRepository imageInfoRepository;
-    private final FileSystemRepository fileSystemRepository;
+    private final FindUserService findUserService;
 
     //문의등록
     @Override
@@ -38,6 +49,7 @@ public class InquiryServiceImpl implements InquiryService {
                     .userNo(request.getUserNo())
                     .subject(request.getSubject())
                     .content(request.getContent())
+                    .proceed(InquiryProceed.BEFORE)
                     .status(StatusInfo.ACTIVE).build());
 
             List<ImageInfo> inquiryImagesList = new ArrayList<>();
@@ -46,8 +58,8 @@ public class InquiryServiceImpl implements InquiryService {
                     inquiryImagesList.add(ImageInfo.builder()
                                     .type(ImageWriteType.INQUIRY)
                                     .boardNo(saveInquiry.getNo())
-                                    .fileId(imageId)
-                            .status(StatusInfo.ACTIVE).build());
+                                    .imageId(imageId)
+                                    .status(StatusInfo.ACTIVE).build());
                 }
                 imageInfoRepository.saveAll(inquiryImagesList);
             }
@@ -63,23 +75,58 @@ public class InquiryServiceImpl implements InquiryService {
     @Override
     public List<InquiryResponse> getInquiry() {
         List<Inquiry> inquiries = inquiryRepository.findAllByOrderByNoDesc();
+        
+        if(inquiries.isEmpty()) {  //여기부터
+            return Collections.emptyList();
+        }
+        
+        List<Integer> userNos = inquiries.stream()
+                                        .map(Inquiry::getUserNo)
+                                        .distinct()
+                                        .collect(Collectors.toList());
+        
+        List<Users> users = findUserService.findUsersByUserNo(userNos);
 
-        return inquiries.stream()
-                .map(inquiry -> InquiryResponse.builder()
-                        .no(inquiry.getNo())
-                        .subject(inquiry.getSubject())
-                        .content(inquiry.getContent())
-                        .createdAt(inquiry.getCreatedAt())
-                        .status(StatusInfo.ACTIVE)
-                        //.nickname(userFindResponse.getNickname())
-                        .build())
-                .collect(Collectors.toList());
+        Map<Integer, String> userNicknameMap = users.stream()
+                .collect(Collectors.toMap(Users::getNo, Users::getNickname, (existing, replacement) -> existing)); //여기까지 추가
+
+        return inquiries.stream().map(inquiry -> {
+
+            String nickname = userNicknameMap.getOrDefault(inquiry.getUserNo(), "알 수 없음");
+
+            return InquiryResponse.builder()
+                    .no(inquiry.getNo())
+                    .subject(inquiry.getSubject())
+                    .createdAt(inquiry.getCreatedAt())
+                    .proceed(inquiry.getProceed())
+                    .status(StatusInfo.ACTIVE)
+                    .nickname(nickname)
+                    .build();
+        })
+        .collect(Collectors.toList());
     }
 
     //문의상세페이지
     @Override
-    public Optional<Inquiry> getInquiryByNo(int no) {
-        return inquiryRepository.findByNo(no);
+    public InquiryResponse getInquiryByNo(int no) {
+        Optional<Inquiry> inquiryOpt = inquiryRepository.findByNo(no);
+
+        Inquiry inquiry = inquiryOpt.orElseThrow(() ->
+                new NoSuchElementException("inquiry not found with no" + no));
+
+        Optional<Users> usersOpt = findUserService.findUser(inquiry.getUserNo());
+        String nickname = usersOpt.map(Users::getNickname).orElse("알 수 없음");
+
+        return InquiryResponse.builder()
+                .no(inquiry.getNo())
+                .userNo(inquiry.getUserNo())
+                .nickname(nickname)
+                .subject(inquiry.getSubject())
+                .content(inquiry.getContent())
+                .createdAt(inquiry.getCreatedAt())
+                .updatedAt(inquiry.getUpdatedAt())
+                .status(inquiry.getStatus())
+                .build();
     }
 
     //문의삭제
@@ -87,13 +134,4 @@ public class InquiryServiceImpl implements InquiryService {
     public void inquiryDel(int no) {
         inquiryRepository.deleteByNo(no);
     }
-
-    /*@Override
-    public List<InquiryResponse> getInquiry(int no) {
-        List<InquiryResponse> inquiryList = inquiryRepository.findByNoOrderByNoDesc(no);
-        for(InquiryResponse inquiryResponse : inquiryList) {
-
-        }
-        return List.of();
-    }*/
 }

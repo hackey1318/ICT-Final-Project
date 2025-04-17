@@ -14,7 +14,7 @@ public interface InquiryService {
 
     List<InquiryResponse> getInquiry();
 
-    Optional<Inquiry> getInquiryByNo(int no);
+    InquiryResponse getInquiryByNo(int no);
 
     void inquiryDel(int no);
 }

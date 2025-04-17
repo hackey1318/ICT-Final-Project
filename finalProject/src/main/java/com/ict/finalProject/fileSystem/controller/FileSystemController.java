@@ -11,8 +11,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +38,6 @@ public class FileSystemController {
 
     private final FileSystemService fileSystemService;
 
-    @AuthRequired({UserRole.USER, UserRole.ADMIN})
     @PostMapping("/upload/register-image")
     public List<FileUploadResponse> uploadRegisterImage(@RequestParam("files") List<MultipartFile> files) throws IOException {
 
@@ -48,6 +49,42 @@ public class FileSystemController {
     @PostMapping("/upload")
     public List<FileUploadResponse> uploadFile(@RequestParam("files") List<MultipartFile> files) throws IOException {
         return fileSystemService.uploadFile(files);
+    }
+
+    @GetMapping("/showImage/{originName}")
+    public void showImage(@PathVariable("originName") String originName, HttpServletResponse response) {
+        List<Images> imageList = fileSystemService.getImageInfo(List.of(originName));
+
+        //이미지가 없을 경우
+        if(imageList.isEmpty()) {
+            log.warn("이미지를 찾을 수 없음 : {}", originName);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Image not found with name : " + originName);
+        }
+
+        Images image = imageList.get(0);
+        Path filePath = Paths.get(image.getPath());
+
+        if(!Files.exists(filePath)) {
+            log.error("DB에는 있으나 실제 파일이 존재하지않음 : {}", filePath);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Image file not found on server : " + originName);
+        }
+
+        response.setContentType(getContentType(filePath));
+
+        try (InputStream inputStream = Files.newInputStream(filePath);
+             OutputStream outputStream = response.getOutputStream()) {
+
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            outputStream.flush();
+            log.debug("이미지 전송 완료 : {}", originName);
+
+        } catch (Exception e) {
+            log.error("이미지 로딩 중 오류 발생 : ", originName, e);
+        }
     }
 
     @GetMapping("/download/{imageId}")
