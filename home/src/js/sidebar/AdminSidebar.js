@@ -94,7 +94,7 @@ function AdminSidebar({activeMenu}){
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>
+                                    <Link to="/manager/home/manager-list" className={`admin-nav-link ${activeMenu === "manager-list" ? "active":""}`}>
                                         관리자 목록 조회
                                     </Link>
                                 </li>

@@ -46,12 +46,22 @@
 .userdau-list>ul:first-child>li{
     border: none;
 }
+.userdau-list>.list-content-ul:hover{
+    background: #ccc;
+}
 .userdau-list-title{
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 7px 20px;
 }
+
+.list-select-box{
+    border-radius: 5px;
+    padding: 2px 1px;
+}
+
+
 .paging-container{
     width: 500px;
     margin: 20px auto;
