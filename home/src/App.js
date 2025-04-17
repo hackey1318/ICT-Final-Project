@@ -1,3 +1,4 @@
+import GeneralRegisterForm from './page/user/GeneralRegisterForm';
 import './App.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -42,10 +43,12 @@ function App() {
 
   return (
       <Routes>
+  
         <Route path='/' element={<Layout />}>
           <Route index element={<Main />} />
           <Route path='login' element={<KakaoLogin />} />
           <Route path='kakao/callback' element={<KakaoCallback />} />
+          <Route path="/register" element={<GeneralRegisterForm />} />
           <Route path='user/findId' element={<FindId />} />
           <Route path='user/findPwd' element={<FindPwd />} />
           <Route path='user/pwdReset' element={<PwdReset />} />
