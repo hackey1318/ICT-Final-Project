@@ -17,6 +17,18 @@ apiClient.interceptors.request.use((config) => {
     return config;
 }, (error) => Promise.reject(error));
 
+//인터셉터
+apiClient.interceptors.request.use((config) => {
+    const accessToken = sessionStorage.getItem("accessToken");
+    if(accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+}, (error) => {
+    console.error("apiClient 인터셉터 에러", error);
+    return Promise.reject(error);
+})
+
 export const uploadImage = async (files) => {
     const formData = new FormData();
     for (const file of files) {

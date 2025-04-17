@@ -22,6 +22,7 @@ tr {
     text-decoration-line: none;
     color: black;
     cursor: pointer;
+    margin-top: 50px;
 }
 
 #write:not(:hover) {
@@ -43,6 +44,7 @@ tr {
 /* 문의작성 */
 .inquiry-container {
     width: 80%;
+    min-width: 1090px;
     margin: 20px auto;
 }
 
@@ -181,7 +183,77 @@ tr {
     margin: 10px 15px 5px 0;
 }
 
+#del-inquiry {
+    position: relative;
+    left: 90%;
+    text-align: center;
+    text-decoration-line: none;
+    color: black;
+    cursor: pointer;
+    width: 60px;
+}
+
+#del-inquiry:not(:hover) {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 5px;
+    transition: all 0.500s;
+}
+
+#del-inquiry:hover {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: gray;
+    transition: all 0.500s;
+    color: white;
+}
+
 /*뷰페이지 모달*/
-#img-container {
-    background-color: #ddd;
+
+#img-modal {
+    position: fixed;
+    top: 25%;
+    left: 10%;
+    height: 600px;
+    width: 80%;
+    min-width: 550px;
+    background-color: white;
+    z-index: 5;
+    border: 3px solid #ddd;
+    border-radius: 20px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+.modal-content {
+    width: 97%;
+    height: 600px;
+    margin: auto;
+    background-color: white;
+    z-index: 10;
+}
+
+#modal-close {
+    position: absolute;
+    left: 95%;
+    width: 50px;
+    cursor: pointer;
+    transition: all 0.500s;
+}
+
+#modal-close:hover {
+    transform: scale(1.2);
+    transition: all 0.500s;
+}
+
+.move-img {
+    width: 50px;
+    transition: all 0.500s;
+    cursor: pointer;
+}
+
+.move-img:hover {
+    transform: scale(1.2);
+    transition: all 0.500s;
+    cursor: pointer;
 }
