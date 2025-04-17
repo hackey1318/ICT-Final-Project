@@ -1,5 +1,6 @@
 package com.ict.finalProject.admin.controller;
 
+import com.ict.finalProject.admin.controller.response.GenderRatio;
 import com.ict.finalProject.admin.controller.response.UserResponse;
 import com.ict.finalProject.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -38,4 +39,9 @@ public class AdminController {
         }
     }
 
+    //성별비율
+    @GetMapping("gender-ratio")
+    public GenderRatio getGenderRatio(){
+         return adminService.getGenderRatio();
+    }
 }
