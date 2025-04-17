@@ -13,6 +13,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -101,5 +103,14 @@ public class FindUserServiceImpl implements FindUserService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //Inquiry에서 사용자 닉네임을 가져오기위한 메서드
+    @Override
+    public List<Users> findUsersByUserNo(List<Integer> userNos) {
+        if(userNos == null || userNos.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return findUserRepository.findByNoIn(userNos);
     }
 }

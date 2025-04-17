@@ -19,4 +19,5 @@ public interface MoviesService {
 
     Movies getMovieDetail(Integer movieNo);
 
+    List<Movies> getRecommendationMovie(Integer userNo);
 }
