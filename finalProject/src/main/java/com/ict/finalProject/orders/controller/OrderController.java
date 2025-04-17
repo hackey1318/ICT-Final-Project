@@ -8,11 +8,14 @@ import com.ict.finalProject.mdShop.service.dto.MdShopDto;
 import com.ict.finalProject.movie.service.TheatersService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
+import com.ict.finalProject.orders.repository.domain.OrderItem;
 import com.ict.finalProject.orders.repository.domain.Orders;
+import com.ict.finalProject.orders.service.OrderItemService;
 import com.ict.finalProject.orders.service.OrdersService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Or;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -31,6 +34,7 @@ public class OrderController {
 
     private final MdShopService mdShopService;
     private final OrdersService ordersService;
+    private final OrderItemService orderItemService;
     private final UserService userService;
     private final TheatersService theatersService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -55,6 +59,7 @@ public class OrderController {
         String theaterName = "";
         int theaterNo = 0;
         boolean isCorrectData = true;
+        JSONArray goods;
 
         List<Object[]> mdList = new ArrayList<>();
         JSONParser parser = new JSONParser();
@@ -65,8 +70,7 @@ public class OrderController {
             userNo = (long) requestData.get("userNo");
             theaterName = (String) requestData.get("theaterName");
             theaterNo = theatersService.getTheaterNo(theaterName);
-
-            JSONArray goods = (JSONArray) requestData.get("goods");
+            goods = (JSONArray) requestData.get("goods");
 
             for (Object itemObj : goods) {
                 JSONObject item = (JSONObject) itemObj;
@@ -94,10 +98,18 @@ public class OrderController {
                 // 기존 주문 있는지 확인
                 Orders checkOrder = ordersService.getPendingOrders((int) userNo, (int) requestTotalPrice, theaterNo);
                 if (checkOrder != null) {
-                    return "success";
+                    return checkOrder.getOrderNumber();
                 } else {
-                    // pending상태인 기존 주문 있다면 삭제
+                    // pending상태이고 주문 정보가 바뀌면 기존 상품들 삭제
+                    if (ordersService.getPendingOrders((int) userNo) != null) {
+                        int pendingOrderId = ordersService.getPendingOrders((int) userNo).getId();
+                        orderItemService.deletePendingOrderItems(pendingOrderId);
+                    }
+
+                    // pending상태이고 주문 정보가 바뀌면 기존 주문 삭제
                     ordersService.deletePendingOrders((int) userNo);
+
+                    // 주문 정보 저장
                     Users user = userService.getUser(userId);
                     Orders orders = new Orders();
                     orders.setUserNo(user.getNo());
@@ -106,6 +118,27 @@ public class OrderController {
                     orders.setStatus("Pending");
                     orders.setTotalPrice((int)requestTotalPrice);
                     ordersService.insertOrders(orders);
+
+                    // 주문 상품 저장
+                    OrderItem orderItem = new OrderItem();
+
+                    int orderNo = ordersService.getOrders(orderNumber).getId();
+                    orderItem.setOrderNo(orderNo); // 주문PK
+
+                    for (Object itemObj : goods) {
+                        JSONObject item = (JSONObject) itemObj;
+                        int goodsNo = ((Long) item.get("id")).intValue(); // 굿즈PK
+                        String goodsName = (String) item.get("name"); // 굿즈이름
+                        int goodsPrice = ((Long) item.get("price")).intValue(); // 굿즈 가격
+                        int goodsQuantity = ((Long) item.get("quantity")).intValue(); // 굿즈 수량
+
+                        orderItem.setGoodsNo(goodsNo);
+                        orderItem.setName(goodsName);
+                        orderItem.setPrice(goodsPrice);
+                        orderItem.setQuantity(goodsQuantity);
+                        orderItemService.insertOrderItem(orderItem);
+                    }
+
                     return "success";
                 }
             } else {
@@ -114,5 +147,12 @@ public class OrderController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @PostMapping("/result")
+    public List<String> result(@RequestBody String orderNumber) {
+        List<String> orderResult = new ArrayList<>();
+
+        return orderResult;
     }
 }
