@@ -3,6 +3,7 @@ package com.ict.finalProject.mdShop.service.impl;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
 import com.ict.finalProject.mdShop.repository.MdShopRepository;
+import com.ict.finalProject.mdShop.repository.domain.Goods_Stocks;
 import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.mdShop.service.dto.MdShopDto;
 import com.ict.finalProject.mdShop.service.dto.MdShopInsertDto;
@@ -14,8 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,5 +78,17 @@ public class MdShopServiceImpl implements MdShopService {
                 .map(MovieNameDto::new)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public Optional<Goods> getMd(int id) {
+        return mdShopRepository.findById(id);
+    }
+
+    @Override
+    public int getMdQuantity(int id) {
+        Goods_Stocks quantity = new Goods_Stocks();
+        quantity = mdShopRepository.findQuantityById(id);
+        return quantity.getQuantity();
     }
 }
