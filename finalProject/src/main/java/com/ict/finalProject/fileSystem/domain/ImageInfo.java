@@ -28,7 +28,7 @@ public class ImageInfo {
     private int no;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 50)
     private ImageWriteType type;
 
     private int boardNo;

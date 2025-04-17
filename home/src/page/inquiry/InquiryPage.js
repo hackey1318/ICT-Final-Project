@@ -5,7 +5,6 @@ import InquiryWrite from './InquiryWrite';
 import InquiryView from './InquiryView';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
-import apiClient from '../../js/public/axiosConfig';
 
 function InquiryPage() {
     let [inquiryModalOpen, setInquiryModalOpen] = useState(false);
@@ -70,7 +69,7 @@ function InquiryPage() {
                             <th style={{width:'48%', textAlign:'center'}}>제목</th>
                             <th style={{width:'15%', textAlign:'center'}}>작성자</th>
                             <th style={{width:'20%', textAlign:'center'}}>작성날짜</th>
-                            <th style={{width:'10%', textAlign:'center'}}>처리여부</th>
+                            <th style={{width:'10%', textAlign:'center'}}>진행상황</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -148,13 +147,15 @@ function InquiryPage() {
                         }
                     </ul> */}
                 </div>
-                <div style={{textAlign: 'right'}}><button id="write" 
+                <div style={{textAlign: 'right', minWidth: '850px'}}>
+                    <button id="write" 
                         title='문의하기' 
                         onClick={() => setWriteModalOpen(true)}
                         disabled={writeModalOpen || inquiryModalOpen}
                         style={{pointerEvents: (writeModalOpen||inquiryModalOpen) ? 'none' : 'auto'}}>
-                    문의하기
-                </button></div>
+                        문의하기
+                    </button>
+                </div>
             </div>
         </div>
     )

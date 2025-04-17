@@ -2,6 +2,7 @@ package com.ict.finalProject.inquiry.controller.response;
 
 import com.ict.finalProject.domain.constant.InquiryProceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.domain.constant.UserRole;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +31,9 @@ public class InquiryResponse {
 
     private List<String> imageIdList;
 
-    private InquiryProceed proceed;
+    private String proceed;
+
+    private UserRole role;
 
     private StatusInfo status;
 
