@@ -1,5 +1,6 @@
 package com.ict.finalProject.admin.service.impl;
 
+import com.ict.finalProject.admin.controller.response.GenderRatio;
 import com.ict.finalProject.admin.controller.response.UserResponse;
 import com.ict.finalProject.admin.repository.AdminRepository;
 import com.ict.finalProject.admin.service.AdminService;
@@ -60,5 +61,29 @@ public class AdminServiceImpl implements AdminService {
         }
 
         adminRepository.updataManagerStatus(StatusInfo.DELETE, userNo);
+    }
+
+    //성별비율
+    @Override
+    public GenderRatio getGenderRatio() {
+        //쿼리문에서 결과값 변수에 담음
+        //(쿼리문에서 계산된 값들은 GenderRatio에 담기 불가능. Object[]에 담아서, 하나씩 DTO에 매핑해줘야함)
+        Object[] result = adminRepository.countUsersByActiveUsers().get(0);
+
+        Long male = ((Number)result[0]).longValue();
+        Long female = ((Number)result[1]).longValue();
+        Long totalPerson = ((Number)result[2]).longValue();
+
+        //비율 계산
+        double maleRatio = (totalPerson != 0) ? (male * 100.0) / totalPerson : 0.0;
+        double femaleRatio = (totalPerson != 0) ? (female * 100.0) / totalPerson : 0.0;
+
+        return GenderRatio.builder()
+                .male(male)
+                .female(female)
+                .totalPerson(totalPerson)
+                .maleRatio(maleRatio)
+                .femaleRatio(femaleRatio)
+                .build();
     }
 }
