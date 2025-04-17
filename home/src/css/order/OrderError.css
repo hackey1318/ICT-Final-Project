@@ -1,0 +1,10 @@
+.order_error_container {
+    
+}
+
+.error_img {
+    background-image: url('./../../img/orderError.jpg');
+    background-size: cover;
+    width: 550px;
+    height: 550px;
+}

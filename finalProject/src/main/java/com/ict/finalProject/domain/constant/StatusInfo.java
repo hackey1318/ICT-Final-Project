@@ -16,5 +16,4 @@ public enum StatusInfo {
     public StatusInfo toggle() {
         return this == ACTIVE ? DELETE : ACTIVE;
     }
-
 }

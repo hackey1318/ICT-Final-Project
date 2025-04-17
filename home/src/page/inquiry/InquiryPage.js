@@ -26,33 +26,17 @@ function InquiryPage() {
     
     //문의리스트 호출
     useEffect (() => {
-        const getInquiryList = async () => {
-            try {
-                const listData = await apiNoAccessClient.get("/inquiry/getInquiry")
-                setInquiryList(listData.data);
-            } catch(error) {
-                console.log("error발생 : ", error);
-            }
-        }
         getInquiryList();
     }, []);
 
-    function getInquiryList() {
-        apiClient.get("http://192.168.1.252:9988/inquiry/getInquiry")
-        .then(function(response) {
-            console.log(response.data);
-            setInquiryList((prev) => {
-                return [...prev, {
-                    no: response.no,
-                    subject: response.subject,
-                    nickname: response.userNo.nickname,
-                    createdAt: response.createdAt
-                }]
-            })
-        })
-        .catch(function(error) {
+    const getInquiryList = async () => {
+        try {
+            const listData = await apiNoAccessClient.get("/inquiry/getInquiry")
+            setInquiryList(listData.data);
+            console.log(setInquiryList);
+        } catch(error) {
             console.log("error발생 : ", error);
-        })
+        }
     }
 
     // 모달 닫는 함수
@@ -77,36 +61,39 @@ function InquiryPage() {
 
     return(
         <div className="inquiry-container">
-            <p>1:1문의하기</p>
+            <h3 style={{margin: '30px auto'}}>1:1문의하기</h3>
             <div className="container mt-3">
                 <table className="table table-hover" style={{width: '100%'}}>
                     <thead style={{borderBottom: '1px solid #ddd'}}>
                         <tr>
-                            <th style={{width:'10%', textAlign:'center'}}>번호</th>
-                            <th style={{width:'50%'}}>제목</th>
-                            <th style={{width:'20%', textAlign:'center'}}>작성자</th>
+                            <th style={{width:'7%', textAlign:'center'}}>번호</th>
+                            <th style={{width:'48%', textAlign:'center'}}>제목</th>
+                            <th style={{width:'15%', textAlign:'center'}}>작성자</th>
                             <th style={{width:'20%', textAlign:'center'}}>작성날짜</th>
+                            <th style={{width:'10%', textAlign:'center'}}>처리여부</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
                             Array.isArray(inquiryList) && inquiryList.length > 0 ? (
                                 inquiryList
-                                    .filter(item => item.status == "ACTIVE")
+                                    .filter(item => item.status === "ACTIVE")
                                     .map((item) => {
+                                        console.log(inquiryList);
                                     return (
-                                        <tr>
-                                            <td style={{width:'10%', textAlign:'center'}}>{item.no}</td>
-                                            <td style={{width:'50%'}}><Link id="toDetail" to={`/inquiryView/${item.no}`}>{item.subject}</Link></td>
-                                            <td style={{width:'20%', textAlign:'center'}}>{item.nickname}</td>
+                                        <tr className="td-container">
+                                            <td style={{width:'7%', textAlign:'center'}}>{item.no}</td>
+                                            <td style={{width:'48%'}}><Link id="toDetail" to={`/inquiryView/${item.no}`} title={`${item.subject}`}>{item.subject}</Link></td>
+                                            <td style={{width:'15%', textAlign:'center'}}>{item.nickname}</td>
                                             <td style={{width:'20%', textAlign:'center'}}>{new Date(item.createdAt).toLocaleDateString()}</td>
+                                            <td style={{width:'10%', textAlign:'center'}}>{item.proceed}</td>
                                         </tr>
                                     )
                                 })
                             ) : (
                                 <tr>
-                                    <td style={{border: 'none'}}>
-                                        <div id='noInquiryMsg'>문의 내역이 없습니다.</div>
+                                    <td className='noInquiryMsg' >
+                                        문의 내역이 없습니다.
                                     </td>
                                 </tr>
                             )
@@ -119,7 +106,8 @@ function InquiryPage() {
                 <>
                     <DimmedOverlay/> {/* 딤 처리 오버레이 */}
                     <div id="inquiryModal">
-                        <InquiryWrite onClose={closeWriteModal}/>
+                        <InquiryWrite onClose={closeWriteModal}
+                                      onSuccess={getInquiryList}/>
                     </div>
                 </>
             }
@@ -128,13 +116,37 @@ function InquiryPage() {
                 <>
                     <DimmedOverlay/> {/* 딤 처리 오버레이 */}
                     <div id="inquiryModal">
-                        <InquiryView onClose={closeInquiryModal}/>
+                        <InquiryView onClose={closeInquiryModal}
+                                     onSuccess={getInquiryList}/>
                     </div>
                 </>
             }
             <div>
                 <div id="paging">
-                    
+                    {/* <ul className="pagination">
+                        {
+                            (function() {
+                                if(nowPage>1){
+                                    return <li className="page-item"><a className="page-link" onClick={()=>getBoardList(nowPage-1)}>Previous</a></li>       
+                                }
+                            })()
+                        }
+                        
+                        {pageNum.map(function(pg){
+                            var activeStyle = 'page-item'; //현재 페이지만 active스타일이 먹도록 설정
+                            if(nowPage == pg) activeStyle = 'page-item active';
+
+                            return <li className={activeStyle}><a className="page-link" onClick={()=>getBoardList(pg)}>{pg}</a></li>
+                        })}
+                        
+                        {
+                            (function(){
+                                if(nowPage<totalPage){
+                                    return <li className="page-item"><a className="page-link" onClick={()=>getBoardList(nowPage+1)}>Next</a></li>
+                                }
+                            })()
+                        }
+                    </ul> */}
                 </div>
                 <div style={{textAlign: 'right'}}><button id="write" 
                         title='문의하기' 
