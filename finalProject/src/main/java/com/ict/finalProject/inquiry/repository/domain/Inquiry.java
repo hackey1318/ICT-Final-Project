@@ -1,5 +1,6 @@
 package com.ict.finalProject.inquiry.repository.domain;
 
+import com.ict.finalProject.domain.constant.InquiryProceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,10 +31,15 @@ public class Inquiry {
     @Column(nullable = false)
     private String subject;  //문의제목
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;  //문의내용
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 15)
+    private InquiryProceed proceed;  //문의처리상태
+
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatusInfo status;  //문의상태
 
     @CreatedDate

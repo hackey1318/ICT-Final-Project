@@ -24,7 +24,7 @@ export const uploadImage = async (files) => {
     }
 
     try {
-        const response = await apiClient.post('/file-system/upload/register-image', formData, {
+        const response = await apiClient.post('/file-system/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
