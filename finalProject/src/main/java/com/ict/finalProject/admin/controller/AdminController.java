@@ -3,6 +3,8 @@ package com.ict.finalProject.admin.controller;
 import com.ict.finalProject.admin.controller.response.GenderRatio;
 import com.ict.finalProject.admin.controller.response.UserResponse;
 import com.ict.finalProject.admin.service.AdminService;
+import com.ict.finalProject.common.config.AuthRequired;
+import com.ict.finalProject.domain.constant.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("manager/home")
+@AuthRequired({UserRole.ADMIN, UserRole.MANAGER})
 public class AdminController {
     private final AdminService adminService;
 
