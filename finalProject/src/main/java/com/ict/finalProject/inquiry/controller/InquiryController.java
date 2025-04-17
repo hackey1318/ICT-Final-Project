@@ -39,6 +39,7 @@ public class InquiryController {
     //문의리스트
     @GetMapping("/getInquiry") // URL 변경 (getReplies -> getInquiries)
     public List<InquiryResponse> getInquiry() { // 메소드명 변경 (getReplies -> getInquiries)
+        System.out.println(inquiryService.getInquiry());
         return inquiryService.getInquiry();
     }
 

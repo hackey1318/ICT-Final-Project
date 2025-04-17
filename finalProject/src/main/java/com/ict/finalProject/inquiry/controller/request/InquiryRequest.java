@@ -23,7 +23,7 @@ public class InquiryRequest {
 
     private String content;  //글내용
 
-    private String password;
+    private String password;  //글 비밀번호
 
     private List<String> imageList;  //문의이미지
 

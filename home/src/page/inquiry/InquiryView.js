@@ -66,7 +66,7 @@ function InquiryView() {
         })
     }, [no]);
 
-    const inquiryDel = (() => {
+    function inquiryDel() {
         if(window.confirm("글을 삭제하시겠습니까?")) {
             apiClient.get(`/inquiry/inquiryDel/${inquiryVO.no}`, )
             .then(function(response){
@@ -84,7 +84,7 @@ function InquiryView() {
                 console.log(error);
             });
         }
-    }, [inquiryVO.no]);
+    }
 
     const loginUserInfo = sessionStorage.getItem("userInfo");
     let loginUserId = null;
