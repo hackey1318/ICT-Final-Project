@@ -12,4 +12,6 @@ public interface FileSystemService {
     List<FileUploadResponse> uploadFile(List<MultipartFile> files) throws IOException;
 
     List<Images> getImageInfo(List<String> imageIdList);
+
+    List<String> getInquiryFileIds(int boardNo);
 }

@@ -5,7 +5,7 @@ import { ArrowLeft, Bookmark, Share2, Heart, HeartOff } from "lucide-react"
 import "./../../css/movie/MovieDetail.css" // CSS 파일 경로는 실제 프로젝트 구조에 맞게 조정하세요
 import LikeType from "../../js/common/LikeType"
 
-const BASE_URL = 'http://localhost:9988/file-system/download/';
+const BASE_URL = 'http://192.168.1.252:9988/file-system/download/';
 
 
 function MovieDetail() {
@@ -40,7 +40,7 @@ function MovieDetail() {
 
     const fetchLikeStatus = async () => {
       try {
-        const response = await axios.get(`http://localhost:9988/likes/${LikeType.MOVIE}?no=${id}`);
+        const response = await axios.get(`http://192.168.1.252:9988/likes/${LikeType.MOVIE}?no=${id}`);
         const likeData = response.data;
   
         // 예: 좋아요 상태가 ACTIVE인지 여부에 따라 아이콘을 채우거나 비우기
@@ -60,7 +60,7 @@ function MovieDetail() {
       try {
         setLoading(true) // 로딩 시작
         setError(null) // 이전 에러 상태 초기화
-        const backendApiUrl = `http://localhost:9988/movies/detail/${id}` // '/detail' 추가!
+        const backendApiUrl = `http://192.168.1.252:9988/movies/detail/${id}` // '/detail' 추가!
 
         // fetch API를 사용하여 백엔드에 GET 요청을 보냅니다.
         const response = await fetch(backendApiUrl)
@@ -124,7 +124,7 @@ function MovieDetail() {
 
   const toggleLike = async () => {
     try {
-        const res = await axios.patch(`/likes/${likeId}`);
+        const res = await axios.patch(`http://192.168.1.252:9988/likes/${likeId}`);
         const likeData = res.data;
         // 예: 좋아요 상태가 ACTIVE인지 여부에 따라 아이콘을 채우거나 비우기
         if (likeData.status === "ACTIVE") {
@@ -169,7 +169,8 @@ function MovieDetail() {
                 color={liked ? 'red' : 'gray'}
                 fill={liked ? 'red' : 'none'}
               />
-            </div>            <Share2 className="movie_detail_icon ms-2" />
+            </div>
+            <Share2 className="movie_detail_icon ms-2" />
           </div>
         </div>
       </header>
