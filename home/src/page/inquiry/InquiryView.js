@@ -1,14 +1,16 @@
 import { useParams } from 'react-router-dom';
 import '../../css/inquiry/inquiry.css';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import apiClient from '../../js/public/axiosConfig';
 import InquiryImageModal from '../../js/inquiry/InquiryImageModal';
+import styled from 'styled-components';
 
 function InquiryView() {
     const {no} = useParams();
-    const IMAGE_BASE_URL = '/file-system/showImage/';
+    const IMAGE_BASE_URL = 'http://192.168.1.252:9988/file-system/showImage/';
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedImage, setSelectedImage] = useState('');
+    const [selectedImageIdx, setSelectedImageIdx] = useState(0);
+
     let [inquiryVO, setInquiryVO] = useState({
         no: null,
         nickname: '',
@@ -18,8 +20,20 @@ function InquiryView() {
         createdAt: '',
         userNo: null,
         writedate: '',
-        role: ''
+        role: '',
+        proceed: ''
     });
+
+    //딤처리
+    const DimmedOverlay = styled.div`
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        z-index: 5;
+        `;
     
     const mounted = useRef(false);
     useEffect(() => {
@@ -30,7 +44,7 @@ function InquiryView() {
         }
     }, [no])
 
-    function getInquiryView() {
+    const getInquiryView = useCallback(() => {
         apiClient.get(`inquiry/getInquiryBy/${no}`)
         .then(function(response) {
             setInquiryVO({
@@ -45,27 +59,32 @@ function InquiryView() {
                 status: response.data.inquiry.status,
                 role: response.data.inquiry.role
             });
+            console.log(inquiryVO)
         })
         .catch(function(error) {
             console.log(error);
         })
-    }
+    });
 
-    function inquiryDel() {
+    const inquiryDel = (() => {
         if(window.confirm("글을 삭제하시겠습니까?")) {
             apiClient.get(`/inquiry/inquiryDel/${inquiryVO.no}`, )
             .then(function(response){
                 console.log(response.data);
                 
-                if(response.data == 0){ 
+                if(response.status === 200 || response.status === 204){ 
+                    alert("게시글이 삭제되었습니다.");
                     window.location.href = '/inquiry';
+                } else {
+                    alert("삭제에 실패하였습니다." + JSON.stringify(response.data));
+                    return false;
                 }
             })
             .catch(function(error){
                 console.log(error);
             });
         }
-    }
+    }, [inquiryVO.no]);
 
     const loginUserInfo = sessionStorage.getItem("userInfo");
     let loginUserId = null;
@@ -79,38 +98,38 @@ function InquiryView() {
     }
     const isWriter = String(loginUserInfo.userNo) && String(loginUserId) === String(inquiryVO.userNo);
 
-    const handleImageClick = (imageName) => {
-        const fullImageUrl = `http://192.168.1.252:9988/file-system/showImage/${imageName}`;
-        setSelectedImage(fullImageUrl);
-        setIsModalOpen(true);
-    }
+    const handleImageClick = useCallback((index) => {
+        if(inquiryVO.imageList && index>=0 && index<inquiryVO.imageList.length) {
+            setSelectedImageIdx(index);
+            setIsModalOpen(true);
+        }
+    }, [inquiryVO.imageList]);
 
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
         setIsModalOpen(false);
-        setSelectedImage('');
-    }
+    }, []);
 
     return (
         <div className='inquiry-container'>
             <h2>{inquiryVO.subject}</h2>
             {
-                isWriter && 
-                <div style={{textAlign: 'right'}}>
+                isWriter && inquiryVO.proceed==='BEFORE' &&
+                <div id="del-inquiry">
                     <a onClick={inquiryDel} style={{cursor: 'pointer'}}>삭제</a>
                 </div>
             }
 
-            <div className="row" style={{borderBottom: '1px solid gray'}}>
+            <div className="row" style={{borderBottom: '1px solid #ddd'}}>
                 <div className="col-sm-2 p-2">글번호</div>
                 <div className="col-sm-10 p-2">{inquiryVO.no}</div>
             </div>
 
-            <div className="row" style={{borderBottom: '1px solid gray'}}>
+            <div className="row" style={{borderBottom: '1px solid #ddd'}}>
                 <div className="col-sm-2 p-2">글쓴이</div>
                 <div className="col-sm-10 p-2">{inquiryVO.nickname}</div>
             </div>
 
-            <div className="row" style={{borderBottom: '1px solid gray'}}>
+            <div className="row" style={{borderBottom: '1px solid #ddd'}}>
                 <div className="col-sm-2 p-2">등록일</div>
                 <div className="col-sm-10 p-2">{new Date(inquiryVO.createdAt).toLocaleString('ko-KO')}</div>
             </div>
@@ -121,13 +140,14 @@ function InquiryView() {
                 {
                     Array.isArray(inquiryVO.imageList) && (inquiryVO.imageList.length > 0) ? (
                     
-                        inquiryVO.imageList.map((item) => {
-                            return (
-                                <img key={item} className='viewpage-img'
-                                        onClick={() => handleImageClick(item)}
-                                        src={`http://192.168.1.252:9988/file-system/showImage/${item}`}
+                        inquiryVO.imageList.map((item, index) => {
+                            const imageUrl = item ? `${IMAGE_BASE_URL}${item}` : "";
+                            return imageUrl ? (
+                                <img key={`${item}-${index}`} className='viewpage-img'
+                                        onClick={() => handleImageClick(index)}
+                                        src={imageUrl}
                                 />
-                            )
+                            ) : null;
                         })
                     ) : (
                         <span>No Image</span>
@@ -136,12 +156,24 @@ function InquiryView() {
                 </div>
             </div>
 
-            <div className="row" style={{borderBottom: '1px solid gray'}}>
+            <div className="row" style={{borderBottom: '1px solid #ddd'}}>
                 <div className="col-sm-2 p-2">내용</div>
                 <div className="col-sm-10 p-2" dangerouslySetInnerHTML={{__html : inquiryVO.content}}></div>
             </div>
-
-            <InquiryImageModal/>
+            
+            {
+                isModalOpen && 
+                <>
+                    <DimmedOverlay/> {/* 딤 처리 오버레이 */}
+                    <div id='img-modal'>
+                        <InquiryImageModal
+                            images={inquiryVO.imageList}
+                            initialIndex={selectedImageIdx} 
+                            onClose={closeModal}    
+                        />
+                    </div>
+                </>
+            }
         </div>
     )
 }

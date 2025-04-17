@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import '../../css/inquiry/inquiry.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import InquiryWrite from './InquiryWrite';
 import InquiryView from './InquiryView';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -11,6 +11,7 @@ function InquiryPage() {
     let [writeModalOpen, setWriteModalOpen] = useState(false);
     let [inquiryList, setInquiryList] = useState([]);
     let [no, setNo] = useState(1);  //페이징
+    let navigate = useNavigate();
 
     const StyledLink = styled(Link)`
         text-decoration: none;
@@ -57,6 +58,17 @@ function InquiryPage() {
         background-color: rgba(0, 0, 0, 0.4);
         z-index: 5;
         `;
+
+    //인터셉터
+    const handleWriteClick = () => {
+        const accessToken = sessionStorage.getItem("accessToken");
+        if(accessToken) {
+            setWriteModalOpen(true);
+        } else {
+            alert("로그인이 필요한 기능입니다.");
+            navigate('/login');
+        }
+    };
 
     return(
         <div className="inquiry-container">
@@ -110,16 +122,6 @@ function InquiryPage() {
                     </div>
                 </>
             }
-            {   
-                inquiryModalOpen &&
-                <>
-                    <DimmedOverlay/> {/* 딤 처리 오버레이 */}
-                    <div id="inquiryModal">
-                        <InquiryView onClose={closeInquiryModal}
-                                     onSuccess={getInquiryList}/>
-                    </div>
-                </>
-            }
             <div>
                 <div id="paging">
                     {/* <ul className="pagination">
@@ -150,7 +152,7 @@ function InquiryPage() {
                 <div style={{textAlign: 'right', minWidth: '850px'}}>
                     <button id="write" 
                         title='문의하기' 
-                        onClick={() => setWriteModalOpen(true)}
+                        onClick={handleWriteClick}
                         disabled={writeModalOpen || inquiryModalOpen}
                         style={{pointerEvents: (writeModalOpen||inquiryModalOpen) ? 'none' : 'auto'}}>
                         문의하기

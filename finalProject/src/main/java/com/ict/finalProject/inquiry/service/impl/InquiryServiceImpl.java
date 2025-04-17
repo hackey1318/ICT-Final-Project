@@ -77,7 +77,7 @@ public class InquiryServiceImpl implements InquiryService {
     public List<InquiryResponse> getInquiry() {
         List<Inquiry> inquiries = inquiryRepository.findAllByOrderByNoDesc();
         
-        if(inquiries.isEmpty()) {  //여기부터
+        if(inquiries.isEmpty()) {
             return Collections.emptyList();
         }
         
@@ -129,6 +129,7 @@ public class InquiryServiceImpl implements InquiryService {
                 .updatedAt(inquiry.getUpdatedAt())
                 .status(inquiry.getStatus())
                 .role(userRole)
+                .proceed(String.valueOf(inquiry.getProceed()))
                 .build();
     }
 
