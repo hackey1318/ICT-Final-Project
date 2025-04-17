@@ -1,7 +1,8 @@
 /* 문의목록 */
 .container {
-    width: 95;
+    width: 95%;
     margin: 0 auto;
+    min-width: 850px;
 }
 
 thead {
@@ -43,7 +44,6 @@ tr {
 .inquiry-container {
     width: 80%;
     margin: 20px auto;
-    /* min-width: 827px; */
 }
 
 .inquiry-modal {
@@ -175,6 +175,13 @@ tr {
 }
 
 /*문의 디테일*/
+.viewpage-img {
+    cursor: pointer;
+    width: 100px;
+    margin: 10px 15px 5px 0;
+}
 
-
-
+/*뷰페이지 모달*/
+#img-container {
+    background-color: #ddd;
+}

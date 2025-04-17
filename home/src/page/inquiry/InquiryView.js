@@ -2,10 +2,13 @@ import { useParams } from 'react-router-dom';
 import '../../css/inquiry/inquiry.css';
 import { useEffect, useRef, useState } from 'react';
 import apiClient from '../../js/public/axiosConfig';
+import InquiryImageModal from '../../js/inquiry/InquiryImageModal';
 
 function InquiryView() {
     const {no} = useParams();
     const IMAGE_BASE_URL = '/file-system/showImage/';
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedImage, setSelectedImage] = useState('');
     let [inquiryVO, setInquiryVO] = useState({
         no: null,
         nickname: '',
@@ -14,8 +17,10 @@ function InquiryView() {
         imageList: [],
         createdAt: '',
         userNo: null,
-        writedate: ''
+        writedate: '',
+        role: ''
     });
+    
     const mounted = useRef(false);
     useEffect(() => {
         if(!mounted) { 
@@ -28,7 +33,6 @@ function InquiryView() {
     function getInquiryView() {
         apiClient.get(`inquiry/getInquiryBy/${no}`)
         .then(function(response) {
-            console.log(response.data);
             setInquiryVO({
                 no: response.data.inquiry.no,
                 nickname: response.data.inquiry.nickname  || 'User Unknowned',
@@ -36,9 +40,10 @@ function InquiryView() {
                 content: response.data.inquiry.content,
                 createdAt: response.data.inquiry.createdAt,
                 imageList: response.data.image_list,
-                userNo: response.data.userNo,
+                userNo: response.data.inquiry.userNo,
                 proceed: response.data.inquiry.proceed,
-                status: response.data.inquiry.status
+                status: response.data.inquiry.status,
+                role: response.data.inquiry.role
             });
         })
         .catch(function(error) {
@@ -52,8 +57,8 @@ function InquiryView() {
             .then(function(response){
                 console.log(response.data);
                 
-                if(response.data == 0){  //글이삭제되면 목록으로 이동
-                    window.location.href = '/boardList';
+                if(response.data == 0){ 
+                    window.location.href = '/inquiry';
                 }
             })
             .catch(function(error){
@@ -72,16 +77,27 @@ function InquiryView() {
             console.log("sessionStorage의 userInfo 파싱오류 : ", error);
         }
     }
-    const isWriter = loginUserId && String(loginUserId) === String(inquiryVO.userNo);
+    const isWriter = String(loginUserInfo.userNo) && String(loginUserId) === String(inquiryVO.userNo);
+
+    const handleImageClick = (imageName) => {
+        const fullImageUrl = `http://192.168.1.252:9988/file-system/showImage/${imageName}`;
+        setSelectedImage(fullImageUrl);
+        setIsModalOpen(true);
+    }
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedImage('');
+    }
 
     return (
         <div className='inquiry-container'>
             <h2>{inquiryVO.subject}</h2>
             {
                 isWriter && 
-                (<div style={{textAlign: 'right'}}>
+                <div style={{textAlign: 'right'}}>
                     <a onClick={inquiryDel} style={{cursor: 'pointer'}}>삭제</a>
-                </div>)
+                </div>
             }
 
             <div className="row" style={{borderBottom: '1px solid gray'}}>
@@ -107,9 +123,9 @@ function InquiryView() {
                     
                         inquiryVO.imageList.map((item) => {
                             return (
-                                <img key={item}
+                                <img key={item} className='viewpage-img'
+                                        onClick={() => handleImageClick(item)}
                                         src={`http://192.168.1.252:9988/file-system/showImage/${item}`}
-                                        style={{width: '100px', marginLeft: '15px'}}
                                 />
                             )
                         })
@@ -124,6 +140,8 @@ function InquiryView() {
                 <div className="col-sm-2 p-2">내용</div>
                 <div className="col-sm-10 p-2" dangerouslySetInnerHTML={{__html : inquiryVO.content}}></div>
             </div>
+
+            <InquiryImageModal/>
         </div>
     )
 }

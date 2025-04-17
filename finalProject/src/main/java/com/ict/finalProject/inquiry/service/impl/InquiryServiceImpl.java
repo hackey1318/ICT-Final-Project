@@ -3,6 +3,7 @@ package com.ict.finalProject.inquiry.service.impl;
 import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.domain.constant.InquiryProceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.fileSystem.controller.response.FileUploadResponse;
 import com.ict.finalProject.fileSystem.domain.ImageInfo;
 import com.ict.finalProject.fileSystem.domain.Images;
@@ -98,7 +99,7 @@ public class InquiryServiceImpl implements InquiryService {
                     .no(inquiry.getNo())
                     .subject(inquiry.getSubject())
                     .createdAt(inquiry.getCreatedAt())
-                    .proceed(inquiry.getProceed())
+                    .proceed(inquiry.getProceed().getDescription())
                     .status(StatusInfo.ACTIVE)
                     .nickname(nickname)
                     .build();
@@ -116,6 +117,7 @@ public class InquiryServiceImpl implements InquiryService {
 
         Optional<Users> usersOpt = findUserService.findUser(inquiry.getUserNo());
         String nickname = usersOpt.map(Users::getNickname).orElse("알 수 없음");
+        UserRole userRole = usersOpt.map(Users::getRole).orElse(null);
 
         return InquiryResponse.builder()
                 .no(inquiry.getNo())
@@ -126,6 +128,7 @@ public class InquiryServiceImpl implements InquiryService {
                 .createdAt(inquiry.getCreatedAt())
                 .updatedAt(inquiry.getUpdatedAt())
                 .status(inquiry.getStatus())
+                .role(userRole)
                 .build();
     }
 
