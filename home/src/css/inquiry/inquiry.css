@@ -179,7 +179,9 @@ tr {
 /*문의 디테일*/
 .viewpage-img {
     cursor: pointer;
+    object-fit: contain;
     width: 100px;
+    height: 100px;
     margin: 10px 15px 5px 0;
 }
 
@@ -227,7 +229,7 @@ tr {
 
 .modal-content {
     width: 97%;
-    height: 600px;
+    height: 580px;
     margin: auto;
     background-color: white;
     z-index: 10;

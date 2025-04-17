@@ -29,9 +29,11 @@ public class InquiryResponse {
 
     private String content;
 
+    private String password;
+
     private List<String> imageIdList;
 
-    private String proceed;
+    private InquiryProceed proceed;
 
     private UserRole role;
 

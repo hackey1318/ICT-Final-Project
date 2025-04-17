@@ -4,12 +4,8 @@ import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.domain.constant.InquiryProceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.domain.constant.UserRole;
-import com.ict.finalProject.fileSystem.controller.response.FileUploadResponse;
 import com.ict.finalProject.fileSystem.domain.ImageInfo;
-import com.ict.finalProject.fileSystem.domain.Images;
-import com.ict.finalProject.fileSystem.repository.FileSystemRepository;
 import com.ict.finalProject.fileSystem.repository.ImageInfoRepository;
-import com.ict.finalProject.fileSystem.service.FileSystemService;
 import com.ict.finalProject.inquiry.controller.request.InquiryRequest;
 import com.ict.finalProject.inquiry.controller.response.InquiryResponse;
 import com.ict.finalProject.inquiry.repository.InquiryRepository;
@@ -17,18 +13,11 @@ import com.ict.finalProject.inquiry.repository.domain.Inquiry;
 import com.ict.finalProject.inquiry.service.InquiryService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.user.service.FindUserService;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,6 +39,7 @@ public class InquiryServiceImpl implements InquiryService {
                     .userNo(request.getUserNo())
                     .subject(request.getSubject())
                     .content(request.getContent())
+                    .password(request.getPassword())
                     .proceed(InquiryProceed.BEFORE)
                     .status(StatusInfo.ACTIVE).build());
 
@@ -99,7 +89,7 @@ public class InquiryServiceImpl implements InquiryService {
                     .no(inquiry.getNo())
                     .subject(inquiry.getSubject())
                     .createdAt(inquiry.getCreatedAt())
-                    .proceed(inquiry.getProceed().getDescription())
+                    .proceed(inquiry.getProceed())
                     .status(StatusInfo.ACTIVE)
                     .nickname(nickname)
                     .build();
@@ -125,11 +115,12 @@ public class InquiryServiceImpl implements InquiryService {
                 .nickname(nickname)
                 .subject(inquiry.getSubject())
                 .content(inquiry.getContent())
+                .password(inquiry.getPassword())
                 .createdAt(inquiry.getCreatedAt())
                 .updatedAt(inquiry.getUpdatedAt())
                 .status(inquiry.getStatus())
                 .role(userRole)
-                .proceed(String.valueOf(inquiry.getProceed()))
+                .proceed(inquiry.getProceed())
                 .build();
     }
 
