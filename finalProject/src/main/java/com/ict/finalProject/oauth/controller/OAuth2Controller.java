@@ -3,14 +3,14 @@ package com.ict.finalProject.oauth.controller;
 import com.ict.finalProject.common.exception.custom.UserAuthenticationException;
 import com.ict.finalProject.common.exception.custom.UserStatusException;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
+import com.ict.finalProject.oauth.controller.request.KakaoRegisterRequest;
+import com.ict.finalProject.oauth.controller.request.LocalRegisterRequest;
 import com.ict.finalProject.oauth.controller.request.LoginRequest;
-import com.ict.finalProject.oauth.controller.request.RegisterRequest;
 import com.ict.finalProject.oauth.controller.response.KakaoLoginResponse;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.KakaoUserInfoDto;
 import com.ict.finalProject.oauth.service.Oauth2Service;
 import com.ict.finalProject.oauth.service.UserService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -48,16 +48,24 @@ public class OAuth2Controller {
         return KakaoLoginResponse.builder().existUser(false).kakaoUserInfoDto(kakaoUserInfo).build();
     }
 
-    @PostMapping("/register")
-    public SuccessOfFailResponse register(@RequestBody RegisterRequest request) {
-        // result 와 message 를 서비스 레이어에서 결정하도록 리팩토링 고려 가능
-        boolean registrationResult = userService.registerUser(request);
-        String message = registrationResult ? "회원가입이 성공적으로 완료되었습니다." : "회원가입 중 오류가 발생했습니다.";
+    @PostMapping("/register/local")
+    public SuccessOfFailResponse registerLocal(@RequestBody LocalRegisterRequest request) {
+        boolean result = userService.registerLocalUser(request);
         return SuccessOfFailResponse.builder()
-                .result(registrationResult)
-                .message(message) // 메시지 추가
+                .result(result)
+                .message(result ? "회원가입 성공 (로컬)" : "회원가입 실패 (로컬)")
                 .build();
     }
+
+    @PostMapping("/register/kakao")
+    public SuccessOfFailResponse registerKakao(@RequestBody KakaoRegisterRequest request) {
+        boolean result = userService.registerKakaoUser(request);
+        return SuccessOfFailResponse.builder()
+                .result(result)
+                .message(result ? "회원가입 성공 (카카오)" : "회원가입 실패 (카카오)")
+                .build();
+    }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {

@@ -111,6 +111,9 @@ const LoginForm = () => {
                             비밀번호 찾기
                         </a>
                     </div>
+                    <div className="text-center mt-3">
+                        <Link to="/register">일반 회원가입</Link>
+                    </div>
                 </div>
             </div>
         </div>

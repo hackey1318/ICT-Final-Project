@@ -201,7 +201,8 @@ export const useKakaoCallback = () => {
             const response = await axios.post(`${API_BASE_URL}/file-system/upload/register-image`, uploadFormData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                }
+                },
+                withCredentials: false
             });
 
             // 백엔드 FileUploadResponse의 'imageId' 필드를 사용합니다.
@@ -375,7 +376,7 @@ export const useKakaoCallback = () => {
 
             console.log("회원가입 요청 데이터:", registerRequest);
 
-            const response = await axios.post(`${API_BASE_URL}/oauth/kakao/register`, registerRequest);
+            const response = await axios.post(`${API_BASE_URL}/oauth/kakao/register/kakao`, registerRequest);
 
             if (response.status === 200 && response.data?.result === true) {
                 setSuccess("회원가입이 완료되었습니다. 잠시 후 로그인 페이지로 이동합니다.");

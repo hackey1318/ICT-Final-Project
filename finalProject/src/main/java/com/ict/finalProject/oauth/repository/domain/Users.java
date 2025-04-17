@@ -3,11 +3,13 @@ package com.ict.finalProject.oauth.repository.domain;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.domain.constant.UserGender;
 import com.ict.finalProject.domain.constant.UserRole;
+import com.ict.finalProject.domain.constant.JoinType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 
 import java.time.LocalDateTime;
 
@@ -30,14 +32,18 @@ public class Users {
     @Column(nullable = false)
     private String password; // 비밀번호 (BCrypt 암호화)
 
-    @Column(nullable = false, unique = true)
-    private String kakaoId; // 카카오에서 제공하는 ID (고유값)
-
-    @Column(nullable = false, unique = true)
-    private String email; // 이메일
-
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private String knickname; // 카카오 닉네임
+    private JoinType joinType; // 가입 유형: LOCAL / KAKAO
+
+    @Column(nullable = true, unique = true)
+    private String kakaoId; // nullable 허용으로 일반 계정 대응
+
+    @Column(nullable = true)
+    private String email;
+
+    @Column(nullable = true)
+    private String knickname;
 
     @Column(nullable = false)
     private String nickname; // 닉네임
@@ -61,4 +67,6 @@ public class Users {
 
     @Column // 제약조건 필요 시 추가 (nullable 등)
     private String profileImageUrl; // 프로필 이미지 URL 저장 필드 추가
+
+
 }

@@ -51,6 +51,8 @@ public class SecurityConfig {
         // white list (Spring Security 체크 제외 목록)
         MvcRequestMatcher[] permitAllWhiteList = {
                 mvc.pattern("/oauth/kakao/**"),
+                mvc.pattern("/oauth/login"),                  // ✅ 일반 로그인 허용
+                mvc.pattern("/oauth/kakao/register/local"),   // ✅ 일반 회원가입 허용
                 mvc.pattern("/file-system/download/**"),
                 mvc.pattern("/file-system/showImage/**"),
                 mvc.pattern("/user/**"),
