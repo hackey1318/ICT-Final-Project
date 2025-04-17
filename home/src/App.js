@@ -26,11 +26,11 @@ import UpcomingMovie from './page/movie/UpcomingMovie';
 import MdList from './page/md/MdList';
 import Admin from './page/admin/Admin';
 import DashBoard from './page/dashboard/UserDau';
-import MemberList from './page/admin/MemberList';
 import Cart from './js/cart/Cart';
 import OrderList from './js/order/OrderList';
 import OrderDetail from './js/order/OrderDetail';
 import OrderError from './js/order/OrderError';
+import MemberList from './page/admin/MemberList';
 import ManagerList from './page/admin/ManagerList';
 
 function App() {
