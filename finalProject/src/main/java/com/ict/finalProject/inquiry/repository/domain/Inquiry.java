@@ -40,6 +40,7 @@ public class Inquiry {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatusInfo status;  //문의상태
 
     @CreatedDate
