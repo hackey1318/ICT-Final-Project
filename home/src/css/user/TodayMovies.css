@@ -1,6 +1,6 @@
 /* TodayMovies 섹션 전체 */
 .TodayMovies_section {
-    padding: 40px 20px; /* 내부 여백 */
+    padding: 40px 120px; /* 내부 여백 */
     background-color: #fff; /* 배경색 */
     /* 필요에 따라 다른 스타일 추가 */
   }
@@ -44,17 +44,69 @@
   .TodayMovies_grid {
     display: grid;
     /* grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 반응형 그리드 */
-
-    grid-template-columns: repeat(3, 1fr);
-
-
     gap: 20px; /* 그리드 아이템 간격 */
     margin-bottom: 30px;
-    max-width: 30%; /* 예시: 그리드의 최대 너비를 700px로 제한합니다. 원하는 크기로 조절하세요. */
+    max-width: 90%; /* 예시: 그리드의 최대 너비를 700px로 제한합니다. 원하는 크기로 조절하세요. */
     width: 100%;     /* 기본적으로 부모 너비를 채우려고 하지만, max-width 제한을 받습니다. */
     margin-left: auto;  /* max-width가 적용될 때 그리드를 가운데 정렬합니다. */
     margin-right: auto; /* max-width가 적용될 때 그리드를 가운데 정렬합니다. */
   }
+
+  /* PC (10개 → 5열) */
+@media (min-width: 1200px) {
+  .TodayMovies_grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* 태블릿 (6개 → 3열) */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .TodayMovies_grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 모바일 (4개 → 2열) */
+@media (max-width: 767px) {
+  .TodayMovies_grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+  .TodayMovies_top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+
+  .TodayMovies_textbox {
+    flex: 0 0 250px; /* 좌측 박스 고정 너비 */
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+/* 반응형 대응 */
+@media (max-width: 1024px) {
+  .TodayMovies_textbox {
+    flex: 1 1 50%;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .TodayMovies_textbox h2 {
+    font-size: 1.4rem;
+  }
+
+  .TodayMovies_subtitle {
+    font-size: 0.9rem;
+  }
+}
   
   /* 그리드 아이템 */
   .TodayMovies_item {
@@ -88,10 +140,19 @@
     margin-bottom: 4px;
   }
   
+  .TodayMovies_mainTitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    /* 제목이 길 경우 말줄임 처리 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .TodayMovies_title {
     font-weight: bold;
     margin-bottom: 6px;
-    /* 제목이 길 경우 말줄임 처리 */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -130,13 +191,14 @@
   /* 하단 추천 영화 */
   .FeaturedMovie_container {
     position: relative; /* ⭐ 자식 absolute 요소의 기준점 */
-    max-width: 50%;
+    max-width: 90%;
     display: flex;
     gap: 30px; /* 이미지와 내용 간격 */
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #fdfdfd;
+    /* margin: 0 auto; */
   }
 
   

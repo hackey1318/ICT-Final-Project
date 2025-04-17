@@ -13,13 +13,23 @@ import PwdReset from './page/user/PwdReset';
 import InquiryPage from './page/inquiry/InquiryPage';
 import InquiryView from './page/inquiry/InquiryView';
 import UserDau from './page/dashboard/UserDau';
+import TossPayment from './js/payment/TossPayment';
+import TossPaymentSuccess from './js/payment/TossPaymentSuccess';
+import TossPaymentFail from './js/payment/TossPaymentFail';
+import PaymentResult from './js/payment/PaymentResult';
 import ManagerLogin from './page/admin/ManagerLogin';
 import { useEffect } from 'react';
 import MovieDetail from './page/movie/MovieDetail';
 import GenreMovie from './page/movie/GenreMovie';
+import CurrentMovie from './page/movie/CurrentMovie';
+import UpcomingMovie from './page/movie/UpcomingMovie';
 import MdList from './page/md/MdList';
 import Admin from './page/admin/Admin';
 import DashBoard from './page/dashboard/UserDau';
+import Cart from './js/cart/Cart';
+import OrderList from './js/order/OrderList';
+import OrderDetail from './js/order/OrderDetail';
+import OrderError from './js/order/OrderError';
 import MemberList from './page/admin/MemberList';
 
 function App() {
@@ -39,10 +49,21 @@ function App() {
           <Route path='kakao/callback' element={<KakaoCallback />} />
           <Route path='user/findId' element={<FindId />} />
           <Route path='user/findPwd' element={<FindPwd />} />
-          <Route path='user/pwdReset' element={<PwdReset />} /><Route path='movies' element={<GenreMovie />} />
+          <Route path='user/pwdReset' element={<PwdReset />} />
+          <Route path='movies' element={<GenreMovie />} />
+          <Route path='payment/tossPayment' element={<TossPayment />} />
+          <Route path='payment/tossPaymentSuccess' element={<TossPaymentSuccess />} />
+          <Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
+          <Route path='payment/result' element={<PaymentResult />} />
           <Route path='movies/:id' element={<MovieDetail />} />
+          <Route path='movies/current' element={<CurrentMovie />} />
+          <Route path='movies/upcoming' element={<UpcomingMovie />} />
           <Route path='/inquiry' element={<InquiryPage />} />
           <Route path='/inquiryView/:no' element={<InquiryView />} />
+          <Route path='cart' element={<Cart />} />
+          <Route path='order/list' element={<OrderList />} />
+          <Route path='order/detail' element={<OrderDetail />} />
+          <Route path='order/error' element={<OrderError />} />
         </Route>
 
         {/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
@@ -51,7 +72,7 @@ function App() {
           <Route path="findId" element={<FindId />} />
           <Route path="findPwd" element={<FindPwd />} />
           <Route path="pwdReset" element={<PwdReset />} />
-          
+
           {/* 로그인 이후 관리자 레이아웃 (사이드바 포함) */}
           <Route path="home" element={<Admin />}>
             <Route index element={<DashBoard/>} />
@@ -60,7 +81,6 @@ function App() {
             <Route path="mdlists" element={<MdList />} />
           </Route>
         </Route>
-
       </Routes>
   );
 }
