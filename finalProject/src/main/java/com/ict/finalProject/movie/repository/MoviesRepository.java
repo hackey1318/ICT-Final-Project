@@ -25,6 +25,6 @@ public interface MoviesRepository extends JpaRepository<Movies, Integer> {
     //Md 등록 시 영화이름검색을 위한
     List<Movies> findAllByNameContaining(String movieSearch);
 
-    @Query("SELECT DISTINCT m.genre FROM Movies AS m WHERE m.no IN (:likeNoList)")
-    List<String> getGenreByLike(@Param("likeNoList") List<Integer> likeNoList);
+    @Query("SELECT DISTINCT m.genre FROM Movies AS m WHERE m.no IN (:targetNoList)")
+    List<String> getGenreByLike(@Param("targetNoList") List<Integer> targetNoList);
 }
