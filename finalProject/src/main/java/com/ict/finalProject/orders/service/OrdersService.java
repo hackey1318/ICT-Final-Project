@@ -8,6 +8,8 @@ import java.util.List;
 public interface OrdersService {
     List<OrdersDto> getOrdersList(int userNo);
     void insertOrders(Orders orders);
+    Orders getPendingOrders(int userNo);
     Orders getPendingOrders(int userNo, int totalPrice, int theaterNo);
     void deletePendingOrders(int userNo);
+    Orders getOrders(String orderNumber);
 }

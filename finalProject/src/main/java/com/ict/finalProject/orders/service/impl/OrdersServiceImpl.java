@@ -1,7 +1,6 @@
 package com.ict.finalProject.orders.service.impl;
 
 import com.ict.finalProject.oauth.repository.UsersRepository;
-import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.orders.repository.OrdersRepository;
 import com.ict.finalProject.orders.repository.domain.Orders;
 import com.ict.finalProject.orders.service.OrdersService;
@@ -29,15 +28,6 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersList.stream().map(OrdersDto::new).collect(Collectors.toList());
     }
 
-//    @Override
-//    public OrdersDto getOrders(int userNo) {
-//        OrdersDto ordersDto;
-//
-//        Orders orders = ordersRepository.findByUserNo(userNo);
-//        ordersDto = new OrdersDto(orders);
-//        return ordersDto;
-//    }
-
     @Override
     public void insertOrders(Orders orders) {
         Orders entity = new Orders();
@@ -54,6 +44,11 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
+    public Orders getPendingOrders(int userNo) {
+        return ordersRepository.findByUserNoAndStatus(userNo, "Pending");
+    }
+
+    @Override
     public Orders getPendingOrders(int userNo, int totalPrice, int theaterNo) {
         return ordersRepository.findByUserNoAndStatusAndTotalPriceAndTheaterNo(userNo, "Pending", totalPrice, theaterNo);
     }
@@ -62,5 +57,10 @@ public class OrdersServiceImpl implements OrdersService {
     @Transactional
     public void deletePendingOrders(int userNo) {
         ordersRepository.deleteByUserNoAndStatus(userNo, "Pending");
+    }
+
+    @Override
+    public Orders getOrders(String orderNumber) {
+        return ordersRepository.findByOrderNumber(orderNumber);
     }
 }
