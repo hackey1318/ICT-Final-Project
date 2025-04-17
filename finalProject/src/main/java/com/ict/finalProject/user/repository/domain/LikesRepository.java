@@ -2,6 +2,7 @@ package com.ict.finalProject.user.repository.domain;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.user.repository.domain.constant.LikeType;
+import com.ict.finalProject.user.service.dto.LikeCountDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,9 +23,9 @@ public interface LikesRepository extends JpaRepository<Likes, Integer> {
     @Query("SELECT l FROM Likes AS l WHERE l.type = :type AND l.userNo = :userNo AND status = :status")
     Page<Likes> getLikeInfo(@Param("userNo") Integer userNo, @Param("type") LikeType type, @Param("status") StatusInfo statusInfo, Pageable pageable);
 
-    @Query("SELECT l.no FROM Likes AS l WHERE l.type = :type AND l.userNo = :userNo AND status = :status")
-    List<Integer> getLikeNo(@Param("userNo") Integer userNo, @Param("type") LikeType type, @Param("status") StatusInfo statusInfo);
+    @Query("SELECT new com.ict.finalProject.user.service.dto.LikeCountDto(l.type AS type, l.targetNo AS targetNo, COUNT(l.targetNo) AS count) FROM Likes AS l WHERE l.type = :type AND (:userNo IS NULL OR l.userNo = :userNo) AND status = :status GROUP BY l.targetNo ORDER BY COUNT(l.targetNo) DESC")
+    List<LikeCountDto> getLikeTargetNo(@Param("userNo") Integer userNo, @Param("type") LikeType type, @Param("status") StatusInfo statusInfo);
 
-//    @Query("SELECT new com.ict.finalProject.user.service.dto.LikeCountDto(l.type AS type, l.targetNo AS targetNo, count(l.targetNo) AS count)  FROM Likes AS l WHERE l.type = :type AND l.userNo = :userNo AND status = :status ")
-//    List<LikeCountDto> getLikeCount();
+    @Query("SELECT new com.ict.finalProject.user.service.dto.LikeCountDto(l.type AS type, l.targetNo AS targetNo, COUNT(l.targetNo) AS count) FROM Likes AS l WHERE l.type = :type AND status = :status GROUP BY l.targetNo ORDER BY COUNT(l.targetNo) DESC")
+    List<LikeCountDto> getAllLikeTargetNo(@Param("type") LikeType type, @Param("status") StatusInfo statusInfo);
 }
