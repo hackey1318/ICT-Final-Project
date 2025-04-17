@@ -2,6 +2,8 @@ package com.ict.finalProject.movie.controller;
 
 import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.domain.constant.UserRole;
+import com.ict.finalProject.mdShop.service.MdShopService;
+import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
 import com.ict.finalProject.movie.controller.response.MovieCardResponse;
 import com.ict.finalProject.movie.controller.response.MovieDetailResponse;
 import com.ict.finalProject.movie.repository.constant.movie.MovieStatus;
@@ -34,6 +36,7 @@ public class MoviesController {
 
     private final MoviesService moviesService;
     private final UserService userService;
+    private final MdShopService mdShopservice;
 
     @GetMapping
     public Page<MovieCardResponse> getMovieList(@PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable,
@@ -120,6 +123,14 @@ public class MoviesController {
 
         moviesService.getRecommendationMovie(userNo);
         return null;
+    }
+    @GetMapping("/titles")
+    public ResponseEntity<List<MovieNameDto>> getMovieNames(String movieSearch){
+        List<MovieNameDto> no_search = new ArrayList<>();
+        if(movieSearch.isEmpty()) {
+            return ResponseEntity.ok(no_search);
+        }
+        return ResponseEntity.ok(mdShopservice.getMovieNameListByMovieSearch(movieSearch));
     }
 
 }
