@@ -32,6 +32,7 @@ import OrderDetail from './js/order/OrderDetail';
 import OrderError from './js/order/OrderError';
 import MemberList from './page/admin/MemberList';
 import ManagerList from './page/admin/ManagerList';
+import Gender from './page/admin/Gender';
 
 function App() {
 
@@ -80,6 +81,7 @@ function App() {
             <Route path="dau" element={<UserDau />} />
             <Route path="member-list" element={<MemberList />} />
             <Route path="manager-list" element={<ManagerList />} />
+            <Route path="gender" element={<Gender />} />
             <Route path="mdlists" element={<MdList />} />
           </Route>
         </Route>

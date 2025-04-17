@@ -84,7 +84,7 @@ function AdminSidebar({activeMenu}){
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>
+                                    <Link to="/manager/home/gender" className={`admin-nav-link ${activeMenu === "gender" ? "active":""}`}>
                                         회원 성별 비율 차트
                                     </Link>
                                 </li>
