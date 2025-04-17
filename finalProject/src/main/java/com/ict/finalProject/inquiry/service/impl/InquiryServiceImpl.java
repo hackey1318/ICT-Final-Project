@@ -135,6 +135,9 @@ public class InquiryServiceImpl implements InquiryService {
     //문의삭제
     @Override
     public void inquiryDel(int no) {
-        inquiryRepository.deleteByNo(no);
+        Inquiry inquiry = inquiryRepository.findByNo(no)
+                                           .orElseThrow(() -> new RuntimeException("문의 찾기 실패"));
+        inquiry.setStatus(StatusInfo.DELETE);
+        inquiryRepository.save(inquiry);
     }
 }
