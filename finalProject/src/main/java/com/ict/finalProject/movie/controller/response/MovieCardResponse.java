@@ -17,8 +17,10 @@ public class MovieCardResponse {
     private Integer no;
     private Integer code;
     private String name;
+    private String description;
     private LocalDate openDate;
     private MovieStatus openStatus;
+    private String reservationRate;
     private String postImage;
     private String genre;
     private String ageGrade;
