@@ -31,6 +31,7 @@ import Cart from './js/cart/Cart';
 import OrderList from './js/order/OrderList';
 import OrderDetail from './js/order/OrderDetail';
 import OrderError from './js/order/OrderError';
+import ManagerList from './page/admin/ManagerList';
 
 function App() {
 
@@ -78,6 +79,7 @@ function App() {
             <Route index element={<DashBoard/>} />
             <Route path="dau" element={<UserDau />} />
             <Route path="member-list" element={<MemberList />} />
+            <Route path="manager-list" element={<ManagerList />} />
             <Route path="mdlists" element={<MdList />} />
           </Route>
         </Route>
