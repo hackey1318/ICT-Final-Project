@@ -1,7 +1,6 @@
 package com.ict.finalProject.fileSystem.domain;
 
 import com.ict.finalProject.domain.constant.ImageWriteType;
-import com.ict.finalProject.domain.constant.InquiryProceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

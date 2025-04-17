@@ -23,6 +23,8 @@ public class InquiryRequest {
 
     private String content;  //글내용
 
+    private String password;
+
     private List<String> imageList;  //문의이미지
 
     private LocalDateTime createdAt;  //작성일

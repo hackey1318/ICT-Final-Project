@@ -15,5 +15,4 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Integer> {
 
     Optional<Inquiry> findByNo(int no);
 
-    void deleteByNo(int no);
 }

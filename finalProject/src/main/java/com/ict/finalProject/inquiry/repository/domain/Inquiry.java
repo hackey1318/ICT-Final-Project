@@ -34,6 +34,9 @@ public class Inquiry {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;  //문의내용
 
+    @Column(nullable = true)
+    private String password;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
     private InquiryProceed proceed;  //문의처리상태

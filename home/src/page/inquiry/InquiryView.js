@@ -64,7 +64,7 @@ function InquiryView() {
         .catch(function(error) {
             console.log(error);
         })
-    });
+    }, [no]);
 
     const inquiryDel = (() => {
         if(window.confirm("글을 삭제하시겠습니까?")) {
@@ -96,7 +96,9 @@ function InquiryView() {
             console.log("sessionStorage의 userInfo 파싱오류 : ", error);
         }
     }
-    const isWriter = String(loginUserInfo.userNo) && String(loginUserId) === String(inquiryVO.userNo);
+    const isWriter = loginUserId !== null &&
+                     inquiryVO.userNo !== null &&
+                     String(loginUserId) === String(inquiryVO.userNo);
 
     const handleImageClick = useCallback((index) => {
         if(inquiryVO.imageList && index>=0 && index<inquiryVO.imageList.length) {
@@ -113,7 +115,7 @@ function InquiryView() {
         <div className='inquiry-container'>
             <h2>{inquiryVO.subject}</h2>
             {
-                isWriter && inquiryVO.proceed==='BEFORE' &&
+                isWriter && String(inquiryVO.proceed)==='BEFORE' &&
                 <div id="del-inquiry">
                     <a onClick={inquiryDel} style={{cursor: 'pointer'}}>삭제</a>
                 </div>
@@ -143,7 +145,8 @@ function InquiryView() {
                         inquiryVO.imageList.map((item, index) => {
                             const imageUrl = item ? `${IMAGE_BASE_URL}${item}` : "";
                             return imageUrl ? (
-                                <img key={`${item}-${index}`} className='viewpage-img'
+                                <img key={`${item}-${index}`} 
+                                        className='viewpage-img img-thumbnail me-2 mb-2'
                                         onClick={() => handleImageClick(index)}
                                         src={imageUrl}
                                 />
