@@ -1,5 +1,6 @@
 package com.ict.finalProject.orders.service.dto;
 
+import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.orders.repository.domain.Orders;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,7 @@ public class OrdersDto {
     private int userNo; // 유저 PK
     private int theaterNo; // 영화관 PK
     private String orderNumber;
-    private String status;
+    private OrdersStatus status;
     private int totalPrice;
     private LocalDateTime updatedAt;
 

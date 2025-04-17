@@ -1,5 +1,6 @@
 package com.ict.finalProject.payment.service.dto;
 
+import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.payment.repository.domain.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,7 @@ public class PaymentDto {
     private int id;
     private int orderNo; // 주문 PK
     private String paymentKey; // 결제번호
-    private String status;
+    private OrdersStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
