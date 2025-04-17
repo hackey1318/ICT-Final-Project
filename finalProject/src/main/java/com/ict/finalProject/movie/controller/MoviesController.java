@@ -4,7 +4,6 @@ import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
-import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
 import com.ict.finalProject.movie.controller.response.MovieCardResponse;
 import com.ict.finalProject.movie.controller.response.MovieDetailResponse;
 import com.ict.finalProject.movie.repository.constant.movie.MovieStatus;

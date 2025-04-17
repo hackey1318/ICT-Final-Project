@@ -15,6 +15,8 @@ import java.util.Optional;
 @Repository
 public interface ImageInfoRepository extends JpaRepository<ImageInfo, Integer> {
 
+    List<ImageInfo> findAllByBoardNoAndType(int boardNo, ImageWriteType type);
+
     // ImageInfo 테이블에서 boardNo와 type으로 imageId 목록 조회
     @Query("SELECT ii.imageId FROM ImageInfo ii WHERE ii.boardNo = :boardNo AND ii.type = :type AND ii.status = :status")
     List<String> findImageIdsByBoardNoAndTypeAndStatus(
