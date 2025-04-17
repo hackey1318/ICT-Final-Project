@@ -27,4 +27,5 @@ public interface MoviesRepository extends JpaRepository<Movies, Integer> {
 
     @Query("SELECT DISTINCT m.genre FROM Movies AS m WHERE m.no IN (:likeNoList)")
     List<String> getGenreByLike(@Param("likeNoList") List<Integer> likeNoList);
+
 }

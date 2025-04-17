@@ -69,17 +69,6 @@ public class MdShopServiceImpl implements MdShopService {
                 .collect(Collectors.toList());
     }
 
-    //임시로 만들었습니다.(불필요시 삭제예정)
-    @Override
-    public List<MovieNameDto> getMovieNameList() {
-        List<Movies> moviesList = moviesRepository.findAll();
-
-        return moviesList.stream()
-                .map(MovieNameDto::new)
-                .collect(Collectors.toList());
-
-    }
-
     @Override
     public Optional<Goods> getMd(int id) {
         return mdShopRepository.findById(id);

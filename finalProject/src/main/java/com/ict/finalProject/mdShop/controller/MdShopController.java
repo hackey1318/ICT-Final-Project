@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/md")
+@RequestMapping("/md-shop")
 @RequiredArgsConstructor
 public class MdShopController {
 
