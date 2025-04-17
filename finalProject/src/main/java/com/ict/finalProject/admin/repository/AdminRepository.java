@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AdminRepository extends JpaRepository<Users, Integer> {
 
@@ -21,4 +23,12 @@ public interface AdminRepository extends JpaRepository<Users, Integer> {
     @Modifying
     @Query(value = "UPDATE users SET status = :status WHERE no = :userNo", nativeQuery = true)
     void updataManagerStatus(@Param("status") StatusInfo status, @Param("userNo") Integer userNo);
+
+    //성별비율
+    @Query(value = "SELECT " +
+            "SUM(CASE WHEN gender = 'MALE' AND status = 'ACTIVE' THEN 1 ELSE 0 END) AS male, " +
+            "SUM(CASE WHEN gender = 'FEMALE' AND status = 'ACTIVE' THEN 1 ELSE 0 END) AS female, " +
+            "COUNT(*) AS totalPerson " +
+            "FROM users WHERE status = 'ACTIVE';", nativeQuery = true)
+    List<Object[]> countUsersByActiveUsers();
 }
