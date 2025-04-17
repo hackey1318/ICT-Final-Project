@@ -66,7 +66,7 @@ public class InquiryServiceImpl implements InquiryService {
     @Override
     public List<InquiryResponse> getInquiry() {
         List<Inquiry> inquiries = inquiryRepository.findAllByOrderByNoDesc();
-        
+        System.out.println(inquiries);
         if(inquiries.isEmpty()) {
             return Collections.emptyList();
         }
@@ -90,7 +90,7 @@ public class InquiryServiceImpl implements InquiryService {
                     .subject(inquiry.getSubject())
                     .createdAt(inquiry.getCreatedAt())
                     .proceed(inquiry.getProceed())
-                    .status(StatusInfo.ACTIVE)
+                    .status(inquiry.getStatus())
                     .nickname(nickname)
                     .build();
         })

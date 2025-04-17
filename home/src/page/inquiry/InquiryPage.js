@@ -33,7 +33,7 @@ function InquiryPage() {
         try {
             const listData = await apiNoAccessClient.get("/inquiry/getInquiry")
             setInquiryList(listData.data);
-            console.log(setInquiryList);
+            console.log(listData.data);
         } catch(error) {
             console.log("error발생 : ", error);
         }
