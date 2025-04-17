@@ -1,5 +1,6 @@
 package com.ict.finalProject.orders.repository.domain;
 
+import com.ict.finalProject.domain.constant.OrdersStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,8 +33,9 @@ public class Orders {
     @Column(nullable = false)
     private String orderNumber; // 혼동 방지를 위해 orderId -> orderNumber로 컬럼명 변경
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private OrdersStatus status;
 
     @Column(nullable = false)
     private int totalPrice;

@@ -1,5 +1,6 @@
 package com.ict.finalProject.payment.repository.domain;
 
+import com.ict.finalProject.domain.constant.OrdersStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,8 +28,9 @@ public class Payment {
     @Column(nullable = false)
     private String paymentKey; // 결제번호
 
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private OrdersStatus status;
 
     @CreationTimestamp
     @Column(updatable = false)

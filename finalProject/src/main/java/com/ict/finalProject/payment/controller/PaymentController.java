@@ -1,5 +1,6 @@
 package com.ict.finalProject.payment.controller;
 
+import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.orders.repository.domain.Orders;
 import com.ict.finalProject.orders.service.OrdersService;
 import com.ict.finalProject.payment.repository.domain.Payment;
@@ -102,11 +103,11 @@ public class PaymentController {
         int orderNo = orders.getId();
         payment.setOrderNo(orderNo);
         payment.setPaymentKey((String) jsonObject.get("paymentKey"));
-        payment.setStatus("Done");
+        payment.setStatus(OrdersStatus.PAID);
         paymentService.insertPayments(payment);
 
         // 기존 주문 정보 상태 변경
-        orders.setStatus("Paid");
+        orders.setStatus(OrdersStatus.PAID);
         ordersService.insertOrders(orders);
 
         return ResponseEntity.status(code).body(jsonObject);

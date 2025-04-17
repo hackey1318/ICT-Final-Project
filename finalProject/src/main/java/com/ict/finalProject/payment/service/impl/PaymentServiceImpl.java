@@ -1,5 +1,6 @@
 package com.ict.finalProject.payment.service.impl;
 
+import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.payment.repository.PaymentRepository;
 import com.ict.finalProject.payment.repository.domain.Payment;
 import com.ict.finalProject.payment.service.PaymentService;
@@ -30,7 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public void updatePaymentsStatus(int orderNo, String status) {
+    public void updatePaymentsStatus(int orderNo, OrdersStatus status) {
         Payment entity = paymentRepository.findByOrderNo(orderNo);
         entity.setStatus(status);
         paymentRepository.save(entity);

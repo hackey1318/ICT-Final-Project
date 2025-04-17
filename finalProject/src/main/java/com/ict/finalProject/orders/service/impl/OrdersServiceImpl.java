@@ -1,5 +1,6 @@
 package com.ict.finalProject.orders.service.impl;
 
+import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.orders.repository.OrdersRepository;
 import com.ict.finalProject.orders.repository.domain.Orders;
@@ -44,19 +45,19 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public Orders getPendingOrders(int userNo) {
-        return ordersRepository.findByUserNoAndStatus(userNo, "Pending");
+    public Orders getOrdersByStatus(int userNo, OrdersStatus status) {
+        return ordersRepository.findByUserNoAndStatus(userNo, status);
     }
 
     @Override
-    public Orders getPendingOrders(int userNo, int totalPrice, int theaterNo) {
-        return ordersRepository.findByUserNoAndStatusAndTotalPriceAndTheaterNo(userNo, "Pending", totalPrice, theaterNo);
+    public Orders getExistOrders(int userNo, int totalPrice, int theaterNo, OrdersStatus status) {
+        return ordersRepository.findByUserNoAndStatusAndTotalPriceAndTheaterNo(userNo, status, totalPrice, theaterNo);
     }
 
     @Override
     @Transactional
-    public void deletePendingOrders(int userNo) {
-        ordersRepository.deleteByUserNoAndStatus(userNo, "Pending");
+    public void deleteOrdersByUserNoAndStatus(int userNo, OrdersStatus status) {
+        ordersRepository.deleteByUserNoAndStatus(userNo, status);
     }
 
     @Override

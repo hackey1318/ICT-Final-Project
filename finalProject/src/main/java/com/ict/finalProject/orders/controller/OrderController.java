@@ -1,6 +1,7 @@
 package com.ict.finalProject.orders.controller;
 
 import com.ict.finalProject.common.config.JwtTokenProvider;
+import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
 import com.ict.finalProject.mdShop.repository.domain.Goods_Stocks;
 import com.ict.finalProject.mdShop.service.MdShopService;
@@ -15,7 +16,6 @@ import com.ict.finalProject.orders.service.OrdersService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Or;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -96,18 +96,19 @@ public class OrderController {
 
             if (isCorrectData) {
                 // 기존 주문 있는지 확인
-                Orders checkOrder = ordersService.getPendingOrders((int) userNo, (int) requestTotalPrice, theaterNo);
+                Orders checkOrder = ordersService.getExistOrders((int) userNo, (int) requestTotalPrice, theaterNo, OrdersStatus.PENDING);
                 if (checkOrder != null) {
                     return checkOrder.getOrderNumber();
                 } else {
                     // pending상태이고 주문 정보가 바뀌면 기존 상품들 삭제
-                    if (ordersService.getPendingOrders((int) userNo) != null) {
-                        int pendingOrderId = ordersService.getPendingOrders((int) userNo).getId();
+                    OrdersStatus status = OrdersStatus.PENDING;
+                    if (ordersService.getOrdersByStatus((int) userNo, status) != null) {
+                        int pendingOrderId = ordersService.getOrdersByStatus((int) userNo, status).getId();
                         orderItemService.deletePendingOrderItems(pendingOrderId);
                     }
 
                     // pending상태이고 주문 정보가 바뀌면 기존 주문 삭제
-                    ordersService.deletePendingOrders((int) userNo);
+                    ordersService.deleteOrdersByUserNoAndStatus((int) userNo, status);
 
                     // 주문 정보 저장
                     Users user = userService.getUser(userId);
@@ -115,7 +116,7 @@ public class OrderController {
                     orders.setUserNo(user.getNo());
                     orders.setTheaterNo(theaterNo);
                     orders.setOrderNumber(orderNumber);
-                    orders.setStatus("Pending");
+                    orders.setStatus(OrdersStatus.PENDING);
                     orders.setTotalPrice((int)requestTotalPrice);
                     ordersService.insertOrders(orders);
 
