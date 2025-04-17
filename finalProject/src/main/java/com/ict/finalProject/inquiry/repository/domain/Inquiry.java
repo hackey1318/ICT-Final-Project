@@ -39,6 +39,7 @@ public class Inquiry {
     private InquiryProceed proceed;  //문의처리상태
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatusInfo status;  //문의상태
 
     @CreatedDate
