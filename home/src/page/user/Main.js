@@ -13,14 +13,6 @@ import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
 
-// Banner data
-const dummyBannerList = [
-  { imageId: "7da7dd9b9a354d21", title: "패션 오브 01", color: "#1a3b6d", bannerUrl: "/movies/59" },
-  { imageId: "3c711d8c63bd4e88", title: "파란 01", color: "#1a3b6d", bannerUrl: "/movies/59" },
-  { imageId: "af4635f4d68f4607", title: "너의 췌장 01", color: "#1a3b6d", bannerUrl: "/movies/59" },
-  { imageId: "30bd478a1ebe4887", title: "본회퍼 01", color: "#1a3b6d", bannerUrl: "/movies/59" },
-  { imageId: "aec156d375f3418f", title: "4월의 불꽃 01", color: "#1a3b6d", bannerUrl: "/movies/59" },
-]
 const BASE_URL = "http://localhost:9988/file-system/download/"
 
 function Main() {
@@ -77,7 +69,7 @@ function Main() {
       <SectionTodayMovies />
 
       {/* --- 섹션 3: 이벤트 섹션 --- */}
-      <SectionNewGoods />
+      {/* <SectionNewGoods /> */}
     </div>
   )
 }
