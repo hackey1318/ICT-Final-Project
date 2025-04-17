@@ -69,7 +69,7 @@ function AdminSidebar({activeMenu}){
                         {adminOpenMenus[0] && (
                             <ul className="admin-sub-menu">
                                 <li>
-                                    <Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>
+                                    <Link to="/manager/home/member-list" className={`admin-nav-link ${activeMenu === "member-list" ? "active":""}`}>
                                         회원 목록 조회
                                     </Link>
                                 </li>
@@ -84,7 +84,7 @@ function AdminSidebar({activeMenu}){
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>
+                                    <Link to="/manager/home/gender" className={`admin-nav-link ${activeMenu === "gender" ? "active":""}`}>
                                         회원 성별 비율 차트
                                     </Link>
                                 </li>
@@ -94,7 +94,7 @@ function AdminSidebar({activeMenu}){
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>
+                                    <Link to="/manager/home/manager-list" className={`admin-nav-link ${activeMenu === "manager-list" ? "active":""}`}>
                                         관리자 목록 조회
                                     </Link>
                                 </li>
