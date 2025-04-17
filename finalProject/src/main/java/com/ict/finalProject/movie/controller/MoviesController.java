@@ -4,6 +4,7 @@ import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
+import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
 import com.ict.finalProject.movie.controller.response.MovieCardResponse;
 import com.ict.finalProject.movie.controller.response.MovieDetailResponse;
 import com.ict.finalProject.movie.repository.constant.movie.MovieStatus;
@@ -118,12 +119,20 @@ public class MoviesController {
     // 3. 전체 좋아요 순
 
     @GetMapping("/recommendation")
-    public List<MovieCardResponse> getRecommendationMovie() {
-        Integer userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
+    public List<MovieCardResponse> getRecommendationMovie(@RequestParam(defaultValue = "10", value = "count") int count) {
+        Integer userNo = null;
 
-        moviesService.getRecommendationMovie(userNo);
-        return null;
+        try {
+            userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
+        } catch (Exception e) {
+            // 아무런 동작 X
+        }
+
+        List<Movies> moviesList = moviesService.getRecommendationMovie(userNo, count);
+
+        return moviesList.stream().map(movie -> modelMapper.map(movie, MovieCardResponse.class)).toList();
     }
+
     @GetMapping("/titles")
     public ResponseEntity<List<MovieNameDto>> getMovieNames(String movieSearch){
         List<MovieNameDto> no_search = new ArrayList<>();
@@ -132,5 +141,4 @@ public class MoviesController {
         }
         return ResponseEntity.ok(mdShopservice.getMovieNameListByMovieSearch(movieSearch));
     }
-
 }
