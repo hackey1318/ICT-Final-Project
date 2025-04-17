@@ -2,6 +2,7 @@ import axios from 'axios';
 import '../../css/dashboard/user.css';
 
 import { useEffect, useState } from "react";
+const accessToken = sessionStorage.getItem("accessToken");
 
 function MemberList(){
     //데이터 담을 변수
@@ -12,7 +13,12 @@ function MemberList(){
     const [totalPages, setTotalPages] = useState(0); //전체 페이지수
 
     useEffect(()=>{
-        axios.get(`http://localhost:9988/manager/home/member-list?page=${page}&size=10`)
+        axios.get(`http://localhost:9988/manager/home/member-list?page=${page}&size=10`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
         .then((response)=>{
             console.log("response.data", response.data);
             console.log("content", response.data.content);

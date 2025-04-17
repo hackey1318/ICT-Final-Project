@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+const accessToken = sessionStorage.getItem("accessToken");
 
 function ManagerList(){
     //데이터 담을 변수
@@ -13,7 +14,12 @@ function ManagerList(){
     const [selectStates, setSelectStates] = useState({}); 
 
     useEffect(()=>{
-        axios.get(`http://localhost:9988/manager/home/manager-list?page=${page}&size=10`)
+        axios.get(`http://localhost:9988/manager/home/manager-list?page=${page}&size=10`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
         .then((response)=>{
             const data = response.data.content;
 
