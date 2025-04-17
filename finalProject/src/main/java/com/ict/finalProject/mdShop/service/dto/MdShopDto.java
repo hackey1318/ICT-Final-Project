@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 
 @Data
@@ -20,6 +21,7 @@ public class MdShopDto {
     private String options;
     private String movieName;
     private String updatedAt;
+    private List<String> imageUrls;
 
     public MdShopDto(Goods goods){
         this.id = goods.getId();
@@ -30,5 +32,6 @@ public class MdShopDto {
         this.options = goods.getOptions();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.updatedAt = goods.getUpdatedAt().format(formatter);
+        this.imageUrls = null;
     }
 }

@@ -39,7 +39,7 @@ public class Goods {
     @Column(nullable = false)
     private int price;
 
-    @Column(nullable = true)
+    @Column(nullable = true)//true 안넣어도 되는데...
     private String options;
 
     @Enumerated(value = EnumType.STRING)
@@ -51,5 +51,4 @@ public class Goods {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "goods_stocks")
-public class Goods_Stocks {
+public class GoodsStocks {
 
     @Id
     @OneToOne
