@@ -38,6 +38,7 @@ public class Inquiry {
     @Column(nullable = false, length = 15)
     private InquiryProceed proceed;  //문의처리상태
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusInfo status;  //문의상태
 
