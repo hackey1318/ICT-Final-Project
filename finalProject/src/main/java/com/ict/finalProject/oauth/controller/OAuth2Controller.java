@@ -126,4 +126,12 @@ public class OAuth2Controller {
             return ResponseEntity.ok().build();
         }
     }
+
+    @GetMapping("/check-phone/{phone}")
+    public ResponseEntity<Void> checkPhone(@PathVariable String phone) {
+        if (userService.existsByPhone(phone)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return ResponseEntity.ok().build();
+    }
 }

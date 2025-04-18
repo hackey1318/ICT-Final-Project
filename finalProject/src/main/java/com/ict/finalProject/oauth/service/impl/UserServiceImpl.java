@@ -127,4 +127,9 @@ public class UserServiceImpl implements UserService {
         // Optional 객체가 값을 가지고 있는지(isPresent()) 여부로 존재 확인
         return usersRepository.findById(userId).isPresent();
     }
+
+    @Override
+    public boolean existsByPhone(String phone) {
+        return usersRepository.findByPhone(phone).isPresent();
+    }
 }

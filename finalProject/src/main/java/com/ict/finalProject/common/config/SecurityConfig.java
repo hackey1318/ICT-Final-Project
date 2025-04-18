@@ -53,6 +53,7 @@ public class SecurityConfig {
                 mvc.pattern("/oauth/kakao/**"),
                 mvc.pattern("/oauth/login"),                  // ✅ 일반 로그인 허용
                 mvc.pattern("/oauth/kakao/register/local"),   // ✅ 일반 회원가입 허용
+                mvc.pattern( "/oauth/api/users/check-phone/**"),
                 mvc.pattern("/file-system/download/**"),
                 mvc.pattern("/file-system/showImage/**"),
                 mvc.pattern("/user/**"),
