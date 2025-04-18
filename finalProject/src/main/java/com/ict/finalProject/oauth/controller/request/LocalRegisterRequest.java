@@ -13,5 +13,6 @@ public class LocalRegisterRequest {
     private String nickName;
     private UserGender gender;
     private String email;
+    private String phone;
     private String uploadedProfileImageId;
 }
