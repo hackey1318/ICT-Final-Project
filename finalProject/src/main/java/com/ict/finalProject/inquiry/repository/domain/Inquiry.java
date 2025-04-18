@@ -35,7 +35,7 @@ public class Inquiry {
     private String content;  //문의내용
 
     @Column(nullable = true)
-    private String password;
+    private String password;  //비밀글 비밀번호
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
