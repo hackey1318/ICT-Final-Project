@@ -74,6 +74,11 @@ function AdminSidebar({activeMenu}){
                                     </Link>
                                 </li>
                                 <li>
+                                    <Link to="/manager/home/inquiry" className={`admin-nav-link ${activeMenu === "inquiry" ? "active":""}`}>
+                                        문의 내역 조회
+                                    </Link>
+                                </li>
+                                <li>
                                     <Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>
                                         신고 목록 조회
                                     </Link>

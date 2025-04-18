@@ -34,6 +34,8 @@ import OrderError from './js/order/OrderError';
 import MemberList from './page/admin/MemberList';
 import ManagerList from './page/admin/ManagerList';
 import Gender from './page/admin/Gender';
+import InquiryReply from './page/admin/InquiryReply';
+import InquiryReplyView from './page/admin/InquiryReplyView';
 import GoodsDetail from './page/md/GoodsDetail';
 import MdShop from './page/md/MdShop';
 import RelatedMovie from './page/movie/RelatedMovie';
@@ -94,6 +96,8 @@ function App() {
             <Route path="blacklist" element={<BlackList />} />
             <Route path="gender" element={<Gender />} />
             <Route path="mdlists" element={<MdList />} />
+            <Route path="inquiry" element={<InquiryReply/>}/>
+            <Route path="inquiry/:no" element={<InquiryReplyView/>}/>
           </Route>
         </Route>
       </Routes>
