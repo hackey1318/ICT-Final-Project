@@ -12,6 +12,7 @@ export const useKakaoCallback = () => {
     const [initialLoading, setInitialLoading] = useState(true); // 초기 카카오 정보 로딩 상태
     const [apiError, setApiError] = useState(""); // 회원가입 API 에러
     const [success, setSuccess] = useState(""); // 회원가입 성공 메시지
+    
 
     // --- 폼 데이터 상태 ---
     const [formData, setFormData] = useState({
@@ -38,6 +39,11 @@ export const useKakaoCallback = () => {
     const [uploadLoading, setUploadLoading] = useState(false); // 파일 업로드 로딩 상태
     const [uploadError, setUploadError] = useState(''); // 파일 업로드 에러 메시지
     const [previewImageUrl, setPreviewImageUrl] = useState(null); // 이미지 미리보기 URL
+
+    // 휴대폰 번호 중복 검사 
+    const [phoneCheckLoading, setPhoneCheckLoading] = useState(false);
+    const [phoneCheckStatus, setPhoneCheckStatus] = useState('');
+    const [phoneCheckMessage, setPhoneCheckMessage] = useState('');
 
     // 필드 유효성 검사 함수
     const validateField = useCallback((name, value, currentFormData) => {
@@ -128,19 +134,20 @@ export const useKakaoCallback = () => {
                 formIsValid = false;
             }
         });
-        const { phone1, phone2, phone3 } = formData;
-        if (phone1 || phone2 || phone3) {
-            const phoneErrorObj = validateField('phone1', phone1, formData);
-             if (phoneErrorObj.phone) {
-                 newErrors.phone = phoneErrorObj.phone;
-                 formIsValid = false;
+        if (formData.phone1 || formData.phone2 || formData.phone3) {
+            const phoneErrorObj = validateField('phone1', formData.phone1, formData);
+            if (phoneErrorObj.phone) {
+                newErrors.phone = phoneErrorObj.phone;
+                formIsValid = false;
+            } else if (phoneCheckStatus !== 'available') {
+                newErrors.phoneCheck = '휴대폰 번호 중복 확인을 완료해주세요.';
+                formIsValid = false;
             }
-        } else {
-            if(newErrors.phone) delete newErrors.phone;
-        }
+        }    
+    
         setErrors(newErrors);
         return formIsValid;
-    }, [formData, validateField]);
+    }, [formData, validateField, phoneCheckStatus]);
 
     // 아이디 중복 확인 함수
     const handleIdCheck = useCallback(async () => {
@@ -184,6 +191,23 @@ export const useKakaoCallback = () => {
             setIdCheckLoading(false);
         }
     }, [formData.id, idCheckLoading, validateField]);
+
+    const handlePhoneCheck = useCallback(async () => {
+        const rawPhone = formData.phone1 + formData.phone2 + formData.phone3;
+        setPhoneCheckLoading(true);
+        setPhoneCheckStatus('checking');
+        setPhoneCheckMessage('중복 확인 중...');
+        try {
+            await axios.get(`${API_BASE_URL}/oauth/kakao/check-phone/${rawPhone}`);
+            setPhoneCheckStatus('available');
+            setPhoneCheckMessage('사용 가능한 휴대폰 번호입니다.');
+        } catch {
+            setPhoneCheckStatus('duplicate');
+            setPhoneCheckMessage('이미 사용 중인 번호입니다.');
+        } finally {
+            setPhoneCheckLoading(false);
+        }
+    }, [formData.phone1, formData.phone2, formData.phone3]);
 
     // --- 파일 업로드 함수 (새로운 API, 인증 제거, imageId 사용) ---
     const uploadProfileImage = useCallback(async (file) => {
@@ -286,8 +310,10 @@ export const useKakaoCallback = () => {
              axios.get(`${API_BASE_URL}/oauth/kakao/login?code=${code}`)
                 .then(response => {
                     if (response.data.existUser === true) {
-                        setApiError("이미 가입된 카카오 계정입니다. 로그인 페이지로 이동합니다.");
-                        setTimeout(() => navigate("/login"), 3000);
+                        sessionStorage.setItem("accessToken", response.data.token);
+                        sessionStorage.setItem("userInfo", JSON.stringify(response.data.user));
+                    
+                        window.location.href = "/";
                     } else if (response.data.existUser === false && response.data.kakaoUserInfoDto) {
                         setUser(response.data);
                         const kakaoInfo = response.data.kakaoUserInfoDto;
@@ -417,7 +443,10 @@ export const useKakaoCallback = () => {
         selectedFile, uploadedImageId, uploadLoading, uploadError, previewImageUrl,
         handleFileChange, handleResetProfileImage,
         handleChange, handleIdCheck, handleSubmit,
-        navigate, lastCheckedId
+        navigate, lastCheckedId,    phoneCheckLoading,
+        phoneCheckStatus,
+        phoneCheckMessage,
+        handlePhoneCheck,
     };
 };
 
