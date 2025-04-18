@@ -2,6 +2,8 @@ package com.ict.finalProject.movie.controller;
 
 import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.domain.constant.UserRole;
+import com.ict.finalProject.mdShop.service.MdShopService;
+import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
 import com.ict.finalProject.movie.controller.response.MovieCardResponse;
 import com.ict.finalProject.movie.controller.response.MovieDetailResponse;
 import com.ict.finalProject.movie.repository.constant.movie.MovieStatus;
@@ -34,6 +36,7 @@ public class MoviesController {
 
     private final MoviesService moviesService;
     private final UserService userService;
+    private final MdShopService mdShopservice;
 
     @GetMapping
     public Page<MovieCardResponse> getMovieList(@PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable,
@@ -104,15 +107,12 @@ public class MoviesController {
         }
     }
 
-    // 로그인 안한 사용자 추천
-
-    // 로그인 사용자 추천
-
-    // 1. 내가 좋아요한 영화의 장르로 좋아요 많이 받은 영화
-
-    // 2. 그냥 랜덤
-
-    // 3. 전체 좋아요 순
+    @GetMapping("/relate-movie")
+    public Page<MovieCardResponse> getRelateGenreMovie(@PageableDefault(page = 0, size = 5, sort = {"createdAt"}) Pageable pageable,
+                                                       @RequestParam(value = "no") int no) {
+        Page<Movies> moviesPage = moviesService.getRelateGenreMovieInfo(pageable, no);
+        return moviesPage.map(movie -> modelMapper.map(movie, MovieCardResponse.class));
+    }
 
     @GetMapping("/recommendation")
     public List<MovieCardResponse> getRecommendationMovie(@RequestParam(defaultValue = "10", value = "count") int count) {
@@ -127,5 +127,14 @@ public class MoviesController {
         List<Movies> moviesList = moviesService.getRecommendationMovie(userNo, count);
 
         return moviesList.stream().map(movie -> modelMapper.map(movie, MovieCardResponse.class)).toList();
+    }
+
+    @GetMapping("/titles")
+    public ResponseEntity<List<MovieNameDto>> getMovieNames(String movieSearch){
+        List<MovieNameDto> no_search = new ArrayList<>();
+        if(movieSearch.isEmpty()) {
+            return ResponseEntity.ok(no_search);
+        }
+        return ResponseEntity.ok(mdShopservice.getMovieNameListByMovieSearch(movieSearch));
     }
 }

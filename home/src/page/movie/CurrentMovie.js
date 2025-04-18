@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import MoviePagination from "../../js/movie/MoviePagination"; // 경로가 올바른지 확인하세요
+import MoviePagination from "../../js/public/Pagination"; // 경로가 올바른지 확인하세요
 import axios from "axios";
 
 function CurrentMovie() {
