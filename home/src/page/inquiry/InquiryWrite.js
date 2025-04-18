@@ -11,6 +11,17 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
     let [addedImg, setAddedImg] = useState([]);
     const runfile = useRef([]);
     const accessToken = sessionStorage.getItem("accessToken");
+    const [isPrivate, setIsPrivate] = useState(false);
+    const [password, setPassword] = useState("");
+    const [passwordConfirm, setPasswordConfirm] = useState("");
+
+    const passwordInputStyle = {
+        marginLeft: '15px',
+        height: '35px',
+        border: '1px solid #ddd',
+        borderRadius: '10px',
+        fontSize: '14px'
+    };
 
     const setSubjectValue = useCallback((e) => {
         setSubject(e.target.value);
@@ -19,6 +30,26 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
     const handleGetContent = useCallback((value) => {
         setContent(value);
     }, [setContent]);
+
+    const handlePrivateChange = useCallback((e) => {
+        const checked = e.target.checked;
+        setIsPrivate(checked);
+
+        if(!checked) {
+            setPassword('');
+            setPasswordConfirm('');
+        }
+    }, []);
+
+    const handlePasswordChange = useCallback((e) => {
+        const value = e.target.value.replace(/[^0-9]/g, '');
+        setPassword(value);
+    }, []);
+
+    const handlePasswordConfirmChange = useCallback((e) => {
+        const value = e.target.value.replace(/[^0-9]/g, '');
+        setPasswordConfirm(value);
+    }, []);
 
     const submitInquiry = useCallback(async () => {
         if (!subject) {
@@ -29,13 +60,41 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
             return;
         }        
 
+        if(isPrivate && !password) {
+            alert("비밀번호를 입력해주세요.");
+            return;
+        }
+
+        if(isPrivate) {
+            const passwordRegex = /^\d{4,8}$/;
+            if(!passwordRegex.test(password)) {
+                alert("비밀번호는 4~8자리의 숫자로 입력해주세요.");
+                return;
+            }
+
+            if(password !== passwordConfirm) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return;
+            }
+        }
+
         let inquiryData = {
             subject: subject,
             content: content,
-            imageList: []
+            imageList: [],
+            password: password,
+            isPrivate: isPrivate
+        }
+
+        if(isPrivate) {
+            inquiryData.password = password;
         }
 
         let formData = new FormData();
+        if(addedImg.length == 0) {
+            window.alert("파일을 첨부해주세요.");
+            return;
+        }
         addedImg.forEach((img) => {
             formData.append("files", img);
         })
@@ -66,7 +125,7 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
                 alert("문의작성을 실패하였습니다.")
                 return;
             })
-    }, [subject, content, addedImg, onClose]);
+    }, [subject, content, addedImg, isPrivate, password, passwordConfirm, onSuccess, onClose, accessToken]);
 
     const handleRealSubmit = useCallback(() => {
         submitInquiry(); 
@@ -161,15 +220,53 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
                 value={subject}
                 onChange={setSubjectValue}
             />
-            <InquiryEditor onChange={handleGetContent}/>
+            <InquiryEditor onChange={handleGetContent} initialValue={content}/>
             {/* <div dangerouslySetInnerHTML={{ __html: content }} style={{ marginTop: '20px', border: '1px solid #ccc', padding: '10px' }} /> */}
             {/* <button onClick={handleGetContent}>에디터 내용 가져오기</button> */}
+
+            <div id="secret-select">
+                <div style={{display: 'flex', alignItems: 'center' }}>
+                    <input
+                        type="checkbox"
+                        id="isPrivateCheckbox"
+                        checked={isPrivate}
+                        onChange={handlePrivateChange}
+                        style={{ marginRight: '5px', cursor: 'pointer' }}
+                    />
+                    <label htmlFor="isPrivateCheckbox" style={{ cursor: 'pointer', marginRight: '10px' }}>비밀글 설정</label>
+                    {/* isPrivate가 true일 때만 비밀번호 입력 필드 표시 */}
+                    {isPrivate && (
+                        <>
+                            <input
+                                type="password"
+                                placeholder="4~8자리의 숫자 입력"
+                                value={password}
+                                onChange={handlePasswordChange}
+                                style={passwordInputStyle}
+                                maxLength={10} // 비밀번호 길이 제한 (선택 사항)
+                                autoComplete="new-password"
+                            />
+                            <input
+                                type="password"
+                                placeholder='비밀번호 확인'
+                                value={passwordConfirm}
+                                onChange={handlePasswordConfirmChange}
+                                style={passwordInputStyle} // 동일 스타일 적용
+                                maxLength={8} // 최대 길이 제한
+                                autoComplete="new-password"
+                            />
+                        </>
+                    )}
+                </div>
+            </div>
+
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
                 <div style={{ display: 'flex', textAlign: 'left' }}>
-                    <input type='file' multiple ref={runfile} style={{ display: 'none' }} />
+                    <input type='file' multiple ref={runfile} style={{ display: 'none' }} accept='image/*'/>
                     <div id='addImgDiv' onClick={addImgClick}><img src={addFile} id='addFile' style={{ cursor: 'pointer', width: '20px' }} /></div>
                     <div className='imgList'></div>
                 </div>
+                
                 <div style={{ textAlign: 'right' }}>
                     <input type='submit' value='작성하기' id='inquiry-submit' onClick={handleRealSubmit} />
                     <input type='button' value='취소하기' id='inquiry-cancel' onClick={closeInquiry} />

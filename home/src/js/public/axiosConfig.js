@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:9988";
+// const API_BASE_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:9988";
+const API_BASE_URL = "http://localhost:9988";
 
 const apiClient = axios.create({
     baseURL: API_BASE_URL,
@@ -16,6 +17,18 @@ apiClient.interceptors.request.use((config) => {
     }
     return config;
 }, (error) => Promise.reject(error));
+
+//인터셉터
+apiClient.interceptors.request.use((config) => {
+    const accessToken = sessionStorage.getItem("accessToken");
+    if(accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+}, (error) => {
+    console.error("apiClient 인터셉터 에러", error);
+    return Promise.reject(error);
+})
 
 export const uploadImage = async (files) => {
     const formData = new FormData();

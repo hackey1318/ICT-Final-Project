@@ -10,10 +10,12 @@ import java.util.Optional;
 
 public interface InquiryRepository extends JpaRepository<Inquiry, Integer> {
 
-    @Query("SELECT i FROM Inquiry i ORDER BY i.no DESC")
+    @Query("SELECT i FROM Inquiry i WHERE i.status='ACTIVE' ORDER BY i.no DESC")
     List<Inquiry> findAllByOrderByNoDesc(); // 모든 문의를 no 기준으로 내림차순 조회 (파라미터 제거)
 
     Optional<Inquiry> findByNo(int no);
 
-    void deleteByNo(int no);
+    //관리자용 문의리스트
+    @Query("SELECT i FROM Inquiry i ORDER BY i.no DESC")
+    List<Inquiry> findAllByOrderByNoDescForAdmin();
 }
