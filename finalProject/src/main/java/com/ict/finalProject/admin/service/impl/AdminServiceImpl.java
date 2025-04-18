@@ -86,4 +86,33 @@ public class AdminServiceImpl implements AdminService {
                 .femaleRatio(femaleRatio)
                 .build();
     }
+
+    @Override
+    public Page<UserResponse> getBlackList(Pageable pageable) {
+        Page<Users> result = adminRepository.findByStatus(StatusInfo.DEACTIVE, pageable);
+
+        return result.map(user->UserResponse.builder()
+                        .no(user.getNo())
+                        .id(user.getId())
+                        .nickname(user.getNickname())
+                        .email(user.getEmail())
+                        .gender(user.getGender().name())
+                        .status(user.getStatus().name())
+                        .role(user.getRole().name())
+                        .build());
+    }
+
+    //블랙리스트 상태 DEACTIVE -> ACTIVE로 변경
+    @Override
+    public void updateBlacklistStatus(Integer userNo) {
+        Users user = adminRepository.findById(userNo) //userNo로 해당하는 관리자 찾음
+                .orElseThrow(()->new IllegalArgumentException("해당 사용자를 찾을 수 없습니다.")); //예외처리
+
+        if(user.getStatus() == StatusInfo.ACTIVE){
+            throw new IllegalArgumentException("이미 활성화된 사용자입니다.");
+
+        }
+
+        adminRepository.updateBlacklistStatus(StatusInfo.ACTIVE.name(), userNo);
+    }
 }

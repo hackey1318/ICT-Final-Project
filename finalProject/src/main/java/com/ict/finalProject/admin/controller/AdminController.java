@@ -52,4 +52,24 @@ public class AdminController {
     public GenderRatio getGenderRatio(){
          return adminService.getGenderRatio();
     }
+
+    //블랙리스트 목록 조회
+    @GetMapping("blacklist")
+    public Page<UserResponse> getBlackList(@PageableDefault(size = 10)Pageable pageable){
+        return adminService.getBlackList(pageable);
+    }
+
+    //블랙리스트 상태 DEACTIVE -> ACTIVE로 변경
+    @PostMapping("blacklist-active/{userNo}")
+    public ResponseEntity<String> updateBlacklistStatus(@PathVariable Integer userNo){
+        //서비스에서 던져진 예외 컨트롤러에서 처리
+        try{
+            adminService.updateBlacklistStatus(userNo);
+            return ResponseEntity.ok("사용자 활성화 성공");
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.ok("이미 활성화된 사용자 or 존재하지 않는 사용자입니다.");
+        }catch(Exception e){
+            return ResponseEntity.ok("서버 오류가 발생했습니다.");
+        }
+    }
 }
