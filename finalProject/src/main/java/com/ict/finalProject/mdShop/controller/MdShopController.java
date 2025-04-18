@@ -1,9 +1,9 @@
 package com.ict.finalProject.mdShop.controller;
 
-import com.ict.finalProject.mdShop.service.dto.MdShopDto;
-import com.ict.finalProject.mdShop.service.dto.MdShopInsertDto;
-import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
+import com.ict.finalProject.mdShop.controller.request.MdshopRequest;
+import com.ict.finalProject.mdShop.controller.response.MdshopResponse;
 import com.ict.finalProject.mdShop.service.MdShopService;
+import com.ict.finalProject.mdShop.service.dto.MdShopDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,38 +12,49 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/md")
+@RequestMapping("/md-shop")
 @RequiredArgsConstructor
 public class MdShopController {
 
-    private final MdShopService md_service;
+    private final MdShopService mdShopservice;
 
-    @GetMapping("/items")
-    public ResponseEntity<Page<MdShopDto>> getMdList(
-        @RequestParam(value = "name", required = false) String name,
-        @PageableDefault(page = 0, size = 10, sort = {"updatedAt"}, direction = Sort.Direction.DESC) Pageable pageable
-        ){
-        return ResponseEntity.ok(md_service.getMdList(name,pageable));
+    @GetMapping("/lists")
+    public ResponseEntity<Page<MdShopDto>> getMdList(@RequestParam(value = "name", required = false) String name,
+                                                     @RequestParam(value = "movie", required = false) String movieName,
+                                                     @PageableDefault(page = 0, size = 10, sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(mdShopservice.getMdList(name, movieName, pageable));
+    }
+
+    @GetMapping("/lists/{id}")
+    public MdShopDto getGoodsInfo(@PathVariable("id") Integer goodsNo) {
+        return mdShopservice.getGoodsInfo(goodsNo);
+    }
+
+    @GetMapping("/movies/{id}")
+    public List<MdShopDto> getGoodsInfoByMovie(@PathVariable("id") Integer movieNo) {
+        return mdShopservice.getGoodsInfoByMovieNo(movieNo);
     }
 
 
-
-    @PostMapping("/insert")
-    public void insertMd(@RequestBody MdShopInsertDto dto){
-        md_service.insertMd(dto);
+        @PostMapping("/items")//아이템정보
+    public ResponseEntity<MdshopResponse> insertItem(@RequestBody MdshopRequest request) {
+        MdshopResponse response = mdShopservice.insertMd(request);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/insert-moviename")
-    public ResponseEntity<List<MovieNameDto>> getMovieNames(String movieSearch){
-        System.out.println(movieSearch);
-        List<MovieNameDto> no_search = new ArrayList<>();
-        if(movieSearch.isEmpty()) {
-            return ResponseEntity.ok(no_search);
-        }
-        return ResponseEntity.ok(md_service.getMovieNameListByMovieSearch(movieSearch));
+    @PutMapping("/items")
+    public ResponseEntity<MdshopResponse> updateItem(@RequestParam int id, @RequestBody MdshopRequest request) {
+        MdshopResponse response = mdShopservice.updateMd(id, request);
+        return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/items/{id}")
+    public ResponseEntity<Void> deleteItem(@PathVariable int id) {
+        mdShopservice.deleteMd(id);
+        return ResponseEntity.ok().build();
+    }
+
 }
