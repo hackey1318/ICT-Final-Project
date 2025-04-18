@@ -35,7 +35,7 @@ public class AdminController {
     }
 
     //관리자 비활성화
-    @PostMapping("manager-delete/{userNo}")
+    @PostMapping("/manager-delete/{userNo}")
     public ResponseEntity<String> deleteManager(@PathVariable Integer userNo){
         try{
             adminService.deleteManager(userNo);
@@ -48,19 +48,19 @@ public class AdminController {
     }
 
     //성별비율
-    @GetMapping("gender-ratio")
+    @GetMapping("/gender-ratio")
     public GenderRatio getGenderRatio(){
          return adminService.getGenderRatio();
     }
 
     //블랙리스트 목록 조회
-    @GetMapping("blacklist")
+    @GetMapping("/blacklist")
     public Page<UserResponse> getBlackList(@PageableDefault(size = 10)Pageable pageable){
         return adminService.getBlackList(pageable);
     }
 
     //블랙리스트 상태 DEACTIVE -> ACTIVE로 변경
-    @PostMapping("blacklist-active/{userNo}")
+    @PostMapping("/blacklist-active/{userNo}")
     public ResponseEntity<String> updateBlacklistStatus(@PathVariable Integer userNo){
         //서비스에서 던져진 예외 컨트롤러에서 처리
         try{

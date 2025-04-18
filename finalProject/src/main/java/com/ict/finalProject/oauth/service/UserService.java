@@ -1,19 +1,24 @@
 package com.ict.finalProject.oauth.service;
 
-import com.ict.finalProject.oauth.controller.request.RegisterRequest;
+import com.ict.finalProject.oauth.controller.request.KakaoRegisterRequest;
+import com.ict.finalProject.oauth.controller.request.LocalRegisterRequest;
 import com.ict.finalProject.oauth.repository.domain.Users;
 
 import java.util.Optional;
 
 public interface UserService {
 
-    String login(String id, String password);
+    boolean registerLocalUser(LocalRegisterRequest request);
+
+    boolean registerKakaoUser(KakaoRegisterRequest request);
 
     Optional<Users> existUser(String kakaoId);
 
-    boolean registerUser(RegisterRequest request);
+    Users getUser(String userId);
 
-    Users getUser(String userid);
+    boolean existsByUserId(String userId);
 
-    boolean existsByUserId(String userid);
+    String login(String id, String password);
+
+    boolean existsByPhone(String phone);
 }
