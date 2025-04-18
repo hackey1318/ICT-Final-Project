@@ -9,7 +9,8 @@ public enum StatusInfo {
 
     ACTIVE("활성 상태"),
     PENDING("활성 전"),
-    DELETE("삭제");
+    DELETE("삭제"),
+    DEACTIVE("비활성 상태");
 
     private final String description;
 

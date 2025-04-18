@@ -14,4 +14,9 @@ public interface AdminService {
     void deleteManager(Integer userNo);
 
     GenderRatio getGenderRatio();
+
+    Page<UserResponse> getBlackList(Pageable pageable);
+
+    //블랙리스트 상태 DEACTIVE -> ACTIVE로 변경
+    void updateBlacklistStatus(Integer userNo);
 }
