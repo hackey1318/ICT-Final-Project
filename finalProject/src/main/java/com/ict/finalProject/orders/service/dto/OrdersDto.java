@@ -16,8 +16,10 @@ public class OrdersDto {
     private int theaterNo; // 영화관 PK
     private String orderNumber;
     private OrdersStatus status;
+    private String statusText;
     private int totalPrice;
     private LocalDateTime updatedAt;
+
 
     public OrdersDto(Orders orders) {
         this.id = orders.getId();
@@ -25,6 +27,7 @@ public class OrdersDto {
         this.theaterNo = orders.getTheaterNo();
         this.orderNumber = orders.getOrderNumber();
         this.status = orders.getStatus();
+        this.statusText = "";
         this.totalPrice = orders.getTotalPrice();
         this.updatedAt = orders.getUpdatedAt();
     }

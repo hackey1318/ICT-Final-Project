@@ -3,8 +3,8 @@ package com.ict.finalProject.payment.controller;
 import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.orders.repository.domain.Orders;
 import com.ict.finalProject.orders.service.OrdersService;
-import com.ict.finalProject.payment.repository.domain.Payment;
-import com.ict.finalProject.payment.service.PaymentService;
+import com.ict.finalProject.payment.repository.domain.Payments;
+import com.ict.finalProject.payment.service.PaymentsService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
@@ -33,7 +33,7 @@ import java.util.Base64;
 public class PaymentController {
 
     private final OrdersService ordersService;
-    private final PaymentService paymentService;
+    private final PaymentsService paymentsService;
 
     @PostMapping("/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
@@ -98,37 +98,33 @@ public class PaymentController {
         responseStream.close();
 
         // 결제 정보 저장하는 부분
-        Payment payment = new Payment();
+        Payments payments = new Payments();
         Orders orders = ordersService.getOrders((String) jsonObject.get("orderId"));
         int orderNo = orders.getId();
-        payment.setOrderNo(orderNo);
-        payment.setPaymentKey((String) jsonObject.get("paymentKey"));
-        payment.setStatus(OrdersStatus.PAID);
-        paymentService.insertPayments(payment);
+        payments.setOrderNo(orderNo);
+        payments.setPaymentKey((String) jsonObject.get("paymentKey"));
+        payments.setStatus(OrdersStatus.PAID);
+
+        if (jsonObject.get("method").equals("간편결제")) {
+            Object easyPayObj = jsonObject.get("easyPay");
+            JSONObject easyPay = (JSONObject) easyPayObj;
+            String provider = (String) easyPay.get("provider");
+            payments.setMethod("간편결제 - " + provider);
+        } else if (jsonObject.get("method").equals("카드")) {
+            Object cardObj = jsonObject.get("card");
+            JSONObject card = (JSONObject) cardObj;
+            String cardType = (String) card.get("cardType");
+            payments.setMethod(cardType + "카드");
+        } else {
+            payments.setMethod("기타");
+        }
+
+        paymentsService.insertPayments(payments);
 
         // 기존 주문 정보 상태 변경
         orders.setStatus(OrdersStatus.PAID);
         ordersService.insertOrders(orders);
 
         return ResponseEntity.status(code).body(jsonObject);
-    }
-
-    @PostMapping("/result")
-    public String paymentResult (@RequestBody String orderId) {
-        
-        // orderId로 사용자 정보 DB에서 추출
-        
-        // 직접 입력한 임시 더미 데이터값
-        JSONArray arr = new JSONArray();
-
-        JSONObject customerInfo = new JSONObject();
-        customerInfo.put("customerEmail", "customer123@gmail.com");
-        customerInfo.put("customerName", "김씨네마투게더");
-        customerInfo.put("customerMobilePhone", "01012341234");
-        customerInfo.put("customerAddress", "서울 성동구 왕십리로");
-
-        arr.add(customerInfo);
-
-        return arr.toString();
     }
 }

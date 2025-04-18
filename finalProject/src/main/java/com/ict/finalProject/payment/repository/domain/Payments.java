@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "payments")
-public class Payment {
+public class Payments {
 
     @Id
     @Column
@@ -31,6 +31,9 @@ public class Payment {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private OrdersStatus status;
+
+    @Column(nullable = false)
+    private String method;
 
     @CreationTimestamp
     @Column(updatable = false)

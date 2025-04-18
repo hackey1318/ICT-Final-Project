@@ -11,4 +11,6 @@ public interface TheatersService {
     void saveTheaterList(List<Theaters> theaters);
 
     int getTheaterNo(String theaterName);
+
+    String getTheaterName(int theaterNo);
 }

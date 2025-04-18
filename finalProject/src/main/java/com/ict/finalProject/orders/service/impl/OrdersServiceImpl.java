@@ -8,6 +8,7 @@ import com.ict.finalProject.orders.service.OrdersService;
 import com.ict.finalProject.orders.service.dto.OrdersDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,5 +64,26 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public Orders getOrders(String orderNumber) {
         return ordersRepository.findByOrderNumber(orderNumber);
+    }
+
+    @Override
+    public OrdersDto getOrdersDtoByOrderNumber(String orderNumber) throws Exception {
+        Orders orders = ordersRepository.findByOrderNumber(orderNumber);
+        if (orders == null) {
+            throw new Exception("Orders not found with OrderNumber");
+        }
+        ModelMapper mapper = new ModelMapper();
+        OrdersDto ordersDto = mapper.map(orders, OrdersDto.class);
+        ordersDto.setStatusText(convertStatusToText(orders.getStatus()));
+        return ordersDto;
+    }
+
+    private String convertStatusToText(OrdersStatus status) {
+        switch (status) {
+            case PAID: return "결제 완료";
+            case PENDING: return "결제 대기";
+            case CANCELLED: return "결제 취소";
+            default: return "기타";
+        }
     }
 }
