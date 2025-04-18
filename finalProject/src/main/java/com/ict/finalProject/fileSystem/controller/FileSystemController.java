@@ -41,7 +41,7 @@ public class FileSystemController {
     @PostMapping("/upload/register-image")
     public List<FileUploadResponse> uploadRegisterImage(@RequestParam("files") List<MultipartFile> files) throws IOException {
 
-        String userId = AuthCheck.getUserId(UserRole.USER, UserRole.ADMIN);
+//        String userId = AuthCheck.getUserId(UserRole.USER, UserRole.ADMIN);
         return fileSystemService.uploadFile(files);
     }
 
