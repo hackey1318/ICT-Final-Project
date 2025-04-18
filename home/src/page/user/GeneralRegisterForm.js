@@ -346,7 +346,12 @@ const GeneralRegisterForm = () => {
                             <button
                                 type="submit"
                                 className="btn btn-primary btn-lg"
-                                disabled={loading || idCheckStatus !== 'available' || uploadLoading}
+                                disabled={
+                                    loading ||
+                                    uploadLoading ||
+                                    idCheckStatus !== 'available' ||
+                                    !(formData.phone1 && formData.phone2 && formData.phone3 && phoneCheckStatus === 'available')
+                                }
                             >
                                 {loading ? (
                                     <>
