@@ -2,6 +2,7 @@ package com.ict.finalProject.user.service.impl;
 
 import com.ict.finalProject.common.exception.custom.NotFoundException;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.mdShop.repository.MdShopRepository;
 import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.domain.Movies;
 import com.ict.finalProject.oauth.repository.UsersRepository;
@@ -40,6 +41,7 @@ public class LikesServiceImpl implements LikesService {
     private final UsersRepository usersRepository;
     private final LikesRepository likesRepository;
     private final MoviesRepository moviesRepository;
+    private final MdShopRepository mdShopRepository;
 
     @Override
     public Page<LikeItemDto> getMovieOrGoodsLikeList(Pageable pageable, Integer userNo, LikeType type) {
@@ -71,6 +73,9 @@ public class LikesServiceImpl implements LikesService {
                         })
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList());
+            }
+            case GOODS -> {
+
             }
         }
 
@@ -117,7 +122,12 @@ public class LikesServiceImpl implements LikesService {
                     throw new NotFoundException("정보를 찾을 수 없습니다.");
                 }
             }
-            case GOODS, INQUIRE, MOVIEREVIEW, GOODSREVIEW -> {
+            case GOODS -> {
+                if (!mdShopRepository.existsById(targetNo)) {
+                    throw new NotFoundException("정보를 찾을 수 없습니다.");
+                }
+            }
+            case INQUIRE, MOVIEREVIEW, GOODSREVIEW -> {
                 log.info("추후 개발");
                 return false;
             }

@@ -1,7 +1,7 @@
 import axios from "../../js/public/axiosConfig"
 import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
-import { ArrowLeft, Bookmark, Share2, Heart, HeartOff } from "lucide-react"
+import { ArrowLeft, Bookmark, Share, Heart, HeartOff } from "lucide-react"
 import "./../../css/movie/MovieDetail.css" // CSS 파일 경로는 실제 프로젝트 구조에 맞게 조정하세요
 import LikeType from "../../js/common/LikeType"
 import RelatedMovie from './RelatedMovie';
@@ -97,7 +97,7 @@ function MovieDetail() {
 
 			try {
 				const movieList = await axios.get(`http://localhost:9988/movies/relate-movie?no=${id}`)
-				setRelatedMovies(movieList.data.content); 
+				setRelatedMovies(movieList.data.content);
 			} catch (error) {
 				console.error("Error fetching related goods:", error);
 			}
@@ -150,6 +150,16 @@ function MovieDetail() {
 		}
 	};
 
+	const handleCopyUrl = () => {
+		const url = window.location.href;
+		navigator.clipboard.writeText(url)
+			.then(() => {
+				alert('링크가 클립보드에 복사되었습니다!');
+			})
+			.catch(err => {
+				console.error('클립보드 복사 실패:', err);
+			});
+	};
 
 	// --- 성공 상태 UI ---
 	// 로딩이 끝나고 에러 없이 movie 데이터가 성공적으로 로드된 경우
@@ -182,8 +192,8 @@ function MovieDetail() {
 								color={liked ? 'red' : 'gray'}
 								fill={liked ? 'red' : 'none'}
 							/>
+							<Share className="movie_detail_icon ms-2" onClick={handleCopyUrl} />
 						</div>
-						<Share2 className="movie_detail_icon ms-2" />
 					</div>
 				</div>
 			</header>
