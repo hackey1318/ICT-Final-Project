@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,4 +32,12 @@ public interface AdminRepository extends JpaRepository<Users, Integer> {
             "COUNT(*) AS totalPerson " +
             "FROM users WHERE status = 'ACTIVE';", nativeQuery = true)
     List<Object[]> countUsersByActiveUsers();
+
+    Page<Users> findByStatus(StatusInfo statusInfo, Pageable pageable);
+
+    //블랙리스트 상태 DEACTIVE -> ACTIVE로 변경
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE users SET status = :status WHERE no = :userNo", nativeQuery = true)
+    void updateBlacklistStatus(@Param("status") String status, @Param("userNo") Integer userNo);
 }

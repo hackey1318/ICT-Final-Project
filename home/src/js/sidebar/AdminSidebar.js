@@ -79,7 +79,7 @@ function AdminSidebar({activeMenu}){
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>
+                                    <Link to="/manager/home/blacklist" className={`admin-nav-link ${activeMenu === "blacklist" ? "active":""}`}>
                                         블랙리스트 조회
                                     </Link>
                                 </li>
@@ -137,9 +137,9 @@ function AdminSidebar({activeMenu}){
                         <div className="top-menu-div" onClick={()=>{toggleMenu(1)}}>회원 조회</div>
                         {managerOpenMenus[1] && (
                             <ul className="admin-sub-menu">
-                                <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>회원 목록 조회</Link></li>
+                                <li><Link to="/manager/home/member-list" className={`admin-nav-link ${activeMenu === "member-list" ? "active":""}`}>회원 목록 조회</Link></li>
                                 <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>신고 목록 조회</Link></li>
-                                <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>블랙리스트 조회</Link></li>
+                                <li><Link to="/manager/home/blacklist" className={`admin-nav-link ${activeMenu === "blacklist" ? "active":""}`}>블랙리스트 조회</Link></li>
                             </ul>
                         )}
                     </li>

@@ -1,12 +1,13 @@
 .userdau-wrap{
-    padding: 40px;
+    padding: 20px 40px 0 40px;
 }
 .contents-title{
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 .userdau-data-wrap{
     display: flex;
-    padding: 30px;
+    padding: 20px 40px 0 40px;
+    gap: 30px;
 }
 .data-select-btn{
     width: 200px;
@@ -30,7 +31,9 @@
     width: 60%;
 }
 .userdau-list{
-    height: 500px;
+    width: 100%;
+    overflow: hidden; /* 스크롤 방지 */
+    min-height: 550px;
 }
 .userdau-list>ul{
     list-style: none;
@@ -38,25 +41,35 @@
     margin: 0;
     padding: 0;
     width: 100%;
-    justify-content: center;
+    justify-content: center; 
+    box-sizing: border-box;
+    flex-wrap: nowrap; /* 줄바꿈 방지 */
 }
 .userdau-list>ul>li{
-    width: 33%;
-    text-align: center;
+    text-align: center; 
     border-bottom: 1px solid #aaa;
     padding: 10px;
+    flex: 1; /* 비율 자동 배분 */
+    min-width: 0; /* 줄어들 수 있도록, flex 아이템이 자동으로 줄어들 수 있게 해줌 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* 줄바꿈 안되게 */
 }
 .userdau-list>ul:first-child>li{
     border: none;
 }
-.userdau-list>.list-content-ul:hover{
+.userdau-list>ul:hover{
     background: #ccc;
+}
+.userdau-list>ul:nth-child(1):hover{
+    background: none;
 }
 .userdau-list-title{
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 7px 20px;
+    white-space: nowrap;
 }
 
 .list-select-box{
@@ -66,7 +79,8 @@
 
 .paging-container{
     width: 500px;
-    margin: 20px auto;
+    margin: 0 auto;
+    margin-top: 25px;
     display: flex;
     justify-content: center;
 }
@@ -111,7 +125,7 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    margin-top: 20px;
+    margin-top: 85px;
     background-color: #f8f9fa;
     padding: 25px;
     border-radius: 12px;

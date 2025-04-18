@@ -33,6 +33,7 @@ import OrderError from './js/order/OrderError';
 import MemberList from './page/admin/MemberList';
 import ManagerList from './page/admin/ManagerList';
 import Gender from './page/admin/Gender';
+import BlackList from './page/admin/BlackList';
 
 function App() {
 
@@ -81,6 +82,7 @@ function App() {
             <Route path="dau" element={<UserDau />} />
             <Route path="member-list" element={<MemberList />} />
             <Route path="manager-list" element={<ManagerList />} />
+            <Route path="blacklist" element={<BlackList />} />
             <Route path="gender" element={<Gender />} />
             <Route path="mdlists" element={<MdList />} />
           </Route>
