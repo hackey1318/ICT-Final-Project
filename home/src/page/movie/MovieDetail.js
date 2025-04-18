@@ -243,7 +243,7 @@ function MovieDetail() {
 									rel="noopener noreferrer"
 								>
 									<img
-										src={item.imageId ? `${BASE_URL}${item.imageId}` : "/placeholder.svg"}
+										src={item.imageUrls ? `${BASE_URL}${item.imageUrls[0]}` : "/placeholder.svg"}
 										alt={item.name}
 										className="movie_detail_item_img img-fluid rounded mb-2"
 										onError={(e) => {
