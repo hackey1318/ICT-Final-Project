@@ -18,7 +18,7 @@ public class MdshopRequest {
     private String options;
     private int movieNo;
     private List<String> imageIdList;
-    private Integer id;
-    private List<String> existingImageIds;
-    private List<String> newImageIds;
+    private List<String> deletedImages;
+    private int count;
+    private String description;
 }

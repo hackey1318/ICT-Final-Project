@@ -35,12 +35,13 @@ public class MdshopResponse {
 
     private String movieName;
 
+    private Integer count;
+
+    private String description;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
     private List<String> imageIdList;
-
-    private List<String> imageUrls;
-
 }

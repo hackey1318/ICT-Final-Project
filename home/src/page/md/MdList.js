@@ -11,7 +11,7 @@ function MdList() {
   const [page, setPage] = useState(0);
   const [size] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  const [sortField, setSortField] = useState("updatedAt");
+  const [sortField, setSortField] = useState("createdAt");
   const [sortDirection, setSortDirection] = useState("desc");
   const [searchType, setSearchType] = useState("name");
   const [searchValue, setSearchValue] = useState("");

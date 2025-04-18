@@ -2,10 +2,8 @@ package com.ict.finalProject.mdShop.controller;
 
 import com.ict.finalProject.mdShop.controller.request.MdshopRequest;
 import com.ict.finalProject.mdShop.controller.response.MdshopResponse;
-import com.ict.finalProject.mdShop.service.dto.MdShopDto;
-import com.ict.finalProject.mdShop.service.dto.MdShopInsertDto;
-import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
 import com.ict.finalProject.mdShop.service.MdShopService;
+import com.ict.finalProject.mdShop.service.dto.MdShopDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +12,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,12 +24,22 @@ public class MdShopController {
     @GetMapping("/lists")
     public ResponseEntity<Page<MdShopDto>> getMdList(@RequestParam(value = "name", required = false) String name,
                                                      @RequestParam(value = "movie", required = false) String movieName,
-                                                     @PageableDefault(page = 0, size = 10, sort = {"updatedAt"}, direction = Sort.Direction.DESC) Pageable pageable
-        ){
+                                                     @PageableDefault(page = 0, size = 10, sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(mdShopservice.getMdList(name, movieName, pageable));
     }
 
-    @PostMapping("/items")//아이템정보
+    @GetMapping("/lists/{id}")
+    public MdShopDto getGoodsInfo(@PathVariable("id") Integer goodsNo) {
+        return mdShopservice.getGoodsInfo(goodsNo);
+    }
+
+    @GetMapping("/movies/{id}")
+    public List<MdShopDto> getGoodsInfoByMovie(@PathVariable("id") Integer movieNo) {
+        return mdShopservice.getGoodsInfoByMovieNo(movieNo);
+    }
+
+
+        @PostMapping("/items")//아이템정보
     public ResponseEntity<MdshopResponse> insertItem(@RequestBody MdshopRequest request) {
         MdshopResponse response = mdShopservice.insertMd(request);
         return ResponseEntity.ok(response);

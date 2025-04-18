@@ -1,21 +1,25 @@
 package com.ict.finalProject.mdShop.service.impl;
 
+import com.ict.finalProject.common.exception.custom.NotFoundException;
 import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.fileSystem.domain.ImageInfo;
 import com.ict.finalProject.fileSystem.domain.Images;
 import com.ict.finalProject.fileSystem.repository.ImageInfoRepository;
 import com.ict.finalProject.fileSystem.repository.FileSystemRepository;
-import com.ict.finalProject.fileSystem.service.FileSystemService;
 import com.ict.finalProject.mdShop.controller.request.MdshopRequest;
 import com.ict.finalProject.mdShop.controller.response.MdshopResponse;
+import com.ict.finalProject.mdShop.repository.GoodsStockRepository;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
 import com.ict.finalProject.mdShop.repository.MdShopRepository;
+import com.ict.finalProject.mdShop.repository.domain.GoodsStocks;
 import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.mdShop.service.dto.MdShopDto;
 import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
 import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.domain.Movies;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,8 +34,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MdShopServiceImpl implements MdShopService {
+
+    private final ModelMapper modelMapper;
+
     private final MdShopRepository mdShopRepository;
     private final MoviesRepository moviesRepository;
+    private final GoodsStockRepository goodsStockRepository;
     private final ImageInfoRepository imageInfoRepository;
     private final FileSystemRepository fileSystemRepository;
 
@@ -47,15 +55,34 @@ public class MdShopServiceImpl implements MdShopService {
 
                     List<String> imageIds = imageInfoRepository.findImageIdsByBoardNoAndTypeAndStatus(
                             goods.getId(), ImageWriteType.GOODS, StatusInfo.ACTIVE);
-                    List<String> imageUrls = imageIds.stream()
-                            .map(id -> "/file-system/view/" + id)
-                            .collect(Collectors.toList());
 
-                    MdShopDto dto = new MdShopDto(goods);
+                    GoodsStocks goodsStock = goodsStockRepository.findByGoods(goods).orElse(null);
+                    MdShopDto dto = new MdShopDto(goods, goodsStock != null ? goodsStock.getQuantity() : 0);
                     dto.setMovieName(movieNameFromDb);
-                    dto.setImageUrls(imageUrls);
+                    dto.setImageUrls(imageIds);
                     return dto;
                 });
+    }
+
+    @Override
+    public MdShopDto getGoodsInfo(Integer id) {
+
+        GoodsStocks goodsStocks = goodsStockRepository.findByGoodsNo(id).orElseThrow(() -> new NotFoundException("상품정보가 존재하지 않습니다."));
+        MdShopDto goodInfo = modelMapper.map(goodsStocks.getGoods(), MdShopDto.class);
+        List<String> imageIds = imageInfoRepository.findImageIdsByBoardNoAndTypeAndStatus(
+                goodInfo.getId(), ImageWriteType.GOODS, StatusInfo.ACTIVE);
+        goodInfo.setCount(goodsStocks.getQuantity());
+        goodInfo.setImageUrls(imageIds);
+
+        return goodInfo;
+    }
+
+    @Override
+    public List<MdShopDto> getGoodsInfoByMovieNo(Integer movieNo) {
+        List<GoodsStocks> goodsStocks = goodsStockRepository.findByGoods_MovieNo(movieNo);
+        return goodsStocks.stream().map(good -> {
+            return new MdShopDto(good.getGoods(), good.getQuantity());
+        }).toList();
     }
 
     @Override
@@ -64,14 +91,17 @@ public class MdShopServiceImpl implements MdShopService {
         Movies movie = moviesRepository.findById(request.getMovieNo())
                 .orElseThrow(() -> new IllegalArgumentException("해당 영화가 존재하지 않습니다."));
 
-        Goods goods = new Goods();
-        goods.setName(request.getName());
-        goods.setType(request.getType());
-        goods.setPrice(request.getPrice());
-        goods.setOptions(request.getOptions());
-        goods.setMovieNo(movie.getNo());
-        goods.setStatus(StatusInfo.ACTIVE);
-        mdShopRepository.save(goods);
+        Goods goods = Goods.builder()
+                .name(request.getName())
+                .type(request.getType())
+                .price(request.getPrice())
+                .options(request.getOptions())
+                .movieNo(movie.getNo())
+                .description(request.getDescription())
+                .status(StatusInfo.ACTIVE)
+                .build();
+        Goods saveEntity = mdShopRepository.save(goods);
+        goodsStockRepository.save(GoodsStocks.builder().goods(saveEntity).quantity(request.getCount()).build());
 
         List<String> imageIds = request.getImageIdList();
         if (imageIds != null && !imageIds.isEmpty()) {
@@ -79,15 +109,11 @@ public class MdShopServiceImpl implements MdShopService {
                     .map(id -> com.ict.finalProject.fileSystem.domain.ImageInfo.builder()
                             .imageId(id)
                             .type(ImageWriteType.GOODS)
-                            .boardNo(goods.getId())
+                            .boardNo(saveEntity.getId())
                             .status(StatusInfo.ACTIVE)
                             .build())
                     .collect(Collectors.toList()));
         }
-
-        List<String> imageUrls = imageIds == null ? List.of() : imageIds.stream()
-                .map(id -> "/file-system/view/" + id)
-                .collect(Collectors.toList());
 
         return MdshopResponse.builder()
                 .id(goods.getId())
@@ -95,9 +121,9 @@ public class MdShopServiceImpl implements MdShopService {
                 .type(goods.getType())
                 .price(goods.getPrice())
                 .options(goods.getOptions())
+                .description(goods.getDescription())
                 .movieNo(movie.getNo())
                 .imageIdList(imageIds)
-                .imageUrls(imageUrls)
                 .build();
     }
 
@@ -107,20 +133,33 @@ public class MdShopServiceImpl implements MdShopService {
         Goods goods = mdShopRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 굿즈가 존재하지 않습니다."));
 
-        goods.setName(request.getName());
-        goods.setMovieNo(request.getMovieNo());
-        goods.setType(request.getType());
-        goods.setPrice(request.getPrice());
-        goods.setOptions(request.getOptions());
+        goods.update(request);
 
-        List<com.ict.finalProject.fileSystem.domain.ImageInfo> oldImageInfos = imageInfoRepository.findAllByBoardNoAndType(id, ImageWriteType.GOODS);
-        oldImageInfos.forEach(img -> img.setStatus(StatusInfo.DELETE));
-        imageInfoRepository.saveAll(oldImageInfos);
+        GoodsStocks goodsStock = goodsStockRepository.findByGoods(goods).orElse(null);
+        if (goodsStock != null) {
+
+            if (goodsStock.getQuantity() != request.getCount()) {
+                goodsStock.update(request.getCount());
+                goodsStockRepository.save(goodsStock);
+            }
+        } else {
+            goodsStockRepository.save(GoodsStocks.builder()
+                    .goods(goods)
+                    .quantity(request.getCount()).build());
+        }
+
+        // 삭제하고자 하는 이미지 삭제
+        if (request.getDeletedImages().size() > 0) {
+
+            List<ImageInfo> oldImageInfos = imageInfoRepository.findByImageIdInAndType(request.getDeletedImages(), ImageWriteType.GOODS);
+            oldImageInfos.forEach(img -> img.setStatus(StatusInfo.DELETE));
+            imageInfoRepository.saveAll(oldImageInfos);
+        }
 
         List<String> newImageIds = request.getImageIdList();
         if (newImageIds != null && !newImageIds.isEmpty()) {
             imageInfoRepository.saveAll(newImageIds.stream()
-                    .map(idStr -> com.ict.finalProject.fileSystem.domain.ImageInfo.builder()
+                    .map(idStr -> ImageInfo.builder()
                             .imageId(idStr)
                             .type(ImageWriteType.GOODS)
                             .boardNo(id)
@@ -129,10 +168,6 @@ public class MdShopServiceImpl implements MdShopService {
                     .collect(Collectors.toList()));
         }
 
-        List<String> imageUrls = newImageIds == null ? List.of() : newImageIds.stream()
-                .map(idStr -> "/file-system/view/" + idStr)
-                .collect(Collectors.toList());
-
         return MdshopResponse.builder()
                 .id(goods.getId())
                 .name(goods.getName())
@@ -140,8 +175,9 @@ public class MdShopServiceImpl implements MdShopService {
                 .price(goods.getPrice())
                 .options(goods.getOptions())
                 .movieNo(goods.getMovieNo())
-                .imageIdList(newImageIds)
-                .imageUrls(imageUrls)
+                .description(goods.getDescription())
+                .imageIdList(imageInfoRepository.findAllByBoardNoAndType(goods.getId(), ImageWriteType.GOODS).stream().map(ImageInfo::getImageId).toList())
+                .count(request.getCount())
                 .build();
     }
 
@@ -161,11 +197,15 @@ public class MdShopServiceImpl implements MdShopService {
         goods.setStatus(StatusInfo.DELETE);
         mdShopRepository.save(goods);
 
-        List<com.ict.finalProject.fileSystem.domain.ImageInfo> imageInfos = imageInfoRepository.findAllByBoardNoAndType(id, ImageWriteType.GOODS);
+        GoodsStocks goodsStock = goodsStockRepository.findById(goods).orElseThrow(() -> new NotFoundException("굿즈 정보 조회에 실패하였습니다."));
+        goodsStock.update(0);
+        goodsStockRepository.save(goodsStock);
+
+        List<ImageInfo> imageInfos = imageInfoRepository.findAllByBoardNoAndType(id, ImageWriteType.GOODS);
         imageInfos.forEach(img -> img.setStatus(StatusInfo.DELETE));
         imageInfoRepository.saveAll(imageInfos);
 
-        List<String> imageIds = imageInfos.stream().map(com.ict.finalProject.fileSystem.domain.ImageInfo::getImageId).collect(Collectors.toList());
+        List<String> imageIds = imageInfos.stream().map(ImageInfo::getImageId).collect(Collectors.toList());
         List<Images> images = fileSystemRepository.findByIdIn(imageIds);
 
         for (Images image : images) {
@@ -179,7 +219,6 @@ public class MdShopServiceImpl implements MdShopService {
                 e.printStackTrace();
             }
         }
-
         fileSystemRepository.saveAll(images);
     }
 }
