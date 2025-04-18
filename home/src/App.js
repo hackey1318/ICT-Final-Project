@@ -1,3 +1,4 @@
+import GeneralRegisterForm from './page/user/GeneralRegisterForm';
 import './App.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -33,6 +34,12 @@ import OrderError from './js/order/OrderError';
 import MemberList from './page/admin/MemberList';
 import ManagerList from './page/admin/ManagerList';
 import Gender from './page/admin/Gender';
+import InquiryReply from './page/admin/InquiryReply';
+import InquiryReplyView from './page/admin/InquiryReplyView';
+import GoodsDetail from './page/md/GoodsDetail';
+import MdShop from './page/md/MdShop';
+import RelatedMovie from './page/movie/RelatedMovie';
+import BlackList from './page/admin/BlackList';
 
 function App() {
 
@@ -45,10 +52,12 @@ function App() {
 
   return (
       <Routes>
+  
         <Route path='/' element={<Layout />}>
           <Route index element={<Main />} />
           <Route path='login' element={<KakaoLogin />} />
           <Route path='kakao/callback' element={<KakaoCallback />} />
+          <Route path="/register" element={<GeneralRegisterForm />} />
           <Route path='user/findId' element={<FindId />} />
           <Route path='user/findPwd' element={<FindPwd />} />
           <Route path='user/pwdReset' element={<PwdReset />} />
@@ -66,7 +75,10 @@ function App() {
           <Route path='order/list' element={<OrderList />} />
           <Route path='order/detail' element={<OrderDetail />} />
           <Route path='order/error' element={<OrderError />} />
-        </Route>
+          <Route path='mdshop' element={<MdShop />} />
+          <Route path="mdshop/:goodsNo" element={<GoodsDetail />} />
+          <Route path="/related-movie/:movieId" element={<RelatedMovie />} />
+          </Route>
 
         {/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
         <Route path="/manager">
@@ -81,8 +93,11 @@ function App() {
             <Route path="dau" element={<UserDau />} />
             <Route path="member-list" element={<MemberList />} />
             <Route path="manager-list" element={<ManagerList />} />
+            <Route path="blacklist" element={<BlackList />} />
             <Route path="gender" element={<Gender />} />
             <Route path="mdlists" element={<MdList />} />
+            <Route path="inquiry" element={<InquiryReply/>}/>
+            <Route path="inquiry/:no" element={<InquiryReplyView/>}/>
           </Route>
         </Route>
       </Routes>

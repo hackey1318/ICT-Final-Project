@@ -19,5 +19,7 @@ public interface MoviesService {
 
     Movies getMovieDetail(Integer movieNo);
 
+    Page<Movies> getRelateGenreMovieInfo(Pageable pageable, int movieNo);
+
     List<Movies> getRecommendationMovie(Integer userNo, int count);
 }

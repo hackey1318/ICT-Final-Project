@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import GenreFilter from "../../js/movie/Genre-filter"
-import MoviePagination from "../../js/movie/MoviePagination";
+import MoviePagination from "../../js/public/Pagination";
 import axios from "axios";
 import TypeFilter from "../../js/movie/MovieType";
 

@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
@@ -51,11 +52,16 @@ public class SecurityConfig {
         // white list (Spring Security 체크 제외 목록)
         MvcRequestMatcher[] permitAllWhiteList = {
                 mvc.pattern("/oauth/kakao/**"),
+                mvc.pattern("/oauth/login"),                  // ✅ 일반 로그인 허용
+                mvc.pattern("/oauth/kakao/register/local"),   // ✅ 일반 회원가입 허용
+                mvc.pattern( "/oauth/api/users/check-phone/**"),
                 mvc.pattern("/file-system/download/**"),
                 mvc.pattern("/file-system/showImage/**"),
                 mvc.pattern("/user/**"),
                 mvc.pattern("/banner/**"),
                 mvc.pattern("/movies/**"),
+                mvc.pattern("/md-shop/lists/**"),
+                mvc.pattern("/md-shop/movies/**"),
                 mvc.pattern("/file-system/upload/register-image"),
                 mvc.pattern("/swagger-ui/index.html"),
                 mvc.pattern("/dashboard/**"),

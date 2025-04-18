@@ -1,0 +1,60 @@
+/* 관리자 - 문의답변리스트 */
+#inquiryreply-container {
+    width: 95%;
+    min-width: 680px;
+    margin: 0 auto;
+    
+}
+
+#inquiryreply-container>ul {
+    overflow: auto;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    height: 50px;
+    line-height: 48px;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.500s;
+}
+
+#inquiryreply-container>ul:hover {
+    background-color: #ebebeb;
+    transition: all 0.500s;
+}
+
+#inquiryreply-container>ul>li {
+    float: left;
+    list-style-type: none;
+}
+
+#inquiryreply-container>ul>li:first-child {
+    width: 5%;
+    
+}
+
+#inquiryreply-container>ul>li:nth-of-type(2) {
+    width: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+#inquiryreply-container>ul>li:nth-of-type(3) {
+    width: 14%;
+}
+
+#inquiryreply-container>ul>li:nth-of-type(4) {
+    width: 17%;
+}
+
+#inquiryreply-container>ul>li:nth-of-type(5) {
+    width: 12%;
+}
+
+#inquiryreply-container>ul>li:last-child {
+    width: 12%;
+}
+
+/* 관리자 - 문의상세페이지 */
+

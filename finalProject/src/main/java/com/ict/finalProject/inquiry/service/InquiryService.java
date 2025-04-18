@@ -14,7 +14,11 @@ public interface InquiryService {
 
     List<InquiryResponse> getInquiry();
 
+    boolean checkPwd(int no, String password);
+
     InquiryResponse getInquiryByNo(int no);
 
     void inquiryDel(int no);
+
+    List<InquiryResponse> getAllInquiry();
 }

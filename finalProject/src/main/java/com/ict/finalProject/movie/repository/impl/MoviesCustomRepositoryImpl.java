@@ -4,7 +4,11 @@ import com.ict.finalProject.movie.repository.MoviesCustomRepository;
 import com.ict.finalProject.movie.repository.domain.Movies;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,5 +73,54 @@ public class MoviesCustomRepositoryImpl implements MoviesCustomRepository {
         query.setParameter("limit", count);
 
         return query.getResultList();
+    }
+
+    public Page<Movies> findRelateGenreMovieList(String[] genreList, Pageable pageable) {
+
+        StringBuilder queryStr = new StringBuilder("SELECT m FROM Movies m WHERE ");
+        String genreCondition = List.of(genreList).stream()
+                .map(g -> "m.genre LIKE :genre" + g)
+                .collect(Collectors.joining(" OR "));
+
+        String finalQuery = queryStr + genreCondition;
+
+        TypedQuery<Movies> query = em.createQuery(finalQuery, Movies.class);
+
+        // LIKE 검색 조건을 파라미터로 설정
+        for (int i = 0; i < genreList.length; i++) {
+            query.setParameter("genre" + genreList[i], "%" + genreList[i] + "%");
+        }
+
+        // 페이지 번호와 페이지 크기를 설정
+        int page = pageable.getPageNumber();
+        int size = pageable.getPageSize();
+
+        // 페이지네이션 적용: 첫 번째 인자는 시작 인덱스, 두 번째 인자는 페이지 크기
+        query.setFirstResult(page * size);
+        query.setMaxResults(size);
+
+        // 결과 반환
+        long total = countMoviesByGenresWithLike(genreList);
+        return new PageImpl<>(query.getResultList(), pageable, total);
+    }
+
+    // 장르 기반 영화의 전체 개수를 세는 메서드
+    private long countMoviesByGenresWithLike(String[] genreList) {
+        // 'LIKE' 조건을 동적으로 생성
+        String genreCondition = List.of(genreList).stream()
+                .map(g -> "m.genre LIKE :genre" + g)
+                .collect(Collectors.joining(" OR "));
+
+        // 전체 카운트를 위한 쿼리 작성
+        String countQueryStr = "SELECT COUNT(m) FROM Movies m WHERE " + genreCondition;
+
+        TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
+
+        // LIKE 검색 조건을 파라미터로 설정
+        for (int i = 0; i < genreList.length; i++) {
+            countQuery.setParameter("genre" + genreList[i], "%" + genreList[i] + "%");
+        }
+
+        return countQuery.getSingleResult();
     }
 }
