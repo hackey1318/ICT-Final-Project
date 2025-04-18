@@ -19,4 +19,6 @@ public interface UserService {
     boolean existsByUserId(String userId);
 
     String login(String id, String password);
+
+    boolean existsByPhone(String phone);
 }
