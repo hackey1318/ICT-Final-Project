@@ -106,10 +106,7 @@ function CheckoutPage({totalPrice, orderName, orderNumber}) {
                                 orderId: orderNumber, // 토스페이먼츠API 변수명 변경 불가
                                 orderName: orderName,
                                 successUrl: window.location.origin + "/payment/tossPaymentSuccess",
-                                failUrl: window.location.origin + "/payment/tossPaymentFail",
-                                customerEmail: "customer123@gmail.com",
-                                customerName: "김씨네마투게더",
-                                customerMobilePhone: "01012341234",
+                                failUrl: window.location.origin + "/payment/tossPaymentFail"
                             });
                         } catch (error) {
                             // 에러 처리하기

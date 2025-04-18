@@ -1,5 +1,11 @@
-package com.ict.finalProject.payment;
+package com.ict.finalProject.payment.controller;
 
+import com.ict.finalProject.domain.constant.OrdersStatus;
+import com.ict.finalProject.orders.repository.domain.Orders;
+import com.ict.finalProject.orders.service.OrdersService;
+import com.ict.finalProject.payment.repository.domain.Payments;
+import com.ict.finalProject.payment.service.PaymentsService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -23,50 +29,11 @@ import java.util.Base64;
 @Slf4j
 @RestController
 @RequestMapping("/payment")
+@AllArgsConstructor
 public class PaymentController {
 
-    JSONArray tempGoodsArray; // 테스트데이터 전용 임시 변수
-
-    @PostMapping("/save")
-    public String savePaymentInfo(@RequestBody String jsonBody) {
-        long requestTotalPrice = 0;
-        long dbTotalPrice = 0;
-
-        JSONParser parser = new JSONParser();
-        try {
-            JSONObject requestData = (JSONObject) parser.parse(jsonBody);
-            String orderId = (String) requestData.get("orderId");
-            requestTotalPrice = (long) requestData.get("totalPrice");
-            String customerEmail = (String) requestData.get("customerEmail");
-            String customerName = (String) requestData.get("customerName");
-            String customerMobilePhone = (String) requestData.get("customerMobilePhone");
-            String customerAddress = (String) requestData.get("customerAddress");
-
-            JSONArray goods = (JSONArray) requestData.get("goods");
-            tempGoodsArray = goods; // 테스트용 값
-            for (Object itemObj : goods) {
-                JSONObject item = (JSONObject) itemObj;
-                int id = ((Long) item.get("id")).intValue();
-                String name = (String) item.get("name");
-                long price = (long) item.get("price");
-                long quantity = (long) item.get("quantity");
-                // ★★★id기반으로 상품테이블 DB조회, 상품명과 가격 일치하는지 확인하는 거 만들어야 함★★★
-                boolean isCorrectData = true; // 임시로 true설정
-                if (isCorrectData) {
-                    dbTotalPrice += price * quantity;
-                } else {
-                    return "fail";
-                }
-            }
-
-            // ★★★orderId 및 주문 정보들 DB에 저장하는 거 만들어야 함★★★
-            return "success";
-
-        } catch (Exception e) {
-            // 취소 시 그냥 주문 상태를 취소로 바꿈
-            throw new RuntimeException(e);
-        }
-    }
+    private final OrdersService ordersService;
+    private final PaymentsService paymentsService;
 
     @PostMapping("/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
@@ -79,20 +46,24 @@ public class PaymentController {
         try {
             // 클라이언트에서 받은 JSON 요청 바디입니다.
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
-            orderId = (String) requestData.get("orderId");
+            orderId = (String) requestData.get("orderId"); // 토스 API 변수명 변경 불가
             paymentKey = (String) requestData.get("paymentKey");
             amount = (String) requestData.get("amount");
 
-            // ★★★DB에서 주문번호와 금액 일치하는지 확인하는 로직 만들어야 함★★★
-            boolean isCorrectRequest = true; // 테스트용 true
+            // order save에서 저장한 주문번호와 총 금액이 일치하는지 확인
+            Orders orders = ordersService.getOrders(orderId);
+            boolean isCorrectRequest = (orders.getTotalPrice() == Integer.parseInt(amount));
+
             if (!isCorrectRequest) {
-                return null;
+                JSONObject errorResponse = new JSONObject();
+                errorResponse.put("message", "유효하지 않은 결제 요청입니다.");
+                return ResponseEntity.badRequest().body(errorResponse);
             }
 
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        ;
+
         JSONObject obj = new JSONObject();
         obj.put("orderId", orderId);
         obj.put("paymentKey", paymentKey);
@@ -126,29 +97,34 @@ public class PaymentController {
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
         responseStream.close();
 
-        return ResponseEntity.status(code).body(jsonObject);
-    }
+        // 결제 정보 저장하는 부분
+        Payments payments = new Payments();
+        Orders orders = ordersService.getOrders((String) jsonObject.get("orderId"));
+        int orderNo = orders.getId();
+        payments.setOrderNo(orderNo);
+        payments.setPaymentKey((String) jsonObject.get("paymentKey"));
+        payments.setStatus(OrdersStatus.PAID);
 
-    @PostMapping("/result")
-    public String paymentResult (@RequestBody String orderId) {
-        
-        // orderId로 사용자 정보 DB에서 추출
-        
-        // 직접 입력한 임시 더미 데이터값
-        JSONArray arr = new JSONArray();
-
-        JSONObject customerInfo = new JSONObject();
-        customerInfo.put("customerEmail", "customer123@gmail.com");
-        customerInfo.put("customerName", "김씨네마투게더");
-        customerInfo.put("customerMobilePhone", "01012341234");
-        customerInfo.put("customerAddress", "서울 성동구 왕십리로");
-
-        arr.add(customerInfo);
-
-        for (int i = 0; i < tempGoodsArray.size(); i++) {
-            arr.add(tempGoodsArray.get(i));
+        if (jsonObject.get("method").equals("간편결제")) {
+            Object easyPayObj = jsonObject.get("easyPay");
+            JSONObject easyPay = (JSONObject) easyPayObj;
+            String provider = (String) easyPay.get("provider");
+            payments.setMethod("간편결제 - " + provider);
+        } else if (jsonObject.get("method").equals("카드")) {
+            Object cardObj = jsonObject.get("card");
+            JSONObject card = (JSONObject) cardObj;
+            String cardType = (String) card.get("cardType");
+            payments.setMethod(cardType + "카드");
+        } else {
+            payments.setMethod("기타");
         }
 
-        return arr.toString();
+        paymentsService.insertPayments(payments);
+
+        // 기존 주문 정보 상태 변경
+        orders.setStatus(OrdersStatus.PAID);
+        ordersService.insertOrders(orders);
+
+        return ResponseEntity.status(code).body(jsonObject);
     }
 }

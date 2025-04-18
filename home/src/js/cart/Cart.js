@@ -186,6 +186,9 @@ function Cart() {
             .then((response) => {
                 if (response.data === "success") {
                     setPaymentModalOpen(true);
+                } else {
+                    setOrderNumber(response.data);
+                    setPaymentModalOpen(true);
                 }
             })
             .catch((error) => {

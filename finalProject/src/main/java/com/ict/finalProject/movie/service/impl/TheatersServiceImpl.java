@@ -30,4 +30,9 @@ public class TheatersServiceImpl implements TheatersService {
         Theaters theaters = theatersRepository.findByName(theaterName);
         return theaters.getNo();
     }
+
+    public String getTheaterName(int theaterNo) {
+        Theaters theaters = theatersRepository.findById(theaterNo);
+        return theaters.getName();
+    }
 }
