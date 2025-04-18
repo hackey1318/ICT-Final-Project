@@ -30,6 +30,10 @@ const KakaoCallback = () => {
         handleSubmit,
         // --- 기타 ---
         navigate,
+        handlePhoneCheck,
+        phoneCheckLoading,
+        phoneCheckStatus,
+        phoneCheckMessage,
         // lastCheckedId // 직접 사용할 일은 적음
     } = useKakaoCallback();
 
@@ -254,19 +258,19 @@ const KakaoCallback = () => {
 
                          {/* 연락처 */}
                          <div className="mb-3">
-                            <label className="form-label">연락처 (선택)</label>
-                             {/* is-invalid 클래스는 input-group 전체에 적용해야 border가 제대로 보임 */}
-                             <div className={`input-group ${errors.phone ? 'is-invalid' : ''}`}>
-                                <input type="tel" className={`form-control ${errors.phone ? 'is-invalid' : ''}`} placeholder="010" name="phone1" value={formData.phone1} onChange={handleChange} maxLength={3} style={{ flex: "0 0 80px" }} aria-label="연락처 첫 부분" disabled={loading}/>
+                            <label className="form-label">연락처<span className="text-danger">*</span></label>
+                            <div className={`input-group ${errors.phone ? 'is-invalid' : ''}`}>
+                                <input type="tel" name="phone1" value={formData.phone1} onChange={handleChange} maxLength={3} className={`form-control ${errors.phone ? 'is-invalid' : ''}`} />
                                 <span className="input-group-text">-</span>
-                                <input type="tel" className={`form-control ${errors.phone ? 'is-invalid' : ''}`} placeholder="1234" name="phone2" value={formData.phone2} onChange={handleChange} maxLength={4} aria-label="연락처 중간 부분" disabled={loading}/>
+                                <input type="tel" name="phone2" value={formData.phone2} onChange={handleChange} maxLength={4} className={`form-control ${errors.phone ? 'is-invalid' : ''}`} />
                                 <span className="input-group-text">-</span>
-                                <input type="tel" className={`form-control ${errors.phone ? 'is-invalid' : ''}`} placeholder="5678" name="phone3" value={formData.phone3} onChange={handleChange} maxLength={4} aria-label="연락처 마지막 부분" disabled={loading}/>
+                                <input type="tel" name="phone3" value={formData.phone3} onChange={handleChange} maxLength={4} className={`form-control ${errors.phone ? 'is-invalid' : ''}`} />
+                                <button type="button" className="btn btn-outline-secondary" onClick={handlePhoneCheck} disabled={phoneCheckLoading || errors.phone || !formData.phone1 || !formData.phone2 || !formData.phone3}>
+                                {phoneCheckLoading ? '확인 중…' : '중복 확인'}
+                                </button>
                             </div>
-                            {/* 'phone' 공통 에러 메시지 표시 */}
-                            {errors.phone && <div id="phoneError" className="invalid-feedback d-block">{errors.phone}</div>}
-                            <div className="form-text">입력 시 본인 인증 등에 활용될 수 있습니다.</div>
-                        </div>
+                            <div className={`form-text ${phoneCheckStatus==='available' ? 'text-success' : 'text-danger'}`}>{phoneCheckMessage}</div>
+                            </div>
 
                          {/* 성별 */}
                         <fieldset className="mb-3">
@@ -294,14 +298,20 @@ const KakaoCallback = () => {
                                 // 2. 아이디 중복 확인 미완료 (idCheckStatus !== 'available')
                                 // 3. 중복 확인 후 아이디 변경됨 (formData.id !== lastCheckedId.current - 훅 내부에서 처리)
                                 // 4. 파일 업로드 진행 중 (uploadLoading)
-                                disabled={loading || idCheckStatus !== 'available' || uploadLoading}
+                                disabled={
+                                    loading || 
+                                    uploadLoading ||
+                                    idCheckStatus !== 'available' || 
+                                    
+                                    !(formData.phone1 && formData.phone2 && formData.phone3 && phoneCheckStatus === 'available')
+                                }
                             >
                                 {loading ? (
                                     <>
                                         <Spinner animation="border" size="sm" className="me-2" />
                                         가입 처리 중...
                                     </>
-                                ) : "가입 완료하기"}
+                                ) : "가입하기"}
                             </button>
                         </div>
                     </form>
