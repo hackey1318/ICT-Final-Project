@@ -8,55 +8,33 @@ function OrderDetail() {
 
     const [goodsData, setGoodsData] = useState([]);
     const [orderData, setOrderData] = useState();
-    const [pickupData, setPickupData] = useState();
+    const [paymentData, setPaymentData] = useState();
+    const [nickName, setNickName] = useState();
+    const [theater, setTheater] = useState();
     const [searchParams] = useSearchParams();
-    const orderId = searchParams.get('id');
+    const orderId = searchParams.get("orderNumber");
 
     useEffect(() => {
-        axios.get("http://localhost:9988/order/detail", {
-            params: {
-                orderId: orderId
-            },
+        axios.post("http://localhost:9988/order/detail", JSON.stringify({
+            orderNumber: orderId
+        }), {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
             }
         })
             .then((response) => {
-                if (response.data === true) {
-                    console.log("TRUE");
-                } else {
-                    console.log("오류 페이지로 이동하기 - 유효하지않은 주문번호 or 본인이 주문한 상품이 아님");
-                }
+                console.log(response.data);
+                setOrderData(response.data.orders);
+                setPaymentData(response.data.payments);
+                setNickName(response.data.nickName);
+                setTheater(response.data.theater);
             })
             .catch((error) => {
-                console.log(error);
+                window.location.href = "/order/error";
             })
 
-        const testGoodsData = [
-            { id: 1, img: "https://img.danawa.com/prod_img/500000/185/173/img/49173185_1.jpg?shrink=130:130&_v=20250407171230", name: "스티치 인형", quantity: 1, price: 19440 },
-            { id: 2, img: "https://img.danawa.com/prod_img/500000/443/941/img/6941443_1.jpg?shrink=130:130&_v=20181227122347", name: "묠니르 망치 스피커", quantity: 2, price: 328000 },
-            { id: 3, img: "https://cimg.cowave.kr/image/vendor_inventory/e317/70193a0bcc148a37695d2780f84fee6caac3acc9321c9288dde86f3e9c48.jpeg", name: "주먹왕 랄프 피규어 세트", quantity: 3, price: 65890 }
-        ]
-
-        const testOrderData = {
-            method: "신용카드",
-            state: "결제 완료",
-            orderDate: "2025-04-14 17:55",
-            paymentDate: "2025-04-14 17:55",
-            amount: 873110
-        }
-
-        const testPickupData = {
-            receiver: "김민수",
-            tel: "010-1234-5678",
-            address: "서울 성동구 왕십리로",
-            memo: "꼼꼼한 포장 부탁드립니다."
-        }
-
-        setGoodsData(prev => [...prev, ...testGoodsData]);
-        setOrderData(testOrderData);
-        setPickupData(testPickupData);
+        // setGoodsData(prev => [...prev, ...testGoodsData]);
     }, []);
 
 
@@ -87,24 +65,37 @@ function OrderDetail() {
                 <b>결제 정보</b>
                 <div className="order_info_table">
                     <div className="order_info_content">
+                        <div>결제 번호</div>
+                        <div>{paymentData?.paymentKey}</div>
+                    </div>
+                    <div className="order_info_content">
                         <div>결제 수단</div>
-                        <div>{orderData?.method}</div>
+                        <div>{paymentData?.method}</div>
                     </div>
                     <div className="order_info_content">
                         <div>주문 상태</div>
-                        <div>{orderData?.state}</div>
+                        <div>{orderData?.statusText}</div>
                     </div>
                     <div className="order_info_content">
-                        <div>주문 시간</div>
-                        <div>{orderData?.orderDate}</div>
-                    </div>
-                    <div className="order_info_content">
-                        <div>결제 시간</div>
-                        <div>{orderData?.paymentDate}</div>
+                        <div>완료 시간</div>
+                        <div>{
+                            new Date(orderData?.updatedAt)
+                                .toLocaleString('ko-KR', {
+                                    year: 'numeric',
+                                    month: '2-digit',
+                                    day: '2-digit',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    hour12: false
+                                })
+                                .replace(/\./g, '')
+                                .replace('  ', ' ')
+                                .replace(/(\d{4}) (\d{2}) (\d{2})/, '$1-$2-$3')
+                        }</div>
                     </div>
                     <div className="order_info_content">
                         <div>결제 금액</div>
-                        <div>{orderData?.amount.toLocaleString()}원</div>
+                        <div>{orderData?.totalPrice.toLocaleString()}원</div>
                     </div>
                 </div>
             </div>
@@ -113,19 +104,15 @@ function OrderDetail() {
                 <div className="order_info_table">
                     <div className="order_info_content">
                         <div>받는 분</div>
-                        <div>{pickupData?.receiver}</div>
+                        <div>{nickName}</div>
                     </div>
                     <div className="order_info_content">
                         <div>전화번호</div>
-                        <div>{pickupData?.tel}</div>
+                        <div>{"(25-04-18 추가) 나중에 이 부분 이메일로 바꿀 것"}</div>
                     </div>
                     <div className="order_info_content">
-                        <div>주소</div>
-                        <div>{pickupData?.address}</div>
-                    </div>
-                    <div className="order_info_content">
-                        <div>메모</div>
-                        <div>{pickupData?.memo}</div>
+                        <div>영화관</div>
+                        <div>{theater}</div>
                     </div>
                 </div>
             </div>
