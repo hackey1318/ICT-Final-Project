@@ -33,6 +33,8 @@ import OrderError from './js/order/OrderError';
 import MemberList from './page/admin/MemberList';
 import ManagerList from './page/admin/ManagerList';
 import Gender from './page/admin/Gender';
+import InquiryReply from './page/admin/InquiryReply';
+import InquiryReplyView from './page/admin/InquiryReplyView';
 
 function App() {
 
@@ -83,6 +85,8 @@ function App() {
             <Route path="manager-list" element={<ManagerList />} />
             <Route path="gender" element={<Gender />} />
             <Route path="mdlists" element={<MdList />} />
+            <Route path="inquiry" element={<InquiryReply/>}/>
+            <Route path="inquiry/:no" element={<InquiryReplyView/>}/>
           </Route>
         </Route>
       </Routes>

@@ -15,4 +15,7 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Integer> {
 
     Optional<Inquiry> findByNo(int no);
 
+    //관리자용 문의리스트
+    @Query("SELECT i FROM Inquiry i ORDER BY i.no DESC")
+    List<Inquiry> findAllByOrderByNoDescForAdmin();
 }

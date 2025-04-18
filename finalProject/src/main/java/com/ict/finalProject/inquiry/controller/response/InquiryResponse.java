@@ -29,7 +29,7 @@ public class InquiryResponse {
 
     private String content;
 
-    private String password;
+    private boolean isPrivate; //비밀번호 존재유무
 
     private List<String> imageIdList;
 
