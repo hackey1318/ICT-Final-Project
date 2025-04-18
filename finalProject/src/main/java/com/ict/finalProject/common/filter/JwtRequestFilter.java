@@ -25,20 +25,28 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final UsersRepository usersRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+        String path = request.getServletPath();
+
+        if (path.startsWith("/file-system/upload/register-image")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         final String token = request.getHeader("Authorization");
 
         String userId = null;
         if (token != null && !token.isEmpty()) {
             String jwtToken = token.substring(7);
-
             userId = jwtTokenProvider.getUserNameFromToken(jwtToken);
         }
 
-        if (userId != null && !userId.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             SecurityContextHolder.getContext().setAuthentication(getUserAuth(userId));
         }
+
         filterChain.doFilter(request, response);
     }
 
