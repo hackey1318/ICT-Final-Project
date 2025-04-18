@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
                     .status(StatusInfo.ACTIVE)
                     .role(UserRole.USER)
                     .email(req.getEmail())
+                    .phone(req.getPhone())
                     .profileImageUrl(profileImageUrl)
                     .joinType(JoinType.LOCAL)
                     .build();
@@ -73,6 +74,7 @@ public class UserServiceImpl implements UserService {
                     .password(passwordEncoder.encode(req.getPassword()))
                     .nickname(req.getNickName())
                     .gender(req.getGender())
+                    .phone(req.getPhone())
                     .status(StatusInfo.ACTIVE)
                     .role(UserRole.USER)
                     .profileImageUrl(profileImageUrl)

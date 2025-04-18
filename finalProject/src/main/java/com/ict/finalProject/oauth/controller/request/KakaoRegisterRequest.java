@@ -2,6 +2,7 @@ package com.ict.finalProject.oauth.controller.request;
 
 import com.ict.finalProject.domain.constant.UserGender;
 import com.ict.finalProject.oauth.service.KakaoUserInfoDto;
+import jakarta.persistence.Column;
 import lombok.*;
 
 @Data
@@ -15,4 +16,6 @@ public class KakaoRegisterRequest {
     private UserGender gender;
     private String uploadedProfileImageId;
     private KakaoUserInfoDto kakaoUserInfo;
+    @Column(nullable = true, length = 11)
+    private String phone;
 }
