@@ -1,5 +1,6 @@
 package com.ict.finalProject.movie.service.impl;
 
+import com.ict.finalProject.common.exception.custom.NotFoundException;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.movie.repository.MoviesCustomRepository;
 import com.ict.finalProject.movie.repository.MoviesRepository;
@@ -47,6 +48,14 @@ public class MoviesServiceImpl implements MoviesService {
     public Movies getMovieDetail(Integer movieNo) {
         return moviesRepository.findById(movieNo)
                 .orElseThrow(() -> new EntityNotFoundException("Movie not found with id: " + movieNo));
+    }
+
+    @Override
+    public Page<Movies> getRelateGenreMovieInfo(Pageable pageable, int movieNo) {
+
+        String genre = moviesRepository.findById(movieNo).orElseThrow(() -> new NotFoundException("영화를 찾을 수 없습니다.")).getGenre();
+        String[] genreList = genre.split(",");
+        return moviesCustomRepository.findRelateGenreMovieList(genreList, pageable);
     }
 
     public List<Movies> getRecommendationMovie(Integer userNo, int count) {
