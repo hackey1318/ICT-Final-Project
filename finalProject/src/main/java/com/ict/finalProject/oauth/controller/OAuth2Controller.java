@@ -1,22 +1,24 @@
 package com.ict.finalProject.oauth.controller;
 
+import com.ict.finalProject.common.config.JwtTokenProvider;
 import com.ict.finalProject.common.exception.custom.UserAuthenticationException;
 import com.ict.finalProject.common.exception.custom.UserStatusException;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
+import com.ict.finalProject.oauth.controller.request.KakaoRegisterRequest;
+import com.ict.finalProject.oauth.controller.request.LocalRegisterRequest;
 import com.ict.finalProject.oauth.controller.request.LoginRequest;
-import com.ict.finalProject.oauth.controller.request.RegisterRequest;
 import com.ict.finalProject.oauth.controller.response.KakaoLoginResponse;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.KakaoUserInfoDto;
 import com.ict.finalProject.oauth.service.Oauth2Service;
 import com.ict.finalProject.oauth.service.UserService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,36 +30,62 @@ public class OAuth2Controller {
 
     private final Oauth2Service oauth2Service;
     private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/login")
-    public KakaoLoginResponse kakaoLogin(@RequestParam String code) {
-        // 1. 카카오 로그인 처리
-        KakaoUserInfoDto kakaoUserInfo = oauth2Service.loginWithKakao(code);
-        if (kakaoUserInfo == null) {
-            throw new UserAuthenticationException("카카오 회원 정보 조회에 실패하였습니다.");
+    public ResponseEntity<?> kakaoLogin(@RequestParam("code") String code) {
+        // 1. 카카오로부터 유저 정보 받아오기
+        KakaoUserInfoDto kakaoUserInfoDto = oauth2Service.loginWithKakao(code);
+
+        // 2. DB에서 해당 kakaoId로 가입된 회원 조회
+        Optional<Users> optionalUser = userService.existUser(kakaoUserInfoDto.getKakaoId());
+
+        // 3. 이미 가입된 유저일 경우 → 바로 로그인 처리
+        if (optionalUser.isPresent()) {
+            Users user = optionalUser.get();
+
+            // JWT 토큰 생성
+            Map<String, String> jwtTokens = jwtTokenProvider.generateJwtToken(user.getId(), String.valueOf(user.getRole()));
+
+            // 응답 구성
+            Map<String, Object> body = new HashMap<>();
+            body.put("existUser", true);
+            body.put("token", jwtTokens.get("accessToken")); // 프론트에서 accessToken만 사용
+            body.put("user", Map.of(
+                    "userNo", user.getNo(),
+                    "nickname", user.getNickname(),
+                    "profileImageUrl", user.getProfileImageUrl()
+            ));
+
+            return ResponseEntity.ok(body);
         }
 
-        // 2. 기존 회원인지 확인
-        Optional<Users> existingUser = userService.existUser(kakaoUserInfo.getKakaoId());
+        // 4. 신규 회원 → 회원가입 폼으로 이동
+        Map<String, Object> body = new HashMap<>();
+        body.put("existUser", false);
+        body.put("kakaoUserInfoDto", kakaoUserInfoDto);
 
-        if (existingUser.isPresent()) {
-            return KakaoLoginResponse.builder().existUser(true).build();
-        }
-
-        // 3. 신규 회원이면 추가 정보 입력 필요
-        return KakaoLoginResponse.builder().existUser(false).kakaoUserInfoDto(kakaoUserInfo).build();
+        return ResponseEntity.ok(body);
     }
 
-    @PostMapping("/register")
-    public SuccessOfFailResponse register(@RequestBody RegisterRequest request) {
-        // result 와 message 를 서비스 레이어에서 결정하도록 리팩토링 고려 가능
-        boolean registrationResult = userService.registerUser(request);
-        String message = registrationResult ? "회원가입이 성공적으로 완료되었습니다." : "회원가입 중 오류가 발생했습니다.";
+    @PostMapping("/register/local")
+    public SuccessOfFailResponse registerLocal(@RequestBody LocalRegisterRequest request) {
+        boolean result = userService.registerLocalUser(request);
         return SuccessOfFailResponse.builder()
-                .result(registrationResult)
-                .message(message) // 메시지 추가
+                .result(result)
+                .message(result ? "회원가입 성공 (로컬)" : "회원가입 실패 (로컬)")
                 .build();
     }
+
+    @PostMapping("/register/kakao")
+    public SuccessOfFailResponse registerKakao(@RequestBody KakaoRegisterRequest request) {
+        boolean result = userService.registerKakaoUser(request);
+        return SuccessOfFailResponse.builder()
+                .result(result)
+                .message(result ? "회원가입 성공 (카카오)" : "회원가입 실패 (카카오)")
+                .build();
+    }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
@@ -117,5 +145,13 @@ public class OAuth2Controller {
             // 아이디 사용 가능하면 -> 200 OK 반환 (또는 204 No Content)
             return ResponseEntity.ok().build();
         }
+    }
+
+    @GetMapping("/check-phone/{phone}")
+    public ResponseEntity<Void> checkPhone(@PathVariable String phone) {
+        if (userService.existsByPhone(phone)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return ResponseEntity.ok().build();
     }
 }

@@ -36,7 +36,7 @@ public class FindUserController {
         UserFindResponse response = new UserFindResponse();
 
         Users result = findUserService.findPwd(userFindRequest);
-        
+
         //일치하는 사용자가 있는지, 활성 또는 비활성 상태인지 확인
         response = handleUserStatus(response, result);
 

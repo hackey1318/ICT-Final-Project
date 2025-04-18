@@ -1,11 +1,13 @@
 package com.ict.finalProject.oauth.service.impl;
 
+import com.ict.finalProject.domain.constant.JoinType;
+import com.ict.finalProject.oauth.controller.request.KakaoRegisterRequest;
+import com.ict.finalProject.oauth.controller.request.LocalRegisterRequest;
 import org.springframework.beans.factory.annotation.Value; // @Value import 추가
 import com.ict.finalProject.common.config.JwtTokenProvider;
 import com.ict.finalProject.common.exception.custom.UserStatusException;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.domain.constant.UserRole;
-import com.ict.finalProject.oauth.controller.request.RegisterRequest;
 import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
@@ -15,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -29,56 +30,69 @@ public class UserServiceImpl implements UserService {
     @Value("${app.base-url:http://localhost:9988}")
     private String appBaseUrl;
 
-    @Transactional // 데이터 변경 작업이므로 트랜잭션 처리 추가
-    public boolean registerUser(RegisterRequest request) {
-
-        // 1. 카카오 ID로 기존 사용자 확인
-        Optional<Users> existingUser = usersRepository.findByKakaoId(request.getKakaoUserInfo().getKakaoId());
-        if (existingUser.isPresent()) {
-            // 실무에서는 사용자 정의 예외 또는 더 구체적인 예외 사용 고려
-            throw new RuntimeException("이미 가입된 카카오 계정입니다.");
-        }
-
+    @Transactional
+    public boolean registerLocalUser(LocalRegisterRequest req) {
         try {
-            // 2. 프로필 이미지 URL 결정
-            String profileImageUrl = null; // 최종적으로 저장될 URL 변수
-
-            String uploadedImageId = request.getUploadedProfileImageId(); // 요청에서 이미지 ID 가져오기
-
-            // 사용자가 직접 업로드한 이미지 ID가 있는 경우
-            if (uploadedImageId != null && !uploadedImageId.isEmpty()) {
-                // DB에서 이미지 경로를 조회하는 대신, ID를 사용하여 다운로드 URL 직접 생성
-                profileImageUrl = appBaseUrl + "/file-system/download/" + uploadedImageId;
-                log.info("사용자 업로드 이미지 사용. ID: {}, 생성된 URL: {}", uploadedImageId, profileImageUrl);
-
-            }
-
-            // 업로드된 이미지가 없거나 ID가 유효하지 않았고, 카카오 프로필 이미지가 있는 경우
-            if (profileImageUrl == null && request.getKakaoUserInfo().getProfile() != null && !request.getKakaoUserInfo().getProfile().isEmpty()) {
-                profileImageUrl = request.getKakaoUserInfo().getProfile(); // 카카오 제공 URL 사용
-                log.info("카카오 프로필 이미지 사용. URL: {}", profileImageUrl);
-            }
-
-
+            String profileImageUrl = makeProfileImageUrl(req.getUploadedProfileImageId());
             Users user = Users.builder()
-                    .kakaoId(request.getKakaoUserInfo().getKakaoId())
-                    .email(request.getKakaoUserInfo().getEmail())
-                    .knickname(request.getKakaoUserInfo().getKnickName())
-                    .nickname(request.getNickName())
-                    .id(request.getId())
-                    .profileImageUrl(profileImageUrl) // ★★★ 결정된 이미지 URL 저장 ★★★
-                    .password(passwordEncoder.encode(request.getPassword()))
-                    .gender(request.getGender())
+                    .id(req.getId())
+                    .password(passwordEncoder.encode(req.getPassword()))
+                    .nickname(req.getNickName())
+                    .gender(req.getGender())
                     .status(StatusInfo.ACTIVE)
                     .role(UserRole.USER)
+                    .email(req.getEmail())
+                    .phone(req.getPhone())
+                    .profileImageUrl(profileImageUrl)
+                    .joinType(JoinType.LOCAL)
                     .build();
             usersRepository.save(user);
+            return true;
         } catch (Exception e) {
-            // UsersRepository 저장 실패 등 다른 예외 처리
-            log.error("회원가입 처리 중 오류 발생 [{}]: {}", request.getId(), e.getMessage(), e); // 스택 트레이스 로깅 추가 고려
-            return false; // 실패 반환
+            log.error("로컬 회원가입 오류: {}", e.getMessage(), e);
+            return false;
         }
-        return true;
+    }
+
+    @Transactional
+    public boolean registerKakaoUser(KakaoRegisterRequest req) {
+        Optional<Users> existingUser = usersRepository.findByKakaoId(req.getKakaoUserInfo().getKakaoId());
+        if (existingUser.isPresent()) {
+            throw new RuntimeException("이미 가입된 카카오 계정입니다.");
+        }
+        try {
+            String profileImageUrl = makeProfileImageUrl(req.getUploadedProfileImageId());
+            if (profileImageUrl == null && req.getKakaoUserInfo().getProfile() != null) {
+                profileImageUrl = req.getKakaoUserInfo().getProfile();
+            }
+
+            Users user = Users.builder()
+                    .kakaoId(req.getKakaoUserInfo().getKakaoId())
+                    .email(req.getKakaoUserInfo().getEmail())
+                    .knickname(req.getKakaoUserInfo().getKnickName())
+                    .id(req.getId())
+                    .password(passwordEncoder.encode(req.getPassword()))
+                    .nickname(req.getNickName())
+                    .gender(req.getGender())
+                    .phone(req.getPhone())
+                    .status(StatusInfo.ACTIVE)
+                    .role(UserRole.USER)
+                    .profileImageUrl(profileImageUrl)
+                    .joinType(JoinType.KAKAO)
+                    .build();
+            usersRepository.save(user);
+            return true;
+        } catch (Exception e) {
+            log.error("카카오 회원가입 오류: {}", e.getMessage(), e);
+            return false;
+        }
+    }
+
+    private String makeProfileImageUrl(String uploadedImageId) {
+        if (uploadedImageId != null && !uploadedImageId.isEmpty()) {
+            return appBaseUrl + "/file-system/download/" + uploadedImageId;
+        }
+        return null;
     }
 
     public String login(String id, String password) {
@@ -112,5 +126,10 @@ public class UserServiceImpl implements UserService {
         // UsersRepository에 정의된 findById(String id) 메소드를 사용
         // Optional 객체가 값을 가지고 있는지(isPresent()) 여부로 존재 확인
         return usersRepository.findById(userId).isPresent();
+    }
+
+    @Override
+    public boolean existsByPhone(String phone) {
+        return usersRepository.findByPhone(phone).isPresent();
     }
 }
