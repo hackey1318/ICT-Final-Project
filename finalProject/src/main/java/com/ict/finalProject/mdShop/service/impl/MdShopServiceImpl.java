@@ -81,7 +81,11 @@ public class MdShopServiceImpl implements MdShopService {
     public List<MdShopDto> getGoodsInfoByMovieNo(Integer movieNo) {
         List<GoodsStocks> goodsStocks = goodsStockRepository.findByGoods_MovieNo(movieNo);
         return goodsStocks.stream().map(good -> {
-            return new MdShopDto(good.getGoods(), good.getQuantity());
+            List<String> imageIds = imageInfoRepository.findImageIdsByBoardNoAndTypeAndStatus(
+                    good.getGoodsNo(), ImageWriteType.GOODS, StatusInfo.ACTIVE);
+            MdShopDto mdShopDto = new MdShopDto(good.getGoods(), good.getQuantity());
+            mdShopDto.setImageUrls(imageIds);
+            return mdShopDto;
         }).toList();
     }
 
