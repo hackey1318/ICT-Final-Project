@@ -71,11 +71,21 @@ function BlackList(){
             const isConfirmed = window.confirm(`사용자 ${userNo}번을 활성화 하시겠습니까?\n'확인'을 누르시면 활성상태가 되고, 목록에서 삭제됩니다.`);
 
             if(isConfirmed){ //status DEACTIVE -> ACTIVE로 변경
-                axios.post(`http://localhost:9988/manager/home/blacklist-active/${userNo}`)
+                axios.post(`http://localhost:9988/manager/home/blacklist-active/${userNo}`,{},{
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                })
                 .then((response)=>{
 
                     //status ACTIVE로 변경 후 목록 요청해서 갱신
-                    axios.get(`http://localhost:9988/manager/home/blacklist?page=${page}&size=10`)
+                    axios.get(`http://localhost:9988/manager/home/blacklist?page=${page}&size=10`, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${accessToken}`
+                        }
+                    })
                     .then((response)=>{
 
                         //블랙리스트, 전체페이지수 셋팅
