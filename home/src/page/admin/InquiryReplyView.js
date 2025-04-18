@@ -1,11 +1,11 @@
-import { useParams } from 'react-router-dom';
-import '../../css/inquiry/inquiry.css';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import apiClient from '../../js/public/axiosConfig';
-import InquiryImageModal from '../../js/inquiry/InquiryImageModal';
-import styled from 'styled-components';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
+import InquiryImageModal from "../../js/inquiry/InquiryImageModal";
 
-function InquiryView() {
+
+function InquiryReplyView() {
     const {no} = useParams();
     const IMAGE_BASE_URL = 'http://192.168.1.252:9988/file-system/showImage/';
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +45,7 @@ function InquiryView() {
     }, [no])
 
     const getInquiryView = useCallback(() => {
-        apiClient.get(`inquiry/getInquiryBy/${no}`)
+        apiNoAccessClient.get(`inquiry/getInquiryBy/${no}`)
         .then(function(response) {
             setInquiryVO({
                 no: response.data.inquiry.no,
@@ -66,40 +66,6 @@ function InquiryView() {
         })
     }, [no]);
 
-    function inquiryDel() {
-        if(window.confirm("글을 삭제하시겠습니까?")) {
-            apiClient.get(`/inquiry/inquiryDel/${inquiryVO.no}`, )
-            .then(function(response){
-                console.log(response.data);
-                
-                if(response.status === 200 || response.status === 204){ 
-                    alert("게시글이 삭제되었습니다.");
-                    window.location.href = '/inquiry';
-                } else {
-                    alert("삭제에 실패하였습니다." + JSON.stringify(response.data));
-                    return false;
-                }
-            })
-            .catch(function(error){
-                console.log(error);
-            });
-        }
-    }
-
-    const loginUserInfo = sessionStorage.getItem("userInfo");
-    let loginUserId = null;
-    if(loginUserInfo) {
-        try {
-            const userInfoObject = JSON.parse(loginUserInfo);
-            loginUserId = userInfoObject.userNo;
-        } catch(error) {
-            console.log("sessionStorage의 userInfo 파싱오류 : ", error);
-        }
-    }
-    const isWriter = loginUserId !== null &&
-                     inquiryVO.userNo !== null &&
-                     String(loginUserId) === String(inquiryVO.userNo);
-
     const handleImageClick = useCallback((index) => {
         if(inquiryVO.imageList && index>=0 && index<inquiryVO.imageList.length) {
             setSelectedImageIdx(index);
@@ -108,18 +74,12 @@ function InquiryView() {
     }, [inquiryVO.imageList]);
 
     const closeModal = useCallback(() => {
-        setIsModalOpen(false);
-    }, []);
+            setIsModalOpen(false);
+        }, []);
 
     return (
         <div className='inquiry-container'>
             <h2>{inquiryVO.subject}</h2>
-            {
-                isWriter && String(inquiryVO.proceed)==='BEFORE' &&
-                <div id="del-inquiry">
-                    <a onClick={inquiryDel} style={{cursor: 'pointer'}}>삭제</a>
-                </div>
-            }
 
             <div className="row" style={{borderBottom: '1px solid #ddd'}}>
                 <div className="col-sm-2 p-2">글번호</div>
@@ -178,7 +138,7 @@ function InquiryView() {
                 </>
             }
         </div>
-    )
+    );
 }
 
-export default InquiryView;
+export default InquiryReplyView;
