@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 import InquiryImageModal from "../../js/inquiry/InquiryImageModal";
+import InquiryComment from "../../js/inquiry/InquiryComment";
 
 
 function InquiryReplyView() {
@@ -137,6 +138,7 @@ function InquiryReplyView() {
                     </div>
                 </>
             }
+            <InquiryComment/>
         </div>
     );
 }

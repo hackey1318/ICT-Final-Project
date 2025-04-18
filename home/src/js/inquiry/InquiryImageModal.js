@@ -45,26 +45,24 @@ function InquiryImageModal({ images, initialIndex, onClose }) {
 
     const currentImageSrc = `${IMAGE_BASE_URL}${images[currentIndex]}`;
 
-    const handleOverlayClick = (e) => {
-        if(e.target === e.currentTarget) {
-            onClose();
-        }
-    };
+    // const handleOverlayClick = (e) => {
+    //     if(e.target === e.currentTarget) {
+    //         onClose();
+    //     }
+    // };
 
     return (
-        <div className="modal-overlay" onClick={handleOverlayClick}>
-            <div className='modal-content' onClick={(e) => e.stopPropagation()} style={{}}>
-                <img src={close} id="modal-close" onClick={onClose}/>
-                <div style={{textAlign: 'center', display: 'flex', justifyContent: 'space-between'}}>
-                    <div style={{width: '10%', height: '580px', lineHeight: '600px'}}>
-                        <img src={left} className='move-img' onClick={toPrev}/>
-                    </div>
-                    <div style={{width: '80%', height: '580px', lineHeight: '600px'}}>
-                        <img src={currentImageSrc} style={{width: '90%', maxHeight: '500px', objectFit:'contain', borderRadius: '20px'}}/>
-                    </div>
-                    <div style={{width: '10%', height: '580px', lineHeight: '600px'}}>
-                        <img src={right} className='move-img' onClick={toNext}/>
-                    </div>
+        <div className="modal-overlay">
+            <img src={close} id="modal-close" onClick={onClose}/>
+            <div style={{textAlign: 'center', display: 'flex', justifyContent: 'space-between'}}>
+                <div style={{width: '10%', height: '580px', lineHeight: '600px'}}>
+                    <img src={left} className='move-img' onClick={toPrev}/>
+                </div>
+                <div style={{width: '80%', height: '580px', lineHeight: '600px'}}>
+                    <img src={currentImageSrc} style={{width: '90%', maxHeight: '500px', objectFit:'contain', borderRadius: '20px'}}/>
+                </div>
+                <div style={{width: '10%', height: '580px', lineHeight: '600px'}}>
+                    <img src={right} className='move-img' onClick={toNext}/>
                 </div>
             </div>
         </div>

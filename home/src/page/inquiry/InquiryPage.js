@@ -146,10 +146,10 @@ function InquiryPage() {
                                     return (
                                         <tr className="td-container" key={item.no}>
                                             <td style={{width:'7%', textAlign:'center'}}>{item.no}</td>
-                                            <td style={{width:'48%'}}>
+                                            <td style={{width:'48%', textAlign: 'left'}}>
                                                 <a href='#' id='toDetail' onClick={(e) => {e.preventDefault(); handleInquiryClick(item)}}>
-                                                    {item.private && <span style={{ marginRight: '5px' }}>🔒</span>}
-                                                    {item.subject}
+                                                    {item.private && <span style={{ marginRight: '5px', position: 'absolute'}}>🔒</span>}
+                                                    <span style={{paddingLeft: '30px'}}>{item.subject}</span>
                                                 </a>
                                             </td>
                                             <td style={{width:'15%', textAlign:'center'}}>{item.nickname}</td>
