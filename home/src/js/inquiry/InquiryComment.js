@@ -26,10 +26,13 @@ function InquiryComment() {
         <div className="comment-container">
             <h5>댓글 목록 :</h5><br/>
             {
-                commentList && commentList.length>0 &&
-                <div id="comments">
-
+                commentList && commentList.length>0 ? (
+                <div className="comments">
+                    
                 </div>
+                ) : (
+                    <h5 style={{textAlign: 'center'}}>작성된 댓글이 없습니다.</h5>
+                )
             }
             <br/>
 
@@ -38,7 +41,6 @@ function InquiryComment() {
                     rows="5" 
                     id="comment" 
                     name="text"
-                    style={{margin: '15px 0'}}
                     onChange={(e) => {setComment(e.target.value);}}
             />
             <div style={{textAlign: 'right'}}>
