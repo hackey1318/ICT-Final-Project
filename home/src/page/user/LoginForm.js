@@ -97,7 +97,7 @@ const LoginForm = () => {
                                     </g>
                                 </svg>
                             </span>
-                            카카오 회원가입
+                            카카오 로그인 / 회원가입
                         </button>
                     </div>
 
