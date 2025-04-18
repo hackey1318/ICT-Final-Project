@@ -38,6 +38,7 @@ import InquiryReplyView from './page/admin/InquiryReplyView';
 import GoodsDetail from './page/md/GoodsDetail';
 import MdShop from './page/md/MdShop';
 import RelatedMovie from './page/movie/RelatedMovie';
+import BlackList from './page/admin/BlackList';
 
 function App() {
 
@@ -89,6 +90,7 @@ function App() {
             <Route path="dau" element={<UserDau />} />
             <Route path="member-list" element={<MemberList />} />
             <Route path="manager-list" element={<ManagerList />} />
+            <Route path="blacklist" element={<BlackList />} />
             <Route path="gender" element={<Gender />} />
             <Route path="mdlists" element={<MdList />} />
             <Route path="inquiry" element={<InquiryReply/>}/>
