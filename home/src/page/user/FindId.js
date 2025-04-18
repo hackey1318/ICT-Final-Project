@@ -77,6 +77,21 @@ function FindId(){
         });
     }
 
+    //전체 아이디 이메일로 받기 버튼 클릭시 동작함(마스킹 해제된 아이디 이메일로 발송)
+    function unmaskId(){
+        axios.post("http://localhost:9988/user/unmask-id",{
+            nickname: idFindForm.nickname,
+            email: idFindForm.email
+        })
+        .then(function(response){
+            console.log(response);
+            alert("전체 아이디가 메일로 전송되었습니다.");
+        }).catch(function(error){
+            console.log(error);
+            alert("메일 전송에 실패했습니다.");
+        });
+    }
+
     return(
         <div>
             <div className="find-form">
@@ -95,6 +110,11 @@ function FindId(){
                     <div>
                         <h3 className="find-form-subject">아이디 찾기</h3>
                         찾은 아이디는 {userId}입니다.
+                        <div className="find-btn-wrap">
+                            <button onClick={unmaskId} className="find-btn find-btn-id">
+                                전체 아이디 이메일로 받기
+                            </button>
+                        </div>
                         <div className="find-btn-wrap">
                             <button onClick={() => window.location.href='/login'} className="find-btn find-btn-id">
                                 로그인

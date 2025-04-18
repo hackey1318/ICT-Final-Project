@@ -97,7 +97,7 @@ const LoginForm = () => {
                                     </g>
                                 </svg>
                             </span>
-                            카카오 회원가입
+                            카카오 로그인 / 회원가입
                         </button>
                     </div>
 
@@ -110,6 +110,9 @@ const LoginForm = () => {
                         <a href="/user/findPwd" className="text-decoration-none text-secondary">
                             비밀번호 찾기
                         </a>
+                    </div>
+                    <div className="text-center mt-3">
+                        <Link to="/register">일반 회원가입</Link>
                     </div>
                 </div>
             </div>

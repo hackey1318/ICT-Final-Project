@@ -2,6 +2,7 @@ package com.ict.finalProject.inquiry.controller.response;
 
 import com.ict.finalProject.domain.constant.InquiryProceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.domain.constant.UserRole;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,9 +29,13 @@ public class InquiryResponse {
 
     private String content;
 
+    private boolean isPrivate; //비밀번호 존재유무
+
     private List<String> imageIdList;
 
     private InquiryProceed proceed;
+
+    private UserRole role;
 
     private StatusInfo status;
 

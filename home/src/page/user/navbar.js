@@ -96,7 +96,7 @@ function Navbar() {
                                 </div>
                             </li>
                             <li className="nav-items">
-                                <Link to="/store" className="nav-links">
+                                <Link to="/mdshop" className="nav-links">
                                     MD Shop
                                 </Link>
                             </li>
@@ -122,28 +122,31 @@ function Navbar() {
                 </div>
             {/* 사용자 섹션 */}
             <div className="navbar-user">
-                {isLoggedIn ? (
-                    <div className="user-profile">
-                        <div className="welcome-text">
-                            환영합니다 <span className="username">{userInfo.nickname}</span> 님
-                        </div>
-                        <div className="profile-circle">
-                            <img src={userInfo.profileImageUrl ? userInfo.profileImageUrl : "https://via.placeholder.com/35"} alt="프로필 이미지" />
-                        </div>
-                        <button onClick={handleLogout} className="test-btn logout">
-                            로그아웃
-                        </button>
-                    </div>
-                ) : (
-                    <div className="auth-buttons">
-                        <Link to="/login" className="btn btn-login">
-                            로그인
-                        </Link>
-                        <Link to="/register" className="btn btn-register">
-                            회원가입
-                        </Link>
-                    </div>
-                )}
+            {isLoggedIn && userInfo ? (
+  <div className="user-profile">
+    <div className="welcome-text">
+      환영합니다 <span className="username">{userInfo.nickname}</span> 님
+    </div>
+    <div className="profile-circle">
+      <img
+        src={userInfo.profileImageUrl || "https://via.placeholder.com/35"}
+        alt="프로필 이미지"
+      />
+    </div>
+    <button onClick={handleLogout} className="test-btn logout">
+      로그아웃
+    </button>
+  </div>
+) : (
+  <div className="auth-buttons">
+    <Link to="/login" className="btn btn-login">
+      로그인
+    </Link>
+    <Link to="/register" className="btn btn-register">
+      회원가입
+    </Link>
+  </div>
+)}
             </div>
 
             {
