@@ -5,6 +5,7 @@ import com.ict.finalProject.common.config.AuthRequired;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.fileSystem.service.FileSystemService;
+import com.ict.finalProject.inquiry.controller.request.InquiryCommentRequest;
 import com.ict.finalProject.inquiry.controller.request.InquiryPwdRequest;
 import com.ict.finalProject.inquiry.controller.request.InquiryRequest;
 import com.ict.finalProject.inquiry.controller.response.InquiryResponse;
@@ -104,5 +105,11 @@ public class InquiryController {
     @GetMapping("/getAllInquiry") // URL 변경 (getReplies -> getInquiries)
     public List<InquiryResponse> getAllInquiry() { // 메소드명 변경 (getReplies -> getInquiries)
         return inquiryService.getAllInquiry();
+    }
+
+    //문의리스트 댓글
+    @PostMapping("/writeComment")
+    public String writeComment(@RequestBody InquiryCommentRequest request) {
+        return null;
     }
 }
