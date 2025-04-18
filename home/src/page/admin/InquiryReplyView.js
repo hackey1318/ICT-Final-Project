@@ -80,7 +80,10 @@ function InquiryReplyView() {
 
     return (
         <div className='inquiry-container'>
-            <h2>{inquiryVO.subject}</h2>
+            <div style={{display:'flex', justifyContent: 'space-between'}}>
+                <h2>{inquiryVO.subject}</h2>
+                <input type="select" value="상태 전환"/>
+            </div>
 
             <div className="row" style={{borderBottom: '1px solid #ddd'}}>
                 <div className="col-sm-2 p-2">글번호</div>
