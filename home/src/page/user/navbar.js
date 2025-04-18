@@ -96,7 +96,7 @@ function Navbar() {
                                 </div>
                             </li>
                             <li className="nav-items">
-                                <Link to="/store" className="nav-links">
+                                <Link to="/mdshop" className="nav-links">
                                     MD Shop
                                 </Link>
                             </li>
