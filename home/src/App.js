@@ -33,6 +33,9 @@ import OrderError from './js/order/OrderError';
 import MemberList from './page/admin/MemberList';
 import ManagerList from './page/admin/ManagerList';
 import Gender from './page/admin/Gender';
+import GoodsDetail from './page/md/GoodsDetail';
+import MdShop from './page/md/MdShop';
+import RelatedMovie from './page/movie/RelatedMovie';
 import BlackList from './page/admin/BlackList';
 
 function App() {
@@ -67,7 +70,10 @@ function App() {
           <Route path='order/list' element={<OrderList />} />
           <Route path='order/detail' element={<OrderDetail />} />
           <Route path='order/error' element={<OrderError />} />
-        </Route>
+          <Route path='mdshop' element={<MdShop />} />
+          <Route path="mdshop/:goodsNo" element={<GoodsDetail />} />
+          <Route path="/related-movie/:movieId" element={<RelatedMovie />} />
+          </Route>
 
         {/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
         <Route path="/manager">
