@@ -16,7 +16,7 @@
 }
 
 /* 등록 버튼 스타일 */
-#md-button-wrapper{
+#md-button-wrapper {
   text-align: right;
 }
 
@@ -53,8 +53,9 @@
   background-color: white;
   border-radius: 8px;
   width: 90%;
-  max-width: 500px;
+  max-width: 500px; /* 최대 폭 제한 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px; /* 래퍼 내부 여백 */
 }
 
 /* 모달 콘텐츠 */
@@ -67,7 +68,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
 }
@@ -183,20 +184,22 @@
 }
 
 /* 부트스트랩 버튼 스타일 재정의 */
-.md_register-btn.btn,
-.md_submit-btn.btn,
-.md_cancel-btn.btn {
+.md_register-btn,
+.md_cancel-btn {
   display: inline-block;
   font-weight: bold;
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
   user-select: none;
-  border: 1px solid transparent;
-  padding: 8px 16px;
+  padding: 10px 20px;
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* 영화 검색 컨테이너 - 상대 위치 설정 */
@@ -499,4 +502,59 @@
   outline: none;
   border-color: #4a6ebd;
   box-shadow: 0 0 0 2px rgba(74, 110, 189, 0.2);
+}
+
+/* 버튼 공통 스타일 */
+.md_btn-edit,
+.md_btn-delete {
+  display: inline-block;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: none;
+  padding: 8px 15px;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 수정 버튼 */
+.md_btn-edit {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.md_btn-edit:hover {
+  background-color: #3a7bc8;
+  transform: translateY(-2px); /* 클릭 효과 */
+}
+
+/* 삭제 버튼 */
+.md_btn-delete {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.md_btn-delete:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px); /* 클릭 효과 */
+}
+
+/* 버튼들 간 간격 및 배치 */
+td {
+  text-align: center;
+  padding: 10px;
+}
+
+.md_btn-edit,
+.md_btn-delete {
+  margin: 0 5px; /* 버튼 간 간격 */
+  min-width: 80px; /* 버튼 최소 너비 */
+  text-transform: uppercase; /* 대문자 텍스트 */
+  font-weight: 600; /* 더 굵은 텍스트 */
 }

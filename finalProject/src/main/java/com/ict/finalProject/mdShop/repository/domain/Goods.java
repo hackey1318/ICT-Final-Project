@@ -1,8 +1,10 @@
 package com.ict.finalProject.mdShop.repository.domain;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.mdShop.controller.request.MdshopRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "goods")
@@ -39,6 +42,9 @@ public class Goods {
     @Column(nullable = false)
     private int price;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @Column(nullable = true)//true 안넣어도 되는데...
     private String options;
 
@@ -51,4 +57,13 @@ public class Goods {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public void update(MdshopRequest request) {
+        this.name = request.getName();
+        this.movieNo = request.getMovieNo();
+        this.type = request.getType();
+        this.price = request.getPrice();
+        this.options = request.getOptions();
+        this.description = request.getDescription();
+    }
 }

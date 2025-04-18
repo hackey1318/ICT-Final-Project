@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -20,18 +21,22 @@ public class MdShopDto {
     private int price;
     private String options;
     private String movieName;
-    private String updatedAt;
+    private String description;
+    private int count;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private List<String> imageUrls;
 
-    public MdShopDto(Goods goods){
+    public MdShopDto(Goods goods, int count){
         this.id = goods.getId();
         this.name = goods.getName();
         this.movieNo = goods.getMovieNo();
         this.type = goods.getType();
         this.price = goods.getPrice();
         this.options = goods.getOptions();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        this.updatedAt = goods.getUpdatedAt().format(formatter);
-        this.imageUrls = null;
+        this.createdAt = goods.getCreatedAt();
+        this.updatedAt = goods.getUpdatedAt();
+        this.description= goods.getDescription();
+        this.count = count;
     }
 }

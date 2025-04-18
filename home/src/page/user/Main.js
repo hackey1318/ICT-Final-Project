@@ -69,7 +69,7 @@ function Main() {
       <SectionTodayMovies />
 
       {/* --- 섹션 3: 이벤트 섹션 --- */}
-      {/* <SectionNewGoods /> */}
+      <SectionNewGoods />
     </div>
   )
 }
