@@ -1,27 +1,36 @@
 package com.ict.finalProject.orders.controller;
 
+import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.common.config.JwtTokenProvider;
+import com.ict.finalProject.domain.constant.OrdersStatus;
+import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
-import com.ict.finalProject.mdShop.repository.domain.Goods_Stocks;
 import com.ict.finalProject.mdShop.service.MdShopService;
-import com.ict.finalProject.mdShop.service.dto.MdShopDto;
 import com.ict.finalProject.movie.service.TheatersService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
+import com.ict.finalProject.orders.repository.domain.OrderItem;
 import com.ict.finalProject.orders.repository.domain.Orders;
+import com.ict.finalProject.orders.service.OrderItemService;
 import com.ict.finalProject.orders.service.OrdersService;
+import com.ict.finalProject.orders.service.dto.OrdersDto;
+import com.ict.finalProject.payment.service.PaymentsService;
+import com.ict.finalProject.payment.service.dto.PaymentsDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -31,6 +40,8 @@ public class OrderController {
 
     private final MdShopService mdShopService;
     private final OrdersService ordersService;
+    private final OrderItemService orderItemService;
+    private final PaymentsService paymentsService;
     private final UserService userService;
     private final TheatersService theatersService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -55,6 +66,7 @@ public class OrderController {
         String theaterName = "";
         int theaterNo = 0;
         boolean isCorrectData = true;
+        JSONArray goods;
 
         List<Object[]> mdList = new ArrayList<>();
         JSONParser parser = new JSONParser();
@@ -65,8 +77,7 @@ public class OrderController {
             userNo = (long) requestData.get("userNo");
             theaterName = (String) requestData.get("theaterName");
             theaterNo = theatersService.getTheaterNo(theaterName);
-
-            JSONArray goods = (JSONArray) requestData.get("goods");
+            goods = (JSONArray) requestData.get("goods");
 
             for (Object itemObj : goods) {
                 JSONObject item = (JSONObject) itemObj;
@@ -92,20 +103,50 @@ public class OrderController {
 
             if (isCorrectData) {
                 // 기존 주문 있는지 확인
-                Orders checkOrder = ordersService.getPendingOrders((int) userNo, (int) requestTotalPrice, theaterNo);
+                Orders checkOrder = ordersService.getExistOrders((int) userNo, (int) requestTotalPrice, theaterNo, OrdersStatus.PENDING);
                 if (checkOrder != null) {
-                    return "success";
+                    return checkOrder.getOrderNumber();
                 } else {
-                    // pending상태인 기존 주문 있다면 삭제
-                    ordersService.deletePendingOrders((int) userNo);
+                    // pending상태이고 주문 정보가 바뀌면 기존 상품들 삭제
+                    OrdersStatus status = OrdersStatus.PENDING;
+                    if (ordersService.getOrdersByStatus((int) userNo, status) != null) {
+                        int pendingOrderId = ordersService.getOrdersByStatus((int) userNo, status).getId();
+                        orderItemService.deletePendingOrderItems(pendingOrderId);
+                    }
+
+                    // pending상태이고 주문 정보가 바뀌면 기존 주문 삭제
+                    ordersService.deleteOrdersByUserNoAndStatus((int) userNo, status);
+
+                    // 주문 정보 저장
                     Users user = userService.getUser(userId);
                     Orders orders = new Orders();
                     orders.setUserNo(user.getNo());
                     orders.setTheaterNo(theaterNo);
                     orders.setOrderNumber(orderNumber);
-                    orders.setStatus("Pending");
+                    orders.setStatus(OrdersStatus.PENDING);
                     orders.setTotalPrice((int)requestTotalPrice);
                     ordersService.insertOrders(orders);
+
+                    // 주문 상품 저장
+                    OrderItem orderItem = new OrderItem();
+
+                    int orderNo = ordersService.getOrders(orderNumber).getId();
+                    orderItem.setOrderNo(orderNo); // 주문PK
+
+                    for (Object itemObj : goods) {
+                        JSONObject item = (JSONObject) itemObj;
+                        int goodsNo = ((Long) item.get("id")).intValue(); // 굿즈PK
+                        String goodsName = (String) item.get("name"); // 굿즈이름
+                        int goodsPrice = ((Long) item.get("price")).intValue(); // 굿즈 가격
+                        int goodsQuantity = ((Long) item.get("quantity")).intValue(); // 굿즈 수량
+
+                        orderItem.setGoodsNo(goodsNo);
+                        orderItem.setName(goodsName);
+                        orderItem.setPrice(goodsPrice);
+                        orderItem.setQuantity(goodsQuantity);
+                        orderItemService.insertOrderItem(orderItem);
+                    }
+
                     return "success";
                 }
             } else {
@@ -113,6 +154,46 @@ public class OrderController {
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/detail")
+    public ResponseEntity<JSONObject> detail(@RequestBody Map<String, String> body, HttpServletRequest request) throws Exception {
+        String orderNumber = body.get("orderNumber");
+        final String token = request.getHeader("Authorization");
+        String userId = null;
+        if (token != null && !token.isEmpty()) {
+            String jwtToken = token.substring(7);
+
+            userId = jwtTokenProvider.getUserNameFromToken(jwtToken);
+        }
+
+//        int userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER, UserRole.ADMIN)).getNo();
+        Users users = userService.getUser(userId);
+        System.out.println(users);
+        if (users == null) {
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("message", "일치하는 회원이 없습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonObj);
+        } else {
+            System.out.println("유저가 널이 아님.");
+        }
+        try {
+            OrdersDto ordersDto = ordersService.getOrdersDtoByOrderNumber(orderNumber);
+            PaymentsDto paymentsDto = paymentsService.getPaymentsDtoByOrderNo(ordersDto.getId());
+            String nickName = users.getNickname();
+            String theater = theatersService.getTheaterName(ordersDto.getTheaterNo());
+            JSONObject obj = new JSONObject();
+            obj.put("orders", ordersDto);
+            obj.put("payments", paymentsDto);
+            obj.put("nickName", nickName);
+            obj.put("theater", theater);
+
+            return ResponseEntity.status(HttpStatus.OK).body(obj);
+        } catch (Exception e) {
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("message", "일치하는 데이터가 없습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonObj);
         }
     }
 }
