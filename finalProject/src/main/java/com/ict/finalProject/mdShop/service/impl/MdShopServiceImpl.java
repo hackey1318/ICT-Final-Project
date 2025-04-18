@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -190,6 +191,11 @@ public class MdShopServiceImpl implements MdShopService {
         return moviesRepository.findAllByNameContaining(movieSearch).stream()
                 .map(MovieNameDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Goods> getMd(int id) {
+        return mdShopRepository.findById(id);
     }
 
     @Override

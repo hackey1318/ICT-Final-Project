@@ -175,7 +175,7 @@ function Cart() {
             orderNumber: randomChars,
             totalPrice: totalPrice,
             userNo: userInfo.userNo,
-            theaterNo: 0, // 임시 0값
+            theaterName: theaterRef.current.value,
             goods: selectedGoods
         }, {
             headers: {
@@ -185,12 +185,13 @@ function Cart() {
         })
             .then((response) => {
                 if (response.data === "success") {
-                    console.log("주문 저장 성공!");
+                    setPaymentModalOpen(true);
+                } else {
+                    setOrderNumber(response.data);
                     setPaymentModalOpen(true);
                 }
             })
             .catch((error) => {
-                // paymentUi.close();
                 alert("상품 정보 오류");
             });
     }
