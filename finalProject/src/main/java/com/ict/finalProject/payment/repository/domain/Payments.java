@@ -1,4 +1,4 @@
-package com.ict.finalProject.orders.repository.domain;
+package com.ict.finalProject.payment.repository.domain;
 
 import com.ict.finalProject.domain.constant.OrdersStatus;
 import jakarta.persistence.*;
@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -15,30 +14,26 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "orders")
-@EntityListeners(AuditingEntityListener.class)
-public class Orders {
+@Table(name = "payments")
+public class Payments {
 
     @Id
-    @Column(name = "no")
+    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(nullable = false)
-    private int userNo; // 유저 PK
+    private int orderNo; // 주문 PK
 
     @Column(nullable = false)
-    private int theaterNo; // 영화관 PK
+    private String paymentKey; // 결제번호
 
-    @Column(nullable = false)
-    private String orderNumber; // 혼동 방지를 위해 orderId -> orderNumber로 컬럼명 변경
-
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private OrdersStatus status;
 
     @Column(nullable = false)
-    private int totalPrice;
+    private String method;
 
     @CreationTimestamp
     @Column(updatable = false)

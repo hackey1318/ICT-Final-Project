@@ -34,14 +34,13 @@ function SuccessPage() {
         return;
       }
 
-      // 결제 성공 비즈니스 로직을 구현하세요.
-      // 부모 창을 이동시키는 부분 (팝업 창에서 부모 창을 제어)
-      if (window.opener) {
-        // window.opener.location.href = `/payment/result?orderId=${requestData.orderId}&amount=${requestData.amount}&paymentKey=${requestData.paymentKey}`; // 부모 창을 /payment/result 이동
-        window.opener.location.href = `/payment/result?orderId=${requestData.orderId}&amount=${requestData.amount}`; // 부모 창을 /payment/result 이동
+      
+      console.log(json);
+      console.log(json.orderId);
 
-        window.close(); // 현재 팝업 창을 닫기
-      }
+      // 결제 성공 비즈니스 로직을 구현하세요.
+      // 결과창으로 이동시키는 부분
+      window.location.href = `/payment/result?orderNumber=${json.orderId}&totalPrice=${json.totalAmount}&paymentKey=${json.paymentKey}`;
     }
     confirm();
   }, []);

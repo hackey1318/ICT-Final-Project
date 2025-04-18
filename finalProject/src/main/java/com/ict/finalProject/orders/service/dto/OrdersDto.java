@@ -1,5 +1,6 @@
 package com.ict.finalProject.orders.service.dto;
 
+import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.orders.repository.domain.Orders;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,9 +15,11 @@ public class OrdersDto {
     private int userNo; // 유저 PK
     private int theaterNo; // 영화관 PK
     private String orderNumber;
-    private String status;
+    private OrdersStatus status;
+    private String statusText;
     private int totalPrice;
     private LocalDateTime updatedAt;
+
 
     public OrdersDto(Orders orders) {
         this.id = orders.getId();
@@ -24,6 +27,7 @@ public class OrdersDto {
         this.theaterNo = orders.getTheaterNo();
         this.orderNumber = orders.getOrderNumber();
         this.status = orders.getStatus();
+        this.statusText = "";
         this.totalPrice = orders.getTotalPrice();
         this.updatedAt = orders.getUpdatedAt();
     }

@@ -9,4 +9,8 @@ public interface TheatersService {
     List<String> getAllTheaterNames();
 
     void saveTheaterList(List<Theaters> theaters);
+
+    int getTheaterNo(String theaterName);
+
+    String getTheaterName(int theaterNo);
 }
