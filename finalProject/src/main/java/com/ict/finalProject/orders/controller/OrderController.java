@@ -1,11 +1,11 @@
 package com.ict.finalProject.orders.controller;
 
+import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.common.config.JwtTokenProvider;
 import com.ict.finalProject.domain.constant.OrdersStatus;
+import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
-import com.ict.finalProject.mdShop.repository.domain.Goods_Stocks;
 import com.ict.finalProject.mdShop.service.MdShopService;
-import com.ict.finalProject.mdShop.service.dto.MdShopDto;
 import com.ict.finalProject.movie.service.TheatersService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
@@ -13,18 +13,24 @@ import com.ict.finalProject.orders.repository.domain.OrderItem;
 import com.ict.finalProject.orders.repository.domain.Orders;
 import com.ict.finalProject.orders.service.OrderItemService;
 import com.ict.finalProject.orders.service.OrdersService;
+import com.ict.finalProject.orders.service.dto.OrdersDto;
+import com.ict.finalProject.payment.service.PaymentsService;
+import com.ict.finalProject.payment.service.dto.PaymentsDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -35,6 +41,7 @@ public class OrderController {
     private final MdShopService mdShopService;
     private final OrdersService ordersService;
     private final OrderItemService orderItemService;
+    private final PaymentsService paymentsService;
     private final UserService userService;
     private final TheatersService theatersService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -150,10 +157,43 @@ public class OrderController {
         }
     }
 
-    @PostMapping("/result")
-    public List<String> result(@RequestBody String orderNumber) {
-        List<String> orderResult = new ArrayList<>();
+    @PostMapping("/detail")
+    public ResponseEntity<JSONObject> detail(@RequestBody Map<String, String> body, HttpServletRequest request) throws Exception {
+        String orderNumber = body.get("orderNumber");
+        final String token = request.getHeader("Authorization");
+        String userId = null;
+        if (token != null && !token.isEmpty()) {
+            String jwtToken = token.substring(7);
 
-        return orderResult;
+            userId = jwtTokenProvider.getUserNameFromToken(jwtToken);
+        }
+
+//        int userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER, UserRole.ADMIN)).getNo();
+        Users users = userService.getUser(userId);
+        System.out.println(users);
+        if (users == null) {
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("message", "일치하는 회원이 없습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonObj);
+        } else {
+            System.out.println("유저가 널이 아님.");
+        }
+        try {
+            OrdersDto ordersDto = ordersService.getOrdersDtoByOrderNumber(orderNumber);
+            PaymentsDto paymentsDto = paymentsService.getPaymentsDtoByOrderNo(ordersDto.getId());
+            String nickName = users.getNickname();
+            String theater = theatersService.getTheaterName(ordersDto.getTheaterNo());
+            JSONObject obj = new JSONObject();
+            obj.put("orders", ordersDto);
+            obj.put("payments", paymentsDto);
+            obj.put("nickName", nickName);
+            obj.put("theater", theater);
+
+            return ResponseEntity.status(HttpStatus.OK).body(obj);
+        } catch (Exception e) {
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("message", "일치하는 데이터가 없습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonObj);
+        }
     }
 }

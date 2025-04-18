@@ -13,4 +13,5 @@ public interface OrdersService {
     Orders getExistOrders(int userNo, int totalPrice, int theaterNo, OrdersStatus status);
     void deleteOrdersByUserNoAndStatus(int userNo, OrdersStatus status);
     Orders getOrders(String orderNumber);
+    OrdersDto getOrdersDtoByOrderNumber(String orderNumber) throws Exception;
 }
