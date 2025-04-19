@@ -40,6 +40,8 @@ import GoodsDetail from './page/md/GoodsDetail';
 import MdShop from './page/md/MdShop';
 import RelatedMovie from './page/movie/RelatedMovie';
 import BlackList from './page/admin/BlackList';
+import UserAnnounce from './page/user/UserAnnounce';
+import UserAnnounceDetail from './page/user/UserAnnounceDetail';
 
 function App() {
 
@@ -78,6 +80,8 @@ function App() {
           <Route path='mdshop' element={<MdShop />} />
           <Route path="mdshop/:goodsNo" element={<GoodsDetail />} />
           <Route path="/related-movie/:movieId" element={<RelatedMovie />} />
+          <Route path="/announcements" element={<UserAnnounce />} />
+          <Route path="/announcements/:id" element={<UserAnnounceDetail />} />
           </Route>
 
         {/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
