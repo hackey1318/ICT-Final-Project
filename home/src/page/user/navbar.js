@@ -106,63 +106,70 @@ function Navbar() {
                                 </Link>
                             </li>
                             <li className="nav-items">
-                                    <Link to="/inquiry" className="nav-links">
-                                        1:1 문의
-                                    </Link>
-                                </li>
+                                <Link to="/inquiry" className="nav-links">
+                                    1:1 문의
+                                </Link>
+                            </li>
+                            <li className="nav-items">
+                                <Link to="/announcements" className="nav-links">
+                                    공지사항
+                                </Link>
+                            </li>
                             {isLoggedIn && (
-                                <li className="nav-items">
-                                    <Link to="/mypage" className="nav-links">
-                                        마이페이지
-                                    </Link>
-                                </li>
+                                <>
+                                    <li className="nav-items">
+                                        <Link to="/mypage" className="nav-links">
+                                            마이페이지
+                                        </Link>
+                                    </li>
+                                </>
                             )}
                         </ul>
                     </div>
                 </div>
-            {/* 사용자 섹션 */}
-            <div className="navbar-user">
-            {isLoggedIn && userInfo ? (
-  <div className="user-profile">
-    <div className="welcome-text">
-      환영합니다 <span className="username">{userInfo.nickname}</span> 님
-    </div>
-    <div className="profile-circle">
-      <img
-        src={userInfo.profileImageUrl || "https://via.placeholder.com/35"}
-        alt="프로필 이미지"
-      />
-    </div>
-    <button onClick={handleLogout} className="test-btn logout">
-      로그아웃
-    </button>
-  </div>
-) : (
-  <div className="auth-buttons">
-    <Link to="/login" className="btn btn-login">
-      로그인
-    </Link>
-    <Link to="/register" className="btn btn-register">
-      회원가입
-    </Link>
-  </div>
-)}
-            </div>
+                {/* 사용자 섹션 */}
+                <div className="navbar-user">
+                    {isLoggedIn && userInfo ? (
+                        <div className="user-profile">
+                            <div className="welcome-text">
+                                환영합니다 <span className="username">{userInfo.nickname}</span> 님
+                            </div>
+                            <div className="profile-circle">
+                                <img
+                                    src={userInfo.profileImageUrl || "https://via.placeholder.com/35"}
+                                    alt="프로필 이미지"
+                                />
+                            </div>
+                            <button onClick={handleLogout} className="test-btn logout">
+                                로그아웃
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="auth-buttons">
+                            <Link to="/login" className="btn btn-login">
+                                로그인
+                            </Link>
+                            <Link to="/register" className="btn btn-register">
+                                회원가입
+                            </Link>
+                        </div>
+                    )}
+                </div>
 
-            {
-                showDropdown && (
-                    <ul className="dropdown-container" style={isMobile() ? {} : { position: "fixed", top: `${dropdownPosition.top}px`, left: `${dropdownPosition.left}px`, }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                        <li>
-                            <Link to="/movies/current">현재 상영작</Link>
-                        </li>
-                        <li>
-                            <Link to="/movies/upcoming">상영 예정작</Link>
-                        </li>
-                        <li>
-                            <Link to="/movies">장르별 영화</Link>
-                        </li>
-                    </ul>
-                )}
+                {
+                    showDropdown && (
+                        <ul className="dropdown-container" style={isMobile() ? {} : { position: "fixed", top: `${dropdownPosition.top}px`, left: `${dropdownPosition.left}px`, }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                            <li>
+                                <Link to="/movies/current">현재 상영작</Link>
+                            </li>
+                            <li>
+                                <Link to="/movies/upcoming">상영 예정작</Link>
+                            </li>
+                            <li>
+                                <Link to="/movies">장르별 영화</Link>
+                            </li>
+                        </ul>
+                    )}
             </div>
 
         </nav>
