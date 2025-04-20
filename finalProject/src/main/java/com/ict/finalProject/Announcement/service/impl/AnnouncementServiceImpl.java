@@ -8,6 +8,7 @@ import com.ict.finalProject.Announcement.repository.constant.AnnounceSearchType;
 import com.ict.finalProject.Announcement.repository.domain.Announcements;
 import com.ict.finalProject.Announcement.service.AnnouncementService;
 import com.ict.finalProject.common.exception.custom.NotFoundException;
+import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.domain.constant.UserRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                     .userNo(request.getUserNo())
                     .title(request.getTitle())
                     .content(request.getContent())
+                    .expiredAt(request.getExpiredAt())
+                    .status(StatusInfo.ACTIVE)
                     .build());
         } catch (Exception e) {
             log.error("announce register error[{}]", e.getMessage());
@@ -58,7 +61,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Transactional
     public boolean modifyAnnounceInfo(Integer id, AnnouncementRequest request) {
 
-        Announcements announcements = announcementsRepository.findById(id).orElseThrow(() -> new NotFoundException("정보를 찾을 수 없습니다."));
+        Announcements announcements = announcementsRepository.getActiveAnnounce(id, StatusInfo.ACTIVE).orElseThrow(() -> new NotFoundException("정보를 찾을 수 없습니다."));
 
         try {
             announcements.update(request);
@@ -74,7 +77,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public boolean removeAnnounceInfo(Integer id) {
 
-        Announcements announcements = announcementsRepository.findById(id).orElseThrow(() -> new NotFoundException("정보를 찾을 수 없습니다."));
+        Announcements announcements = announcementsRepository.getActiveAnnounce(id, StatusInfo.ACTIVE).orElseThrow(() -> new NotFoundException("정보를 찾을 수 없습니다."));
 
         try {
             announcements.remove();

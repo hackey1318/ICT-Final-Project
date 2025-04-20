@@ -1,7 +1,7 @@
 import axios from "../../js/public/axiosConfig"
 import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
-import { ArrowLeft, Bookmark, Share, Heart, HeartOff } from "lucide-react"
+import { ArrowLeft, Bookmark, Share2, Heart, HeartOff } from "lucide-react"
 import "./../../css/movie/MovieDetail.css" // CSS 파일 경로는 실제 프로젝트 구조에 맞게 조정하세요
 import LikeType from "../../js/common/LikeType"
 import RelatedMovie from './RelatedMovie';
@@ -189,10 +189,10 @@ function MovieDetail() {
 						<div onClick={toggleLike} style={{ cursor: 'pointer' }}>
 							<Heart
 								className="movie_detail_icon"
-								color={liked ? 'red' : 'gray'}
+								color={liked ? 'red' : 'black'}
 								fill={liked ? 'red' : 'none'}
 							/>
-							<Share className="movie_detail_icon ms-2" onClick={handleCopyUrl} />
+							<Share2 className="movie_detail_icon ms-2" onClick={handleCopyUrl} />
 						</div>
 					</div>
 				</div>
@@ -248,7 +248,7 @@ function MovieDetail() {
 						{relatedGoods.map((item) => (
 							<div key={item.id} className="movie_detail_item col-6 col-sm-3 mb-3">
 								<a
-									href={item.productUrl || '#'}
+									href={item.productUrl || '#'}	// TODO: 상품 URL 잘못 연결됨
 									target="_blank"
 									rel="noopener noreferrer"
 								>
