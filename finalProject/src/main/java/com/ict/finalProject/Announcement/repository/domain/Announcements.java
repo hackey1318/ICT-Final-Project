@@ -35,6 +35,9 @@ public class Announcements {
     @Enumerated(value = EnumType.STRING)
     private StatusInfo status;
 
+    // ✅ 예약 종료일 필드 추가
+    private LocalDateTime expiredAt;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -47,6 +50,7 @@ public class Announcements {
         this.userNo = request.getUserNo();
         this.title = request.getTitle();
         this.content = request.getContent();
+        this.expiredAt = request.getExpiredAt(); // 같이 반영
     }
 
     public void remove() {

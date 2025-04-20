@@ -42,6 +42,8 @@ import RelatedMovie from './page/movie/RelatedMovie';
 import BlackList from './page/admin/BlackList';
 import UserAnnounce from './page/user/UserAnnounce';
 import UserAnnounceDetail from './page/user/UserAnnounceDetail';
+import AnnounceList from './page/admin/AnnounceList';
+import AnnounceDetail from './page/admin/AnnounceDetail';
 
 function App() {
 
@@ -102,6 +104,8 @@ function App() {
             <Route path="mdlists" element={<MdList />} />
             <Route path="inquiry" element={<InquiryReply/>}/>
             <Route path="inquiry/:no" element={<InquiryReplyView/>}/>
+            <Route path="announce" element={<AnnounceList />} />
+            <Route path="announce/:no" element={<AnnounceDetail />} />
           </Route>
         </Route>
       </Routes>

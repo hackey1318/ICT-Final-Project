@@ -23,7 +23,7 @@ public class AnnouncementsCustomRepositoryImpl implements AnnouncementsCustomRep
     @Override
     public Page<AnnouncementResponse> searchByCondition(String keyword, AnnounceSearchType type, Pageable pageable, boolean isUser) {
 
-        StringBuilder base = new StringBuilder("SELECT new com.ict.finalProject.Announcement.controller.response.AnnouncementResponse(a.id AS id, a.title AS title, a.createdAt AS createdAt, u.no AS userNo, u.nickname AS nickname, u.role AS role) FROM Announcements AS a LEFT JOIN Users AS u ON a.userNo = u.no");
+        StringBuilder base = new StringBuilder("SELECT new com.ict.finalProject.Announcement.controller.response.AnnouncementResponse(a.id AS id, a.title AS title, a.createdAt AS createdAt, u.no AS userNo, u.nickname AS nickname, a.status AS status, u.role AS role) FROM Announcements AS a LEFT JOIN Users AS u ON a.userNo = u.no");
 
         boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
 
@@ -44,6 +44,16 @@ public class AnnouncementsCustomRepositoryImpl implements AnnouncementsCustomRep
 
         if (!conditions.isEmpty()) {
             base.append(" WHERE ").append(String.join(" AND ", conditions));
+        }
+
+        if (pageable.getSort().isSorted()) {
+            base.append(" ORDER BY ");
+            List<String> sortConditions = pageable.getSort().stream()
+                    .map(order -> "a." + order.getProperty() + " " + order.getDirection().name())
+                    .toList();
+            base.append(String.join(", ", sortConditions));
+        } else {
+            base.append(" ORDER BY a.createdAt DESC"); // 기본 정렬
         }
 
         TypedQuery<AnnouncementResponse> query = em.createQuery(base.toString(), AnnouncementResponse.class);

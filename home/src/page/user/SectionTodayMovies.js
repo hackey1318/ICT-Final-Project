@@ -14,7 +14,7 @@ const MovieGridItem = ({ movie, onClickItem }) => (
 				{movie.openStatus === 'PENDING'
 					? <div>상영 예정작<br/>{movie.openDate}</div>
 					: `예매율 ★ ${!isNaN(parseFloat(movie.reservationRate))
-						? parseFloat(movie.reservationRate).toFixed(2)
+						? `${parseFloat(movie.reservationRate).toFixed(2)}%`
 						: 'N/A'}`
 				}
 			</div>

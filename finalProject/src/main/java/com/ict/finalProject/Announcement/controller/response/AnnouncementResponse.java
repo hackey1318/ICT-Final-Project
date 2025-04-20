@@ -1,5 +1,6 @@
 package com.ict.finalProject.Announcement.controller.response;
 
+import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.domain.constant.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,10 @@ public class AnnouncementResponse {
     String title;
 
     String content;
+
+    LocalDateTime expiredAt;
+
+    StatusInfo status;
 
     LocalDateTime createdAt;
 }

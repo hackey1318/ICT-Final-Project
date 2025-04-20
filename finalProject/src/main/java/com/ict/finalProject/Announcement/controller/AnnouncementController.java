@@ -11,6 +11,7 @@ import com.ict.finalProject.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class AnnouncementController {
 
     // 전체 공지 조회
     @GetMapping
-    public Page<AnnouncementResponse> getAnnouncePage(@PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable,
+    public Page<AnnouncementResponse> getAnnouncePage(@PageableDefault(page = 0, size = 10, sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable,
                                                       @RequestParam(value = "type", defaultValue = "all") String type,
                                                       @RequestParam(value = "keyword", required = false) String keyword) {
 
