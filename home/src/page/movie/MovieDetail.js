@@ -247,11 +247,7 @@ function MovieDetail() {
 					<div className="movie_detail_items row">
 						{relatedGoods.map((item) => (
 							<div key={item.id} className="movie_detail_item col-6 col-sm-3 mb-3">
-								<a
-									href={item.productUrl || '#'}	// TODO: 상품 URL 잘못 연결됨
-									target="_blank"
-									rel="noopener noreferrer"
-								>
+								<Link to={`/mdshop/${item.id}`} className="Goods_item_links">
 									<img
 										src={item.imageUrls ? `${BASE_URL}${item.imageUrls[0]}` : "/placeholder.svg"}
 										alt={item.name}
@@ -261,7 +257,7 @@ function MovieDetail() {
 											e.target.src = "/placeholder.svg";
 										}}
 									/>
-								</a>
+								</Link>
 								<span className="movie_detail_item_name d-block">{item.name}</span>
 								<span className="movie_detail_item_price fw-bold">{item.price.toLocaleString()}원</span>
 							</div>
