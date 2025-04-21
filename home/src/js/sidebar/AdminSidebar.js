@@ -65,6 +65,7 @@ function AdminSidebar({activeMenu}){
                 //ADMIN 메뉴
                 <ul>
                     <li className="admin-top-menu">
+                        <div className="top-menu-div" onClick={()=>{toggleMenu(0)}}>대시보드</div>
                         <div className="top-menu-div" onClick={()=>{toggleMenu(0)}}>회원 조회</div>
                         {adminOpenMenus[0] && (
                             <ul className="admin-sub-menu">
