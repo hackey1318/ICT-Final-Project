@@ -4,10 +4,8 @@ import { useParams, Link } from "react-router-dom"
 import { ArrowLeft, Bookmark, Share2, Heart, HeartOff } from "lucide-react"
 import "./../../css/movie/MovieDetail.css" // CSS 파일 경로는 실제 프로젝트 구조에 맞게 조정하세요
 import LikeType from "../../js/common/LikeType"
-import RelatedMovie from './RelatedMovie';
 
 const BASE_URL = 'http://192.168.1.252:9988/file-system/download/';
-
 
 function MovieDetail() {
 	// URL 경로에서 영화 ID를 가져옵니다 (예: /movies/10 -> id는 "10")
@@ -285,8 +283,10 @@ function MovieDetail() {
 				<div className="movie_detail_items row">
 					{relatedMovies.map((movieItem) => (
 						<div key={movieItem.no} className="movie_detail_item col-6 col-sm-2 mb-3">
-							<img src={movieItem.postImage} alt={movieItem.name} className="movie_detail_item_img img-fluid rounded mb-2" />
-							<span className="movie_detail_item_name d-block">{movieItem.name}</span>
+							<Link to={`/movies/${movieItem.no}`}>
+								<img src={movieItem.postImage} alt={movieItem.name} className="movie_detail_item_img img-fluid rounded mb-2" />
+								<span className="movie_detail_item_name d-block">{movieItem.name}</span>
+							</Link>
 						</div>
 					))}
 				</div>
