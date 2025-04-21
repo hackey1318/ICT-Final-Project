@@ -3,7 +3,7 @@ import './App.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation, useParams } from 'react-router-dom';
 import Main from './page/user/Main'
 import Layout from './page/user/Layout';
 import KakaoLogin from './page/user/LoginForm';
@@ -21,6 +21,8 @@ import PaymentResult from './js/payment/PaymentResult';
 import ManagerLogin from './page/admin/ManagerLogin';
 import { useEffect } from 'react';
 import MovieDetail from './page/movie/MovieDetail';
+import ReviewListPage from './page/movie/ReviewListPage';
+import ReviewWritePage from './page/movie/ReviewWritePage';
 import GenreMovie from './page/movie/GenreMovie';
 import CurrentMovie from './page/movie/CurrentMovie';
 import UpcomingMovie from './page/movie/UpcomingMovie';
@@ -45,9 +47,23 @@ import UserAnnounceDetail from './page/user/UserAnnounceDetail';
 import AnnounceList from './page/admin/AnnounceList';
 import AnnounceDetail from './page/admin/AnnounceDetail';
 
+
 function App() {
 
   const location = useLocation();
+
+  function ReviewListRoute() {
+    const { id } = useParams();                    // URL :movies/:id/reviews
+    const stored = sessionStorage.getItem('userInfo');
+    const currentUser = stored ? JSON.parse(stored) : null;
+    const currentUserNo = currentUser?.userNo;
+    return (
+      <ReviewListPage
+        movieNo={Number(id)}
+        currentUserNo={currentUserNo}
+      />
+    );
+  }
 
   useEffect(() => {
     const isManagerPage = location.pathname.startsWith('/manager');
@@ -71,6 +87,8 @@ function App() {
           <Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
           <Route path='payment/result' element={<PaymentResult />} />
           <Route path='movies/:id' element={<MovieDetail />} />
+          <Route path='movies/:id/reviews' element={<ReviewListRoute />} />
+          <Route path='movies/:id/reviewWrite' element={<ReviewWritePage />} />
           <Route path='movies/current' element={<CurrentMovie />} />
           <Route path='movies/upcoming' element={<UpcomingMovie />} />
           <Route path='/inquiry' element={<InquiryPage />} />

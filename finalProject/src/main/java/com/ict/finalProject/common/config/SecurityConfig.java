@@ -60,6 +60,8 @@ public class SecurityConfig {
                 mvc.pattern("/user/**"),
                 mvc.pattern("/banner/**"),
                 mvc.pattern("/movies/**"),
+                mvc.pattern("/movie/*/reviews"),
+                mvc.pattern("/movie/*/reviews/**"),
                 mvc.pattern("/md-shop/lists/**"),
                 mvc.pattern("/md-shop/movies/**"),
                 mvc.pattern("/file-system/upload/register-image"),
