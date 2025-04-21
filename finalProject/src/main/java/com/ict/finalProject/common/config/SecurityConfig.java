@@ -88,8 +88,7 @@ public class SecurityConfig {
 
                                 authorize.requestMatchers(permitAllWhiteList).permitAll()
                                         .requestMatchers(HttpMethod.GET, "/movies/detail/{id}").permitAll()
-                                        // .requestMatchers("/admin/**").hasAnyRole(MemberRole.ADMIN.name())
-
+                                        .requestMatchers(HttpMethod.GET, "/announce/**").permitAll()
                                         .requestMatchers("/admin/**").permitAll()
                                         .requestMatchers(HttpMethod.DELETE, "/user").hasAnyRole(UserRole.ADMIN.name())
                                         .anyRequest().authenticated())

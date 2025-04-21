@@ -128,7 +128,7 @@ function AdminSidebar({activeMenu}){
                         <div className="top-menu-div" onClick={()=>{toggleMenu(3)}}>공지 조회</div>
                             {adminOpenMenus[3] && (
                             <ul className="admin-sub-menu">
-                                <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>공지 목록 조회</Link></li>
+                                <li><Link to="/manager/home/announce" className={`admin-nav-link ${activeMenu === "announce" ? "active":""}`}>공지 목록 조회</Link></li>
                             </ul>
                         )}
                     </li>
@@ -169,7 +169,7 @@ function AdminSidebar({activeMenu}){
                         <div className="top-menu-div" onClick={()=>{toggleMenu(4)}}>공지 조회</div>
                         {managerOpenMenus[4] && (
                             <ul className="admin-sub-menu">
-                                <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>공지 목록 조회</Link></li>
+                                <li><Link to="/manager/home/announce" className={`admin-nav-link ${activeMenu === "announce" ? "active":""}`}>공지 목록 조회</Link></li>
                             </ul>
                         )}
                     </li>

@@ -97,7 +97,7 @@ function MovieDetail() {
 
 			try {
 				const movieList = await axios.get(`http://localhost:9988/movies/relate-movie?no=${id}`)
-				setRelatedMovies(movieList.data.content); 
+				setRelatedMovies(movieList.data.content);
 			} catch (error) {
 				console.error("Error fetching related goods:", error);
 			}
@@ -150,6 +150,16 @@ function MovieDetail() {
 		}
 	};
 
+	const handleCopyUrl = () => {
+		const url = window.location.href;
+		navigator.clipboard.writeText(url)
+			.then(() => {
+				alert('링크가 클립보드에 복사되었습니다!');
+			})
+			.catch(err => {
+				console.error('클립보드 복사 실패:', err);
+			});
+	};
 
 	// --- 성공 상태 UI ---
 	// 로딩이 끝나고 에러 없이 movie 데이터가 성공적으로 로드된 경우
@@ -179,11 +189,11 @@ function MovieDetail() {
 						<div onClick={toggleLike} style={{ cursor: 'pointer' }}>
 							<Heart
 								className="movie_detail_icon"
-								color={liked ? 'red' : 'gray'}
+								color={liked ? 'red' : 'black'}
 								fill={liked ? 'red' : 'none'}
 							/>
+							<Share2 className="movie_detail_icon ms-2" onClick={handleCopyUrl} />
 						</div>
-						<Share2 className="movie_detail_icon ms-2" />
 					</div>
 				</div>
 			</header>
@@ -238,7 +248,7 @@ function MovieDetail() {
 						{relatedGoods.map((item) => (
 							<div key={item.id} className="movie_detail_item col-6 col-sm-3 mb-3">
 								<a
-									href={item.productUrl || '#'}
+									href={item.productUrl || '#'}	// TODO: 상품 URL 잘못 연결됨
 									target="_blank"
 									rel="noopener noreferrer"
 								>

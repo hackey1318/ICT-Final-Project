@@ -31,10 +31,10 @@ public class LikeController {
         LikeType likeType = LikeType.valueOf(type.toUpperCase());
 
         switch (likeType) {
-            case USER, MOVIE -> {
+            case USER, MOVIE, GOODS -> {
                 return likesService.getMovieOrGoodsLikeList(pageable, userNo, likeType);
             }
-            case GOODS, INQUIRE, MOVIEREVIEW, GOODSREVIEW -> {
+            case INQUIRE, MOVIEREVIEW, GOODSREVIEW -> {
                 log.info("추후 개발");
             }
         }
