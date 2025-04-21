@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +17,7 @@ public class OrderItemDto {
     private String name;
     private int price;
     private int quantity;
+    private List<String> imageIdList;
 
     public OrderItemDto(OrderItem orderItem) {
         this.id = orderItem.getId();
