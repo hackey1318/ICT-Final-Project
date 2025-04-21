@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -78,17 +79,17 @@ public class MoviesCustomRepositoryImpl implements MoviesCustomRepository {
     public Page<Movies> findRelateGenreMovieList(String[] genreList, Pageable pageable) {
 
         StringBuilder queryStr = new StringBuilder("SELECT m FROM Movies m WHERE ");
-        String genreCondition = List.of(genreList).stream()
-                .map(g -> "m.genre LIKE :genre" + g)
+        String genreCondition = IntStream.range(0, genreList.length)
+                .mapToObj(i -> "m.genre LIKE :genre" + i)
                 .collect(Collectors.joining(" OR "));
 
         String finalQuery = queryStr + genreCondition;
 
         TypedQuery<Movies> query = em.createQuery(finalQuery, Movies.class);
 
-        // LIKE 검색 조건을 파라미터로 설정
+        // 파라미터 바인딩
         for (int i = 0; i < genreList.length; i++) {
-            query.setParameter("genre" + genreList[i], "%" + genreList[i] + "%");
+            query.setParameter("genre" + i, "%" + genreList[i] + "%");
         }
 
         // 페이지 번호와 페이지 크기를 설정
@@ -107,8 +108,8 @@ public class MoviesCustomRepositoryImpl implements MoviesCustomRepository {
     // 장르 기반 영화의 전체 개수를 세는 메서드
     private long countMoviesByGenresWithLike(String[] genreList) {
         // 'LIKE' 조건을 동적으로 생성
-        String genreCondition = List.of(genreList).stream()
-                .map(g -> "m.genre LIKE :genre" + g)
+        String genreCondition = IntStream.range(0, genreList.length)
+                .mapToObj(i -> "m.genre LIKE :genre" + i)
                 .collect(Collectors.joining(" OR "));
 
         // 전체 카운트를 위한 쿼리 작성
@@ -116,9 +117,9 @@ public class MoviesCustomRepositoryImpl implements MoviesCustomRepository {
 
         TypedQuery<Long> countQuery = em.createQuery(countQueryStr, Long.class);
 
-        // LIKE 검색 조건을 파라미터로 설정
+        // 파라미터 바인딩
         for (int i = 0; i < genreList.length; i++) {
-            countQuery.setParameter("genre" + genreList[i], "%" + genreList[i] + "%");
+            countQuery.setParameter("genre" + i, "%" + genreList[i] + "%");
         }
 
         return countQuery.getSingleResult();
