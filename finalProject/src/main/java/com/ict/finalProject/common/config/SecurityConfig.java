@@ -66,7 +66,8 @@ public class SecurityConfig {
                 mvc.pattern("/swagger-ui/index.html"),
                 mvc.pattern("/dashboard/**"),
                 mvc.pattern("/payment/**"),
-                mvc.pattern("/inquiry/**")
+                mvc.pattern("/inquiry/**"),
+                mvc.pattern("/manager/home/register/**") //관리자 등록
         };
 
         return http
