@@ -1,6 +1,7 @@
 package com.ict.finalProject.fileSystem.service;
 
 import com.ict.finalProject.fileSystem.controller.response.FileUploadResponse;
+import com.ict.finalProject.fileSystem.domain.ImageInfo;
 import com.ict.finalProject.fileSystem.domain.Images;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,4 +15,6 @@ public interface FileSystemService {
     List<Images> getImageInfo(List<String> imageIdList);
 
     List<String> getInquiryFileIds(int boardNo);
+
+
 }

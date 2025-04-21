@@ -6,6 +6,7 @@ import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.fileSystem.controller.request.ImageRequest;
 import com.ict.finalProject.fileSystem.controller.response.FileUploadResponse;
 import com.ict.finalProject.fileSystem.domain.Images;
+import com.ict.finalProject.fileSystem.repository.FileSystemRepository;
 import com.ict.finalProject.fileSystem.service.FileSystemService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ import static com.ict.finalProject.domain.constant.UserRole.*;
 public class FileSystemController {
 
     private final FileSystemService fileSystemService;
+    private final FileSystemRepository fileSystemRepository;
 
     @PostMapping("/upload/register-image")
     public List<FileUploadResponse> uploadRegisterImage(@RequestParam("files") List<MultipartFile> files) throws IOException {
@@ -154,4 +156,37 @@ public class FileSystemController {
             return "application/octet-stream";
         }
     }
+
+    @GetMapping("/showPreview/{imageId}")
+    public void showPreviewByImageId(@PathVariable("imageId") String imageId,
+                                     HttpServletResponse response) {
+        // ✅ FileSystemRepository 사용
+        List<Images> list = fileSystemRepository.findByIdIn(List.of(imageId));
+        if (list.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다: " + imageId);
+        }
+
+        Images image = list.get(0);
+        Path filePath = Paths.get(image.getPath());
+
+        if (!Files.exists(filePath)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "서버에 이미지 파일이 없습니다: " + imageId);
+        }
+
+        response.setContentType(getContentType(filePath));
+
+        try (InputStream in = Files.newInputStream(filePath);
+             OutputStream out = response.getOutputStream()) {
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+            out.flush();
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 전송 실패", e);
+        }
+    }
+
+
 }

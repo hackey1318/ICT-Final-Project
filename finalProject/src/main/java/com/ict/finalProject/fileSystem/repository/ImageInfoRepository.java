@@ -5,6 +5,7 @@ import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.fileSystem.domain.ImageInfo;
 import com.ict.finalProject.fileSystem.domain.Images;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -26,4 +27,13 @@ public interface ImageInfoRepository extends JpaRepository<ImageInfo, Integer> {
             @Param("type") ImageWriteType type,
             @Param("status") StatusInfo status
     );
+
+    @Modifying
+    @Query("UPDATE ImageInfo i " +
+            "SET i.boardNo = :boardNo, i.type = :type, i.status = 'ACTIVE' " +
+            "WHERE i.imageId IN (:imageIds)")
+    int linkImagesToReview(
+            @Param("imageIds") List<String> imageIds,
+            @Param("boardNo") int boardNo,
+            @Param("type") ImageWriteType type);
 }

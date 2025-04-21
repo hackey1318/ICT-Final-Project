@@ -224,6 +224,14 @@ function MovieDetail() {
 						>
 							자세히 보기
 						</a>
+
+			                <Link
+								to={`/movies/${id}/reviews`}
+								className="movie_detail_btn_secondary btn btn-outline-secondary"
+							>
+								리뷰보기
+							</Link>
+
 					</div>
 				</div>
 			</div>

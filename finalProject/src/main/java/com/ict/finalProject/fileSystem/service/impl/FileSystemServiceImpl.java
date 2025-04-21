@@ -86,4 +86,5 @@ public class FileSystemServiceImpl implements FileSystemService {
     public List<String> getInquiryFileIds(int boardNo) {
         return imageInfoRepository.findImageIdsByBoardNoAndTypeAndStatus(boardNo, ImageWriteType.INQUIRY, StatusInfo.ACTIVE);
     }
+
 }
