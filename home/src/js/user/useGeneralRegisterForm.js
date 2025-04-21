@@ -4,8 +4,15 @@ import axios from 'axios';
 
 const API_BASE_URL = "http://localhost:9988";
 
-export const useGeneralRegisterForm = () => {
+export const useGeneralRegisterForm = (role = 'user') => {
   const navigate = useNavigate();
+
+  const isManager = role === 'manager';  
+
+  //회원가입 버튼 클릭시, role이 user인지 manager인지에 따라 axios 주소값 변경
+  const registerEndpoint = isManager
+    ? `${API_BASE_URL}/manager/home/register`
+    : `${API_BASE_URL}/oauth/kakao/register/local`;
 
   // ── 폼 데이터 상태 ──
   const [formData, setFormData] = useState({
@@ -203,8 +210,15 @@ export const useGeneralRegisterForm = () => {
       uploadedProfileImageId: uploadedImageId
     };
     try {
-      await axios.post(`${API_BASE_URL}/oauth/kakao/register/local`, payload);
-      setSuccess(true); navigate('/login');
+      //registerEndpoint는 role이 user, manager에 따라 다름름
+      await axios.post(registerEndpoint, payload);
+      setSuccess(true); 
+
+      if(role === 'user'){
+        navigate('/login');
+      }else if(role === 'manager'){
+        navigate('/manager');
+      }
     } catch (err) {
       setApiError(err.response?.data?.errorMsg || '회원가입에 실패했습니다.');
     } finally { setLoading(false); }
