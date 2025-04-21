@@ -3,6 +3,8 @@ import '../../css/cart/Cart.css';
 import checkMark from '../../img/checkMark.png';
 import axios from 'axios';
 import TossPayment from "./../payment/TossPayment";
+// import { debounce } from 'lodash';
+import CartApi, { deleteGoodsList, getGoodsList, getTheaterList } from "./CartApi";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -17,14 +19,47 @@ function Cart() {
     const [theaterData, setTheaterData] = useState([]);
     const [filteredTheaters, setFilteredTheaters] = useState([]);
     const theaterRef = useRef();
+    const goodsRef = useRef(goods);
 
     useEffect(() => {
-        axios.post("http://localhost:9988/order/theaterList", {}, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
+        const handleBeforeUnload = (e) => {
+            if (window.location.pathname === "/cart") {
+                cartQuantityUpdate(); // 동기 API 또는 navigator.sendBeacon
             }
-        })
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        return () => {
+            cartQuantityUpdate();
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
+    }, []);
+
+    const cartQuantityUpdate = () => {
+        axios.post("http://localhost:9988/cart/updateQuantity",
+            {
+                goodsNos: goodsRef.current.map(element => element.goodsNo),
+                goodsQuantities: goodsRef.current.map(element => element.quantity),
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }
+        );
+    }
+
+    useEffect(() => {
+        // 로그인 확인
+        if (!accessToken) {
+            window.location.href = "/login";
+            return null;
+        }
+        setLoading(false);
+
+        // 영화관 데이터 가져오기
+        getTheaterList()
             .then((response) => {
                 setTheaterData(prev => [...prev, ...response.data]);
                 setFilteredTheaters(prev => [...prev, ...response.data]);
@@ -33,50 +68,24 @@ function Cart() {
                 console.error("API 호출 중 오류 발생:", error);
             });
 
-            
-    }, []);
-
-    // 테스트 데이터
-    const test_goods_1 = {
-        id: 1,
-        image: "https://img.danawa.com/prod_img/500000/185/173/img/49173185_1.jpg?shrink=130:130&_v=20250407171230",
-        name: "머그컵",
-        quantity: 1,
-        price: 1000,
-        selected: true
-    }
-
-    const test_goods_2 = {
-        id: 2,
-        image: "https://img.danawa.com/prod_img/500000/443/941/img/6941443_1.jpg?shrink=130:130&_v=20181227122347",
-        name: "머그컵2",
-        quantity: 2,
-        price: 10000,
-        selected: true
-    }
-
-    const test_goods_3 = {
-        id: 3,
-        image: "https://cimg.cowave.kr/image/vendor_inventory/e317/70193a0bcc148a37695d2780f84fee6caac3acc9321c9288dde86f3e9c48.jpeg",
-        name: "머그컵3",
-        quantity: 3,
-        price: 90000,
-        selected: true
-    }
-
-    useEffect(() => {
-        if (!accessToken) {
-            window.location.href = "/login";
-            return null;
-        }
-
-        setGoods([test_goods_1, test_goods_2, test_goods_3]);
-        setLoading(false);
+        // 장바구니 데이터 가져오기
+        getGoodsList()
+            .then((response) => {
+                console.log(response.data);
+                const updateGoods = response.data.map(item => ({
+                    ...item,
+                    quantity: item.quantity,
+                    selected: true
+                }));
+                setGoods(updateGoods);
+            })
+            .catch();
     }, []);
 
     useEffect(() => {
         updateTotalPrice();
         updateCheckBox();
+        goodsRef.current = goods;
     }, [goods]);
 
     const selectGoods = (e) => {
@@ -93,7 +102,7 @@ function Cart() {
 
         goods.forEach((item) => {
             if (item.selected) {
-                totalPrice += item.price * item.quantity;
+                totalPrice += item.goodsPrice * item.quantity;
             }
         });
 
@@ -122,11 +131,16 @@ function Cart() {
 
     const addQuantity = (e) => {
         const index = e.target.getAttribute("goodsIndex");
-        setGoods(prev =>
-            prev.map((item, idx) =>
-                idx === parseInt(index) ? { ...item, quantity: item.quantity + 1 } : item
-            )
-        );
+        if (goods[index].goodsQuantity > goods[index].quantity) {
+            setGoods(prev =>
+                prev.map((item, idx) =>
+                    idx === parseInt(index) ? { ...item, quantity: item.quantity + 1 } : item
+                )
+            );
+        } else {
+            alert("재고가 부족합니다.");
+        }
+
     }
 
     const selectAll = () => {
@@ -139,7 +153,12 @@ function Cart() {
     }
 
     const deleteSelected = () => {
-        setGoods(prev => prev.filter(item => !item.selected));
+        deleteGoodsList(goods.filter(item => item.selected))
+            .then(response => {
+                const updatedGoods = goods.filter(item => !item.selected);
+                setGoods(updatedGoods);
+            });
+
     }
 
     const order = () => {
@@ -153,6 +172,8 @@ function Cart() {
             alert("올바른 영화관을 선택해주세요.");
             return;
         }
+
+        cartQuantityUpdate();
 
         setOrderName(selectedGoods.length === 1
             ? selectedGoods[0].name
@@ -193,11 +214,12 @@ function Cart() {
             })
             .catch((error) => {
                 alert("상품 정보 오류");
+                console.log(error);
             });
     }
 
     const searchTheater = (e) => {
-        const filtered = theaterData.filter((theater) => 
+        const filtered = theaterData.filter((theater) =>
             theater.includes(e.target.value));
         setFilteredTheaters(filtered);
     }
@@ -224,13 +246,13 @@ function Cart() {
                     </div>
                     <div className="goods_container">
                         {goods.length > 0 ? goods.map((element, index) => (
-                            <div className="goods" key={element.id}>
+                            <div className="goods" key={element.goodsId}>
                                 <div className="check_image_container">
                                     <div className="select_goods" onClick={selectGoods} goodsIndex={index} style={{ backgroundImage: `url(${checkMark})` }}></div>
                                 </div>
-                                <div className="goods_info">
-                                    <img src={element.image} alt={element.name} />
-                                    <span>{element.name}</span>
+                                <div className="goods_info" onClick={() => window.location.href = `/mdshop/${element.goodsNo}`}>
+                                <img src={`http://192.168.1.252:9988/file-system/download/${element.imageIdList[0]}`}/>
+                                    <span>{element.goodsName}</span>
                                 </div>
                                 <div className="goods_quantity">
                                     <button onClick={subQuantity} goodsIndex={index}>◀</button>
@@ -238,7 +260,7 @@ function Cart() {
                                     <button onClick={addQuantity} goodsIndex={index}>▶</button>
                                 </div>
                                 <div className="goods_price">
-                                    {element.price.toLocaleString()}원
+                                    {element.goodsPrice}원
                                 </div>
                             </div>
                         )) : <div>장바구니가 비어있습니다.</div>}
@@ -277,7 +299,7 @@ function Cart() {
                                 {filteredTheaters.length != 0 ? filteredTheaters.map((element, idx) => (
                                     <div key={idx} onClick={selectTheater}>{element}</div>
                                 )) : <div>결과가 없습니다.</div>}
-                                
+
                             </div>
                         }
                     </div>

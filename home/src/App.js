@@ -84,6 +84,7 @@ function App() {
           <Route path="/related-movie/:movieId" element={<RelatedMovie />} />
           <Route path="/announcements" element={<UserAnnounce />} />
           <Route path="/announcements/:id" element={<UserAnnounceDetail />} />
+
           </Route>
 
         {/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
