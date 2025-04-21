@@ -5,7 +5,8 @@ import { postReview } from '../../js/api/reviewApi';
 import './../../css/movie/ReviewWritePage.css';
 
 function ReviewWritePage() {
-    const baseUrl = process.env.REACT_APP_API_URL;
+    const baseUrl = axios.defaults.baseURL;
+
   const { id } = useParams();
   const movieNo = Number(id);
 
@@ -44,10 +45,20 @@ function ReviewWritePage() {
     }
   };
 
-  const handleRemoveImage = (idx) => {
+  const handleRemoveImage = async (idx) => {
+    const imageIdToRemove = imageIds[idx];
+  
+    try {
+        await axios.patch(`/file-system/delete-image/${imageIdToRemove}`, null, {
+            params: { type: 'MOVIEREVIEW' }
+          });
+    } catch (err) {
+      console.warn('서버 이미지 삭제 실패:', err);
+    }
+  
+    // 프론트 상태도 제거
     setImageIds((prev) => prev.filter((_, i) => i !== idx));
     setPreviews((prev) => prev.filter((_, i) => i !== idx));
-    // (선택) 서버에 DELETE 토글 요청도 가능
   };
 
   const handleSubmit = () => {
@@ -63,6 +74,8 @@ function ReviewWritePage() {
       .then(() => navigate(`/movies/${movieNo}/reviews`))
       .catch((err) => console.error(err));
   };
+
+  
 
   return (
     <div className="review-write-page">

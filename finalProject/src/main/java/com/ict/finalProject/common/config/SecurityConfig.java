@@ -57,6 +57,7 @@ public class SecurityConfig {
                 mvc.pattern( "/oauth/api/users/check-phone/**"),
                 mvc.pattern("/file-system/download/**"),
                 mvc.pattern("/file-system/showImage/**"),
+                mvc.pattern("/file-system/showPreview/**"),
                 mvc.pattern("/user/**"),
                 mvc.pattern("/banner/**"),
                 mvc.pattern("/movies/**"),
