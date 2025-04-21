@@ -17,4 +17,6 @@ public interface FileSystemService {
     List<String> getInquiryFileIds(int boardNo);
 
 
+
+
 }

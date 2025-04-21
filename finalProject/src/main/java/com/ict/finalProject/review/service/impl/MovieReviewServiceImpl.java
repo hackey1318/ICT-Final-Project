@@ -58,7 +58,11 @@ public class MovieReviewServiceImpl implements MovieReviewService {
         MovieReviewResponse dto = modelMapper.map(saved, MovieReviewResponse.class);
         List<ImageInfo> infos = imageInfoRepo.findAllByBoardNoAndType(saved.getNo(), ImageWriteType.MOVIEREVIEW);
         dto.setImageIds(infos.stream().map(ImageInfo::getImageId).collect(Collectors.toList()));
+        System.out.println(">> 저장된 리뷰 ID: " + saved.getNo());
+        System.out.println(">> 이미지 연결된 개수: " + dto.getImageIds().size());
         return dto;
+
+
     }
 
     @Override

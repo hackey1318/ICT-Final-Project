@@ -3,7 +3,6 @@ package com.ict.finalProject.fileSystem.repository;
 import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.fileSystem.domain.ImageInfo;
-import com.ict.finalProject.fileSystem.domain.Images;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ImageInfoRepository extends JpaRepository<ImageInfo, Integer> {
@@ -36,4 +34,13 @@ public interface ImageInfoRepository extends JpaRepository<ImageInfo, Integer> {
             @Param("imageIds") List<String> imageIds,
             @Param("boardNo") int boardNo,
             @Param("type") ImageWriteType type);
+
+    @Modifying
+    @Query("UPDATE ImageInfo i SET i.status = :status WHERE i.imageId = :imageId AND i.type = :type")
+    void updateImageStatus(
+            @Param("imageId") String imageId,
+            @Param("type") ImageWriteType type,
+            @Param("status") StatusInfo status
+    );
+
 }
