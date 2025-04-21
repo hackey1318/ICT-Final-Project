@@ -1,0 +1,14 @@
+.md_flex-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.md_modal-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.md_modal-right img {
+    max-height: 320px;
+    object-fit: cover;
+}
