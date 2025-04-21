@@ -47,11 +47,12 @@ public class MovieReviewServiceImpl implements MovieReviewService {
 
         // 2) 업로드된 이미지들 링크 (ImageInfo.boardNo, type 업데이트)
         if (request.getImageIds() != null && !request.getImageIds().isEmpty()) {
-            imageInfoRepo.linkImagesToReview(
+            int updatedCount = imageInfoRepo.linkImagesToReview( // 👈 반환값 저장
                     request.getImageIds(),
                     saved.getNo(),
                     ImageWriteType.MOVIEREVIEW
             );
+            System.out.println(">> 이미지 링크된 row 수: " + updatedCount); // 👈 로그 출력
         }
 
         // 3) DTO 변환 및 이미지 ID 포함
@@ -71,12 +72,8 @@ public class MovieReviewServiceImpl implements MovieReviewService {
         List<MovieReview> reviews = reviewRepository.findByMovieNo(movieNo);
         if (reviews.isEmpty()) return Collections.emptyList();
 
-        // ... user 매핑 로직 생략 ...
-
         return reviews.stream().map(r -> {
             MovieReviewResponse dto = modelMapper.map(r, MovieReviewResponse.class);
-            // 영화 포스터·유저 정보 세팅 생략...
-            // 이미지 ID 세팅
             List<ImageInfo> infos = imageInfoRepo.findAllByBoardNoAndType(r.getNo(), ImageWriteType.MOVIEREVIEW);
             dto.setImageIds(infos.stream().map(ImageInfo::getImageId).collect(Collectors.toList()));
             return dto;
