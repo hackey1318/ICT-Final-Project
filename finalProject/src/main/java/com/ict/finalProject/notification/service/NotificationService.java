@@ -1,5 +1,6 @@
 package com.ict.finalProject.notification.service;
 
+import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.notification.repository.constant.NotificationStatus;
 import com.ict.finalProject.notification.repository.domain.Notifications;
 import org.springframework.data.domain.Page;
@@ -15,4 +16,5 @@ public interface NotificationService {
 
     int readNotification(Integer userNo, List<Integer> notificationNoList);
 
+    boolean generateNotification(Integer userNo, String content);
 }
