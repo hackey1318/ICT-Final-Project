@@ -44,6 +44,7 @@ import UserAnnounce from './page/user/UserAnnounce';
 import UserAnnounceDetail from './page/user/UserAnnounceDetail';
 import AnnounceList from './page/admin/AnnounceList';
 import AnnounceDetail from './page/admin/AnnounceDetail';
+import ManagerRegister from './page/admin/ManagerRegisterForm';
 
 function App() {
 
@@ -92,6 +93,7 @@ function App() {
           <Route path="findId" element={<FindId />} />
           <Route path="findPwd" element={<FindPwd />} />
           <Route path="pwdReset" element={<PwdReset />} />
+          <Route path="register" element={<ManagerRegister />} />
 
           {/* 로그인 이후 관리자 레이아웃 (사이드바 포함) */}
           <Route path="home" element={<Admin />}>
