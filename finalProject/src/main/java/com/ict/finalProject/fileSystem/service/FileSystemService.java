@@ -1,5 +1,6 @@
 package com.ict.finalProject.fileSystem.service;
 
+import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.fileSystem.controller.response.FileUploadResponse;
 import com.ict.finalProject.fileSystem.domain.ImageInfo;
 import com.ict.finalProject.fileSystem.domain.Images;
@@ -18,8 +19,5 @@ public interface FileSystemService {
 
     List<String> getCartFileIds(int boardNo);
 
-    void createPendingImageInfos(List<String> imageIds);
-
-
-
+    void createPendingImageInfos(List<String> imageIds, int boardNo, ImageWriteType type);
 }

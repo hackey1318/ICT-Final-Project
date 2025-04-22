@@ -17,7 +17,7 @@ import "../../css/movie/ReviewDetailModal.css"
 function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
   const navigate = useNavigate()
   const handleDelete = () => {
-    deleteReview(review.no).then(() => {
+    deleteReview(review.movieNo, review.no).then(() => {
       onDelete(review.no)
       onClose()
     })
@@ -25,7 +25,7 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
 
   const handleEdit = () => {
     // 리뷰 수정 페이지로 이동
-    navigate(`/movies/${review.movieNo}/reviewEdit/${review.no}`)
+    navigate(`/movies/${review.movieNo}/reviews/edit/${review.no}`)
   }
 
   // 모달 내부 클릭 시 닫히지 않도록 이벤트 전파 차단

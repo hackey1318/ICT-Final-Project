@@ -70,7 +70,7 @@ function ReviewWritePage() {
       imageIds,
     };
 
-    postReview(payload)
+    postReview(movieNo, payload)
       .then(() => navigate(`/movies/${movieNo}/reviews`))
       .catch((err) => console.error(err));
   };

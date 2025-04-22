@@ -35,7 +35,7 @@ function ReviewListPage({ movieNo, currentUserNo }) {
       {accessToken && (
         <button
           className="btn-write"
-          onClick={() => navigate(`/movies/${movieNo}/reviewWrite`)}
+          onClick={() => navigate(`/movies/${movieNo}/reviews/write`)}
         >
           리뷰 작성
         </button>
