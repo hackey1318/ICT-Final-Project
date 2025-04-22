@@ -5,11 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ReportType {
+public enum ReportCategory {
 
-    CINEMATE("씨네메이트"),
-    MOVIEREVIEW("영화 리뷰"),
-    GOODSREVIEW("굿즈 리뷰");
+    BADWORD("욕설");
 
     private final String description;
 }
