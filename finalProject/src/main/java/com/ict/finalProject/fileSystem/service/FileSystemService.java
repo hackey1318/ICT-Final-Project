@@ -18,6 +18,7 @@ public interface FileSystemService {
 
     List<String> getCartFileIds(int boardNo);
 
+    void createPendingImageInfos(List<String> imageIds);
 
 
 

@@ -5,6 +5,8 @@ import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.fileSystem.domain.ImageInfo;
 import com.ict.finalProject.fileSystem.repository.ImageInfoRepository;
 import java.util.Collections;
+
+import com.ict.finalProject.fileSystem.service.FileSystemService;
 import jakarta.persistence.EntityNotFoundException;
 import com.ict.finalProject.review.repository.MovieReviewRepository;
 import com.ict.finalProject.review.repository.domain.MovieReview;
@@ -25,12 +27,13 @@ public class MovieReviewServiceImpl implements MovieReviewService {
     private final MovieReviewRepository reviewRepository;
     private final ImageInfoRepository imageInfoRepo;
     private final ModelMapper modelMapper;
+    private final FileSystemService fileSystemService;
 
 
     @Override
     @Transactional
     public MovieReviewResponse writeReview(MovieReviewRequest request) {
-        // --- 1) 리뷰 저장 ---
+        // 1) 리뷰 저장
         MovieReview saved = reviewRepository.save(
                 MovieReview.builder()
                         .movieNo(request.getMovieNo())
@@ -40,7 +43,10 @@ public class MovieReviewServiceImpl implements MovieReviewService {
                         .build()
         );
 
-        // --- 2) 이미지 링크 (PENDING → ACTIVE) ---
+        // 2) PENDING 레코드 생성
+        fileSystemService.createPendingImageInfos(request.getImageIds());
+
+        // 3) PENDING → ACTIVE 링크
         if (request.getImageIds() != null && !request.getImageIds().isEmpty()) {
             imageInfoRepo.linkImagesToReview(
                     request.getImageIds(),
@@ -49,12 +55,14 @@ public class MovieReviewServiceImpl implements MovieReviewService {
             );
         }
 
-        // --- 3) DTO 변환 & 이미지 ID 채우기 ---
+        // 4) DTO 변환 & ACTIVE 이미지만 조회
         MovieReviewResponse dto = modelMapper.map(saved, MovieReviewResponse.class);
-        List<String> ids = imageInfoRepo
-                .findAllByBoardNoAndType(saved.getNo(), ImageWriteType.MOVIEREVIEW)
-                .stream().map(ImageInfo::getImageId).toList();
-        dto.setImageIds(ids);
+        List<String> activeIds = imageInfoRepo.findImageIdsByBoardNoAndTypeAndStatus(
+                saved.getNo(),
+                ImageWriteType.MOVIEREVIEW,
+                StatusInfo.ACTIVE
+        );
+        dto.setImageIds(activeIds);
         return dto;
     }
 

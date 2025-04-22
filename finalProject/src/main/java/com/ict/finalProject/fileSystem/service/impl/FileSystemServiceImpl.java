@@ -91,4 +91,19 @@ public class FileSystemServiceImpl implements FileSystemService {
     public List<String> getCartFileIds(int boardNo) {
         return imageInfoRepository.findImageIdsByBoardNoAndTypeAndStatus(boardNo, ImageWriteType.GOODS, StatusInfo.ACTIVE);
     }
+
+    @Override
+    public void createPendingImageInfos(List<String> imageIds) {
+        if (imageIds == null || imageIds.isEmpty()) return;
+        List<ImageInfo> infos = imageIds.stream()
+                .map(id -> ImageInfo.builder()
+                        .imageId(id)
+                        .status(StatusInfo.PENDING)
+                        .type(null)      // 아직 연결 대상이 없으니 null
+                        .boardNo(0)      // 연결 전이니 더미값
+                        .build())
+                .toList();
+        imageInfoRepository.saveAll(infos);
+    }
+
 }
