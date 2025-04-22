@@ -2,46 +2,51 @@ import styled from 'styled-components';
 import '../../css/inquiry/inquiry.css';
 import { Link, useNavigate } from 'react-router-dom';
 import InquiryWrite from './InquiryWrite';
-import InquiryView from './InquiryView';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
 import apiClient from '../../js/public/axiosConfig';
 import InquiryPwdModal from '../../js/inquiry/InquiryPwdModal';
+import Pagination from '../../js/public/Pagination';
 
 function InquiryPage() {
     let [inquiryModalOpen, setInquiryModalOpen] = useState(false);
     let [writeModalOpen, setWriteModalOpen] = useState(false);
     let [inquiryList, setInquiryList] = useState([]);
-    let [no, setNo] = useState(1);  //페이징
     let navigate = useNavigate();
     const [showPasswordModal, setShowPasswordModal] = useState(false);
     const [currentItemForPassword, setCurrentItemForPassword] = useState(null);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [pageSize, setPageSize] = useState(9);
+
 
     const StyledLink = styled(Link)`
         text-decoration: none;
+        &:link, &:visited, &:active {color: blue;}
+        &:hover {color: yellowgreen;}`;
 
-        &:link, &:visited, &:active {
-            color: blue;
-        }
-        &:hover {
-            color: yellowgreen;
-        }
-    `;
-    
-    //문의리스트 호출
-    useEffect (() => {
-        getInquiryList();
-    }, []);
-
-    const getInquiryList = async () => {
+    const getInquiryList = useCallback(async (page=0) => {
         try {
-            const listData = await apiNoAccessClient.get("/inquiry/getInquiry")
-            setInquiryList(listData.data);
-            console.log(listData.data);
+            const response = await apiNoAccessClient.get(`/inquiry/getInquiry?page=${page}&size=${pageSize}`);
+            if(response.data && response.data.content) {
+                setInquiryList(response.data.content || []);
+                setTotalPages(response.data.totalPages);
+            } else {
+                console.error("잘못된 API구조", response.data);
+                setInquiryList([]);
+                setTotalPages(0);
+            }
         } catch(error) {
             console.log("error발생 : ", error);
+            setInquiryList([]);
+            setCurrentPage(0);
         }
-    }
+    }, [pageSize]);
+
+    //문의리스트 호출
+    useEffect (() => {
+        getInquiryList(currentPage);
+    }, [currentPage, getInquiryList]);
 
     // 모달 닫는 함수
     const closeWriteModal = useCallback(() => {
@@ -120,7 +125,9 @@ function InquiryPage() {
         }
     };
 
-    console.log(inquiryList)
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
 
     return(
         <div className="inquiry-container">
@@ -129,11 +136,11 @@ function InquiryPage() {
                 <table className="table table-hover" style={{width: '100%'}}>
                     <thead style={{borderBottom: '1px solid #ddd'}}>
                         <tr>
-                            <th style={{width:'7%', textAlign:'center'}}>번호</th>
-                            <th style={{width:'48%', textAlign:'center'}}>제목</th>
-                            <th style={{width:'15%', textAlign:'center'}}>작성자</th>
-                            <th style={{width:'20%', textAlign:'center'}}>작성날짜</th>
-                            <th style={{width:'10%', textAlign:'center'}}>진행상황</th>
+                            <th style={{width:'7%', textAlign:'center', background: '#f1f3f5'}}>번호</th>
+                            <th style={{width:'48%', textAlign:'center', background: '#f1f3f5'}}>제목</th>
+                            <th style={{width:'15%', textAlign:'center', background: '#f1f3f5'}}>작성자</th>
+                            <th style={{width:'20%', textAlign:'center', background: '#f1f3f5'}}>작성날짜</th>
+                            <th style={{width:'10%', textAlign:'center', background: '#f1f3f5'}}>진행상황</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -146,15 +153,15 @@ function InquiryPage() {
                                     return (
                                         <tr className="td-container" key={item.no}>
                                             <td style={{width:'7%', textAlign:'center'}}>{item.no}</td>
-                                            <td style={{width:'48%'}}>
+                                            <td style={{width:'48%', textAlign: 'left'}}>
                                                 <a href='#' id='toDetail' onClick={(e) => {e.preventDefault(); handleInquiryClick(item)}}>
-                                                    {item.private && <span style={{ marginRight: '5px' }}>🔒</span>}
-                                                    {item.subject}
+                                                    {item.private && <span style={{ marginRight: '5px', position: 'absolute'}}>🔒</span>}
+                                                    <span style={{paddingLeft: '30px'}}>{item.subject}</span>
                                                 </a>
                                             </td>
                                             <td style={{width:'15%', textAlign:'center'}}>{item.nickname}</td>
                                             <td style={{width:'20%', textAlign:'center'}}>{new Date(item.createdAt).toLocaleDateString()}</td>
-                                            <td style={{width:'10%', textAlign:'center'}}>{item.proceed}</td>
+                                            <td style={{width:'10%', textAlign:'center'}}>{item.proceedDescription}</td>
                                         </tr>
                                     )
                                 })
@@ -169,17 +176,17 @@ function InquiryPage() {
                     </tbody>
                 </table>
             </div>
-            {   /* 문의입력 모달창 */
+            {  
                 writeModalOpen &&
                 <>
-                    <DimmedOverlay/> {/* 딤 처리 오버레이 */}
+                    <DimmedOverlay/>
                     <div id="inquiryModal">
                         <InquiryWrite onClose={closeWriteModal}
                                       onSuccess={getInquiryList}/>
                     </div>
                 </>
             }
-            {   /* 비밀글 PW입력 모달창 */
+            {   
                 <InquiryPwdModal
                     show={showPasswordModal}
                     item={currentItemForPassword}
@@ -188,30 +195,13 @@ function InquiryPage() {
             }
             <div>
                 <div id="paging">
-                    {/* <ul className="pagination">
-                        {
-                            (function() {
-                                if(nowPage>1){
-                                    return <li className="page-item"><a className="page-link" onClick={()=>getBoardList(nowPage-1)}>Previous</a></li>       
-                                }
-                            })()
-                        }
-                        
-                        {pageNum.map(function(pg){
-                            var activeStyle = 'page-item'; //현재 페이지만 active스타일이 먹도록 설정
-                            if(nowPage == pg) activeStyle = 'page-item active';
-
-                            return <li className={activeStyle}><a className="page-link" onClick={()=>getBoardList(pg)}>{pg}</a></li>
-                        })}
-                        
-                        {
-                            (function(){
-                                if(nowPage<totalPage){
-                                    return <li className="page-item"><a className="page-link" onClick={()=>getBoardList(nowPage+1)}>Next</a></li>
-                                }
-                            })()
-                        }
-                    </ul> */}
+                    {totalPages > 0 && ( 
+                        <Pagination
+                            page={currentPage}       
+                            totalPages={totalPages}   
+                            onPageChange={handlePageChange} 
+                        />
+                    )}
                 </div>
                 <div style={{textAlign: 'right', minWidth: '850px'}}>
                     <button id="write" 

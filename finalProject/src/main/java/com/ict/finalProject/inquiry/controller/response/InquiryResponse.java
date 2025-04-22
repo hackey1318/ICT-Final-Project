@@ -3,12 +3,10 @@ package com.ict.finalProject.inquiry.controller.response;
 import com.ict.finalProject.domain.constant.InquiryProceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.domain.constant.UserRole;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.w3c.dom.Text;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +32,8 @@ public class InquiryResponse {
     private List<String> imageIdList;
 
     private InquiryProceed proceed;
+
+    private String proceedDescription;
 
     private UserRole role;
 

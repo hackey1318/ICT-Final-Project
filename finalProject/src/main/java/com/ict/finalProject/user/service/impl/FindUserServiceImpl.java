@@ -159,6 +159,12 @@ public class FindUserServiceImpl implements FindUserService {
         return findUserRepository.findByNoIn(userNos);
     }
 
+    //문의 댓글용 사용자 정보가져오기
+    @Override
+    public Optional<Users> findUserById(String id) {
+        return findUserRepository.findById(id);
+    }
+
     //회원정보 가져오기
     @Override
     public Optional<Users> userSelect(String userId) {

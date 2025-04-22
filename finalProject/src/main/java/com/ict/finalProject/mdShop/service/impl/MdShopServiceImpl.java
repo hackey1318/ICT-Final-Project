@@ -204,11 +204,12 @@ public class MdShopServiceImpl implements MdShopService {
         Goods goods = mdShopRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 굿즈가 존재하지 않습니다."));
 
-        goods.setStatus(StatusInfo.DELETE);
-        mdShopRepository.save(goods);
-
-        GoodsStocks goodsStock = goodsStockRepository.findById(goods).orElseThrow(() -> new NotFoundException("굿즈 정보 조회에 실패하였습니다."));
+        GoodsStocks goodsStock = goodsStockRepository.findByGoods(goods).orElseThrow(() -> new NotFoundException("굿즈 정보 조회에 실패하였습니다."));
         goodsStock.update(0);
+        goods.setStatus(StatusInfo.DELETE);
+        Goods saveEntity = mdShopRepository.save(goods);
+        goodsStock.setGoods(saveEntity);
+
         goodsStockRepository.save(goodsStock);
 
         List<ImageInfo> imageInfos = imageInfoRepository.findAllByBoardNoAndType(id, ImageWriteType.GOODS);

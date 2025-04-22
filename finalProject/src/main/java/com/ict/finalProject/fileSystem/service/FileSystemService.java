@@ -14,4 +14,6 @@ public interface FileSystemService {
     List<Images> getImageInfo(List<String> imageIdList);
 
     List<String> getInquiryFileIds(int boardNo);
+
+    List<String> getCartFileIds(int boardNo);
 }

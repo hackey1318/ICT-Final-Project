@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import './../../css/user/FindUser.css';
+import arrow from '../../img/arrow.png';
 
 function FindPwd(){
     //입력한 아이디, 이메일을 보관할 변수
@@ -74,6 +75,9 @@ function FindPwd(){
 
     return(
         <div className="find-form">
+            <button onClick={() => window.history.back()} className="back-button" style={{display:"flex"}}>
+                <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
+            </button>
             {!pwdFoundCheck ? (
                 <form onSubmit={formCheck}>
                     <h3 className="find-form-subject">비밀번호 찾기</h3>

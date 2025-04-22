@@ -65,6 +65,7 @@ function AdminSidebar({activeMenu}){
                 //ADMIN 메뉴
                 <ul>
                     <li className="admin-top-menu">
+                        <div className="top-menu-div" onClick={()=>{toggleMenu(0)}}>대시보드</div>
                         <div className="top-menu-div" onClick={()=>{toggleMenu(0)}}>회원 조회</div>
                         {adminOpenMenus[0] && (
                             <ul className="admin-sub-menu">
@@ -120,7 +121,7 @@ function AdminSidebar({activeMenu}){
                         <div className="top-menu-div" onClick={()=>{toggleMenu(2)}}>영화 조회</div>
                         {adminOpenMenus[2] && (
                             <ul className="admin-sub-menu">
-                                <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>배너 목록 조회</Link></li>
+                                <li><Link to="/manager/home/banner" className={`admin-nav-link ${activeMenu === "banner" ? "active":""}`}>배너 목록 조회</Link></li>
                             </ul> 
                         )}   
                     </li>
@@ -161,7 +162,7 @@ function AdminSidebar({activeMenu}){
                         <div className="top-menu-div" onClick={()=>{toggleMenu(3)}}>영화 조회</div>
                         {managerOpenMenus[3] && (
                             <ul className="admin-sub-menu">
-                                <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>배너 목록 조회</Link></li>
+                                <li><Link to="/manager/home/banner" className={`admin-nav-link ${activeMenu === "banner" ? "active":""}`}>배너 목록 조회</Link></li>
                             </ul>
                         )}
                     </li>
