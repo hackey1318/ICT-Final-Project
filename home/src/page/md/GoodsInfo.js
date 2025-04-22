@@ -25,29 +25,6 @@ const GoodsInfo = ({ goods }) => {
         setQuantity(quantity + 1);
     };
 
-    const handlePurchase = () => {
-        addGoodsToCart(goodsNo, quantity, "Purchase")
-        .then(response => {
-            alert(response.data.message);
-            if (response.data.isRedirect)
-            window.location.href = "/cart";
-        })
-        .catch(error => {
-            console.log(error);
-        });
-    };
-
-    const handleAddToCart = () => {
-        // alert(`${goods.name} ${quantity}개를 장바구니에 담습니다. 총 금액: ${(goods.price * quantity).toLocaleString()}원`);
-        addGoodsToCart(goodsNo, quantity, "Add")
-        .then(response => {
-            alert(response.data.message);
-        })
-        .catch(error => {
-            console.log(error);
-        });
-    };
-
     const handleButton = (act) => {
         addGoodsToCart(goodsNo, quantity, act)
         .then(response => {

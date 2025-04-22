@@ -6,29 +6,73 @@ const accessToken = sessionStorage.getItem("accessToken");
 function OrderList() {
     const [orderList, setOrderList] = useState([]);
     const [orderItemList, setOrderItemList] = useState([]);
+    const [paymentKeyList, setPaymentKeyList] = useState([]);
 
-    useEffect(() => {
-        const fetchOrderList = async () => {
-            const response = await fetch("http://localhost:9988/order/list", {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            }
-            );
-
-            if (!response.ok) {
-                console.log("요청 실패:", response.status);
-
-            } else {
-                const data = await response.json();
-                setOrderList(data.ordersDtoList);
-                setOrderItemList(data.orderItemDtoList)
+    const fetchOrderList = async () => {
+        const response = await fetch("http://localhost:9988/order/list", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${accessToken}`
             }
         }
+        );
 
+        if (!response.ok) {
+            console.log("요청 실패:", response.status);
+            return;
+        }
+
+        const data = await response.json();
+        setOrderList(data.ordersDtoList);
+        setOrderItemList(data.orderItemDtoList)
+        setPaymentKeyList(data.paymentKeyList);
+        console.log(data);
+
+    }
+
+    useEffect(() => {
         fetchOrderList();
     }, []);
+
+    const cancelOrder = (paymentKey, orderNo) => {
+        const fetchCancelOrder = async () => {
+            const paymentResponse = await fetch("http://localhost:9988/payment/cancel", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`
+                },
+                body: JSON.stringify({ paymentKey })
+            });
+
+            if (!paymentResponse.ok) {
+                console.log("요청 실패:", paymentResponse.status);
+                return;
+            }
+
+            const paymentData = await paymentResponse.json();
+            const transactionKey = paymentData.lastTransactionKey;
+            console.log("결제 취소 결과:", paymentData);
+
+            const orderResponse = await fetch("http://localhost:9988/order/cancel", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`
+                },
+                body: JSON.stringify({ paymentKey, orderNo, transactionKey })
+            });
+
+            if (!orderResponse.ok) {
+                console.log("요청 실패:", orderResponse.status);
+                return;
+            }
+
+            fetchOrderList();
+        };
+
+        fetchCancelOrder();
+    }
 
     return (
         <div className="orderList_wrapper">
@@ -41,7 +85,7 @@ function OrderList() {
                         return (<div>
                             <hr />
                             <div className="orderList_head">
-                                <div>
+                                <div className="orderList_date_state">
                                     {
                                         new Date(order?.updatedAt)
                                             .toLocaleString('ko-KR', {
@@ -57,7 +101,17 @@ function OrderList() {
                                     } - {order?.statusText}
                                 </div>
                                 <div>
-                                    {order?.statusText !== "결제 대기" && <span className="orderDetail" onClick={() => window.location.href = `/order/detail?orderNumber=${order.orderNumber}`}><b>{"상세보기 >"}</b></span>}
+                                    {
+                                        order?.statusText !== "결제 대기" &&
+                                        <div>
+                                            <span className="orderList_link" onClick={() => window.location.href = `/order/detail?orderNumber=${order.orderNumber}`}><b>{"상세 보기 >"}</b></span>
+                                            <br />
+                                            {
+                                                order?.statusText !== "결제 취소" &&
+                                                <span className="orderList_link" onClick={() => cancelOrder(paymentKeyList[orderIndex], order.id)}><b>{"주문 취소 >"}</b></span>
+                                            }
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             <div className="orderItem_container">

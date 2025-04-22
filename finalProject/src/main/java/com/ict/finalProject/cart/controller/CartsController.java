@@ -67,9 +67,19 @@ public class CartsController {
         }
 
         if (cartsService.checkCartGoodsExist(userNo, goodsId)) {
-            result.put("isRedirect", false);
-            result.put("message", "이미 장바구니에 있는 상품입니다.");
-            return ResponseEntity.ok(result);
+            if (act.equals("Purchase")) {
+                result.put("isRedirect", true);
+                result.put("message", "이미 추가된 상품입니다. 장바구니 페이지로 이동합니다.");
+                return ResponseEntity.ok(result);
+            } else if (act.equals("Add")) {
+                result.put("isRedirect", false);
+                result.put("message", "이미 장바구니에 추가된 상품입니다.");
+                return ResponseEntity.ok(result);
+            } else {
+                result.put("isRedirect", false);
+                result.put("message", "Unknown Act");
+                return ResponseEntity.ok(result);
+            }
         } else {
             cartsService.insertCartGoods(userNo, goodsId, goodsQuantity);
             if (act.equals("Purchase")) {

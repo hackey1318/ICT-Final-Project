@@ -83,6 +83,13 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersDto;
     }
 
+    @Override
+    public void cancelOrders(int orderNo) {
+        Orders entity = ordersRepository.findById(orderNo).get();
+        entity.setStatus(OrdersStatus.CANCELLED);
+        ordersRepository.save(entity);
+    }
+
     private String convertStatusToText(OrdersStatus status) {
         switch (status) {
             case PAID: return "결제 완료";

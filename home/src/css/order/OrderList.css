@@ -20,16 +20,22 @@
     justify-content: space-between;
 }
 
+.orderList_date_state {
+    display: flex;
+    font-size: 1.2em;
+    padding-top: 3px;
+}
+
 .orderList_container {
     width: 40%;
     max-width: 1000px;
 }
 
-.orderDetail {
+.orderList_link {
     margin-left: auto;
 }
 
-.orderDetail:hover {
+.orderList_link:hover {
     cursor: pointer;
     color: royalblue;
 }
@@ -38,7 +44,7 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
-    padding-top: 20px;
+    padding-top: 10px;
 }
 
 .orderList_content:hover {
