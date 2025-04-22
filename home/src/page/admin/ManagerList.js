@@ -126,9 +126,9 @@ function ManagerList(){
                         )
                     })
                 }
-
-                {/* 페이징 */}
-                <div className="paging-container">
+            </div>
+            {/* 페이징 */}
+            <div className="paging-container">
                     {page > 0 && (
                         <button className="page-buttons" onClick={() => handlePageChange(page - 1)}>
                             이전
@@ -146,7 +146,6 @@ function ManagerList(){
                         </button>
                     )}
                 </div>
-            </div>
         </div>
     )
 }

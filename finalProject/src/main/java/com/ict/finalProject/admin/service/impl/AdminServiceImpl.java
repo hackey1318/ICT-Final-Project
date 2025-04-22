@@ -55,16 +55,27 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Page<UserResponse> getMemberList(Pageable pageable) {
-        Page<Users> usersPage = adminRepository.findAll(pageable); //Users엔터티 목록 가져옴
+    public Page<UserResponse> getMemberList(Pageable pageable, String memberId, String memberNickname, String memberEmail) {
+        Page<Users> usersPage;
 
-        return usersPage.map(user->UserResponse.builder()
+        if (memberId != null && !memberId.isEmpty()) {
+            usersPage = adminRepository.findByIdContainingIgnoreCase(memberId, pageable);
+        } else if (memberNickname != null && !memberNickname.isEmpty()) {
+            usersPage = adminRepository.findByNicknameContaining(memberNickname, pageable);
+        } else if (memberEmail != null && !memberEmail.isEmpty()) {
+            usersPage = adminRepository.findByEmailContaining(memberEmail, pageable);
+        } else {
+            usersPage = adminRepository.findAll(pageable);
+        }
+
+        return usersPage.map(user -> UserResponse.builder()
                 .no(user.getNo())
                 .id(user.getId())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
                 .gender(user.getGender().name())
                 .status(user.getStatus().name())
+                .role(user.getRole().name())
                 .build());
     }
 
