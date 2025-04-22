@@ -8,6 +8,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 public class InquiryCommentRequest {
-    private int no;
+    private int inquiryNo;
     private String content;
 }

@@ -154,7 +154,7 @@ function InquiryPage() {
                                             </td>
                                             <td style={{width:'15%', textAlign:'center'}}>{item.nickname}</td>
                                             <td style={{width:'20%', textAlign:'center'}}>{new Date(item.createdAt).toLocaleDateString()}</td>
-                                            <td style={{width:'10%', textAlign:'center'}}>{item.proceed}</td>
+                                            <td style={{width:'10%', textAlign:'center'}}>{item.proceedDescription}</td>
                                         </tr>
                                     )
                                 })

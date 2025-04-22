@@ -35,6 +35,8 @@ public class InquiryResponse {
 
     private InquiryProceed proceed;
 
+    private String proceedDescription;
+
     private UserRole role;
 
     private StatusInfo status;

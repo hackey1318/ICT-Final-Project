@@ -3,13 +3,17 @@ package com.ict.finalProject.inquiry.controller;
 import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.common.config.AuthRequired;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
+import com.ict.finalProject.domain.constant.InquiryProceed;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.fileSystem.service.FileSystemService;
 import com.ict.finalProject.inquiry.controller.request.InquiryCommentRequest;
 import com.ict.finalProject.inquiry.controller.request.InquiryPwdRequest;
 import com.ict.finalProject.inquiry.controller.request.InquiryRequest;
+import com.ict.finalProject.inquiry.controller.request.UpdateInquiryStatusRequest;
+import com.ict.finalProject.inquiry.controller.response.InquiryCommentResponse;
 import com.ict.finalProject.inquiry.controller.response.InquiryResponse;
 import com.ict.finalProject.inquiry.repository.domain.Inquiry;
+import com.ict.finalProject.inquiry.repository.domain.InquiryComment;
 import com.ict.finalProject.inquiry.service.InquiryService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
@@ -21,10 +25,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -107,9 +108,78 @@ public class InquiryController {
         return inquiryService.getAllInquiry();
     }
 
-    //문의리스트 댓글
-    @PostMapping("/writeComment")
-    public String writeComment(@RequestBody InquiryCommentRequest request) {
-        return null;
+    //문의 댓글 작성
+    @PostMapping("/{inquiryNo}/writeComment")
+    public ResponseEntity<SuccessOfFailResponse> writeComment(
+                                            @PathVariable("inquiryNo") int inquiryNo,
+                                            @RequestBody InquiryCommentRequest request) {
+        try {
+            boolean success = inquiryService.writeComment(inquiryNo, request);
+            if(success) {
+                return ResponseEntity.status(HttpStatus.CREATED)
+                        .body(SuccessOfFailResponse.builder()
+                                .result(true)
+                                .message("댓글 작성 중 오류 발생")
+                                .build());
+            } else {
+                return ResponseEntity.internalServerError()
+                        .body(SuccessOfFailResponse.builder()
+                                .result(false)
+                                .build());
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError()
+                    .body(SuccessOfFailResponse.builder().result(false).message("에러발생").build());
+        }
+    }
+
+    //문의 댓글 목록
+    @GetMapping("/{inquiryNo}/getComments")
+    public ResponseEntity<List<InquiryCommentResponse>> getComments(@PathVariable("inquiryNo") int inquiryNo) {
+        try {
+            List<InquiryCommentResponse> comments = inquiryService.getComments(inquiryNo);
+            return ResponseEntity.ok(comments);
+        } catch(Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    //관리자 문의페이지 진행상황 변경
+    @AuthRequired({UserRole.ADMIN, UserRole.MANAGER})
+    @PatchMapping("/{inquiryNo}/proceedStatus")
+    public ResponseEntity<SuccessOfFailResponse> updateInquiryStatus (
+            @PathVariable("inquiryNo") int inquiryNo, @RequestBody UpdateInquiryStatusRequest request) {
+       try {
+           InquiryProceed newStatus = request.getProceed();
+           if(newStatus == null) {
+               throw new IllegalArgumentException("변경할 상태(proceed)값이 필요합니다.");
+           }
+
+           boolean success = inquiryService.updateInquiryStatus(inquiryNo, newStatus);
+
+           if(success) {
+               return ResponseEntity.ok(SuccessOfFailResponse.builder()
+                                .result(true)
+                                .message("성공적으로 변경되었습니다.")
+                                .build());
+           } else {
+               log.warn("문의 상태 변경 실패 - 서비스 로직 false 반환 (inquiryNo: {})", inquiryNo);
+               return ResponseEntity.internalServerError()
+                       .body(SuccessOfFailResponse.builder().result(false).message("문의 상태 변경 중 오류가 발생했습니다.").build());
+           }
+       } catch (NoSuchElementException e) { // Service에서 문의 못 찾을 때
+           log.warn("상태 변경 대상 문의 없음 (inquiryNo: {}): {}", inquiryNo, e.getMessage());
+           return ResponseEntity.status(HttpStatus.NOT_FOUND) // 404 Not Found
+                   .body(SuccessOfFailResponse.builder().result(false).message(e.getMessage()).build());
+       } catch (IllegalArgumentException e) { // 잘못된 요청 값 (예: status null)
+           log.warn("문의 상태 변경 실패 - 잘못된 요청 값 (inquiryNo: {}): {}", inquiryNo, e.getMessage());
+           return ResponseEntity.badRequest() // 400 Bad Request
+                   .body(SuccessOfFailResponse.builder().result(false).message(e.getMessage()).build());
+       } catch (Exception e) { // 기타 서버 오류
+           log.error("문의 상태 변경 중 서버 오류 발생 (inquiryNo: {}): {}", inquiryNo, e.getMessage(), e);
+           return ResponseEntity.internalServerError()
+                   .body(SuccessOfFailResponse.builder().result(false).message("문의 상태 변경 중 오류가 발생했습니다.").build());
+       }
     }
 }
