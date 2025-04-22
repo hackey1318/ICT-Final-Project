@@ -137,4 +137,10 @@ public class MoviesController {
         }
         return ResponseEntity.ok(mdShopservice.getMovieNameListByMovieSearch(movieSearch));
     }
+
+    @GetMapping("/search")
+    public void searchMovie(@PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable,
+                            @RequestParam(required = false, value = "keyword") String keyword) {
+
+    }
 }
