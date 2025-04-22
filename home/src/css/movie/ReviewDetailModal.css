@@ -1,3 +1,5 @@
+/* src/css/movie/ReviewDetailModal.css */
+
 .modal-overlay {
   position: fixed;
   top: -30%;
@@ -90,27 +92,26 @@
   border-top: 1px solid #f0f0f0;
 }
 
+/* 이미지 컨테이너: 슬라이더 중앙 정렬 */
 .modal-image-container {
   width: 45%;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-poster {
   padding: 10px;
   width: 100%;
   height: 100%;
-  
+  object-fit: cover;
 }
-
-
 
 .modal-review-content {
   width: 55%;
   padding: 20px;
   position: relative;
   border-left: 1px solid #f0f0f0;
-  
 }
 
 .review-header {
@@ -163,14 +164,55 @@
   }
 }
 
-
+/* 프로필 영역 소폭 정렬 조정 */
 .modal-profile div {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  
-  .review-date {
-    font-size: 12px;
-    color: #888;
-  }
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.review-date {
+  font-size: 12px;
+  color: #888;
+}
+
+/* Swiper 슬라이드 스타일 */
+.review-swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.modal-slide-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* 내비게이션 화살표 색상 조정 */
+.swiper-button-prev,
+.swiper-button-next {
+  color: #333;
+}
+
+
+/* 수정 버튼 스타일 */
+.modal-action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.modal-edit {
+  background: #f39c12;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.modal-edit:hover {
+  background: #d78c0a;
+}

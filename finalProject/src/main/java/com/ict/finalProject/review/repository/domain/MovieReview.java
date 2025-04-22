@@ -48,7 +48,5 @@ public class MovieReview {
     @JoinColumn(name="no", insertable=false, updatable=false)
     private Users user;
 
-    @Column(name = "image_id", length = 255)
-    private String imageId;
 
 }

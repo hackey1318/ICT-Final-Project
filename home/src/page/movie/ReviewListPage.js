@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReviewDetailModal from './ReviewDetailModal';
 import { getReviews } from '../../js/api/reviewApi';
+import axios from '../../js/public/axiosConfig';
 import '../../css/movie/ReviewListPage.css';
 
 function ReviewListPage({ movieNo, currentUserNo }) {
@@ -12,7 +13,7 @@ function ReviewListPage({ movieNo, currentUserNo }) {
   const pageSize = 10;
   const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("accessToken");
-
+  const baseUrl = axios.defaults.baseURL;
 
   useEffect(() => {
     getReviews(movieNo).then(res => setReviews(res.data));
@@ -20,20 +21,18 @@ function ReviewListPage({ movieNo, currentUserNo }) {
 
   const handleDelete = no => setReviews(prev => {
     const filtered = prev.filter(r => r.no !== no);
-    // 삭제 후 페이지 인덱스 보정
     const maxPage = Math.ceil(filtered.length / pageSize) || 1;
     if (currentPage > maxPage) setCurrentPage(maxPage);
     return filtered;
   });
 
-  // 현재 페이지에 맞춘 슬라이스
   const start = (currentPage - 1) * pageSize;
   const paged = reviews.slice(start, start + pageSize);
   const totalPages = Math.ceil(reviews.length / pageSize) || 1;
 
   return (
     <div className="review-list-page">
-       {accessToken && (
+      {accessToken && (
         <button
           className="btn-write"
           onClick={() => navigate(`/movies/${movieNo}/reviewWrite`)}
@@ -42,7 +41,6 @@ function ReviewListPage({ movieNo, currentUserNo }) {
         </button>
       )}
 
-
       <div className="review-cards">
         {paged.map(r => (
           <div
@@ -50,12 +48,20 @@ function ReviewListPage({ movieNo, currentUserNo }) {
             className="review-card"
             onClick={() => setSelected(r)}
           >
-            {r.postImage && (
+            {r.imageIds && r.imageIds.length > 0 ? (
               <img
-                src={r.postImage}
-                alt="poster"
+                src={`${baseUrl}/file-system/showPreview/${r.imageIds[0]}`}
+                alt="review"
                 className="review-card-image"
               />
+            ) : (
+              r.postImage && (
+                <img
+                  src={r.postImage}
+                  alt="poster"
+                  className="review-card-image"
+                />
+              )
             )}
             {r.title && (
               <h4 className="review-card-title">
@@ -71,7 +77,6 @@ function ReviewListPage({ movieNo, currentUserNo }) {
         ))}
       </div>
 
-      {/* 페이지네이션 */}
       {totalPages > 1 && (
         <div className="pagination">
           <button
@@ -82,11 +87,11 @@ function ReviewListPage({ movieNo, currentUserNo }) {
           </button>
           {[...Array(totalPages)].map((_, i) => (
             <button
-              key={i+1}
-              className={currentPage === i+1 ? 'active' : ''}
-              onClick={() => setCurrentPage(i+1)}
+              key={i + 1}
+              className={currentPage === i + 1 ? 'active' : ''}
+              onClick={() => setCurrentPage(i + 1)}
             >
-              {i+1}
+              {i + 1}
             </button>
           ))}
           <button
