@@ -93,14 +93,14 @@ public class FileSystemServiceImpl implements FileSystemService {
     }
 
     @Override
-    public void createPendingImageInfos(List<String> imageIds) {
+    public void createPendingImageInfos(List<String> imageIds, int boardNo, ImageWriteType type){
         if (imageIds == null || imageIds.isEmpty()) return;
         List<ImageInfo> infos = imageIds.stream()
                 .map(id -> ImageInfo.builder()
                         .imageId(id)
                         .status(StatusInfo.PENDING)
-                        .type(null)      // 아직 연결 대상이 없으니 null
-                        .boardNo(0)      // 연결 전이니 더미값
+                        .type(type)
+                        .boardNo(boardNo)
                         .build())
                 .toList();
         imageInfoRepository.saveAll(infos);

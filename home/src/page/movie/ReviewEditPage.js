@@ -1,4 +1,3 @@
-// src/page/movie/ReviewEditPage.js
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../../js/public/axiosConfig';
@@ -7,7 +6,8 @@ import './../../css/movie/ReviewWritePage.css';
 
 function ReviewEditPage() {
   const baseUrl = axios.defaults.baseURL;
-  const { movieNo, reviewNo } = useParams();
+  // 라우트에서 :id 로 선언된 파라미터를 movieNo로 사용
+  const { id: movieNo, reviewNo } = useParams();
   const movieNoNum = Number(movieNo);
   const reviewId = Number(reviewNo);
 
@@ -24,17 +24,20 @@ function ReviewEditPage() {
 
   // 1) Mount 시 기존 리뷰 불러와서 필드 채우기
   useEffect(() => {
-    getReviews(movieNo).then(res => {
-      const rv = res.data.find(r => r.no === reviewId);
-      if (!rv) return;
-      setTitle(rv.title);
-      setContent(rv.content);
-      setImageIds(rv.imageIds || []);
-      setPreviews((rv.imageIds || []).map(id =>
-        `${baseUrl}/file-system/showPreview/${id}`
-      ));
-    });
-  }, [movieNo, reviewId, baseUrl]);
+    if (!movieNoNum) return;
+    getReviews(movieNoNum)
+      .then(res => {
+        const rv = res.data.find(r => r.no === reviewId);
+        if (!rv) return;
+        setTitle(rv.title);
+        setContent(rv.content);
+        setImageIds(rv.imageIds || []);
+        setPreviews((rv.imageIds || []).map(id =>
+          `${baseUrl}/file-system/showPreview/${id}`
+        ));
+      })
+      .catch(err => console.error('리뷰 불러오기 실패:', err));
+  }, [movieNoNum, reviewId, baseUrl]);
 
   // 2) 새 파일 선택 시 업로드 및 preview/imageIds 업데이트
   const handleFileChange = async e => {
@@ -63,9 +66,11 @@ function ReviewEditPage() {
   const handleRemoveImage = async idx => {
     const idToRemove = imageIds[idx];
     try {
-      await axios.patch(`/file-system/delete-image/${idToRemove}`, null, {
-        params: { type: 'MOVIEREVIEW' }
-      });
+      await axios.patch(
+        `/file-system/delete-image/${idToRemove}`,
+        null,
+        { params: { type: 'MOVIEREVIEW' } }
+      );
     } catch {
       console.warn('서버 이미지 삭제 실패');
     }
@@ -76,16 +81,14 @@ function ReviewEditPage() {
   // 4) 저장(수정) 처리
   const handleSubmit = () => {
     const payload = {
-      no: reviewId,
-      movieNo,
-      userNo: currentUserNo,
-      title,
-      content,
-      imageIds
-    };
-    updateReview(payload)
-      .then(() => navigate(`/movies/${movieNo}/reviews`))
-      .catch(err => console.error(err));
+        userNo: currentUserNo,
+        title,
+        content,
+        imageIds
+     };
+     updateReview(movieNoNum, reviewId, payload)
+     .then(() => navigate(`/movies/${movieNo}/reviews`))
+      .catch(err => console.error('리뷰 수정 실패:', err));
   };
 
   return (

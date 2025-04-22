@@ -3,7 +3,7 @@ import './App.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import Main from './page/user/Main'
 import Layout from './page/user/Layout';
 import KakaoLogin from './page/user/LoginForm';
@@ -63,10 +63,15 @@ function App() {
     const currentUser = stored ? JSON.parse(stored) : null;
     const currentUserNo = currentUser?.userNo;
     return (
+      <>
       <ReviewListPage
         movieNo={Number(id)}
         currentUserNo={currentUserNo}
+        
       />
+
+      <Outlet />
+      </>
     );
   }
 
@@ -92,9 +97,10 @@ function App() {
           <Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
           <Route path='payment/result' element={<PaymentResult />} />
           <Route path='movies/:id' element={<MovieDetail />} />
-          <Route path='movies/:id/reviews' element={<ReviewListRoute />} />
-          <Route path='movies/:id/reviewWrite' element={<ReviewWritePage />} />
-          <Route path="/movies/:movieNo/reviewEdit/:reviewNo" element={<ReviewEditPage/>}/>
+          <Route path='movies/:id/reviews' element={<ReviewListRoute />}>
+          <Route path='write' element={<ReviewWritePage />} />
+          <Route path='edit/:reviewNo' element={<ReviewEditPage />} />
+          </Route>
           <Route path='movies/current' element={<CurrentMovie />} />
           <Route path='movies/upcoming' element={<UpcomingMovie />} />
           <Route path='/inquiry' element={<InquiryPage />} />

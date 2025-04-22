@@ -61,8 +61,6 @@ public class SecurityConfig {
                 mvc.pattern("/user/**"),
                 mvc.pattern("/banner/**"),
                 mvc.pattern("/movies/**"),
-                mvc.pattern("/movie/*/reviews"),
-                mvc.pattern("/movie/*/reviews/**"),
                 mvc.pattern("/md-shop/lists/**"),
                 mvc.pattern("/md-shop/movies/**"),
                 mvc.pattern("/file-system/upload/register-image"),
@@ -95,6 +93,7 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.GET, "/announce/**").permitAll()
                                         .requestMatchers("/admin/**").permitAll()
                                         .requestMatchers(HttpMethod.DELETE, "/user").hasAnyRole(UserRole.ADMIN.name())
+                                        .requestMatchers(HttpMethod.GET, "/movies/{movieNo}/reviews").permitAll()
                                         .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(activeUserTrackingFilter, JwtRequestFilter.class)
