@@ -683,7 +683,7 @@
       },
       "8YPwGVEm69MUragfAcDzW": {
         "id": "8YPwGVEm69MUragfAcDzW",
-        "name": "question_answer",
+        "name": "question_comment",
         "comment": "답변",
         "columnIds": [
           "3tq-v6D1aR7_bJGv-hHgv",
@@ -703,12 +703,12 @@
           "x": 14.0285,
           "y": 12.8218,
           "zIndex": 1006,
-          "widthName": 90,
+          "widthName": 103,
           "widthComment": 60,
           "color": ""
         },
         "meta": {
-          "updateAt": 1744440858085,
+          "updateAt": 1745199397643,
           "createAt": 1743554567893
         }
       },
@@ -7274,7 +7274,7 @@
       1743554567892,
       -1,
       {
-        "name": 1743554596672,
+        "name": 1745199397643,
         "comment": 1743554607468
       }
     ],
