@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 import InquiryImageModal from "../../js/inquiry/InquiryImageModal";
+import InquiryComment from "../../js/inquiry/InquiryComment";
+import apiClient from "../../js/public/axiosConfig";
 
 
 function InquiryReplyView() {
@@ -10,6 +11,7 @@ function InquiryReplyView() {
     const IMAGE_BASE_URL = 'http://192.168.1.252:9988/file-system/showImage/';
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImageIdx, setSelectedImageIdx] = useState(0);
+    const [isUpdateStatus, setIsUpdateStatus] = useState(false);
 
     let [inquiryVO, setInquiryVO] = useState({
         no: null,
@@ -45,7 +47,7 @@ function InquiryReplyView() {
     }, [no])
 
     const getInquiryView = useCallback(() => {
-        apiNoAccessClient.get(`inquiry/getInquiryBy/${no}`)
+        apiClient.get(`inquiry/getInquiryBy/${no}`)
         .then(function(response) {
             setInquiryVO({
                 no: response.data.inquiry.no,
@@ -66,6 +68,42 @@ function InquiryReplyView() {
         })
     }, [no]);
 
+    const handleStatusChange = (event) => {
+        const newStatus = event.target.value;
+        console.log("상태변경시도", newStatus);
+
+        if(!inquiryVO.no || !newStatus) return;
+
+        if(!window.confirm(`문의상태를 ${newStatus}(으)로 변경하시겠습니까?`)) {
+            event.target.value = inquiryVO.proceed;
+            return;
+        }
+        setIsUpdateStatus(true);
+
+        apiClient.patch(`/inquiry/${inquiryVO.no}/proceedStatus`, {
+            proceed: newStatus
+        })
+        .then(response => {
+            if(response.data?.result === true) {
+                alert("문의 상태가 성공적으로 변경되었습니다.");
+                setInquiryVO(prev => ({
+                    ...prev, proceed: newStatus
+                }));
+            } else {
+                alert("상태 변경에 실패하였습니다.");
+                event.target.value = inquiryVO.proceed;
+            }
+        })
+        .catch(error => {
+            console.error("상태 변경 API 오류:", error.response ? error.response.data : error.message);
+            alert(error.response?.data?.message || "상태 변경 중 오류가 발생했습니다.");
+            event.target.value = inquiryVO.proceed;
+        })
+        .finally(() => {
+            setIsUpdateStatus(false);
+        });
+    };
+    
     const handleImageClick = useCallback((index) => {
         if(inquiryVO.imageList && index>=0 && index<inquiryVO.imageList.length) {
             setSelectedImageIdx(index);
@@ -79,7 +117,24 @@ function InquiryReplyView() {
 
     return (
         <div className='inquiry-container'>
-            <h2>{inquiryVO.subject}</h2>
+            <div style={{display:'flex', justifyContent: 'space-between'}}>
+                <h2>{inquiryVO.subject}</h2>
+                <div>
+                    <label htmlFor="inquiryStatus" style={{ margin: '0 5px 5px 0' }}>상태:</label>
+                    <select
+                        id="inquiryStatus"
+                        className="form-select form-select-sm" 
+                        value={inquiryVO.proceed || ''} 
+                        onChange={handleStatusChange} 
+                        disabled={isUpdateStatus} 
+                        style={{ width: '150px' }} 
+                    >
+                        <option value="BEFORE">처리 전</option>
+                        <option value="PROCEEDING">처리 중</option>
+                        <option value="CLOSED">처리 완료</option>
+                    </select>
+                </div>
+            </div>
 
             <div className="row" style={{borderBottom: '1px solid #ddd'}}>
                 <div className="col-sm-2 p-2">글번호</div>
@@ -137,6 +192,7 @@ function InquiryReplyView() {
                     </div>
                 </>
             }
+            <InquiryComment/>
         </div>
     );
 }
