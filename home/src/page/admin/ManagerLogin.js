@@ -132,7 +132,7 @@ export default function ManagerLogin() {
 						아이디 찾기
 					</a>
 					<span className="divider">|</span>
-					<a href="/manager/find-password" className="text-decoration-none text-secondary">
+					<a href="/manager/find-pwd" className="text-decoration-none text-secondary">
 						비밀번호 찾기
 					</a>
 					<span className="divider">|</span>
