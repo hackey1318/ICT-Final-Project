@@ -23,8 +23,10 @@ function InquiryReplyView() {
         userNo: null,
         writedate: '',
         role: '',
-        proceed: ''
+        proceed: '',
+        status: ''
     });
+    const isDeleted = inquiryVO.status === 'DELETE';
 
     //딤처리
     const DimmedOverlay = styled.div`
@@ -70,12 +72,12 @@ function InquiryReplyView() {
 
     const handleStatusChange = (event) => {
         const newStatus = event.target.value;
-        console.log("상태변경시도", newStatus);
+        const currentProceed = inquiryVO.proceed;
+        const statusMap = {BEFORE:'처리 전', PROCEEDING: '처리 중', CLOSED: '처리 완료'};
+        const confirmMessage = `문의상태를 ${statusMap[newStatus] || newStatus}(으)로 변경하시겠습니까?`;
 
-        if(!inquiryVO.no || !newStatus) return;
-
-        if(!window.confirm(`문의상태를 ${newStatus}(으)로 변경하시겠습니까?`)) {
-            event.target.value = inquiryVO.proceed;
+        if(!window.confirm(confirmMessage)) {
+            event.target.value = currentProceed;
             return;
         }
         setIsUpdateStatus(true);
@@ -119,21 +121,28 @@ function InquiryReplyView() {
         <div className='inquiry-container'>
             <div style={{display:'flex', justifyContent: 'space-between'}}>
                 <h2>{inquiryVO.subject}</h2>
-                <div>
-                    <label htmlFor="inquiryStatus" style={{ margin: '0 5px 5px 0' }}>상태:</label>
-                    <select
-                        id="inquiryStatus"
-                        className="form-select form-select-sm" 
-                        value={inquiryVO.proceed || ''} 
-                        onChange={handleStatusChange} 
-                        disabled={isUpdateStatus} 
-                        style={{ width: '150px' }} 
-                    >
-                        <option value="BEFORE">처리 전</option>
-                        <option value="PROCEEDING">처리 중</option>
-                        <option value="CLOSED">처리 완료</option>
-                    </select>
-                </div>
+                {
+                    
+                    
+                        <div>
+                            <label htmlFor="inquiryStatus" style={{ margin: '0 5px 5px 0' }}>상태:</label>
+                            <select
+                                id="inquiryStatus"
+                                className="form-select form-select-sm" 
+                                value={isDeleted ? 'CLOSED' : (inquiryVO.proceed || '')} 
+                                onChange={handleStatusChange} 
+                                disabled={isDeleted || isUpdateStatus} 
+                                style={{ width: '150px',
+                                         backgroundColor: isDeleted ? '#e9ecef' : '',
+                                         cursor: isDeleted ? 'not-allowed' : 'pointer' }} 
+                            >
+                                <option value="BEFORE">처리 전</option>
+                                <option value="PROCEEDING">처리 중</option>
+                                <option value="CLOSED">처리 완료</option>
+                            </select>
+                        </div>
+                    
+                }
             </div>
 
             <div className="row" style={{borderBottom: '1px solid #ddd'}}>

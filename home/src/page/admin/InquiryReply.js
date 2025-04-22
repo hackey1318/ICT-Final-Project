@@ -89,6 +89,9 @@ function InquiryReply() {
 
             {
                 inquiryList.map((item) => {
+                    const isUpdating = updateStatus[item.no] || false;
+                    const isDeleted = item.status === 'DELETE';
+
                     return (
                         <ul id="inquiryReplyList">
                             <li>{item.no}</li>
@@ -98,16 +101,19 @@ function InquiryReply() {
                             <li>
                                 <select
                                     className="form-select form-select-sm"
-                                    value={item.proceed || ''}
-                                    onChange={(e) => handleStatusChangeInList(e, item.no)}
-                                    style={{ minWidth: '100px', lineHeight: '25px', marginTop: '7px' }}
+                                    value={isDeleted ? 'CLOSED' : (item.proceed || '')}
+                                    onChange={(e) => handleStatusChangeInList(e, item.no, item.proceed)}
+                                    disabled={isDeleted || isUpdating}
+                                    style={{ minWidth: '100px', lineHeight: '25px', marginTop: '7px',
+                                             cursor: isDeleted ? 'not-allowed' : 'pointer',
+                                             backgroundColor: isDeleted ? '#e9ecef' : ''}}
                                 >
                                     <option value="BEFORE">처리 전</option>
                                     <option value="PROCEEDING">처리 중</option>
                                     <option value="CLOSED">처리 완료</option>
                                 </select>
                             </li>
-                            <li>{item.status}</li>
+                            <li style={{ color: isDeleted ? 'red' : 'inherit' }}>{item.status}</li>
                         </ul>
                     )
                 })
