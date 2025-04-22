@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import apiClient from '../../js/public/axiosConfig';
 import InquiryImageModal from '../../js/inquiry/InquiryImageModal';
 import styled from 'styled-components';
+import InquiryComment from '../../js/inquiry/InquiryComment';
 
 function InquiryView() {
     const {no} = useParams();
@@ -177,6 +178,7 @@ function InquiryView() {
                     </div>
                 </>
             }
+            <InquiryComment/>
         </div>
     )
 }
