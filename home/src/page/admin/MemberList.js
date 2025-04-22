@@ -64,8 +64,6 @@ function MemberList(){
                     <li><div className="userdau-list-title">회원닉네임</div></li>
                     <li><div className="userdau-list-title">이메일</div></li>
                     <li><div className="userdau-list-title">연락처</div></li>
-                    <li><div className="userdau-list-title">경고횟수</div></li>
-                    <li><div className="userdau-list-title">경고사유</div></li>
                     <li><div className="userdau-list-title">회원상태</div></li>
                 </ul>
                 {
@@ -77,34 +75,31 @@ function MemberList(){
                                 <li>{item.nickname}</li>
                                 <li>{item.email}</li>
                                 <li>010-0000-0000</li>
-                                <li>5회</li>
-                                <li>명예훼손</li>
                                 <li>{item.status}</li>
                             </ul>
                         )
                     })
                 }
+            </div>
+            
+            {/* 페이징 */}
+            <div className="paging-container">
+                {page > 0 && (
+                    <button className="page-buttons" onClick={() => handlePageChange(page - 1)}>
+                        이전
+                    </button>
+                )}
 
-                {/* 페이징 */}
-                <div className="paging-container">
-                    {page > 0 && (
-                        <button className="page-buttons" onClick={() => handlePageChange(page - 1)}>
-                            이전
-                        </button>
-                    )}
-
-                    {/* 페이지 번호 버튼 */}
-                    <div className="page-buttons">
-                        {pageButtons()}
-                    </div>
-
-                    {page < totalPages - 1 && (
-                        <button className="page-buttons" onClick={() => handlePageChange(page + 1)}>
-                            다음
-                        </button>
-                    )}
+                {/* 페이지 번호 버튼 */}
+                <div className="page-buttons">
+                    {pageButtons()}
                 </div>
 
+                {page < totalPages - 1 && (
+                    <button className="page-buttons" onClick={() => handlePageChange(page + 1)}>
+                        다음
+                    </button>
+                )}
             </div>
         </div>
     )
