@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -36,7 +35,6 @@ public class FileSystemServiceImpl implements FileSystemService {
     private final ImageInfoRepository imageInfoRepository;
 
     @Override
-    @Transactional
     public List<FileUploadResponse> uploadFile(List<MultipartFile> files) throws IOException {
 
         Path uploadPath = new ClassPathResource("static/img").getFile().toPath(); // 실제 서버 파일 시스템 경로
@@ -55,8 +53,6 @@ public class FileSystemServiceImpl implements FileSystemService {
 
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-            // 1) 이미지 파일 정보 저장
             Images image = Images.builder()
                     .id(fileId)
                     .path(filePath.toString())
@@ -64,19 +60,9 @@ public class FileSystemServiceImpl implements FileSystemService {
                     .status(StatusInfo.ACTIVE)
                     .build();
             imageList.add(image);
-
-            // 2) ⬅ ImageInfo 함께 저장할 정보 구성
-            ImageInfo info = ImageInfo.builder()
-                    .imageId(fileId)
-                    .boardNo(0)
-                    .type(null) // 아직 연결 전
-                    .status(StatusInfo.PENDING)
-                    .build();
-            imageInfos.add(info);
         }
 
         List<Images> saveEntity = fileSystemRepository.saveAll(imageList);
-        imageInfoRepository.saveAll(imageInfos); // ✅ 이거 추가!!
         return saveEntity.stream().map(img -> FileUploadResponse.builder()
                 .no(img.getNo())
                 .imageId(img.getId())
@@ -101,4 +87,8 @@ public class FileSystemServiceImpl implements FileSystemService {
         return imageInfoRepository.findImageIdsByBoardNoAndTypeAndStatus(boardNo, ImageWriteType.INQUIRY, StatusInfo.ACTIVE);
     }
 
+    @Override
+    public List<String> getCartFileIds(int boardNo) {
+        return imageInfoRepository.findImageIdsByBoardNoAndTypeAndStatus(boardNo, ImageWriteType.GOODS, StatusInfo.ACTIVE);
+    }
 }

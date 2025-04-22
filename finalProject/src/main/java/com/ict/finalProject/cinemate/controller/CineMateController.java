@@ -1,0 +1,31 @@
+package com.ict.finalProject.cinemate.controller;
+
+import com.ict.finalProject.cinemate.controller.request.CineMateRequest;
+import com.ict.finalProject.cinemate.service.CineMateService;
+import com.ict.finalProject.common.config.AuthCheck;
+import com.ict.finalProject.common.response.SuccessOfFailResponse;
+import com.ict.finalProject.domain.constant.UserRole;
+import com.ict.finalProject.oauth.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/cinemate")
+public class CineMateController {
+
+    private final UserService userService;
+    private final CineMateService cineMateService;
+
+    @PostMapping
+    public SuccessOfFailResponse generateCineMate(@RequestBody CineMateRequest request) {
+
+        Integer userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
+        request.setUserNo(userNo);
+
+        return SuccessOfFailResponse.builder().result(cineMateService.generateCineMateInfo(request)).build();
+    }
+}

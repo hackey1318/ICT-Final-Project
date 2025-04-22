@@ -10,6 +10,7 @@ function OrderDetail() {
     const [orderData, setOrderData] = useState();
     const [paymentData, setPaymentData] = useState();
     const [nickName, setNickName] = useState();
+    const [email, setEmail] = useState();
     const [theater, setTheater] = useState();
     const [searchParams] = useSearchParams();
     const orderId = searchParams.get("orderNumber");
@@ -26,9 +27,12 @@ function OrderDetail() {
             .then((response) => {
                 console.log(response.data);
                 setOrderData(response.data.orders);
+                setGoodsData(response.data.goods);
                 setPaymentData(response.data.payments);
                 setNickName(response.data.nickName);
+                setEmail(response.data.email);
                 setTheater(response.data.theater);
+                console.log(response);
             })
             .catch((error) => {
                 window.location.href = "/order/error";
@@ -36,6 +40,14 @@ function OrderDetail() {
 
         // setGoodsData(prev => [...prev, ...testGoodsData]);
     }, []);
+
+    useEffect(() => {
+        if (goodsData.length === 0) return;
+        console.log(goodsData);
+        console.log("hf");
+        const goodsIdList = goodsData.map(item => item.goodsNo);
+
+    }, [goodsData])
 
 
     return (
@@ -47,9 +59,10 @@ function OrderDetail() {
                 <div className="order_info_table">
                     <div className="order_info_content_goods">
                         {goodsData.map((element, index) => (
-                            <div key={index} onClick={() => window.location.href = `/id=${goodsData[index].id}`}> {/* 상품 상세정보 페이지 링크 나중에 추가할 것 */}
+                            <div key={index} onClick={() => window.location.href = `/mdshop/${goodsData[index].goodsNo}`}>
                                 <div className="order_info_content_goods_img">
-                                    <img src={element.img} />
+                                    {console.log(element.imageIdList[0])}
+                                    <img src={`http://192.168.1.252:9988/file-system/download/${element.imageIdList[0]}`}/>
                                 </div>
                                 <div className="order_info_content_goods_detail">
                                     <span className="goods_name"><b>{element.name}</b></span>
@@ -107,8 +120,8 @@ function OrderDetail() {
                         <div>{nickName}</div>
                     </div>
                     <div className="order_info_content">
-                        <div>전화번호</div>
-                        <div>{"(25-04-18 추가) 나중에 이 부분 이메일로 바꿀 것"}</div>
+                        <div>이메일</div>
+                        <div>{email}</div>
                     </div>
                     <div className="order_info_content">
                         <div>영화관</div>

@@ -1,9 +1,8 @@
-import { useState } from "react";
-import '../../css/user/FindUser.css';
 import axios from "axios";
+import { useState } from "react";
 import arrow from '../../img/arrow.png';
 
-function FindId(){
+function AdminFindId(){
     //입력한 닉네임, 이메일을 보관할 변수
     let [idFindForm, setIdFindForm] = useState({});
 
@@ -66,12 +65,12 @@ function FindId(){
                 setIdFound(true);  //아이디 찾기 성공 상태로 변경
             }else if(response.data.status === "userDelete"){
                 //탈퇴한 사용자의 경우
-                alert("탈퇴한 사용자입니다. 회원가입 후 이용하세요.");
-                window.location.href = "/register";
+                alert("퇴사한 사용자입니다. 관리자에게 문의하세요.");
+                window.location.href = "/manager";
             }else if(response.data.status === "userNone"){
                 //아이디 존재하지 않을 경우
-                alert("아이디 찾기 실패하였습니다. 회원가입 페이지로 이동합니다.");
-                window.location.href = "/register";
+                alert("아이디 찾기 실패하였습니다. 관리자등록 페이지로 이동합니다.");
+                window.location.href = "/manager/register";
             }
         }).catch(function(error){
             console.log(error);
@@ -94,9 +93,9 @@ function FindId(){
     }
 
     return(
-        <div>
-            <div className="find-form">
-                <button onClick={() => window.history.back()} className="back-button" style={{display:"flex"}}>
+        <div className="container d-flex justify-content-center align-items-center vh-100">
+            <div className="admin-find-form">
+                <button onClick={() => window.history.back()} className="back-button">
                     <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
                 </button>
                 {!idFound ? (
@@ -120,10 +119,10 @@ function FindId(){
                             </button>
                         </div>
                         <div className="find-btn-wrap">
-                            <button onClick={() => window.location.href='/login'} className="find-btn find-btn-id">
+                            <button onClick={() => window.location.href='/manager'} className="find-btn find-btn-id">
                                 로그인
                             </button>
-                            <button onClick={() => window.location.href='/user/findPWd'} className="find-btn find-btn-id">
+                            <button onClick={() => window.location.href='/manager/find-pWd'} className="find-btn find-btn-id">
                                 비밀번호 찾기
                             </button>
                         </div>
@@ -134,4 +133,4 @@ function FindId(){
     )
 }
 
-export default FindId;
+export default AdminFindId;
