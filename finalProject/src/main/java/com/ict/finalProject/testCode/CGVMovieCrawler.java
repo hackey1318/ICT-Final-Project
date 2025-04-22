@@ -41,8 +41,9 @@ public class CGVMovieCrawler {
                 .collect(Collectors.toMap(Movies::getCode, m -> m));
 
         Map<Integer, Movies> existingMoviesMap = allMoviesMap.values().stream()
-                .filter(m -> m.getOpenStatus() == MovieStatus.ACTIVE || m.getOpenStatus() == MovieStatus.PENDING)
+                .filter(m -> m.getOpenStatus() == MovieStatus.ACTIVE)
                 .collect(Collectors.toMap(Movies::getCode, m -> m));
+
 
         Set<Integer> updatedMovieCodes = new HashSet<>();
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import '../../css/user/FindUser.css';
 import axios from "axios";
+import arrow from '../../img/arrow.png';
 
 function FindId(){
     //입력한 닉네임, 이메일을 보관할 변수
@@ -95,6 +96,9 @@ function FindId(){
     return(
         <div>
             <div className="find-form">
+                <button onClick={() => window.history.back()} className="back-button" style={{display:"flex"}}>
+                    <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
+                </button>
                 {!idFound ? (
                     <>
                     <form onSubmit={formCheck}>

@@ -1,0 +1,238 @@
+.notification-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 1000;
+}
+
+.icon-button {
+    position: relative;
+    padding: 0.5rem;
+    border-radius: 9999px;
+    background: none;
+    border: 0px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-button:hover {
+    background-color: rgba(229, 231, 235, 0.5);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -0.25rem;
+    right: -0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: 0.75rem;
+    color: white;
+    background-color: rgb(239, 68, 68);
+    border-radius: 9999px;
+}
+
+.notification-modal {
+    position: absolute;
+    top: 3rem;
+    right: 2rem;
+    width: 22rem;
+    max-height: 28rem;
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 0.375rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    z-index: 10;
+}
+
+.notification-header {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid rgba(75, 85, 99, 1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-title {
+    font-weight: 500;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.read-all-button {
+    font-size: 0.75rem;
+    color: #007bff;
+    background-color: transparent;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.read-all-button:hover {
+    text-decoration: underline;
+}
+
+.notification-loading {
+    padding: 0.75rem;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+.notification-empty {
+    padding: 0.75rem;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+.notification-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    max-height: 20rem; /* 모달 크기에 맞춤 */
+    overflow-y: auto; /* 내용이 많을 경우만 스크롤 */
+}
+
+.notification-item {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid rgba(75, 85, 99, 1);
+}
+
+.notification-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-column {
+    display: flex;
+    flex-direction: column;
+    width: 33.33%;
+    color: #4fc3f7;
+    text-align: center;
+    padding: 0 0.5rem;
+}
+
+.notification-message-container {
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+    flex: 1;
+    max-height: 3rem; /* 최대 높이 지정 (필요에 따라 조절) */
+    overflow: hidden; /* 기본적으로 넘치는 내용 숨김 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 최대 2줄까지만 표시 */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis; /* 넘치는 부분 ... 처리 */
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.notification-message {
+    flex-grow: 1;
+    margin: 0;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: normal; /* 줄바꿈 허용 */
+    word-break: break-word; /* 긴 단어도 줄바꿈  */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 최대 2줄까지만 표시 */
+    -webkit-box-orient: vertical;
+    /* line-height: 1.5; */
+    font-size: 0.875rem;
+    max-width: 100%;
+}
+
+/* 삭제 버튼이 메시지를 밀어내지 않도록 조정 */
+.notification-time-and-delete {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.notification-time {
+    display: block;
+    font-size: 0.7rem;
+    color: rgba(156, 163, 175, 1);
+    margin-right: 10px;
+}
+
+.delete-button {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: white;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    margin-left: 5rem;
+    flex-shrink: 0;
+}
+
+.delete-button:hover {
+    background-color: #e0e0e0;
+}
+
+.notification-footer {
+    padding: 0.375rem;
+    text-align: center;
+}
+
+.close-button {
+    font-size: 0.75rem;
+    color: rgba(96, 165, 250, 1);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    text-decoration: underline;
+}
+
+.noti-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.375rem;
+    color: white;
+}
+
+.noti-pagination-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    margin: 0 0.25rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Gowun Batang', sans-serif;
+}
+
+.noti-pagination-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.noti-pagination-info {
+    margin: 0 0.5rem;
+    font-size: 0.875rem;
+}
