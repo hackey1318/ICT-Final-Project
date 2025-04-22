@@ -4,10 +4,9 @@ import { useParams, Link } from "react-router-dom"
 import { ArrowLeft, Bookmark, Share2, Heart, HeartOff } from "lucide-react"
 import "./../../css/movie/MovieDetail.css" // CSS 파일 경로는 실제 프로젝트 구조에 맞게 조정하세요
 import LikeType from "../../js/common/LikeType"
-import RelatedMovie from './RelatedMovie';
+import RecruitMovieModal from "./RecruitMovieModal"
 
 const BASE_URL = 'http://192.168.1.252:9988/file-system/download/';
-
 
 function MovieDetail() {
 	// URL 경로에서 영화 ID를 가져옵니다 (예: /movies/10 -> id는 "10")
@@ -23,6 +22,7 @@ function MovieDetail() {
 	const [likeId, setLikeId] = useState(null); // 좋아요 ID (DB에서 받은 값)
 	const [relatedGoods, setRelatedGoods] = useState([]); // 관련 상품 목록
 	const [relatedMovies, setRelatedMovies] = useState([]); // 관련 영화 목록
+	const [showRecruitModal, setShowRecruitModal] = useState(false)
 
 	// 컴포넌트가 마운트되거나 URL의 id 값이 변경될 때 실행됩니다.
 	useEffect(() => {
@@ -224,9 +224,16 @@ function MovieDetail() {
 						>
 							자세히 보기
 						</a>
+						<button
+							className="movie_detail_btn_primary btn btn-primary ms-2"
+							onClick={() => setShowRecruitModal(true)}
+						>같이 볼 사람 구하기</button>
 					</div>
 				</div>
 			</div>
+			{showRecruitModal && (
+				<RecruitMovieModal movie={movie} closeModal={() => setShowRecruitModal(false)} />
+			)}
 
 			{/* === 관련 상품 섹션 수정 === */}
 			<div className="movie_detail_related_section mt-5">
@@ -247,11 +254,7 @@ function MovieDetail() {
 					<div className="movie_detail_items row">
 						{relatedGoods.map((item) => (
 							<div key={item.id} className="movie_detail_item col-6 col-sm-3 mb-3">
-								<a
-									href={item.productUrl || '#'}	// TODO: 상품 URL 잘못 연결됨
-									target="_blank"
-									rel="noopener noreferrer"
-								>
+								<Link to={`/mdshop/${item.id}`} className="Goods_item_links">
 									<img
 										src={item.imageUrls ? `${BASE_URL}${item.imageUrls[0]}` : "/placeholder.svg"}
 										alt={item.name}
@@ -261,7 +264,7 @@ function MovieDetail() {
 											e.target.src = "/placeholder.svg";
 										}}
 									/>
-								</a>
+								</Link>
 								<span className="movie_detail_item_name d-block">{item.name}</span>
 								<span className="movie_detail_item_price fw-bold">{item.price.toLocaleString()}원</span>
 							</div>
@@ -289,8 +292,10 @@ function MovieDetail() {
 				<div className="movie_detail_items row">
 					{relatedMovies.map((movieItem) => (
 						<div key={movieItem.no} className="movie_detail_item col-6 col-sm-2 mb-3">
-							<img src={movieItem.postImage} alt={movieItem.name} className="movie_detail_item_img img-fluid rounded mb-2" />
-							<span className="movie_detail_item_name d-block">{movieItem.name}</span>
+							<Link to={`/movies/${movieItem.no}`}>
+								<img src={movieItem.postImage} alt={movieItem.name} className="movie_detail_item_img img-fluid rounded mb-2" />
+								<span className="movie_detail_item_name d-block">{movieItem.name}</span>
+							</Link>
 						</div>
 					))}
 				</div>

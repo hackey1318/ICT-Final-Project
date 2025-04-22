@@ -27,8 +27,31 @@ public class FindUserController {
         Users result = findUserService.FindId(userFindRequest);
 
         //일치하는 사용자가 있는지, 활성 또는 비활성 상태인지 확인해서 결과를 리턴
-        return handleUserStatus(response, result);
+        response =  handleUserStatus(response, result);
+
+        //아이디 마스킹 처리
+        if(result != null && StatusInfo.ACTIVE == result.getStatus()){
+            String maskedId = findUserService.maskId(result.getId());
+            response.setId(maskedId);
+        }
+
+        return response;
     }
+    //아이디 마스킹 해제 후, 이메일로 발송
+    @PostMapping("unmask-id")
+    public String unmaskId(@RequestBody UserFindRequest userFindRequest){
+        Users user = findUserService.FindId(userFindRequest);
+
+        if(user == null){
+            return "userNone";
+        }
+
+        //전체 아이디를 DB에 저장된 이메일로 발송
+        findUserService.unmaskId(user.getId(), user.getEmail());
+
+        return "ok";
+    }
+
 
     @PostMapping("/findPwdOk")
     public UserFindResponse findPwdOk(@RequestBody UserFindRequest userFindRequest){
