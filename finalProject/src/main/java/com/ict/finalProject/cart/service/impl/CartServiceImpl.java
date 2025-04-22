@@ -4,6 +4,8 @@ import com.ict.finalProject.cart.controller.response.CartsResponse;
 import com.ict.finalProject.cart.domain.Carts;
 import com.ict.finalProject.cart.repository.CartsReposity;
 import com.ict.finalProject.cart.service.CartsService;
+import com.ict.finalProject.domain.constant.OrdersStatus;
+import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
 import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.mdShop.service.dto.MdShopDto;
@@ -27,20 +29,29 @@ public class CartServiceImpl implements CartsService {
         entity.setUserNo(userNo);
         entity.setGoodsNo(goods.get().getId());
         entity.setQuantity(goodsQuantity);
-        entity.setStatus("???");
+        entity.setStatus(OrdersStatus.PENDING);
 
         cartsReposity.save(entity);
     }
 
     @Override
     public void deleteCartGoods(int userNo, int goodsNo) {
-        Carts entity = cartsReposity.findByUserNoAndGoodsNo(userNo, goodsNo).get();
-        cartsReposity.delete(entity);
+        Carts entity = cartsReposity.findByUserNoAndGoodsNoAndStatus(userNo, goodsNo, OrdersStatus.PENDING).get();
+        entity.setStatus(OrdersStatus.DELETED);
+        cartsReposity.save(entity);
     }
 
     @Override
+    public void paidCartGoods(int userNo, int goodsNo) {
+        Carts entity = cartsReposity.findByUserNoAndGoodsNoAndStatus(userNo, goodsNo, OrdersStatus.PENDING).get();
+        entity.setStatus(OrdersStatus.PAID);
+        cartsReposity.save(entity);
+    }
+
+
+    @Override
     public boolean checkCartGoodsExist(int userNo, int goodsNo) {
-        Optional<Carts> cart = cartsReposity.findByUserNoAndGoodsNo(userNo, goodsNo);
+        Optional<Carts> cart = cartsReposity.findByUserNoAndGoodsNoAndStatus(userNo, goodsNo, OrdersStatus.PENDING);
         return cart.isPresent();
     }
 
@@ -48,7 +59,7 @@ public class CartServiceImpl implements CartsService {
     public List<CartsResponse> getCartsGoods(int userNo) {
         List<CartsResponse> cartsResponses = new ArrayList<>();
 
-        List<Carts> cartsList = cartsReposity.findByUserNo(userNo);
+        List<Carts> cartsList = cartsReposity.findByUserNoAndStatus(userNo, OrdersStatus.PENDING);
         for (Carts element : cartsList) {
             CartsResponse cartsResponse = new CartsResponse();
             MdShopDto mdShopDto = mdShopService.getGoodsInfo(element.getGoodsNo());
@@ -71,7 +82,7 @@ public class CartServiceImpl implements CartsService {
             int goodsNo = goodsNos.get(i);
             int goodsQuantity = goodsQuantities.get(i);
 
-            Carts carts = cartsReposity.findByUserNoAndGoodsNo(userNo, goodsNo).get();
+            Carts carts = cartsReposity.findByUserNoAndGoodsNoAndStatus(userNo, goodsNo, OrdersStatus.PENDING).get();
             carts.setQuantity(goodsQuantity);
             cartsReposity.save(carts);
         }

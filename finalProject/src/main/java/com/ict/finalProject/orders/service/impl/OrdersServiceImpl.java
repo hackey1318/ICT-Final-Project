@@ -27,7 +27,12 @@ public class OrdersServiceImpl implements OrdersService {
 
         ordersList = ordersRepository.findByUserNo(userNo);
 
-        return ordersList.stream().map(OrdersDto::new).collect(Collectors.toList());
+        return ordersList.stream().map(
+                orders -> {
+                    OrdersDto ordersDto = new OrdersDto(orders);
+                    ordersDto.setStatusText(convertStatusToText(orders.getStatus()));
+                    return ordersDto;
+                }).collect(Collectors.toList());
     }
 
     @Override

@@ -1,11 +1,14 @@
 package com.ict.finalProject.cart.domain;
 
+import com.ict.finalProject.domain.constant.OrdersStatus;
+import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "carts")
+@EntityListeners(AuditingEntityListener.class)
 public class Carts {
 
     @Id
@@ -30,8 +34,8 @@ public class Carts {
     @Column(nullable = false)
     private int quantity;
 
-    @Column(nullable = false)
-    private String status;
+    @Enumerated(value = EnumType.STRING)
+    private OrdersStatus status;
 
     @CreationTimestamp
     @Column(updatable = false)

@@ -1,12 +1,13 @@
 import axios from 'axios';
-
+import Cart from './Cart';
 const accessToken = sessionStorage.getItem("accessToken");
 
-export const addGoodsToCart = (id, quantity) => {
+export const addGoodsToCart = (id, quantity, act) => {
     return axios.get("http://localhost:9988/cart/addGoods", {
         params: {
             goodsId: id,
-            goodsQuantity: quantity
+            goodsQuantity: quantity,
+            act: act
          },
         headers: {
             Authorization: `Bearer ${accessToken}`
