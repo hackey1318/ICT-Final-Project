@@ -1,6 +1,5 @@
 package com.ict.finalProject.inquiry.service.impl;
 
-import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.common.exception.custom.UserAuthenticationException;
 import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.domain.constant.InquiryProceed;
@@ -21,13 +20,13 @@ import com.ict.finalProject.user.service.FindUserService;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -81,28 +80,30 @@ public class InquiryServiceImpl implements InquiryService {
         return true;
     }
 
-    //문의리스트
+    //사용자 문의리스트
     @Override
-    public List<InquiryResponse> getInquiry() {
-        List<Inquiry> inquiries = inquiryRepository.findAllByOrderByNoDesc();
-        System.out.println(inquiries);
-        if(inquiries.isEmpty()) {
-            return Collections.emptyList();
+    public Page<InquiryResponse> getInquiry(Pageable pageable) {
+        Page<Inquiry> inquiryPage = inquiryRepository.findAllByOrderByNoDesc(pageable);
+
+        List<Inquiry> inquiriesOnPage = inquiryPage.getContent();
+
+        Map<Integer, String> userNicknameMap = new HashMap<>();
+        if (!inquiriesOnPage.isEmpty()) {
+            List<Integer> userNos = inquiriesOnPage.stream()
+                    .map(Inquiry::getUserNo)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
+            if (!userNos.isEmpty()) {
+                List<Users> users = findUserService.findUsersByUserNo(userNos);
+                userNicknameMap = users.stream()
+                        .collect(Collectors.toMap(Users::getNo, Users::getNickname, (e, r) -> e));
+            }
         }
 
-        List<Integer> userNos = inquiries.stream()
-                                        .map(Inquiry::getUserNo)
-                                        .distinct()
-                                        .collect(Collectors.toList());
-
-        List<Users> users = findUserService.findUsersByUserNo(userNos);
-
-        Map<Integer, String> userNicknameMap = users.stream()
-                .collect(Collectors.toMap(Users::getNo, Users::getNickname, (existing, replacement) -> existing)); //여기까지 추가
-
-        return inquiries.stream().map(inquiry -> {
-
-            String nickname = userNicknameMap.getOrDefault(inquiry.getUserNo(), "알 수 없음");
+        final Map<Integer, String> finalUserNicknameMap = userNicknameMap;
+        return inquiryPage.map(inquiry -> {
+            String nickname = finalUserNicknameMap.getOrDefault(inquiry.getUserNo(), "알 수 없음");
             boolean isPrivate = inquiry.getPassword() != null && !inquiry.getPassword().isEmpty();
 
             return InquiryResponse.builder()
@@ -110,13 +111,13 @@ public class InquiryServiceImpl implements InquiryService {
                     .subject(inquiry.getSubject())
                     .createdAt(inquiry.getCreatedAt())
                     .proceed(inquiry.getProceed())
-                    .proceedDescription(inquiry.getProceed().getDescription())
+                    .proceedDescription(inquiry.getProceed() != null ? inquiry.getProceed().getDescription() : "N/A") // Null 처리
                     .status(inquiry.getStatus())
                     .nickname(nickname)
                     .isPrivate(isPrivate)
+                    .userNo(inquiry.getUserNo())
                     .build();
-        })
-        .collect(Collectors.toList());
+        });
     }
 
     //문의상세페이지
@@ -131,12 +132,6 @@ public class InquiryServiceImpl implements InquiryService {
         String nickname = usersOpt.map(Users::getNickname).orElse("알 수 없음");
         UserRole userRole = usersOpt.map(Users::getRole).orElse(null);
         boolean isPrivate = inquiry.getPassword() != null && !inquiry.getPassword().isEmpty();
-
-        // 이미지 ID 목록 조회 로직 추가 "확인" 필요@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        /*List<String> imageIdList = imageInfoRepository.findByTypeAndBoardNoAndStatus(ImageWriteType.INQUIRY, no, StatusInfo.ACTIVE)
-                .stream()
-                .map(ImageInfo::getImageId)
-                .collect(Collectors.toList());*/
 
         return InquiryResponse.builder()
                 .no(inquiry.getNo())
@@ -177,40 +172,38 @@ public class InquiryServiceImpl implements InquiryService {
 
     //관리자용 문의리스트
     @Override
-    public List<InquiryResponse> getAllInquiry() {
-        List<Inquiry> inquiries = inquiryRepository.findAllByOrderByNoDescForAdmin();
+    @Transactional(readOnly = true)
+    public Page<InquiryResponse> getAllInquiry(Pageable pageable) {
+        Page<Inquiry> inquiryPage = inquiryRepository.findAllByOrderByNoDescForAdmin(pageable);
 
-        if(inquiries.isEmpty()) {
-            return Collections.emptyList();
+        List<Inquiry> inquiriesOnPage = inquiryPage.getContent();
+
+        Map<Integer, String> userNicknameMap = new HashMap<>();
+        if (!inquiriesOnPage.isEmpty()) {
+            List<Integer> userNos = inquiriesOnPage.stream().map(Inquiry::getUserNo).filter(Objects::nonNull).distinct().collect(Collectors.toList());
+            if (!userNos.isEmpty()) {
+                List<Users> users = findUserService.findUsersByUserNo(userNos);
+                userNicknameMap = users.stream().collect(Collectors.toMap(Users::getNo, Users::getNickname, (e,r)->e));
+            }
         }
 
-        List<Integer> userNos = inquiries.stream()
-                .map(Inquiry::getUserNo)
-                .distinct()
-                .collect(Collectors.toList());
+        final Map<Integer, String> finalUserNicknameMap = userNicknameMap;
+        return inquiryPage.map(inquiry -> {
+            String nickname = finalUserNicknameMap.getOrDefault(inquiry.getUserNo(), "알 수 없음");
+            boolean isPrivate = inquiry.getPassword() != null && !inquiry.getPassword().isEmpty();
 
-        List<Users> users = findUserService.findUsersByUserNo(userNos);
-
-        Map<Integer, String> userNicknameMap = users.stream()
-                .collect(Collectors.toMap(Users::getNo, Users::getNickname, (existing, replacement) -> existing)); //여기까지 추가
-
-        return inquiries.stream().map(inquiry -> {
-
-                    String nickname = userNicknameMap.getOrDefault(inquiry.getUserNo(), "알 수 없음");
-                    boolean isPrivate = inquiry.getPassword() != null && !inquiry.getPassword().isEmpty();
-
-                    return InquiryResponse.builder()
-                            .no(inquiry.getNo())
-                            .subject(inquiry.getSubject())
-                            .nickname(nickname)
-                            .createdAt(inquiry.getCreatedAt())
-                            .isPrivate(isPrivate)
-                            .proceed(inquiry.getProceed())
-                            .proceedDescription(inquiry.getProceed().getDescription())
-                            .status(inquiry.getStatus())
-                            .build();
-                })
-                .collect(Collectors.toList());
+            return InquiryResponse.builder()
+                    .no(inquiry.getNo())
+                    .subject(inquiry.getSubject())
+                    .nickname(nickname)
+                    .createdAt(inquiry.getCreatedAt())
+                    .isPrivate(isPrivate)
+                    .proceed(inquiry.getProceed())
+                    .proceedDescription(inquiry.getProceed() != null ? inquiry.getProceed().getDescription() : "N/A")
+                    .status(inquiry.getStatus())
+                    .userNo(inquiry.getUserNo())
+                    .build();
+        });
     }
 
     //문의 댓글 목록조회

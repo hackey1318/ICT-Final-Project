@@ -123,7 +123,7 @@ function InquiryComment() {
                     })
                 ) : (
                     !isLoading &&
-                    <h5 style={{textAlign: 'center'}}>작성된 댓글이 없습니다.</h5>
+                    <h5 style={{textAlign: 'center', marginTop: '35px'}}>작성된 댓글이 없습니다.</h5>
                 )
             }
         </div>

@@ -5,17 +5,16 @@ import com.ict.finalProject.inquiry.controller.request.InquiryCommentRequest;
 import com.ict.finalProject.inquiry.controller.request.InquiryRequest;
 import com.ict.finalProject.inquiry.controller.response.InquiryCommentResponse;
 import com.ict.finalProject.inquiry.controller.response.InquiryResponse;
-import com.ict.finalProject.inquiry.repository.domain.Inquiry;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public interface InquiryService {
 
     boolean inquiryWrite(InquiryRequest request);  //문의등록
 
-    List<InquiryResponse> getInquiry();  //문의목록
+    Page<InquiryResponse> getInquiry(Pageable pageable);  //문의목록
 
     boolean checkPwd(int no, String password);  //비밀번호 확인
 
@@ -23,7 +22,7 @@ public interface InquiryService {
 
     void inquiryDel(int no);  //문의 삭제
 
-    List<InquiryResponse> getAllInquiry();  //관리자용 문의목록
+    Page<InquiryResponse> getAllInquiry(Pageable pageable);  //관리자용 문의목록
 
     List<InquiryCommentResponse> getComments(int no);  //문의 댓글 목록
 

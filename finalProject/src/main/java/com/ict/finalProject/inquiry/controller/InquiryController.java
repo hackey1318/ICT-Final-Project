@@ -12,17 +12,16 @@ import com.ict.finalProject.inquiry.controller.request.InquiryRequest;
 import com.ict.finalProject.inquiry.controller.request.UpdateInquiryStatusRequest;
 import com.ict.finalProject.inquiry.controller.response.InquiryCommentResponse;
 import com.ict.finalProject.inquiry.controller.response.InquiryResponse;
-import com.ict.finalProject.inquiry.repository.domain.Inquiry;
-import com.ict.finalProject.inquiry.repository.domain.InquiryComment;
 import com.ict.finalProject.inquiry.service.InquiryService;
-import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -41,16 +40,6 @@ public class InquiryController {
     @AuthRequired({UserRole.USER})
     @PostMapping("/inquiryWrite")
     public SuccessOfFailResponse inquiryWrite(@RequestBody InquiryRequest request) {
-        /*int userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
-        request.setUserNo(userNo);
-
-        if(request.getPassword() != null && !request.getPassword().isEmpty()) {
-            String password = request.getPassword().trim();
-            if(!password.matches("^\\d{4,8}$")) {
-                return SuccessOfFailResponse.builder().result("비밀번호는 4~8자리 숫자여야 합니다.").build();
-            }
-        }
-        return SuccessOfFailResponse.builder().result(inquiryService.inquiryWrite(request)).build();*/
         int userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
         request.setUserNo(userNo);
 
@@ -66,8 +55,16 @@ public class InquiryController {
 
     //문의리스트
     @GetMapping("/getInquiry") // URL 변경 (getReplies -> getInquiries)
-    public List<InquiryResponse> getInquiry() { // 메소드명 변경 (getReplies -> getInquiries)
-        return inquiryService.getInquiry();
+    public ResponseEntity<Page<InquiryResponse>> getInquiry(
+            @PageableDefault(size=9, sort="createdAt", direction=Sort.Direction.DESC) Pageable pageable) {
+        try {
+            Page<InquiryResponse> inquiryResponse = inquiryService.getInquiry(pageable);
+            return ResponseEntity.ok(inquiryResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+
     }
 
     // 문의디테일페이지
@@ -103,9 +100,16 @@ public class InquiryController {
     }
 
     //관리자용 문의리스트
+    @AuthRequired({UserRole.ADMIN, UserRole.MANAGER})
     @GetMapping("/getAllInquiry") // URL 변경 (getReplies -> getInquiries)
-    public List<InquiryResponse> getAllInquiry() { // 메소드명 변경 (getReplies -> getInquiries)
-        return inquiryService.getAllInquiry();
+    public ResponseEntity<Page<InquiryResponse>> getAllInquiry(
+            @PageableDefault(size = 10, sort = "no", direction = Sort.Direction.DESC) Pageable pageable) {
+        try {
+            Page<InquiryResponse> inquiryResponse = inquiryService.getAllInquiry(pageable);
+            return ResponseEntity.ok(inquiryResponse);
+        } catch(Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     //문의 댓글 작성
