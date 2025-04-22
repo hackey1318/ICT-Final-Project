@@ -6,10 +6,16 @@ import 'swiper/css/pagination';
 import '../../css/md/GoodsInfo.css';
 
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { useParams } from "react-router-dom";
+import Cart from "../../js/cart/Cart";
+import CartApi, { addGoodsToCart } from "../../js/cart/CartApi";
+const accessToken = sessionStorage.getItem("accessToken");
+
 
 const GoodsInfo = ({ goods }) => {
     const [quantity, setQuantity] = useState(1);
     const imageRef = useRef(null);
+    const { goodsNo } = useParams();
 
     const decreaseQuantity = () => {
         if (quantity > 1) setQuantity(quantity - 1);
@@ -24,7 +30,14 @@ const GoodsInfo = ({ goods }) => {
     };
 
     const handleAddToCart = () => {
-        alert(`${goods.name} ${quantity}개를 장바구니에 담습니다. 총 금액: ${(goods.price * quantity).toLocaleString()}원`);
+        // alert(`${goods.name} ${quantity}개를 장바구니에 담습니다. 총 금액: ${(goods.price * quantity).toLocaleString()}원`);
+        addGoodsToCart(goodsNo, quantity)
+        .then(response => {
+            alert(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     };
 
     return (
