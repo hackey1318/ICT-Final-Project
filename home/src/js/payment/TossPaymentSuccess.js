@@ -36,6 +36,8 @@ function SuccessPage() {
         return;
       }
 
+      console.log(json);
+
       // 결제 성공 비즈니스 로직을 구현하세요.
       axios.post("http://localhost:9988/cart/paidGoods", {
         orderNumber: json.orderId

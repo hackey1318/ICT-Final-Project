@@ -14,4 +14,5 @@ public interface OrdersService {
     void deleteOrdersByUserNoAndStatus(int userNo, OrdersStatus status);
     Orders getOrders(String orderNumber);
     OrdersDto getOrdersDtoByOrderNumber(String orderNumber) throws Exception;
+    void cancelOrders(int orderNo);
 }

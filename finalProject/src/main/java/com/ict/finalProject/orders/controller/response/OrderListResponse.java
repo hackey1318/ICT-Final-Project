@@ -16,4 +16,5 @@ import java.util.List;
 public class OrderListResponse {
     private List<OrdersDto> ordersDtoList;
     private List<List<OrderItemDto>> orderItemDtoList;
+    private List<String> paymentKeyList;
 }
