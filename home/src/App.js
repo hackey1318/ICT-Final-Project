@@ -23,6 +23,7 @@ import { useEffect } from 'react';
 import MovieDetail from './page/movie/MovieDetail';
 import ReviewListPage from './page/movie/ReviewListPage';
 import ReviewWritePage from './page/movie/ReviewWritePage';
+import ReviewEditPage from './page/movie/ReviewEditPage';
 import GenreMovie from './page/movie/GenreMovie';
 import CurrentMovie from './page/movie/CurrentMovie';
 import UpcomingMovie from './page/movie/UpcomingMovie';
@@ -90,6 +91,7 @@ function App() {
           <Route path='movies/:id' element={<MovieDetail />} />
           <Route path='movies/:id/reviews' element={<ReviewListRoute />} />
           <Route path='movies/:id/reviewWrite' element={<ReviewWritePage />} />
+          <Route path="/movies/:movieNo/reviewEdit/:reviewNo" element={<ReviewEditPage/>}/>
           <Route path='movies/current' element={<CurrentMovie />} />
           <Route path='movies/upcoming' element={<UpcomingMovie />} />
           <Route path='/inquiry' element={<InquiryPage />} />
