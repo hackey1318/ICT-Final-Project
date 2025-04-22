@@ -14,6 +14,7 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
     const [isPrivate, setIsPrivate] = useState(false);
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const passwordInputStyle = {
         marginLeft: '15px',
@@ -78,6 +79,9 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
             }
         }
 
+        if(isSubmitting) return;
+        setIsSubmitting(true);
+
         let inquiryData = {
             subject: subject,
             content: content,
@@ -116,6 +120,8 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
                     onSuccess();
                 }
 
+                setIsSubmitting(false);
+
                 if (onClose) {
                     onClose();
                 }
@@ -125,7 +131,7 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
                 alert("문의작성을 실패하였습니다.")
                 return;
             })
-    }, [subject, content, addedImg, isPrivate, password, passwordConfirm, onSuccess, onClose, accessToken]);
+    }, [subject, content, addedImg, isPrivate, password, passwordConfirm, onSuccess, onClose, accessToken, isSubmitting]);
 
     const handleRealSubmit = useCallback(() => {
         submitInquiry(); 
@@ -268,7 +274,7 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
                 </div>
                 
                 <div style={{ textAlign: 'right' }}>
-                    <input type='submit' value='작성하기' id='inquiry-submit' onClick={handleRealSubmit} />
+                    <input type='submit' value='작성하기' id='inquiry-submit' onClick={handleRealSubmit} disabled={isSubmitting} />
                     <input type='button' value='취소하기' id='inquiry-cancel' onClick={closeInquiry} />
                 </div>
             </div>
