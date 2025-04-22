@@ -22,7 +22,6 @@ tr {
     text-decoration-line: none;
     color: black;
     cursor: pointer;
-    margin-top: 50px;
 }
 
 #write:not(:hover) {
@@ -222,8 +221,9 @@ tr {
 
 #img-modal {
     position: fixed;
-    top: 25%;
-    left: 10%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     height: 600px;
     width: 80%;
     min-width: 550px;
@@ -232,14 +232,6 @@ tr {
     border: 3px solid #ddd;
     border-radius: 20px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-}
-
-.modal-content {
-    width: 97%;
-    height: 580px;
-    margin: auto;
-    background-color: white;
-    z-index: 10;
 }
 
 #modal-close {
@@ -272,5 +264,98 @@ tr {
 }
 
 .modal-content {
-    height: 300px;
+    height: 350px;
 }
+
+/* 댓글영역 */
+.comment-container {
+    width: 95%;
+    margin: 15px auto 0;
+}
+
+.comments {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    min-height: 100px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.form-control {
+    margin: 15px 0;
+    border-radius: 15px;
+}
+
+.comment-item {
+    margin: 30px 5%;
+    display: flex;        
+    width: 90%;          
+}
+  
+/* 문의 댓글 */
+  .other-comment {
+    justify-content: flex-start; 
+  }
+
+  .other-comment>div {
+    text-align: left;
+  }
+  
+  .my-comment {
+    justify-content: flex-end;   
+  }
+
+  .my-comment>div {
+    text-align: right;
+  }
+  
+  .comment-bubble {
+    display: block;
+    text-align: left;
+    margin-top: 5px;
+    padding: 10px 15px;     
+    border-radius: 15px;    
+    max-width: 75%;         
+    word-wrap: break-word;  
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .other-comment .comment-bubble {
+    background-color: #f1f0f0; 
+    border: 1px solid #e9e9eb;
+    color: #333; 
+  }
+  
+  /* 내 댓글 버블 배경색 */
+  .my-comment .comment-bubble {
+    background-color: #e3f1ff; /* 파란색 배경 (예시) */
+    color: #333; /* 흰색 글자 */
+  }
+  
+  /* 댓글 작성자 닉네임 스타일 */
+  .comment-author {
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #555;
+  }
+  
+  /* 댓글 작성 시간 스타일 */
+  .comment-timestamp {
+    display: block;
+    font-size: 0.75em;
+    color: #999;
+    margin-top: 4px;
+  }
+  
+  /* 내 댓글일 경우 타임스탬프 오른쪽 정렬 */
+  .my-comment, .comment-timestamp {
+    text-align: right;
+  }
+  
+  /* 다른 사람 댓글일 경우 타임스탬프 왼쪽 정렬 (기본값) */
+  .other-comment .comment-timestamp {
+    text-align: left;
+  }
+
