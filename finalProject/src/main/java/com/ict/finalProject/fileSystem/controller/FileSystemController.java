@@ -1,8 +1,6 @@
 package com.ict.finalProject.fileSystem.controller;
 
-import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.common.config.AuthRequired;
-import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.fileSystem.controller.request.ImageRequest;
 import com.ict.finalProject.fileSystem.controller.response.FileUploadResponse;
 import com.ict.finalProject.fileSystem.domain.Images;
@@ -24,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -52,7 +49,7 @@ public class FileSystemController {
         return fileSystemService.uploadFile(files);
     }
 
-    @GetMapping("/showImage/{originName}")
+    @GetMapping("/showImage/{imageId}")
     public void showImage(@PathVariable("originName") String originName, HttpServletResponse response) {
         List<Images> imageList = fileSystemService.getImageInfo(List.of(originName));
 
