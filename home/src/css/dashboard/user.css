@@ -29,6 +29,7 @@
 }
 .userdau-left{
     width: 60%;
+    min-height: 550px;
 }
 .userdau-list{
     width: 100%;
@@ -54,6 +55,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap; /* 줄바꿈 안되게 */
+    height: 50px;
 }
 .userdau-list>ul:first-child>li{
     border: none;
@@ -66,10 +68,16 @@
 }
 .userdau-list-title{
     display: inline-block;
-    border: 1px solid #ccc;
     border-radius: 10px;
     padding: 7px 20px;
     white-space: nowrap;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.userdau-list > ul:first-child {
+    border-bottom: 5px solid rgb(248, 169, 23); /* 굵기, 색상은 자유롭게 */
+    padding-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .list-select-box{
@@ -140,3 +148,10 @@
     font-size: 18px;
     line-height: 2;
 }
+.member_search-container {
+    display: flex;
+    justify-content: flex-end; /* 👉 오른쪽 정렬 */
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }

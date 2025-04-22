@@ -18,6 +18,7 @@
 /* 등록 버튼 스타일 */
 #md-button-wrapper {
   text-align: right;
+  margin-bottom: 5px;
 }
 
 .md_register-btn {
@@ -64,14 +65,13 @@
 }
 
 /* 모달 헤더 */
-.md_modal-header {
+.md_header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+  margin-bottom: 20px;
 }
+
 
 .md_modal-title {
   font-size: 1.5rem;
@@ -266,20 +266,22 @@
   margin-bottom: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 580px;
 }
 
 .md_table {
   width: 100%;
   border-collapse: collapse;
   background-color: white;
+  border: 1px solid #dee2e6;
 }
 
 .md_table th,
 .md_table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #dee2e6;
+  font-size: 14px;
+  vertical-align: middle;
 }
 
 .md_table th {
@@ -352,50 +354,30 @@
 }
 
 /* 페이지네이션 스타일 */
-.md_pagination {
+.paging-container {
+  width: 500px;
+  margin: 0 auto;
+  margin-top: 25px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
 }
 
-.md_pagination-btn {
-  min-width: 36px;
-  height: 36px;
-  padding: 0 10px;
-  border: 1px solid #ddd;
-  background-color: white;
-  border-radius: 4px;
+.paging-container > button, .paging-container > div > button {
   cursor: pointer;
-  font-size: 14px;
-}
-
-.md_pagination-btn:hover:not(:disabled) {
+  padding: 8px 15px;
+  margin: 0 5px;
+  border: none;
   background-color: #f0f0f0;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
-.md_pagination-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.md_pagination-active {
-  background-color: #4a6ebd;
+.paging-container > div > button.active {
+  background-color: navy;
   color: white;
-  border-color: #4a6ebd;
+  font-weight: bold;
+  border-radius: 5px;
 }
-
-/* Optional: Add hover effect for active button */
-.md_pagination-active:hover {
-  background-color: #3a5ca0 !important;
-}
-
-.md_pagination-info {
-  font-size: 14px;
-  color: #666;
-}
-
 /*검색, 정렬창*/
 .md_search-sort-controls {
   display: flex;

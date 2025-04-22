@@ -9,8 +9,8 @@ function MdList() {
   const [editTarget, setEditTarget] = useState(null);
 
   const [page, setPage] = useState(0);
-  const [size] = useState(10);
-  const [totalPages, setTotalPages] = useState(0);
+  const [size] = useState(5);
+  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
   const [sortField, setSortField] = useState("createdAt");
   const [sortDirection, setSortDirection] = useState("desc");
   const [searchType, setSearchType] = useState("name");
@@ -70,8 +70,27 @@ function MdList() {
   return (
     <div className="md-yes-container">
       <h2>굿즈 리스트</h2>
+        <div id="md-button-wrapper">
+          <button id="md-register-btn" className="btn btn-outline-primary" onClick={() => { setModalOpen(true); setEditTarget(null); }}>
+            등록하기
+          </button>
+        </div>
 
       <div className="md_search-sort-controls">
+
+        <div className="md_sort-container">
+          <label>정렬 기준:</label>
+          <select value={sortField} onChange={(e) => setSortField(e.target.value)} className="md_dropdown">
+            <option value="updatedAt">등록일</option>
+            <option value="name">이름</option>
+            <option value="price">가격</option>
+          </select>
+          <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)} className="md_dropdown">
+            <option value="desc">내림차순</option>
+            <option value="asc">오름차순</option>
+          </select>
+        </div>
+
         <div className="md_search-container">
           <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="md_dropdown">
             <option value="name">굿즈명</option>
@@ -89,18 +108,6 @@ function MdList() {
           </button>
         </div>
 
-        <div className="md_sort-container">
-          <label>정렬 기준:</label>
-          <select value={sortField} onChange={(e) => setSortField(e.target.value)} className="md_dropdown">
-            <option value="updatedAt">등록일</option>
-            <option value="name">이름</option>
-            <option value="price">가격</option>
-          </select>
-          <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)} className="md_dropdown">
-            <option value="desc">내림차순</option>
-            <option value="asc">오름차순</option>
-          </select>
-        </div>
       </div>
 
       <div className="md_table-container">
@@ -140,35 +147,31 @@ function MdList() {
         </table>
       </div>
 
-      <div id="md-button-wrapper">
-        <button id="md-register-btn" className="btn btn-primary" onClick={() => { setModalOpen(true); setEditTarget(null); }}>
-          등록하기
-        </button>
-      </div>
+      {/* 페이지네이션 */}
+      <div className="paging-container">
+        {page > 0 && (
+          <button className="page-buttons" onClick={() => handlePageChange(page - 1)}>
+            이전
+          </button>
+        )}
 
-      <div className="md_pagination">
-        <button className="md_pagination-btn" onClick={() => handlePageChange(0)} disabled={page === 0}>처음</button>
-        <button className="md_pagination-btn" onClick={() => handlePageChange(page - 1)} disabled={page === 0}>&lt;</button>
+        <div className="page-buttons">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => handlePageChange(i)}
+              className={page === i ? "active" : ""}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
 
-        {(() => {
-          const pageButtons = [];
-          const pageGroup = Math.floor(page / 5);
-          const startPage = pageGroup * 5;
-          const endPage = Math.min(startPage + 4, totalPages - 1);
-
-          for (let i = startPage; i <= endPage; i++) {
-            pageButtons.push(
-              <button key={i} className={`md_pagination-btn ${page === i ? "md_pagination-active" : ""}`} onClick={() => handlePageChange(i)}>
-                {i + 1}
-              </button>
-            );
-          }
-
-          return pageButtons;
-        })()}
-
-        <button className="md_pagination-btn" onClick={() => handlePageChange(page + 1)} disabled={page === totalPages - 1}>&gt;</button>
-        <button className="md_pagination-btn" onClick={() => handlePageChange(totalPages - 1)} disabled={page === totalPages - 1}>마지막</button>
+        {page < totalPages - 1 && (
+          <button className="page-buttons" onClick={() => handlePageChange(page + 1)}>
+            다음
+          </button>
+        )}
       </div>
 
       {modalOpen && (

@@ -1,15 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState,useCallback } from "react";
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 import { useNavigate } from "react-router-dom";
 import '../../css/admin/InquiryReply.css';
-import apiClient from "../../js/public/axiosConfig";
 import Pagination from "../../js/public/Pagination";
+import apiClient from "../../js/public/axiosConfig";
 
 function InquiryReply() {
     const [inquiryList, setInquiryList] = useState([]);
     const navigate = useNavigate();
     const [updateStatus, setUpdateStatus] = useState({});
-    const [currentPage, setCurrentPage] = useState(0); 
-    const [totalPages, setTotalPages] = useState(0);   
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
     const [pageSize, setPageSize] = useState(9);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -25,7 +26,7 @@ function InquiryReply() {
                 console.error("잘못된 API 응답구조", response.data);
                 setInquiryList([]);
                 setTotalPages(0);
-            }            
+            }
         } catch(error) {
             console.log("관리자 문의 목록 로딩 error발생 : ", error.response?.data);
             setInquiryList([]);
@@ -45,7 +46,7 @@ function InquiryReply() {
         const confirmMessage = `"${inquiryNo}번 문의"의 상태를 "${statusMap[newStatus] || newStatus}"(으)로 변경하시겠습니까?`;
 
         if (!window.confirm(confirmMessage)) {
-            event.target.value = currentStatus; 
+            event.target.value = currentStatus;
             return;
         }
         setUpdateStatus(prevMap => ({ ...prevMap, [inquiryNo]: true }));
@@ -63,7 +64,7 @@ function InquiryReply() {
             } else {
                 alert(response.data?.message || "상태 변경에 실패했습니다.");
             }
-        })   
+        })
     }
 
     const inquiryReplyView = (no) => {
@@ -78,13 +79,15 @@ function InquiryReply() {
     return (
         <div id="inquiryreply-container">
             <h3>회원 문의 목록</h3>
-            <ul style={{fontWeight: 'bold'}}>
-                <li>번호</li>
-                <li style={{cursor: 'auto'}}>제목</li>
-                <li>작성자</li>
-                <li>작성날짜</li>
-                <li>진행상황</li>
-                <li>상태</li>
+
+            <div className="inquiryreply-list">
+            <ul>
+                <li><div className="inquiryreply-list-title">번호</div></li>
+                <li><div className="inquiryreply-list-title">제목</div></li>
+                <li><div className="inquiryreply-list-title">작성자</div></li>
+                <li><div className="inquiryreply-list-title">작성날짜</div></li>
+                <li><div className="inquiryreply-list-title">진행상황</div></li>
+                <li><div className="inquiryreply-list-title">상태</div></li>
             </ul>
 
             {
@@ -112,14 +115,31 @@ function InquiryReply() {
                     )
                 })
             }
+            </div>
 
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                {totalPages > 0 && !isLoading && (
-                    <Pagination
-                        page={currentPage}       
-                        totalPages={totalPages}   
-                        onPageChange={handlePageChange} 
-                    />
+            <div className="paging-container">
+                {currentPage > 0 && (
+                    <button className="page-buttons" onClick={() => handlePageChange(currentPage - 1)}>
+                        이전
+                    </button>
+                )}
+
+                <div className="page-buttons">
+                    {Array.from({ length: totalPages }, (_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => handlePageChange(i)}
+                            className={currentPage === i ? 'active' : ''}
+                        >
+                            {i + 1}
+                        </button>
+                    ))}
+                </div>
+
+                {currentPage < totalPages - 1 && (
+                    <button className="page-buttons" onClick={() => handlePageChange(currentPage + 1)}>
+                        다음
+                    </button>
                 )}
             </div>
         </div>

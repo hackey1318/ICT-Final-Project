@@ -2,7 +2,7 @@
 .admin-container{
     display: flex;
     gap: 20px;
-    padding-top: 50px;
+    padding-top: 30px;
 }
 
 .container-content{
@@ -23,10 +23,12 @@
 .admin-sidebar{
     width: 300px;
     height: 800px;
-    background: #fff;
     border-radius: 0 15px 15px 0;
     position: sticky;
     padding: 20px 0;
+    color: #ddd;
+    background-color: rgb(53, 53, 53);
+    height: 850px;
 }
 
 /* 배너 부분 */
@@ -34,6 +36,8 @@
     width: 200px;
     margin: 0 auto;
     display: block;
+    background-color: #ddd;
+    opacity: 0.5;
 }
 
 /* 관리자 닉네임, role 부분 */
@@ -42,9 +46,10 @@
     width: 230px;
     height: 40px;
     line-height: 40px;
-    background: #ddd;
     border-radius: 10px;
     margin: 10px auto;
+    font-size: 1.5rem;
+    color: #ddd;
 }
 
 /* 사이드바 탑메뉴 */
@@ -52,15 +57,16 @@
     list-style: none;
 }
 .top-menu-div{
-    width: 100px;
+    width: 150px;
     height: 40px;
     font-weight: bold;
     text-align: center;
     line-height: 40px;
-    background: #ddd;
     border-radius: 10px;
     margin-bottom: 8px;
     cursor: pointer;
+    color: rgb(211, 124, 63);
+    font-size: 1.5rem;
 }
 
 /* 사이드바 서브메뉴 */
@@ -78,5 +84,6 @@
 }
 .admin-nav-link:hover, .admin-nav-link.active{
     font-weight: bold;
-    border-bottom: 1px solid black;
+    size: 1.5rem;
+    border-bottom: 3px solid rgb(211, 124, 63);
 }
