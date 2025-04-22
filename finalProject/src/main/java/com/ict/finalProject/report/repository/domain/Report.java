@@ -1,6 +1,8 @@
 package com.ict.finalProject.report.repository.domain;
 
-import com.ict.finalProject.domain.constant.InquiryProceed;
+import com.ict.finalProject.domain.constant.Proceed;
+import com.ict.finalProject.domain.constant.ReportType;
+import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,17 +27,25 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int no;  //신고 번호
 
-    private int userNo;  //유저번호
+    private int userNo;  //유저번호(신고자/피신고자/담당자)
 
     @Column(nullable = false)
     private String subject;  //신고 제목
 
     @Column(nullable = false, columnDefinition = "LONGTEXT")
-    private String content;
+    private String content;  //신고 내용
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
-    private InquiryProceed proceed;
+    private ReportType type;
+
+    @Column(nullable = false, length = 15)
+    @Enumerated(EnumType.STRING)
+    private Proceed proceed;  //처리 진행 상황
+
+    @Column(nullable = false, length = 15)
+    @Enumerated(EnumType.STRING)
+    private StatusInfo status;
 
     @CreatedDate
     @Column(nullable = false)
