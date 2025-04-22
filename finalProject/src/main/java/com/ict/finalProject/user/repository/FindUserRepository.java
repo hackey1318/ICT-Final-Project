@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FindUserRepository extends JpaRepository<Users, Integer> {
@@ -12,6 +13,9 @@ public interface FindUserRepository extends JpaRepository<Users, Integer> {
 
     Users findByIdAndEmail(String id, String email);
 
-    //inquiry 닉네임 가져오기
+    //inquiry 닉네임가져오기
     List<Users> findByNoIn(List<Integer> userNos);
+
+    //문의 댓글용 사용자 정보가져오기
+    Optional<Users> findById(String id);
 }
