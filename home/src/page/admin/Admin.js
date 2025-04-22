@@ -17,6 +17,7 @@ function Admin(){
         if(path.includes("/home/gender")) return "gender"
         if(path.includes("/home/mdlists")) return "mdlists"
         if(path.includes("/home/announce")) return "announce"
+        if(path.includes("/home/banner")) return "banner"
 
         return "manager/info"
     }

@@ -31,9 +31,11 @@ export default function AnnounceDetail() {
         const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
         if (confirmDelete) {
             try {
-                await axios.delete(`http://localhost:9988/announce/${no}`);
+                await axios.delete(`http://localhost:9988/announce/${no}`, {
+                    headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
+                });
                 alert("공지사항이 삭제되었습니다.");
-                navigate("/admin/announce"); // 삭제 후 목록 페이지로 이동
+                navigate("/manager/home/announce"); // 삭제 후 목록 페이지로 이동
             } catch (error) {
                 alert("삭제 중 오류가 발생했습니다.");
             }
@@ -84,8 +86,15 @@ export default function AnnounceDetail() {
             </div>
 
             <div className="mt-4 text-end">
-                <button className="btn btn-primary" onClick={handleEdit}>수정</button>
-                <button className="btn btn-danger ms-2" onClick={handleDelete}>삭제</button>
+                {
+                    announce.status === 'AcTIVE' ? (
+                        <>
+                            <button className="btn btn-primary" onClick={handleEdit}>수정</button>
+                            <button className="btn btn-danger ms-2" onClick={handleDelete}>삭제</button>
+                        </>
+                    ): null
+                }
+                
                 <button className="btn btn-secondary ms-2" onClick={() => navigate("/manager/home/announce")}>목록</button>
             </div>
 
