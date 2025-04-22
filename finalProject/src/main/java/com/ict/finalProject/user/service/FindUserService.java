@@ -31,4 +31,10 @@ public interface FindUserService {
 
     //Inquiry에서 사용자 닉네임을 가져오기위한 메서드 
     List<Users> findUsersByUserNo(List<Integer> userNos);
+
+    //회원정보 가져오기
+    Optional<Users> userSelect(String userId);
+
+    //회원수정(DB)
+    int userUpdate(Users users);
 }

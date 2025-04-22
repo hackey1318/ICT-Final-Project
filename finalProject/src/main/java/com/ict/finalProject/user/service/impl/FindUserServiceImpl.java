@@ -158,4 +158,16 @@ public class FindUserServiceImpl implements FindUserService {
         }
         return findUserRepository.findByNoIn(userNos);
     }
+
+    //회원정보 가져오기
+    @Override
+    public Optional<Users> userSelect(String userId) {
+        return findUserRepository.findById(userId);
+    }
+
+    //회원수정(DB)
+    @Override
+    public int userUpdate(Users users) {
+        return findUserRepository.userUpdate(users.getNo(), users.getEmail(), users.getNickname(), users.getProfileImageUrl(), users.getPhone());
+    }
 }

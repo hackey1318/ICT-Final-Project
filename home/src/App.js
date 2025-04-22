@@ -45,6 +45,7 @@ import UserAnnounceDetail from './page/user/UserAnnounceDetail';
 import AnnounceList from './page/admin/AnnounceList';
 import AnnounceDetail from './page/admin/AnnounceDetail';
 import ManagerRegister from './page/admin/ManagerRegisterForm';
+import UserEditForm from './page/user/UserEditForm';
 
 function App() {
 
@@ -85,7 +86,8 @@ function App() {
           <Route path="/related-movie/:movieId" element={<RelatedMovie />} />
           <Route path="/announcements" element={<UserAnnounce />} />
           <Route path="/announcements/:id" element={<UserAnnounceDetail />} />
-          </Route>
+          <Route path="/user-edit" element={<UserEditForm />} />
+        </Route>
 
         {/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
         <Route path="/manager">

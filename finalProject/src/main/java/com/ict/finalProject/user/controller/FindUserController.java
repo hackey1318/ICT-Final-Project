@@ -1,7 +1,11 @@
 package com.ict.finalProject.user.controller;
 
+import com.ict.finalProject.common.config.AuthCheck;
+import com.ict.finalProject.common.config.AuthRequired;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.oauth.repository.domain.Users;
+import com.ict.finalProject.oauth.service.UserService;
 import com.ict.finalProject.user.controller.request.UserFindRequest;
 import com.ict.finalProject.user.controller.response.UserFindResponse;
 import com.ict.finalProject.user.repository.domain.PwdReset;
@@ -11,6 +15,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -18,6 +24,7 @@ public class FindUserController {
     private final FindUserService findUserService;
     private final JavaMailSender mailSender;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @PostMapping("/findIdOk")
     public UserFindResponse findIdOk(@RequestBody UserFindRequest userFindRequest) {
@@ -111,6 +118,35 @@ public class FindUserController {
         resetUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
         findUserService.insertUser(resetUser);
+
+        return "ok";
+    }
+
+    //회원정보 불러오기
+    @PostMapping("/edit")
+    @AuthRequired({UserRole.USER, UserRole.ADMIN, UserRole.MANAGER})
+    public Optional<Users> getUserEdit(){
+        String userId = AuthCheck.getUserId(UserRole.USER, UserRole.ADMIN, UserRole.MANAGER);
+
+        return findUserService.userSelect(userId);
+    }
+
+    //회원정보 수정
+    @PostMapping("/editOk")
+    @AuthRequired({UserRole.USER, UserRole.ADMIN, UserRole.MANAGER})
+    public String editOk(@RequestBody Users users){
+        //현재 로그인한 사용자 정보 가져오기
+        Users user = userService.getUser(AuthCheck.getUserId(UserRole.USER, UserRole.ADMIN, UserRole.MANAGER));
+        users.setNo(user.getNo());
+
+        //이미지 저장시 파일명 앞에 주소 붙게함.
+        if (users.getProfileImageUrl() != null && !users.getProfileImageUrl().startsWith("http")) {
+            String fullUrl = "http://localhost:9988/file-system/download/" + users.getProfileImageUrl();
+            users.setProfileImageUrl(fullUrl);
+        }
+
+        //사용자 정보 수정
+        findUserService.userUpdate(users);
 
         return "ok";
     }

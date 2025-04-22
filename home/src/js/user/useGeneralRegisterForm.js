@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const API_BASE_URL = "http://localhost:9988";
+const accessToken = sessionStorage.getItem("accessToken");
 
 export const useGeneralRegisterForm = (role = 'user') => {
   const navigate = useNavigate();
@@ -45,6 +46,8 @@ export const useGeneralRegisterForm = (role = 'user') => {
   const [phoneCheckLoading, setPhoneCheckLoading] = useState(false);
   const [phoneCheckStatus, setPhoneCheckStatus] = useState('');   // '', 'checking', 'available', 'duplicate'
   const [phoneCheckMessage, setPhoneCheckMessage] = useState('');
+
+  const [originalPhone, setOriginalPhone] = useState('');
 
   // ── 필드별 유효성 검사 ──
   const validateField = useCallback((name, value, data) => {
@@ -191,6 +194,23 @@ export const useGeneralRegisterForm = (role = 'user') => {
     return valid;
   }, [formData, uploadedImageId, validateField]);
 
+  //회원수정시 폼 유효성 검사
+  const editValidateForm = useCallback(() => {
+    let valid = true;
+    const newErrors = {};
+    ['id','password','passwordConfirm','nickName','email'].forEach(field => {
+      const err = validateField(field, formData[field], formData)[field];
+      if (err) { newErrors[field] = err; valid = false; }
+    });
+    // 연락처 검증
+    const phoneErr = validateField('phone1', formData.phone1, formData).phone;
+    if (phoneErr) { newErrors.phone = phoneErr; valid = false; }
+
+    // if (!uploadedImageId) { newErrors.profileImage = '프로필 이미지를 업로드해주세요.'; valid = false; }
+    setErrors(newErrors);
+    return valid;
+  }, [formData, uploadedImageId, validateField]);
+
   // ── 제출 핸들러 ──
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
@@ -210,7 +230,7 @@ export const useGeneralRegisterForm = (role = 'user') => {
       uploadedProfileImageId: uploadedImageId
     };
     try {
-      //registerEndpoint는 role이 user, manager에 따라 다름름
+      //registerEndpoint는 role이 user, manager에 따라 다름
       await axios.post(registerEndpoint, payload);
       setSuccess(true); 
 
@@ -224,12 +244,46 @@ export const useGeneralRegisterForm = (role = 'user') => {
     } finally { setLoading(false); }
   }, [formData, uploadedImageId, navigate, validateForm]);
 
+  //회원수정 버튼 클릭시 작동
+  const handleEditSubmit = useCallback((e) => {
+    e.preventDefault();
+    if (!editValidateForm()) return;
+
+    setUploadLoading(true); setLoading(true); setApiError('');
+
+    const payload = {
+      id: formData.id,
+      password: formData.password,
+      passwordConfirm: formData.passwordConfirm,
+      nickname: formData.nickName,
+      gender: formData.gender,
+      email: formData.email,
+      phone: formData.phone1 && formData.phone2 && formData.phone3
+      ? `${formData.phone1}${formData.phone2}${formData.phone3}`
+      : null,
+      profileImageUrl: uploadedImageId ?? (previewImageUrl?.startsWith('http') ? previewImageUrl : null)
+    };
+
+    axios.post(`${API_BASE_URL}/user/editOk`, payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    }).then((response)=>{
+      alert("회원정보 수정 성공. 메인페이지로 이동합니다.");
+      
+      window.location.href = "/";
+    }).catch((error)=>{
+      console.log(error);
+    });
+  }, [formData, uploadedImageId, navigate, editValidateForm]);
+
   return {
-    formData, errors, loading, apiError, success,
-    idCheckLoading, idCheckStatus, idCheckMessage,
-    handleChange, handleIdCheck, handleFileChange, handleSubmit,
-    previewImageUrl, uploadLoading, uploadError,
-    phoneCheckLoading,phoneCheckStatus,phoneCheckMessage,handlePhoneCheck,
+    formData, setFormData, errors, loading, apiError, success,
+    idCheckLoading, setIdCheckLoading, idCheckStatus, idCheckMessage,
+    handleChange, handleIdCheck, handleFileChange, handleSubmit, handleEditSubmit,
+    previewImageUrl, setPreviewImageUrl, setUploadedImageId, uploadLoading, uploadError,
+    phoneCheckLoading, setPhoneCheckLoading, phoneCheckStatus, setPhoneCheckStatus, 
+    phoneCheckMessage, setPhoneCheckMessage, handlePhoneCheck, originalPhone, setOriginalPhone
   };
 };
 
