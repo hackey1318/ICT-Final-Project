@@ -13,6 +13,7 @@ import com.ict.finalProject.orders.repository.domain.OrderItem;
 import com.ict.finalProject.orders.repository.domain.Orders;
 import com.ict.finalProject.orders.service.OrderItemService;
 import com.ict.finalProject.orders.service.OrdersService;
+import com.ict.finalProject.orders.service.dto.OrderItemDto;
 import com.ict.finalProject.orders.service.dto.OrdersDto;
 import com.ict.finalProject.payment.service.PaymentsService;
 import com.ict.finalProject.payment.service.dto.PaymentsDto;
@@ -81,10 +82,10 @@ public class OrderController {
 
             for (Object itemObj : goods) {
                 JSONObject item = (JSONObject) itemObj;
-                int id = ((Long) item.get("id")).intValue();
-                String name = (String) item.get("name");
-                long price = (long) item.get("price");
-                long quantity = (long) item.get("quantity");
+                int id = ((Long) item.get("goodsNo")).intValue();
+                String name = (String) item.get("goodsName");
+                long price = (long) item.get("goodsPrice");
+                long quantity = (long) item.get("goodsQuantity");
 
                 // id기반으로 상품테이블 DB조회, 상품명과 가격 일치하는지 확인
                 Goods dbGoods = mdShopService.getMd(id).get();
@@ -135,9 +136,9 @@ public class OrderController {
 
                     for (Object itemObj : goods) {
                         JSONObject item = (JSONObject) itemObj;
-                        int goodsNo = ((Long) item.get("id")).intValue(); // 굿즈PK
-                        String goodsName = (String) item.get("name"); // 굿즈이름
-                        int goodsPrice = ((Long) item.get("price")).intValue(); // 굿즈 가격
+                        int goodsNo = ((Long) item.get("goodsNo")).intValue(); // 굿즈PK
+                        String goodsName = (String) item.get("goodsName"); // 굿즈이름
+                        int goodsPrice = ((Long) item.get("goodsPrice")).intValue(); // 굿즈 가격
                         int goodsQuantity = ((Long) item.get("quantity")).intValue(); // 굿즈 수량
 
                         orderItem.setGoodsNo(goodsNo);
@@ -180,14 +181,19 @@ public class OrderController {
         }
         try {
             OrdersDto ordersDto = ordersService.getOrdersDtoByOrderNumber(orderNumber);
+            List<OrderItemDto> orderItemDto = orderItemService.getOrderItems(ordersDto.getId());
             PaymentsDto paymentsDto = paymentsService.getPaymentsDtoByOrderNo(ordersDto.getId());
             String nickName = users.getNickname();
+            String email = users.getEmail();
             String theater = theatersService.getTheaterName(ordersDto.getTheaterNo());
             JSONObject obj = new JSONObject();
             obj.put("orders", ordersDto);
+            obj.put("goods", orderItemDto);
             obj.put("payments", paymentsDto);
             obj.put("nickName", nickName);
+            obj.put("email", email);
             obj.put("theater", theater);
+
 
             return ResponseEntity.status(HttpStatus.OK).body(obj);
         } catch (Exception e) {
