@@ -4,17 +4,16 @@ import com.ict.finalProject.admin.controller.response.GenderRatio;
 import com.ict.finalProject.admin.controller.response.UserResponse;
 import com.ict.finalProject.admin.service.AdminService;
 import com.ict.finalProject.common.config.AuthRequired;
+import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.domain.constant.UserRole;
-import com.ict.finalProject.inquiry.controller.response.InquiryResponse;
 import com.ict.finalProject.inquiry.service.InquiryService;
+import com.ict.finalProject.oauth.controller.request.LocalRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +22,16 @@ import java.util.List;
 public class AdminController {
     private final AdminService adminService;
     private final InquiryService inquiryService;
+
+    @PostMapping("/register")
+    public SuccessOfFailResponse managerRegister(@RequestBody LocalRegisterRequest request){
+        boolean result = adminService.registerManager(request);
+
+        return SuccessOfFailResponse.builder()
+                .result(result)
+                .message(result ? "관리자 등록 성공" : "관리자 등록 실패")
+                .build();
+    }
 
     @GetMapping("/member-list")
     public Page<UserResponse> getMemberList(@PageableDefault(size = 10)Pageable pageable){

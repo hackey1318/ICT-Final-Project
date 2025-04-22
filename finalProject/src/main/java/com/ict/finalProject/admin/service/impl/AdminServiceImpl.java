@@ -4,12 +4,18 @@ import com.ict.finalProject.admin.controller.response.GenderRatio;
 import com.ict.finalProject.admin.controller.response.UserResponse;
 import com.ict.finalProject.admin.repository.AdminRepository;
 import com.ict.finalProject.admin.service.AdminService;
+import com.ict.finalProject.domain.constant.JoinType;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.domain.constant.UserRole;
+import com.ict.finalProject.oauth.controller.request.LocalRegisterRequest;
+import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +24,35 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UsersRepository usersRepository;
+    @Value("${app.base-url:http://localhost:9988}")
+    private String appBaseUrl;
+
+    //관리자 등록
+    @Override
+    public boolean registerManager(LocalRegisterRequest request) {
+        try{
+            String profileImageUrl = makeProfileImageUrl(request.getUploadedProfileImageId());
+            Users user = Users.builder()
+                    .id(request.getId())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .nickname(request.getNickName())
+                    .gender(request.getGender())
+                    .status(StatusInfo.ACTIVE)
+                    .role(UserRole.MANAGER)
+                    .email(request.getEmail())
+                    .phone(request.getPhone())
+                    .profileImageUrl(profileImageUrl)
+                    .joinType(JoinType.LOCAL)
+                    .build();
+            usersRepository.save(user);
+            return true;
+        }catch(Exception e){
+            log.error("관리자 등록 오류: {}", e.getMessage(), e);
+            return false;
+        }
+    }
 
     @Override
     public Page<UserResponse> getMemberList(Pageable pageable) {
@@ -114,5 +149,12 @@ public class AdminServiceImpl implements AdminService {
         }
 
         adminRepository.updateBlacklistStatus(StatusInfo.ACTIVE.name(), userNo);
+    }
+
+    private String makeProfileImageUrl(String uploadedImageId) {
+        if (uploadedImageId != null && !uploadedImageId.isEmpty()) {
+            return appBaseUrl + "/file-system/download/" + uploadedImageId;
+        }
+        return null;
     }
 }
