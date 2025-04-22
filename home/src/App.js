@@ -50,6 +50,7 @@ import AnnounceDetail from './page/admin/AnnounceDetail';
 import ManagerRegister from './page/admin/ManagerRegisterForm';
 import AdminFindId from './page/admin/AdminFindId';
 import AdminFindPwd from './page/admin/AdminFindPwd';
+import BannerList from './page/admin/banner/BannerList';
 
 
 function App() {
@@ -131,6 +132,7 @@ function App() {
             <Route path="inquiry/:no" element={<InquiryReplyView/>}/>
             <Route path="announce" element={<AnnounceList />} />
             <Route path="announce/:no" element={<AnnounceDetail />} />
+            <Route path='banner' element={<BannerList />} />
           </Route>
         </Route>
       </Routes>
