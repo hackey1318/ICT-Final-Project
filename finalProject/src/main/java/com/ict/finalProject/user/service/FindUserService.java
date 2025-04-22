@@ -23,6 +23,12 @@ public interface FindUserService {
     //비밀번호 재설정 링크 이메일 발송
     void sendPwdResetEmail(String email, Integer userno);
 
+    //아이디 마스킹 처리
+    String maskId(String id);
+
+    //아이디 마스킹 해제 후, 메일 발송
+    void unmaskId(String userId, String email);
+
     //Inquiry에서 사용자 닉네임을 가져오기위한 메서드 
     List<Users> findUsersByUserNo(List<Integer> userNos);
 }

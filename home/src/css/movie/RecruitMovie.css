@@ -1,0 +1,49 @@
+.md_flex-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.md_modal-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.md_modal-right img {
+    max-height: 320px;
+    object-fit: cover;
+}
+
+.md_form-input {
+    width: 100%;  /* 입력 필드의 너비를 100%로 설정 */
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.suggestions-container {
+    width: 90%;  /* 영화관 검색 리스트도 100% 너비로 설정 */
+    position: absolute;
+    top: 100%;  /* 입력창 바로 아래에 리스트가 보이도록 설정 */
+    left: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.suggestion-item {
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #ccc;
+}
+
+
+.suggestion-item.selected {
+    background-color: #e0e0e0;
+}

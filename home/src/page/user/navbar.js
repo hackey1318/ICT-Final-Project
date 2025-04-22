@@ -4,15 +4,18 @@ import "../../css/user/navbar.css" // CSS 파일 임포트 (실제 경로로 수
 
 // 로고 이미지 임포트 (실제 경로로 수정 필요)
 import logo from "../../img/cinetogether.png"
+import NotificationSystem from "./notification/NotificationSystem"
 
 function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [userInfo, setUserInfo] = useState(null);
     const [isNavOpen, setIsNavOpen] = useState(false)
     const [showDropdown, setShowDropdown] = useState(false)
+    const [showCustomerDropdown, setShowCustomerDropdown] = useState(false)
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
+    const [dropdownCustomerPosition, setDropdownCustomerPosition] = useState({ top: 0, left: 0 })
     const movieMenuRef = useRef(null)
-
+    const customerServiceMenuRef = useRef(null)
 
     // 컴포넌트 마운트 시 로그인 상태 확인
     useEffect(() => {
@@ -33,6 +36,22 @@ function Navbar() {
     // 네비게이션 토글 함수
     const toggleNav = () => {
         setIsNavOpen(!isNavOpen)
+    }
+
+    // 드롭다운 토글 함수
+    const handleCustomerMouseEnter = () => {
+        if (customerServiceMenuRef.current) {
+            const rect = customerServiceMenuRef.current.getBoundingClientRect()
+            setDropdownCustomerPosition({
+                top: rect.bottom,
+                left: rect.left,
+            })
+        }
+        setShowCustomerDropdown(true)
+    }
+
+    const handleCustomerMouseLeave = () => {
+        setShowCustomerDropdown(false)
     }
 
     // 드롭다운 토글 함수
@@ -105,15 +124,10 @@ function Navbar() {
                                     시네메이트
                                 </Link>
                             </li>
-                            <li className="nav-items">
-                                <Link to="/inquiry" className="nav-links">
-                                    1:1 문의
-                                </Link>
-                            </li>
-                            <li className="nav-items">
-                                <Link to="/announcements" className="nav-links">
-                                    공지사항
-                                </Link>
+                            <li className="nav-items" onMouseEnter={handleCustomerMouseEnter} onMouseLeave={handleCustomerMouseLeave}>
+                                <div className="nav-links" ref={customerServiceMenuRef}>
+                                    고객센터 <i className="dropdown-arrow">▼</i>
+                                </div>
                             </li>
                             {isLoggedIn && (
                                 <>
@@ -131,6 +145,11 @@ function Navbar() {
                 <div className="navbar-user">
                     {isLoggedIn && userInfo ? (
                         <div className="user-profile">
+                            {
+                                userInfo.role === "USER" && (
+                                    <NotificationSystem />
+                                )
+                            }
                             <div className="welcome-text">
                                 환영합니다 <span className="username">{userInfo.nickname}</span> 님
                             </div>
@@ -167,6 +186,17 @@ function Navbar() {
                             </li>
                             <li>
                                 <Link to="/movies">장르별 영화</Link>
+                            </li>
+                        </ul>
+                    )}
+                {
+                    showCustomerDropdown && (
+                        <ul className="dropdown-container" style={isMobile() ? {} : { position: "fixed", top: `${dropdownCustomerPosition.top}px`, left: `${dropdownCustomerPosition.left}px`, }} onMouseEnter={handleCustomerMouseEnter} onMouseLeave={handleCustomerMouseLeave}>
+                            <li>
+                                <Link to="/inquiry">1:1 문의</Link>
+                            </li>
+                            <li>
+                                <Link to="/announcements">공지사항</Link>
                             </li>
                         </ul>
                     )}
