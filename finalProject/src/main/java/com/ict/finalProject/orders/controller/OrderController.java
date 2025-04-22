@@ -9,6 +9,7 @@ import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.movie.service.TheatersService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
+import com.ict.finalProject.orders.controller.response.OrderListResponse;
 import com.ict.finalProject.orders.repository.domain.OrderItem;
 import com.ict.finalProject.orders.repository.domain.Orders;
 import com.ict.finalProject.orders.service.OrderItemService;
@@ -25,11 +26,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -201,5 +201,27 @@ public class OrderController {
             jsonObj.put("message", "일치하는 데이터가 없습니다.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonObj);
         }
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<OrderListResponse> getOrderList(HttpServletRequest request) {
+        final String token = request.getHeader("Authorization");
+        String userId = null;
+        if (token != null && !token.isEmpty()) {
+            String jwtToken = token.substring(7);
+
+            userId = jwtTokenProvider.getUserNameFromToken(jwtToken);
+        }
+        int userNo = userService.getUser(userId).getNo();
+        List<OrdersDto> ordersDtoList = ordersService.getOrdersList(userNo);
+        List<List<OrderItemDto>> orderItemDtoLists = new ArrayList<>();
+        for (OrdersDto ordersDto : ordersDtoList) {
+            List<OrderItemDto> orderItemDtoList = orderItemService.getOrderItems(ordersDto.getId());
+            orderItemDtoLists.add(orderItemDtoList);
+        }
+        Collections.reverse(ordersDtoList);
+        Collections.reverse(orderItemDtoLists);
+        OrderListResponse orderListResponse = new OrderListResponse(ordersDtoList, orderItemDtoLists);
+        return ResponseEntity.ok(orderListResponse);
     }
 }

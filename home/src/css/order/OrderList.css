@@ -1,0 +1,70 @@
+.orderList_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+}
+
+#back_button {
+    width: 30px;
+    height: 30px;
+    background: url('./../../img/leftArrow.png');
+    background-size: cover;
+    border: none;
+    margin-top: 50px;
+    margin-right: auto;
+}
+
+.orderList_head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.orderList_container {
+    width: 40%;
+    max-width: 1000px;
+}
+
+.orderDetail {
+    margin-left: auto;
+}
+
+.orderDetail:hover {
+    cursor: pointer;
+    color: royalblue;
+}
+
+.orderItem_container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 20px;
+}
+
+.orderList_content:hover {
+    cursor: pointer;
+}
+
+.orderList_content:hover .goods_name {
+    color: royalblue;
+}
+
+.orderList_content_goods_img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.orderList_content_goods_img > img{
+    width: 90px;
+    height: 90px;
+}
+
+.orderList_content_goods_detail {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    padding-left: 10px;
+    font-size: 0.8em;
+}
