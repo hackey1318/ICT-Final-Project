@@ -1,7 +1,7 @@
 import axios from "../../js/public/axiosConfig"
 import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
-import { ArrowLeft, Bookmark, Share2, Heart, HeartOff } from "lucide-react"
+import { ArrowLeft, Share2, Heart } from "lucide-react"
 import "./../../css/movie/MovieDetail.css" // CSS 파일 경로는 실제 프로젝트 구조에 맞게 조정하세요
 import LikeType from "../../js/common/LikeType"
 import RecruitMovieModal from "./RecruitMovieModal"
