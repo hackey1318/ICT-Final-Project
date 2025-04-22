@@ -25,4 +25,7 @@ public interface FindUserService {
 
     //Inquiry에서 사용자 닉네임을 가져오기위한 메서드 
     List<Users> findUsersByUserNo(List<Integer> userNos);
+
+    //문의 댓글용 사용자 정보가져오기
+    Optional<Users> findUserById(String id);
 }
