@@ -56,5 +56,4 @@ public class MdShopController {
         mdShopservice.deleteMd(id);
         return ResponseEntity.ok().build();
     }
-
 }
