@@ -45,6 +45,9 @@ import UserAnnounceDetail from './page/user/UserAnnounceDetail';
 import AnnounceList from './page/admin/AnnounceList';
 import AnnounceDetail from './page/admin/AnnounceDetail';
 import ManagerRegister from './page/admin/ManagerRegisterForm';
+import AdminFindId from './page/admin/AdminFindId';
+import AdminFindPwd from './page/admin/AdminFindPwd';
+import BannerList from './page/admin/banner/BannerList';
 import UserEditForm from './page/user/UserEditForm';
 
 function App() {
@@ -92,8 +95,8 @@ function App() {
         {/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
         <Route path="/manager">
           <Route index element={<ManagerLogin />} />
-          <Route path="findId" element={<FindId />} />
-          <Route path="findPwd" element={<FindPwd />} />
+          <Route path="find-id" element={<AdminFindId />} />
+          <Route path="find-pwd" element={<AdminFindPwd />} />
           <Route path="pwdReset" element={<PwdReset />} />
           <Route path="register" element={<ManagerRegister />} />
 
@@ -110,6 +113,7 @@ function App() {
             <Route path="inquiry/:no" element={<InquiryReplyView/>}/>
             <Route path="announce" element={<AnnounceList />} />
             <Route path="announce/:no" element={<AnnounceDetail />} />
+            <Route path='banner' element={<BannerList />} />
           </Route>
         </Route>
       </Routes>

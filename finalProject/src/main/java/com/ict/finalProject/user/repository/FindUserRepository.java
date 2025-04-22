@@ -17,9 +17,10 @@ public interface FindUserRepository extends JpaRepository<Users, Integer> {
 
     Users findByIdAndEmail(String id, String email);
 
-    //inquiry 닉네임 가져오기
+    //inquiry 닉네임가져오기
     List<Users> findByNoIn(List<Integer> userNos);
 
+    //문의 댓글용 사용자 정보가져오기
     Optional<Users> findById(String id);
 
     //회원정보 수정
