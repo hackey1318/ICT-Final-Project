@@ -45,6 +45,8 @@ import UserAnnounceDetail from './page/user/UserAnnounceDetail';
 import AnnounceList from './page/admin/AnnounceList';
 import AnnounceDetail from './page/admin/AnnounceDetail';
 import ManagerRegister from './page/admin/ManagerRegisterForm';
+import AdminFindId from './page/admin/AdminFindId';
+import AdminFindPwd from './page/admin/AdminFindPwd';
 
 function App() {
 
@@ -85,13 +87,14 @@ function App() {
           <Route path="/related-movie/:movieId" element={<RelatedMovie />} />
           <Route path="/announcements" element={<UserAnnounce />} />
           <Route path="/announcements/:id" element={<UserAnnounceDetail />} />
+
           </Route>
 
         {/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
         <Route path="/manager">
           <Route index element={<ManagerLogin />} />
-          <Route path="findId" element={<FindId />} />
-          <Route path="findPwd" element={<FindPwd />} />
+          <Route path="find-id" element={<AdminFindId />} />
+          <Route path="find-pwd" element={<AdminFindPwd />} />
           <Route path="pwdReset" element={<PwdReset />} />
           <Route path="register" element={<ManagerRegister />} />
 
