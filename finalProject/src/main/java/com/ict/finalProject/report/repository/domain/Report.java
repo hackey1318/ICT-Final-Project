@@ -1,9 +1,7 @@
 package com.ict.finalProject.report.repository.domain;
 
-import com.ict.finalProject.domain.constant.Proceed;
+import com.ict.finalProject.domain.constant.*;
 import com.ict.finalProject.domain.constant.ReportBoard;
-import com.ict.finalProject.domain.constant.ReportBoard;
-import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,14 +30,18 @@ public class Report {
 
     private int staffNo;  //담당자번호
 
+    private int boardNo;  //게시글 번호
+
+    @Column(nullable = false, length = 15)
+    @Enumerated(EnumType.STRING)
+    private ReportCategory category;  //신고 종류
+
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;  //신고 내용
 
     @Column(nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
     private ReportBoard type;  //게시판 종류
-
-    private int boardNo;  //게시글 번호
 
     @Column(nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
