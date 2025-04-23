@@ -5,9 +5,9 @@ import com.ict.finalProject.orders.repository.domain.Orders;
 import com.ict.finalProject.orders.service.OrdersService;
 import com.ict.finalProject.payment.repository.domain.Payments;
 import com.ict.finalProject.payment.service.PaymentsService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -22,9 +22,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -103,6 +108,8 @@ public class PaymentController {
         int orderNo = orders.getId();
         payments.setOrderNo(orderNo);
         payments.setPaymentKey((String) jsonObject.get("paymentKey"));
+        payments.setPayTransactionKey((String) jsonObject.get("lastTransactionKey"));
+        payments.setCancelTransactionKey("-");
         payments.setStatus(OrdersStatus.PAID);
 
         if (jsonObject.get("method").equals("간편결제")) {
@@ -126,5 +133,23 @@ public class PaymentController {
         ordersService.insertOrders(orders);
 
         return ResponseEntity.status(code).body(jsonObject);
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<String> cancelOrder(@RequestBody Map<String, String> request, HttpServletRequest httpRequest) throws Exception {
+        String paymentKey = request.get("paymentKey");
+        String secretKey = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
+        String encodedAuth = Base64.getEncoder().encodeToString((secretKey + ":").getBytes(StandardCharsets.UTF_8));
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest tossRequest = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.tosspayments.com/v1/payments/" + paymentKey + "/cancel"))
+                .header("Authorization", "Basic " + encodedAuth)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString("{\"cancelReason\":\"사용자 요청\"}"))
+                .build();
+
+        HttpResponse<String> response = client.send(tossRequest, HttpResponse.BodyHandlers.ofString());
+
+        return ResponseEntity.status(response.statusCode()).body(response.body());
     }
 }
