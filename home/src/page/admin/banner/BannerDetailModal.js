@@ -1,42 +1,53 @@
-import React from "react";
-
-export default function BannerDetailModal ({ banner, onClose }) {
-    if (!banner) return null;
+export default function BannerDetailModal({ show, banner, onClose, onEdit }) {
+    if (!show || !banner) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded shadow-md w-[400px]">
-                <h3 className="text-lg font-bold mb-4">배너 상세</h3>
+        <div className="custom-modal-wrapper" onClick={onClose}>
+            <div className="custom-modal" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h5 className="modal-title">배너 상세 정보</h5>
+                    <button type="button" className="btn-close" onClick={onClose}></button>
+                </div>
 
-                <div className="space-y-3">
-                    <div className="flex justify-between">
-                        <span className="font-medium">제목:</span>
-                        <span>{banner.title}</span>
+                <div className="modal-body">
+                    <div className="form-group">
+                        <label className="form-label">배너 제목</label>
+                        <input type="text" className="form-control" value={banner.targetName} readOnly />
                     </div>
-                    <div className="flex justify-between">
-                        <span className="font-medium">타입:</span>
-                        <span>{banner.type}</span>
+                    <div className="form-group">
+                        <label className="form-label">타입</label>
+                        <input type="text" className="form-control" value={banner.type} readOnly />
                     </div>
-                    <div className="flex justify-between">
-                        <span className="font-medium">링크 URL:</span>
-                        <span>{banner.linkUrl}</span>
+                    <div className="form-group">
+                        <label className="form-label">배경 색상</label>
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <div
+                                style={{
+                                    width: "30px",
+                                    height: "30px",
+                                    backgroundColor: banner.color,
+                                    border: "1px solid #ccc",
+                                    borderRadius: "4px",
+                                }}
+                            />
+                            <span>{banner.color}</span>
+                        </div>
                     </div>
-                    <div className="flex justify-between">
-                        <span className="font-medium">시작일:</span>
-                        <span>{banner.startDate}</span>
+                    <div className="form-group">
+                        <label className="form-label">시작 날짜</label>
+                        <input type="text" className="form-control" value={new Date(banner.startDate).toLocaleDateString()} readOnly />
                     </div>
-                    <div className="flex justify-between">
-                        <span className="font-medium">종료일:</span>
-                        <span>{banner.endDate}</span>
+                    <div className="form-group">
+                        <label className="form-label">종료 날짜</label>
+                        <input type="text" className="form-control" value={new Date(banner.endDate).toLocaleDateString()} readOnly />
                     </div>
                 </div>
 
-                <div className="mt-4 flex justify-end">
-                    <button onClick={onClose} className="px-4 py-2 border rounded">
-                        닫기
-                    </button>
+                <div className="modal-footer">
+                    <button className="btn btn-outline-primary" onClick={() => onEdit(banner)}>수정</button>
+                    <button className="btn btn-secondary" onClick={onClose}>닫기</button>
                 </div>
             </div>
         </div>
     );
-};
+}

@@ -8,6 +8,11 @@ import com.ict.finalProject.banner.repository.domain.Banners;
 import com.ict.finalProject.banner.service.BannerManageService;
 import com.ict.finalProject.common.exception.custom.NotFoundException;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.mdShop.repository.GoodsStockRepository;
+import com.ict.finalProject.mdShop.repository.MdShopRepository;
+import com.ict.finalProject.mdShop.repository.domain.Goods;
+import com.ict.finalProject.movie.repository.MoviesRepository;
+import com.ict.finalProject.movie.repository.domain.Movies;
 import com.ict.finalProject.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,12 +38,40 @@ public class BannerManageServiceImpl implements BannerManageService {
     private final UserService userService;
 
     private final BannersRepository bannersRepository;
+    private final MoviesRepository moviesRepository;
+    private final MdShopRepository mdShopRepository;
 
     @Override
     public Page<BannerResponse> getAllBannerList(List<BannerType> typeList, Pageable pageable) {
 
         Page<Banners> banners = bannersRepository.getBannerList(typeList, pageable);
-        return banners.map(banner -> modelMapper.map(banner, BannerResponse.class));
+
+        // 1. ID 추출
+        List<Integer> movieIds = new ArrayList<>();
+        List<Integer> goodsIds = new ArrayList<>();
+        for (Banners banner : banners) {
+            if (banner.getType() == BannerType.MOVIE) {
+                movieIds.add(banner.getTargetNo());
+            } else if (banner.getType() == BannerType.GOODS) {
+                goodsIds.add(banner.getTargetNo());
+            }
+        }
+
+        // 2. 이름 매핑
+        Map<Integer, String> movieMap = moviesRepository.findByNoIn(movieIds)
+                .stream().collect(Collectors.toMap(Movies::getNo, Movies::getName));
+        Map<Integer, String> goodsMap = mdShopRepository.findByIdIn(goodsIds)
+                .stream().collect(Collectors.toMap(Goods::getId, Goods::getName));
+        // 3. 매핑 + 변환
+        return banners.map(banner -> {
+            BannerResponse response = modelMapper.map(banner, BannerResponse.class);
+            if (banner.getType() == BannerType.MOVIE) {
+                response.setTargetName(movieMap.get(banner.getTargetNo()));
+            } else if (banner.getType() == BannerType.GOODS) {
+                response.setTargetName(goodsMap.get(banner.getTargetNo()));
+            }
+            return response;
+        });
     }
 
     @Override

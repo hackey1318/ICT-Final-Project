@@ -50,9 +50,10 @@ public class BannerManageController {
         return SuccessOfFailResponse.builder().result(bannerManageService.createBanner(userId, request)).build();
     }
 
-    @PatchMapping
-    public SuccessOfFailResponse updateBanner(@RequestBody BannerRequest request) {
+    @PatchMapping("/{no}")
+    public SuccessOfFailResponse updateBanner(@PathVariable("no") Integer no, @RequestBody BannerRequest request) {
 
+        request.setNo(no);
         return SuccessOfFailResponse.builder().result(bannerManageService.updateBanner(request)).build();
     }
 
