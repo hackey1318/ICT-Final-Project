@@ -5,8 +5,10 @@ import { ArrowLeft, Share2, Heart } from "lucide-react"
 import "./../../css/movie/MovieDetail.css" // CSS 파일 경로는 실제 프로젝트 구조에 맞게 조정하세요
 import LikeType from "../../js/common/LikeType"
 import RecruitMovieModal from "./RecruitMovieModal"
+import RelatedMovie from './RelatedMovie';
 
 const BASE_URL = 'http://192.168.1.252:9988/file-system/download/';
+
 
 function MovieDetail() {
 	// URL 경로에서 영화 ID를 가져옵니다 (예: /movies/10 -> id는 "10")
@@ -228,13 +230,19 @@ function MovieDetail() {
 							className="movie_detail_btn_primary btn btn-primary ms-2"
 							onClick={() => setShowRecruitModal(true)}
 						>같이 볼 사람 구하기</button>
+						<Link
+							to={`/movies/${id}/reviews`}
+							className="movie_detail_btn_secondary btn btn-outline-secondary"
+						>
+							리뷰보기
+						</Link>
+
 					</div>
 				</div>
 			</div>
 			{showRecruitModal && (
 				<RecruitMovieModal movie={movie} closeModal={() => setShowRecruitModal(false)} />
 			)}
-
 			{/* === 관련 상품 섹션 수정 === */}
 			<div className="movie_detail_related_section mt-5">
 				{/* --- 헤더 --- */}
