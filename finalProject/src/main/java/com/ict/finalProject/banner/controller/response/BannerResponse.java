@@ -23,6 +23,8 @@ public class BannerResponse {
 
     private int targetNo;
 
+    private String targetName;
+
     private String color;
 
     private LocalDateTime startDate;

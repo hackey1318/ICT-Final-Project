@@ -9,7 +9,6 @@ import com.ict.finalProject.fileSystem.domain.Images;
 import com.ict.finalProject.fileSystem.repository.FileSystemRepository;
 import com.ict.finalProject.fileSystem.repository.ImageInfoRepository;
 import com.ict.finalProject.fileSystem.service.FileSystemService;
-import com.ict.finalProject.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -30,7 +29,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FileSystemServiceImpl implements FileSystemService {
 
-    private final UserService userService;
     private final FileSystemRepository fileSystemRepository;
     private final ImageInfoRepository imageInfoRepository;
 
@@ -91,4 +89,19 @@ public class FileSystemServiceImpl implements FileSystemService {
     public List<String> getCartFileIds(int boardNo) {
         return imageInfoRepository.findImageIdsByBoardNoAndTypeAndStatus(boardNo, ImageWriteType.GOODS, StatusInfo.ACTIVE);
     }
+
+    @Override
+    public void createPendingImageInfos(List<String> imageIds, int boardNo, ImageWriteType type){
+        if (imageIds == null || imageIds.isEmpty()) return;
+        List<ImageInfo> infos = imageIds.stream()
+                .map(id -> ImageInfo.builder()
+                        .imageId(id)
+                        .status(StatusInfo.PENDING)
+                        .type(type)
+                        .boardNo(boardNo)
+                        .build())
+                .toList();
+        imageInfoRepository.saveAll(infos);
+    }
+
 }

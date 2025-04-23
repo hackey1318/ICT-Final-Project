@@ -3,7 +3,7 @@ import './App.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import Main from './page/user/Main'
 import Layout from './page/user/Layout';
 import KakaoLogin from './page/user/LoginForm';
@@ -21,6 +21,9 @@ import PaymentResult from './js/payment/PaymentResult';
 import ManagerLogin from './page/admin/ManagerLogin';
 import { useEffect } from 'react';
 import MovieDetail from './page/movie/MovieDetail';
+import ReviewListPage from './page/movie/ReviewListPage';
+import ReviewWritePage from './page/movie/ReviewWritePage';
+import ReviewEditPage from './page/movie/ReviewEditPage';
 import GenreMovie from './page/movie/GenreMovie';
 import CurrentMovie from './page/movie/CurrentMovie';
 import UpcomingMovie from './page/movie/UpcomingMovie';
@@ -47,11 +50,31 @@ import AnnounceDetail from './page/admin/AnnounceDetail';
 import ManagerRegister from './page/admin/ManagerRegisterForm';
 import AdminFindId from './page/admin/AdminFindId';
 import AdminFindPwd from './page/admin/AdminFindPwd';
+import Report from './page/admin/Report';
 import BannerList from './page/admin/banner/BannerList';
+
 
 function App() {
 
   const location = useLocation();
+
+  function ReviewListRoute() {
+    const { id } = useParams();                    // URL :movies/:id/reviews
+    const stored = sessionStorage.getItem('userInfo');
+    const currentUser = stored ? JSON.parse(stored) : null;
+    const currentUserNo = currentUser?.userNo;
+    return (
+      <>
+      <ReviewListPage
+        movieNo={Number(id)}
+        currentUserNo={currentUserNo}
+        
+      />
+
+      <Outlet />
+      </>
+    );
+  }
 
   useEffect(() => {
     const isManagerPage = location.pathname.startsWith('/manager');
@@ -75,6 +98,10 @@ function App() {
           <Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
           <Route path='payment/result' element={<PaymentResult />} />
           <Route path='movies/:id' element={<MovieDetail />} />
+          <Route path='movies/:id/reviews' element={<ReviewListRoute />}>
+          <Route path='write' element={<ReviewWritePage />} />
+          <Route path='edit/:reviewNo' element={<ReviewEditPage />} />
+          </Route>
           <Route path='movies/current' element={<CurrentMovie />} />
           <Route path='movies/upcoming' element={<UpcomingMovie />} />
           <Route path='/inquiry' element={<InquiryPage />} />
@@ -112,6 +139,7 @@ function App() {
             <Route path="inquiry/:no" element={<InquiryReplyView/>}/>
             <Route path="announce" element={<AnnounceList />} />
             <Route path="announce/:no" element={<AnnounceDetail />} />
+            <Route path="report" element={<Report />} />
             <Route path='banner' element={<BannerList />} />
           </Route>
         </Route>

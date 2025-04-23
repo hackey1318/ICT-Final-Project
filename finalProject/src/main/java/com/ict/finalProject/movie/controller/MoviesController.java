@@ -4,6 +4,7 @@ import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
+import com.ict.finalProject.movie.controller.response.BannerMovieResponse;
 import com.ict.finalProject.movie.controller.response.MovieCardResponse;
 import com.ict.finalProject.movie.controller.response.MovieDetailResponse;
 import com.ict.finalProject.movie.repository.constant.movie.MovieStatus;
@@ -139,8 +140,9 @@ public class MoviesController {
     }
 
     @GetMapping("/search")
-    public void searchMovie(@PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable,
-                            @RequestParam(required = false, value = "keyword") String keyword) {
-
+    public Page<BannerMovieResponse> searchMovie(@PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable,
+                                                 @RequestParam(required = false, value = "name") String name) {
+        Page<Movies> moviesPage = moviesService.searchMovieByBanner(pageable, name);
+        return moviesPage.map(movie -> modelMapper.map(movie, BannerMovieResponse.class));
     }
 }

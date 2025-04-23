@@ -72,6 +72,11 @@
     padding: 10px;
 }
 
+.goods_container .goods_info:hover {
+    color: royalblue;
+    cursor: pointer;
+}
+
 .goods_info > div {
     width: 100%;
 }
