@@ -13,7 +13,6 @@ public class LikedUserDto extends LikeItemDto {
     private Integer id;
     private String nickname;
     private String profileImageUrl;
-    private String ageGrade;
     private String postImage;
 
     public LikedUserDto(Users users) {

@@ -1,0 +1,112 @@
+.liked-items-container {
+    min-height: 100vh;
+    padding: 30px;
+    background-color: #f4f4f8;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.tab-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-buttons button {
+    padding: 8px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #ddd;
+    color: #333;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.tab-buttons button:hover {
+    background-color: #0a0a29;
+    color: white;
+    transform: scale(1.05);
+}
+
+.tab-buttons button.active {
+    background-color: #0a0a29;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+}
+
+.like-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.like-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+.like-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.like-card-title {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* 페이지네이션 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 8px 16px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pagination button:hover {
+    background-color: #0a0a29;
+    color: white;
+}
+
+.pagination button.disabled {
+    cursor: not-allowed;
+    background-color: #f0f0f0;
+    color: #aaa;
+}
+
+.user-profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 10px;
+}
