@@ -80,6 +80,30 @@ function InquiryReply() {
         <div className="inquiryreply-wrap">
             <h3 className="inquiryreply-title">회원 문의 목록</h3>
 
+            {/* 검색어 예시 */}
+            <div className="inquiryreply_search-container">
+                <select /*value={searchType}
+                        onChange={(e) => setSearchType(e.target.value)} */
+                        style={{ padding: '12px' }}
+                        className="inquiryreply_dropdown">
+                    <option value="inquiryreplySubject">제목</option>
+                    <option value="inquiryreplyNickname">작성자</option>
+                </select>
+                <input
+                    type="text"
+                    /*value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}*/
+                    className="form-control-search w-25 me-2"
+                    style={{ padding: '10px' }}
+                    placeholder="검색어를 입력하세요"
+                />
+                <button className="btn btn-primary" 
+                        /*onClick={() => { setPage(0); getUserList(); }}*/
+                >
+                    검색
+                </button>
+            </div>
+
             <div className="inquiryreply-container">
                 <table className="inquiryreply-table">
                     <thead>

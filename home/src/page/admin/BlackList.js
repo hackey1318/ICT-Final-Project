@@ -110,6 +110,31 @@ function BlackList(){
         <div className="memberlist-wrap">
             <h3 className="contents-title">Admin Page - BlackList</h3>
 
+            {/* 검색어 예시 */}
+            <div className="member_search-container">
+                <select /*value={searchType}
+                        onChange={(e) => setSearchType(e.target.value)} */
+                        style={{ padding: '0.5rem' }}
+                        className="md_dropdown">
+                    <option value="memberId">아이디</option>
+                    <option value="memberNickname">닉네임</option>
+                    <option value="memberEmail">이메일</option>
+                </select>
+                <input
+                    type="text"
+                    /*value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}*/
+                    className="form-control-search w-25 me-2"
+                    style={{ padding: '0.5rem' }}
+                    placeholder="검색어를 입력하세요"
+                />
+                <button className="btn btn-primary" 
+                        /*onClick={() => { setPage(0); getUserList(); }}*/
+                >
+                    검색
+                </button>
+            </div>
+
             <div className="memberlist-container">
                 <table className="memberlist-table">
                     <thead>
@@ -127,12 +152,12 @@ function BlackList(){
                     blackList.map((item)=>{
                         return(
                             <tr key={item.no} className="memberlist-item">
-                                <td style={{}}>{item.no}</td>
-                                <td style={{}}>{item.id}</td>
-                                <td style={{}}>{item.nickname}</td>
-                                <td style={{}}>{item.email}</td>
-                                <td style={{}}>010-0000-0000</td>
-                                <td style={{}}>
+                                <td>{item.no}</td>
+                                <td>{item.id}</td>
+                                <td>{item.nickname}</td>
+                                <td>{item.email}</td>
+                                <td>010-0000-0000</td>
+                                <td>
                                     <select className="list-select-box" value={selectStatus[item.no] || item.status} onChange={(e) => handleStatusChange(e, item.no)}>
                                         <option value={item.status}>{item.status}</option>
                                         <option value="active">ACTIVE</option>
