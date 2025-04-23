@@ -18,7 +18,6 @@ public class LikedGoodsDto extends LikeItemDto {
     private String option;
     private String description;
 
-    // TODO : 굿즈 Entity 추가 후 수정
     public LikedGoodsDto(Goods goods) {
         super(LikeType.GOODS);
         this.id = goods.getId();
