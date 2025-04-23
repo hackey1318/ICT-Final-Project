@@ -68,17 +68,32 @@ function InquiryPage() {
         z-index: 5;
         `;
 
-    //비밀글 클릭 핸들러
+    //비밀글 클릭 핸들러(사용자 본인 확인 후 실행)
     const handleInquiryClick = useCallback(async (item) => {
         if(!item || item.no == null) return;
-        if(item.private) {
-            setCurrentItemForPassword(item);
-            setShowPasswordModal(true);
 
+        let loginUserId = null;
+        const loginUserInfo = sessionStorage.getItem("userInfo");
+        if(loginUserInfo) {
+            const userInfoObject = JSON.parse(loginUserInfo);
+            loginUserId = userInfoObject.userNo;
+        } else {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+            return;
+        }
+
+        if(item.private) {
+            if(loginUserId != null && item.userNo != null && String(loginUserId) === String(item.userNo)) {
+                setCurrentItemForPassword(item);
+                setShowPasswordModal(true);
+            } else {
+                alert("비밀글은 작성자만 접근가능합니다.");
+            }
         } else {
             navigate(`/inquiryView/${item.no}`);
         }
-    }, []);
+    }, [navigate]);
 
     const handlePasswordConfirm = useCallback(async (item, password) => {
         setShowPasswordModal(false);
@@ -88,7 +103,6 @@ function InquiryPage() {
             alert("비밀번호를 입력해주세요.");
             return;
         }
-
         try{
             const response = await apiClient.post(`/inquiry/checkPwd/${item.no}`, {password});
             if(response.data === true) {

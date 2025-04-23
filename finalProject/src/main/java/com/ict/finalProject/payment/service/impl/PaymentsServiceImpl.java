@@ -20,6 +20,8 @@ public class PaymentsServiceImpl implements PaymentsService {
         entity.setId(payments.getId());
         entity.setOrderNo(payments.getOrderNo());
         entity.setPaymentKey(payments.getPaymentKey());
+        entity.setPayTransactionKey(payments.getPayTransactionKey());
+        entity.setCancelTransactionKey(payments.getCancelTransactionKey());
         entity.setStatus(payments.getStatus());
         entity.setMethod(payments.getMethod());
         entity.setCreatedAt(payments.getCreatedAt());
@@ -49,5 +51,16 @@ public class PaymentsServiceImpl implements PaymentsService {
         ModelMapper mapper = new ModelMapper();
         PaymentsDto paymentsDto = mapper.map(payments, PaymentsDto.class);
         return paymentsDto;
+    }
+
+    @Override
+    public void cancelPayments(int orderNo, OrdersStatus status, String cancelTransactionKey) throws Exception {
+        Payments entity = paymentsRepository.findByOrderNo(orderNo);
+        if (entity == null) {
+            throw new Exception("Payments not found with OrderNo");
+        }
+        entity.setCancelTransactionKey(cancelTransactionKey);
+        entity.setStatus(status);
+        paymentsRepository.save(entity);
     }
 }

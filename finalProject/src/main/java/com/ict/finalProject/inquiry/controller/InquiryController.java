@@ -3,7 +3,7 @@ package com.ict.finalProject.inquiry.controller;
 import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.common.config.AuthRequired;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
-import com.ict.finalProject.domain.constant.InquiryProceed;
+import com.ict.finalProject.domain.constant.Proceed;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.fileSystem.service.FileSystemService;
 import com.ict.finalProject.inquiry.controller.request.InquiryCommentRequest;
@@ -155,7 +155,7 @@ public class InquiryController {
     public ResponseEntity<SuccessOfFailResponse> updateInquiryStatus (
             @PathVariable("inquiryNo") int inquiryNo, @RequestBody UpdateInquiryStatusRequest request) {
        try {
-           InquiryProceed newStatus = request.getProceed();
+           Proceed newStatus = request.getProceed();
            if(newStatus == null) {
                throw new IllegalArgumentException("변경할 상태(proceed)값이 필요합니다.");
            }
