@@ -27,7 +27,12 @@ public class OrdersServiceImpl implements OrdersService {
 
         ordersList = ordersRepository.findByUserNo(userNo);
 
-        return ordersList.stream().map(OrdersDto::new).collect(Collectors.toList());
+        return ordersList.stream().map(
+                orders -> {
+                    OrdersDto ordersDto = new OrdersDto(orders);
+                    ordersDto.setStatusText(convertStatusToText(orders.getStatus()));
+                    return ordersDto;
+                }).collect(Collectors.toList());
     }
 
     @Override
@@ -76,6 +81,13 @@ public class OrdersServiceImpl implements OrdersService {
         OrdersDto ordersDto = mapper.map(orders, OrdersDto.class);
         ordersDto.setStatusText(convertStatusToText(orders.getStatus()));
         return ordersDto;
+    }
+
+    @Override
+    public void cancelOrders(int orderNo) {
+        Orders entity = ordersRepository.findById(orderNo).get();
+        entity.setStatus(OrdersStatus.CANCELLED);
+        ordersRepository.save(entity);
     }
 
     private String convertStatusToText(OrdersStatus status) {
