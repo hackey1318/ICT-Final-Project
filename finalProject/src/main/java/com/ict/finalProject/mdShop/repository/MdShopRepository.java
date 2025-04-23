@@ -29,4 +29,6 @@ public interface MdShopRepository extends JpaRepository<Goods, Integer> {
             @Param("movieName") String movieName,
             Pageable pageable
     );
+
+    List<Goods> findByIdIn(List<Integer> ids);
 }

@@ -4,9 +4,9 @@
   "settings": {
     "width": 2000,
     "height": 2000,
-    "scrollTop": -100,
-    "scrollLeft": -800,
-    "zoomLevel": 1,
+    "scrollTop": -498.381,
+    "scrollLeft": -591.6396,
+    "zoomLevel": 0.76,
     "show": 447,
     "database": 4,
     "databaseName": "",
@@ -757,12 +757,11 @@
           "9PGhUPqcnTVpTw9aa1Ylm",
           "9Ahe9po21mSXsU3GD_gi_",
           "Sk_AXAH-S-Iv5mlpwuvRl",
-          "3LXm9ulsuytyXO7SmBOjT",
+          "OMoUusR_owuDzZFGp2wik",
           "SpikPhHGf9f6xuoDjWPtM",
           "5UL-LdRwzMe1t9i4Zs2OI",
           "M-5sCzfPz7wETQkNvjIRp",
           "cpHwiC4VYMatDhbqP3X6e",
-          "OzLC8GpvgZqloIzW85Z-_",
           "3noJ4bODimvfXfIJmfFuG",
           "7mDDUxq2C4JYFPZVxv1pR"
         ],
@@ -772,25 +771,23 @@
           "9Ahe9po21mSXsU3GD_gi_",
           "Sk_AXAH-S-Iv5mlpwuvRl",
           "OMoUusR_owuDzZFGp2wik",
-          "3LXm9ulsuytyXO7SmBOjT",
           "SpikPhHGf9f6xuoDjWPtM",
           "5UL-LdRwzMe1t9i4Zs2OI",
           "M-5sCzfPz7wETQkNvjIRp",
           "cpHwiC4VYMatDhbqP3X6e",
-          "OzLC8GpvgZqloIzW85Z-_",
           "3noJ4bODimvfXfIJmfFuG",
           "7mDDUxq2C4JYFPZVxv1pR"
         ],
         "ui": {
-          "x": 1498.8737,
-          "y": 224.6892,
+          "x": 1476.8737,
+          "y": 234.6892,
           "zIndex": 1108,
           "widthName": 60,
           "widthComment": 60,
           "color": ""
         },
         "meta": {
-          "updateAt": 1745306491689,
+          "updateAt": 1745302346282,
           "createAt": 1743555552992
         }
       },
@@ -3760,40 +3757,40 @@
       "M-5sCzfPz7wETQkNvjIRp": {
         "id": "M-5sCzfPz7wETQkNvjIRp",
         "tableId": "89zFa3PqPWbhPsOv5lWRw",
-        "name": "boardNo",
-        "comment": "게시물PK",
+        "name": "notifyNo",
+        "comment": "신고 게시물 PK",
         "dataType": "INT",
         "default": "",
         "options": 8,
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 60,
+          "widthComment": 82,
           "widthDataType": 60,
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1745306419833,
+          "updateAt": 1743555721414,
           "createAt": 1743555698183
         }
       },
       "Sk_AXAH-S-Iv5mlpwuvRl": {
         "id": "Sk_AXAH-S-Iv5mlpwuvRl",
         "tableId": "89zFa3PqPWbhPsOv5lWRw",
-        "name": "staffNo",
+        "name": "responsibilityNo",
         "comment": "담당자PK",
         "dataType": "INT",
         "default": "",
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 60,
+          "widthName": 88,
           "widthComment": 60,
           "widthDataType": 60,
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1745306166758,
+          "updateAt": 1743555778979,
           "createAt": 1743555736351
         }
       },
@@ -5359,7 +5356,7 @@
             "nagmARy8Z7p6hDXJV3WGQ"
           ],
           "x": 1747.9784,
-          "y": 737.128,
+          "y": 697.1279999999999,
           "direction": 8
         },
         "meta": {
