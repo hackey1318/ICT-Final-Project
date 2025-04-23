@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "payments")
+@EntityListeners(AuditingEntityListener.class)
 public class Payments {
 
     @Id
@@ -28,6 +30,12 @@ public class Payments {
     @Column(nullable = false)
     private String paymentKey; // 결제번호
 
+    @Column(nullable = false)
+    private String payTransactionKey; // 결제 트랜잭션 키
+
+    @Column(nullable = false)
+    private String cancelTransactionKey; // 취소 트랜잭션 키
+    
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private OrdersStatus status;
