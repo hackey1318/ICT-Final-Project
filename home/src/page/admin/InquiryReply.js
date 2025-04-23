@@ -76,8 +76,8 @@ function InquiryReply() {
     };
 
     return (
-        <div id="inquiryreply-container">
-            <h3>회원 문의 목록</h3>
+        <div id="inquiryreply-container" style={{padding: '20px 16px 0 16px'}}>
+            <h3>Admin Page - Inquiry List</h3>
             <ul style={{fontWeight: 'bold'}}>
                 <li>번호</li>
                 <li style={{cursor: 'auto'}}>제목</li>

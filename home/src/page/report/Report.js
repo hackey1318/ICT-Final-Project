@@ -27,10 +27,10 @@ function Report() {
                 <ul style={{fontWeight: 'bold'}}>
                     <li>번호</li>
                     <li style={{cursor: 'auto'}}>신고 종류</li>
-                    <li>신고자</li>
+                    <li>게시판</li>
+                    <li>게시글번호</li>
                     <li>신고날짜</li>
                     <li>진행상황</li>
-                    <li>상태</li>
                 </ul>
 
                 {
