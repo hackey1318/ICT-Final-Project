@@ -1,6 +1,8 @@
-package com.ict.finalProject.inquiry.repository.domain;
+package com.ict.finalProject.report.repository.domain;
 
 import com.ict.finalProject.domain.constant.Proceed;
+import com.ict.finalProject.domain.constant.ReportBoard;
+import com.ict.finalProject.domain.constant.ReportBoard;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,30 +22,32 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Inquiry {
+public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int no;  //문의번호
+    private int no;  //신고 번호
 
-    private int userNo;  //유저번호
+    private int userNo;  //유저번호(신고자)
 
-    @Column(nullable = false)
-    private String subject;  //문의제목
+    private int staffNo;  //담당자번호
 
     @Column(nullable = false, columnDefinition = "LONGTEXT")
-    private String content;  //문의내용
+    private String content;  //신고 내용
 
-    @Column(nullable = true)
-    private String password;  //비밀글 비밀번호
-
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
-    private Proceed proceed;  //문의처리상태
-
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusInfo status;  //문의상태
+    private ReportBoard type;  //게시판 종류
+
+    private int boardNo;  //게시글 번호
+
+    @Column(nullable = false, length = 15)
+    @Enumerated(EnumType.STRING)
+    private Proceed proceed;  //처리 진행 상황
+
+    @Column(nullable = false, length = 15)
+    @Enumerated(EnumType.STRING)
+    private StatusInfo status;  //신고글 상태
 
     @CreatedDate
     @Column(nullable = false)
