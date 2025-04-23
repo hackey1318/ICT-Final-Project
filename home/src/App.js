@@ -50,7 +50,7 @@ import AnnounceDetail from './page/admin/AnnounceDetail';
 import ManagerRegister from './page/admin/ManagerRegisterForm';
 import AdminFindId from './page/admin/AdminFindId';
 import AdminFindPwd from './page/admin/AdminFindPwd';
-import Report from './page/admin/Report';
+import Report from './page/report/Report';
 import BannerList from './page/admin/banner/BannerList';
 
 
@@ -115,7 +115,6 @@ function App() {
           <Route path="/related-movie/:movieId" element={<RelatedMovie />} />
           <Route path="/announcements" element={<UserAnnounce />} />
           <Route path="/announcements/:id" element={<UserAnnounceDetail />} />
-
           </Route>
 
         {/* 로그인 & 비로그인 페이지 (사이드바 없음) */}

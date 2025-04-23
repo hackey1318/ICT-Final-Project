@@ -17,15 +17,22 @@
   background: #fff;
   border-radius: 12px;
   position: relative;
-  width: 30%;
+  min-width: 400px;
+  min-height: 500px;
   height: 30%;
   max-width: 90%;
-  max-height: 90%;
+  max-height: 90vh;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: min-width 0.3s ease-out, max-width 0.3s ease-out;
+}
+
+.modal-content.reporting-active {
+  min-width: 800px;
 }
 
 .modal-header {
   display: flex;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
@@ -52,6 +59,8 @@
 
 .modal-body-container {
   padding: 0;
+  display: flex;
+  min-height: 416px;
 }
 
 .modal-profile {
@@ -147,6 +156,40 @@
   cursor: pointer;
   font-size: 12px;
 }
+
+/* 광식 */
+.modal-header, .modal-profile, .modal-body-container {
+  min-width: 400px;
+}
+
+.modal-report-form {
+  min-width: 400px;
+}
+
+.form-group {
+  margin: 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.form-group>select, .form-group>textarea {
+  margin-left: 15px;
+}
+
+.form-group>textarea {
+  width: 70%;
+}
+
+.report-form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.report-form-actions>button {
+  margin-right: 15px;
+}
+
+/*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
 @media (max-width: 600px) {
   .modal-content-wrapper {
