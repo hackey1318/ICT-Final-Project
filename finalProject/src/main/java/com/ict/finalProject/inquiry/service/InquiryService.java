@@ -1,6 +1,6 @@
 package com.ict.finalProject.inquiry.service;
 
-import com.ict.finalProject.domain.constant.InquiryProceed;
+import com.ict.finalProject.domain.constant.Proceed;
 import com.ict.finalProject.inquiry.controller.request.InquiryCommentRequest;
 import com.ict.finalProject.inquiry.controller.request.InquiryRequest;
 import com.ict.finalProject.inquiry.controller.response.InquiryCommentResponse;
@@ -28,5 +28,5 @@ public interface InquiryService {
 
     boolean writeComment(int no, InquiryCommentRequest request);  //문의 댓글 등록
 
-    boolean updateInquiryStatus(int inquiryNo, InquiryProceed newStatus);
+    boolean updateInquiryStatus(int inquiryNo, Proceed newStatus);
 }

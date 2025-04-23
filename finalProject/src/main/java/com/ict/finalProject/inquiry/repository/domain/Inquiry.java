@@ -1,6 +1,6 @@
 package com.ict.finalProject.inquiry.repository.domain;
 
-import com.ict.finalProject.domain.constant.InquiryProceed;
+import com.ict.finalProject.domain.constant.Proceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -39,7 +39,7 @@ public class Inquiry {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
-    private InquiryProceed proceed;  //문의처리상태
+    private Proceed proceed;  //문의처리상태
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
