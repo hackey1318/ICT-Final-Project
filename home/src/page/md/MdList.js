@@ -93,7 +93,7 @@ function MdList() {
         </div>
 
         <div className="md_search-container">
-          <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="md_dropdown">
+          <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="md_dropdown" style={{ padding: '12px' }}>
             <option value="name">굿즈명</option>
             <option value="movie">영화명</option>
           </select>
@@ -103,6 +103,7 @@ function MdList() {
             onChange={(e) => setSearchValue(e.target.value)}
             className="md_search-input"
             placeholder="검색어를 입력하세요"
+            style={{ padding: '10px' }}
           />
           <button className="md_search-btn" onClick={() => { setPage(0); getMdList(); }}>
             검색

@@ -90,6 +90,31 @@ function ManagerList(){
     return(
         <div className='memberlist-wrap'>
             <h3>Admin Page - Manager List</h3>
+            
+            {/* 검색어 예시 */}
+            <div className="member_search-container">
+                <select /*value={searchType}
+                        onChange={(e) => setSearchType(e.target.value)} */
+                        className="md_dropdown"
+                        style={{ padding: '12px', width: '10rem' }}>
+                    <option value="memberId">관리자아이디</option>
+                    <option value="memberNickname">관리자닉네임</option>
+                    <option value="memberEmail">이메일</option>
+                </select>
+                <input
+                    type="text"
+                    /*value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}*/
+                    className="form-control-search w-25 me-2"
+                    style={{ padding: '10px' }}
+                    placeholder="검색어를 입력하세요"
+                />
+                <button className="btn btn-primary" 
+                        /*onClick={() => { setPage(0); getUserList(); }}*/
+                >
+                    검색
+                </button>
+            </div>
 
             <div className='memberlist-container'>
                 <table className="memberlist-table">
@@ -107,7 +132,7 @@ function ManagerList(){
                             {
                                 managerList.map((item)=>{
                                     return(
-                                        <tr key={item.no} className="list-content-ul">
+                                        <tr key={item.no} className="memberlist-item">
                                             <td>{item.no}</td>
                                             <td>{item.id}</td>
                                             <td>{item.nickname}</td>

@@ -70,7 +70,7 @@ export default function AnnounceList() {
     if (loading) return <div className="text-center mt-5">Loading...</div>;
 
     return (
-        <div className="announce-container">
+        <div className="announce-container p-4 rounded shadow-sm bg-light">
             {/* 제목 & 공지 작성 버튼 */}
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h2 className="text-primary fw-bold">📢 공지사항</h2>
