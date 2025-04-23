@@ -77,7 +77,7 @@ public class SecurityConfig {
                     config.setAllowedOrigins(List.of("http://localhost:3000", "http://192.168.1.252:3000"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
                     config.setAllowedHeaders(List.of("*"));
-                    config.setExposedHeaders(List.of("accessToken")); // accessToken 노출
+                    config.setExposedHeaders(List.of("accessToken", "Content-Disposition")); // accessToken 노출
                     config.setAllowCredentials(true);
                     return config;
                 }))

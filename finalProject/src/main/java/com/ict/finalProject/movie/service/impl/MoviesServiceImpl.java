@@ -73,4 +73,9 @@ public class MoviesServiceImpl implements MoviesService {
 
         return moviesCustomRepository.findPopularMoviesByGenres(userNo, userGenreName, count);
     }
+
+    @Override
+    public Page<Movies> searchMovieByBanner(Pageable pageable, String name) {
+        return moviesRepository.searchMoviesByBanner(name, List.of(MovieStatus.ACTIVE, MovieStatus.PENDING), pageable);
+    }
 }
