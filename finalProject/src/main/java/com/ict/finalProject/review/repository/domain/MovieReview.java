@@ -45,8 +45,7 @@ public class MovieReview {
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="no", insertable=false, updatable=false)
+    @JoinColumn(name = "userNo", referencedColumnName = "no", insertable = false, updatable = false)
     private Users user;
-
 
 }
