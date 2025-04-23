@@ -40,6 +40,7 @@ import Gender from './page/admin/Gender';
 import InquiryReply from './page/admin/InquiryReply';
 import InquiryReplyView from './page/admin/InquiryReplyView';
 import GoodsDetail from './page/md/GoodsDetail';
+import GoodsReviewSection from './page/md/GoodsReviewSection';
 import MdShop from './page/md/MdShop';
 import RelatedMovie from './page/movie/RelatedMovie';
 import BlackList from './page/admin/BlackList';
@@ -111,7 +112,10 @@ function App() {
           <Route path='order/detail' element={<OrderDetail />} />
           <Route path='order/error' element={<OrderError />} />
           <Route path='mdshop' element={<MdShop />} />
-          <Route path="mdshop/:goodsNo" element={<GoodsDetail />} />
+          <Route path='mdshop/:goodsNo' element={<GoodsDetail />}>
+          {/* 상세 페이지 안에서 /reviews로 접근할 때 Outlet 자리에 렌더 */}
+          <Route path='reviews' element={<GoodsReviewSection />} />
+          </Route>
           <Route path="/related-movie/:movieId" element={<RelatedMovie />} />
           <Route path="/announcements" element={<UserAnnounce />} />
           <Route path="/announcements/:id" element={<UserAnnounceDetail />} />
