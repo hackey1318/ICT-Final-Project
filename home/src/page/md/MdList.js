@@ -36,6 +36,7 @@ function MdList() {
         },
       })
       .then((res) => {
+        console.log("response.data", res.data);
         setMdList(res.data.content);
         setTotalPages(res.data.totalPages);
       })
@@ -114,7 +115,7 @@ function MdList() {
         <table className="md_table">
           <thead>
             <tr>
-              <th>No.</th>
+              <th>굿즈번호</th>
               <th>굿즈명</th>
               <th>영화</th>
               <th>종류</th>
@@ -126,7 +127,7 @@ function MdList() {
           <tbody>
             {mdList.map((item, idx) => (
               <tr key={idx} className="md_item">
-                <td>{page * size + idx + 1}</td>
+                <td>{item.id}</td>
                 <td><span className="md_text-ellipsis-name" title={item.name}>{item.name}</span></td>
                 <td><span className="md_text-ellipsis-moviename" title={item.movieName}>{item.movieName}</span></td>
                 <td>{item.type}</td>

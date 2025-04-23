@@ -76,6 +76,7 @@ public class AdminServiceImpl implements AdminService {
                 .gender(user.getGender().name())
                 .status(user.getStatus().name())
                 .role(user.getRole().name())
+                .phone(user.getPhone())
                 .build());
     }
 

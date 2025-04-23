@@ -1,128 +1,361 @@
-#inquiryreply-container {
-    padding: 20px 40px 0 40px;
+/* 문의목록 */
+.container {
+    width: 95%;
+    margin: 0 auto;
+    min-width: 850px;
 }
 
-/* 리스트 전체 감싸는 영역 */
-.inquiryreply-list {
-    width: 100%;
-    overflow: hidden;
-    min-height: 550px;
+thead {
+    border-bottom: 1px solid #ddd;
 }
 
-/* 리스트 줄 기본 스타일 */
-.inquiryreply-list > ul {
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    justify-content: center;
-    box-sizing: border-box;
-    flex-wrap: nowrap;
+tr {
+    border-bottom: 1px solid #ddd;
 }
 
-/* 각 셀(li) 스타일 */
-.inquiryreply-list > ul > li {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.td-container {
+    height: 40px;
+    line-height: 40px;
+}
+
+#write {
+    text-decoration-line: none;
+    color: black;
+    cursor: pointer;
+}
+
+#write:not(:hover) {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 5px;
+    transition: all 0.500s;
+}
+
+#write:hover {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: gray;
+    transition: all 0.500s;
+    color: white;
+}
+
+/* 문의작성 */
+.inquiry-container {
+    width: 80%;
+    min-width: 1090px;
+    margin: 20px auto;
+}
+
+.inquiry-modal {
+    width: 80%;
+    margin: 20px auto;
+
+}
+
+.inquiry-title {
+    width: 98%;
+    margin: 5px auto 15px;
+    height: 28px;
+    line-height: 28px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#addImgDiv {
+    width: 55px;
+    height: 55px;
     text-align: center;
-    padding: 0 10px;
-    flex: 1;
-    min-width: 0;
+    line-height: 47px;
+    border: 2px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.500s;
+}
+
+#addImgDiv:hover {
+    background-color: #ddd;
+    transition: all 0.500s;
+}
+
+.imgList {
+    display: flex;
+    margin-left: 20px;
+}
+
+.imgList>div {
+    margin-left: 10px;
+    width: 60px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#inquiry-submit {
+    margin-top: 15px;
+    text-decoration-line: none;
+    color: black;
+    cursor: pointer;
+}
+
+#inquiry-submit:not(:hover) {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+    transition: all 0.500s;
+}
+
+#inquiry-submit:hover {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: gray;
+    transition: all 0.500s;
+    color: white;
+}
+
+#inquiry-cancel {
+    margin-left: 10px;
+    text-decoration-line: none;
+    color: black;
+    cursor: pointer;
+}
+
+#inquiry-cancel:not(:hover) {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+    transition: all 0.500s;
+}
+
+#inquiry-cancel:hover {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: gray;
+    transition: all 0.500s;
+    color: white;
+}
+
+#inquiry-box {
+    border-radius: 0 0 10px 10px;
+}
+
+#inquiryModal {
+    position: fixed;
+    top: 20%;
+    left: 10%;
+    width: 80%;
+    min-width: 560px;
+    background-color: white;
+    z-index: 10;
+    border: 3px solid #ddd;
+    border-radius: 20px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+#toDetail {
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.3s;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: black;
+}
+
+.noInquiryMsg {
+    position: absolute;
+    left: 10%;
+    width: 80%;
     height: 50px;
+    line-height: 30px;
+    margin: 0 auto;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
 }
 
-/* 제목줄 (첫 줄) 강조 스타일 */
-.inquiryreply-list > ul:first-child {
-    border-bottom: 5px solid rgb(248, 169, 23);
-    padding-bottom: 8px;
-    margin-bottom: 12px;
-    font-weight: bold;
+#secret-select {
+    height: 50px;
+    line-height: 50px;
+    margin-top: 15px;
+    text-align: right;
 }
 
-/* 제목줄 hover 제거 */
-.inquiryreply-list > ul:first-child:hover {
-    background: none;
+/*문의 디테일*/
+.viewpage-img {
+    cursor: pointer;
+    object-fit: contain;
+    width: 100px;
+    height: 100px;
+    margin: 10px 15px 5px 0;
 }
 
-/* 일반 줄 hover 효과 */
-.inquiryreply-list > ul:not(:first-child):hover {
-    background: #ccc;
+#del-inquiry {
+    position: relative;
+    left: 90%;
+    text-align: center;
+    text-decoration-line: none;
+    color: black;
+    cursor: pointer;
+    width: 60px;
 }
 
-/* 제목 텍스트 스타일 (헤더용) */
-.inquiryreply-list-title {
-    display: inline-block;
+#del-inquiry:not(:hover) {
+    border: 2px solid #ddd;
     border-radius: 10px;
-    padding: 7px 20px;
-    white-space: nowrap;
-    font-size: 1.2rem;
-    font-weight: bold;
+    padding: 5px;
+    transition: all 0.500s;
 }
 
-/* 🔹 제목 셀 (헤더줄 - 클릭X) */
-.inquiryreply-list > ul:first-child > li:nth-child(2) {
-    cursor: default;
-    color: #333;
-    text-decoration: none;
-}
-
-/* 🔹 제목 셀 (데이터줄 - 클릭O) */
-.inquiryreply-list > ul:not(:first-child) > li:nth-child(2) {
-    cursor: pointer;
-    color: #0077cc;
-}
-.inquiryreply-list > ul:not(:first-child) > li:nth-child(2):hover {
-    text-decoration: underline;
-}
-
-/* 드롭다운 (처리상태 셀) */
-.inquiryreply-list select.form-select {
-    height: 34px;
-    padding: 0 12px;
-    font-size: 14px;
-    line-height: normal;
-    vertical-align: middle;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-    width: 90%;
-}
-.paging-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 30px auto;
-    gap: 10px;
-}
-
-.page-buttons {
-    display: flex;
-    gap: 6px;
-}
-
-.page-buttons button {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s ease;
-}
-
-.page-buttons button.active {
-    background-color: navy;
+#del-inquiry:hover {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: gray;
+    transition: all 0.500s;
     color: white;
-    font-weight: bold;
-    border-color: navy;
 }
 
-.page-buttons button:hover {
-    background-color: #d0d0d0;
+/*뷰페이지 모달*/
+
+#img-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 600px;
+    width: 80%;
+    min-width: 550px;
+    background-color: white;
+    z-index: 5;
+    border: 3px solid #ddd;
+    border-radius: 20px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 }
+
+#modal-close {
+    position: absolute;
+    left: 95%;
+    width: 50px;
+    cursor: pointer;
+    transition: all 0.500s;
+}
+
+#modal-close:hover {
+    transform: scale(1.2);
+    transition: all 0.500s;
+}
+
+.move-img {
+    width: 50px;
+    transition: all 0.500s;
+    cursor: pointer;
+}
+
+.move-img:hover {
+    transform: scale(1.2);
+    transition: all 0.500s;
+    cursor: pointer;
+}
+
+.modal-content, .modal-dialog, .modal-header, .modal-body, .modal-footer {
+    width: 400px;
+}
+
+.modal-content {
+    height: 350px;
+}
+
+/* 댓글영역 */
+.comment-container {
+    width: 95%;
+    margin: 15px auto 0;
+}
+
+.comments {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    min-height: 100px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.form-control {
+    margin: 15px 0;
+    border-radius: 15px;
+}
+
+.comment-item {
+    margin: 30px 5%;
+    display: flex;        
+    width: 90%;          
+}
+  
+/* 문의 댓글 */
+  .other-comment {
+    justify-content: flex-start; 
+  }
+
+  .other-comment>div {
+    text-align: left;
+  }
+  
+  .my-comment {
+    justify-content: flex-end;   
+  }
+
+  .my-comment>div {
+    text-align: right;
+  }
+  
+  .comment-bubble {
+    display: block;
+    text-align: left;
+    margin-top: 5px;
+    padding: 10px 15px;     
+    border-radius: 15px;    
+    max-width: 75%;         
+    word-wrap: break-word;  
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .other-comment .comment-bubble {
+    background-color: #f1f0f0; 
+    border: 1px solid #e9e9eb;
+    color: #333; 
+  }
+  
+  /* 내 댓글 버블 배경색 */
+  .my-comment .comment-bubble {
+    background-color: #e3f1ff; /* 파란색 배경 (예시) */
+    color: #333; /* 흰색 글자 */
+  }
+  
+  /* 댓글 작성자 닉네임 스타일 */
+  .comment-author {
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #555;
+  }
+  
+  /* 댓글 작성 시간 스타일 */
+  .comment-timestamp {
+    display: block;
+    font-size: 0.75em;
+    color: #999;
+    margin-top: 4px;
+  }
+  
+  /* 내 댓글일 경우 타임스탬프 오른쪽 정렬 */
+  .my-comment, .comment-timestamp {
+    text-align: right;
+  }
+  
+  /* 다른 사람 댓글일 경우 타임스탬프 왼쪽 정렬 (기본값) */
+  .other-comment .comment-timestamp {
+    text-align: left;
+  }
+

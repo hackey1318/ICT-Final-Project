@@ -147,35 +147,42 @@ function UserDau(){
     //그래프 LineChart 끝 ---------------------------------------------------------------
 
     return(
-        <div className='userdau-wrap' style={{backgroundColor: 'white'}}>
+        <div className='memberlist-wrap'>
             <h3 className='userdau-title'>Admin Page - User's {dataType}</h3>
-            {/* 일별, 월별 선택 버튼 */}
-            <div className='data-select-btn'>
-                {/* 1개월을 선택하면 최근 1개월치의 데이터를 일별로 보여줌 */}
-                <button className={`select-btn ${dataType==='DAU' ? 'active':''}`} onClick={()=>{setDataType('DAU'); selectUserData('DAU')}}>1개월</button>
-                {/* 1년을 선택하면 최근 1년치의 데이터를 월별로 보여줌 */}
-                <button className={`select-btn ${dataType==='MAU' ? 'active':''}`} onClick={()=>{setDataType('MAU'); selectUserData('MAU');}}>1년</button>
-            </div>
             <div className='userdau-data-wrap'>
                 <div className='userdau-left'>
+                    {/* 일별, 월별 선택 버튼 */}
+                    <div className='data-select-btn'>
+                        {/* 1개월을 선택하면 최근 1개월치의 데이터를 일별로 보여줌 */}
+                        <button className={`select-btn ${dataType==='DAU' ? 'active':''}`} onClick={()=>{setDataType('DAU'); selectUserData('DAU')}}>1개월</button>
+                        {/* 1년을 선택하면 최근 1년치의 데이터를 월별로 보여줌 */}
+                        <button className={`select-btn ${dataType==='MAU' ? 'active':''}`} onClick={()=>{setDataType('MAU'); selectUserData('MAU');}}>1년</button>
+                    </div>
+
                     {/* 목록 */}
-                    <div className="userdau-list">
-                        <ul>
-                            <li><div className="userdau-list-title">날짜</div></li>
-                            <li><div className="userdau-list-title">총활동인원수</div></li>
-                            <li><div className="userdau-list-title">일별 시네메이트 완료</div></li>
-                        </ul>
+                    <div className="userdaulist-container">
+                        <table className="userdau-table">
+                            <thead>
+                                <tr>
+                                    <th>날짜</th>
+                                    <th>총활동인원수</th>
+                                    <th>일별 시네메이트 완료</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                         {
                             dauList.map((item, index)=>{
                                 return (
-                                    <ul key={index}>
-                                        <li>{item.dateTime}</li>
-                                        <li>{item.count}</li>
-                                        <li>0</li>
-                                    </ul>
+                                    <tr key={index}>
+                                        <td>{item.dateTime}</td>
+                                        <td>{item.count}</td>
+                                        <td>0</td>
+                                    </tr>
                                 )
                             })
                         }
+                            </tbody>
+                        </table>
                     </div>
                     {/* 페이징 */}
                     <div className="paging-container">

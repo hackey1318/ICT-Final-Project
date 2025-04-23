@@ -1,8 +1,11 @@
-#inquiryreply-wrap {
-    padding: 20px 40px 0 40px;
+.inquiryreply-wrap {
+    padding: 20px 40px;
+    width: 95%;
+    margin: 0 auto;
 }
 
-.inquiry-title {
+/*제목*/
+.inquiryreply-title {
     margin-bottom: 30px;
 }
 
@@ -12,79 +15,68 @@
     min-height: 550px;
 }
 
-/* 리스트 구조 및 스타일 통일 */
-.inquiry-list-header,
-#inquiryReplyList {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+
+  /* 테이블 영역(memberlist) */
+  .memberlist-container {
+    margin-top: 20px;
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .inquiryreply-table {
     width: 100%;
-    justify-content: center;
-    flex-wrap: nowrap;
-    border-bottom: 1px solid #aaa;
-    transition: background-color 0.3s ease;
-    height: 50px;
-    align-items: center;
-}
-
-.inquiry-list-title{
-    display: inline-block;
-    border-radius: 10px;
-    padding: 7px 20px;
-    white-space: nowrap;
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-.inquiry-list > ul:first-child {
-    border-bottom: 5px solid rgb(248, 169, 23);
-    padding-bottom: 8px;
-    margin-bottom: 12px;
-    font-weight: bold;
-}
-
-/* hover 효과 */
-#inquiryReplyList:hover {
-    background-color: #ccc;
-}
-
-.inquiry-list-header {
-    font-weight: bold;
-    border-bottom: 5px solid  rgb(248, 169, 23);
-    padding-bottom: 8px;
-    margin-bottom: 12px;
-}
-
-/* 각 리스트 항목 스타일 */
-#inquiryReplyList li,
-.inquiry-list-header li {
-    flex: 1;
+    border-collapse: collapse;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    font-size: 14px;
+  }
+  
+  .inquiryreply-table th,
+  .inquiryreply-table td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
     text-align: center;
-    padding: 10px;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    height: 50px;
-}
-
-/* 제목 클릭 스타일 */
-#inquiryReplyList li:nth-child(2),
-.inquiry-list-header li:nth-child(2) {
-    cursor: pointer;
-    color: #0077cc;
-}
-
-#inquiryReplyList li:nth-child(2):hover {
-    text-decoration: underline;
-}
-
-/* 제목 텍스트 박스 스타일 (user.css의 .userdau-list-title과 유사하게) */
-.inquiry-list-title {
-    display: inline-block;
-    border-radius: 10px;
-    padding: 7px 20px;
-    white-space: nowrap;
-    font-size: 1.2rem;
+    vertical-align: middle;
+  }
+  
+  .inquiryreply-table th {
+    background-color: #f8f9fa;
     font-weight: bold;
+    color: #333;
+  }
+
+  .inquiryreply-table th:nth-child(1),
+  .inquiryreply-table td:nth-child(1) {
+  width: 10%;
 }
+
+  .inquiryreply-table th:nth-child(2),
+  .inquiryreply-table td:nth-child(2) {
+  width: 25%;
+}
+
+  .inquiryreply-table th:nth-child(3),
+  .inquiryreply-table td:nth-child(3) {
+  width: 15%;
+}
+
+  .inquiryreply-table th:nth-child(4),
+  .inquiryreply-table td:nth-child(4) {
+  width: 15%;
+}
+
+  .inquiryreply-table th:nth-child(5),
+  .inquiryreply-table td:nth-child(5) {
+  width: 20%;
+}
+
+  .inquiryreply-table th:nth-child(6),
+  .inquiryreply-table td:nth-child(6) {
+  width: 15%;
+}
+  
+  .inquiryreply-table tr:hover {
+    background-color: #f1f1f1;
+  }
+

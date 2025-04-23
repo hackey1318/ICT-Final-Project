@@ -77,46 +77,50 @@ function InquiryReply() {
     };
 
     return (
-        <div id="inquiryreply-container">
-            <h3>회원 문의 목록</h3>
+        <div className="inquiryreply-wrap">
+            <h3 className="inquiryreply-title">회원 문의 목록</h3>
 
-            <div className="inquiryreply-list">
-            <ul>
-                <li><div className="inquiryreply-list-title">번호</div></li>
-                <li><div className="inquiryreply-list-title">제목</div></li>
-                <li><div className="inquiryreply-list-title">작성자</div></li>
-                <li><div className="inquiryreply-list-title">작성날짜</div></li>
-                <li><div className="inquiryreply-list-title">진행상황</div></li>
-                <li><div className="inquiryreply-list-title">상태</div></li>
-            </ul>
-
-            {
-                inquiryList.map((item) => {
-                    return (
-                        <ul id="inquiryReplyList">
-                            <li>{item.no}</li>
-                            <li onClick={() => inquiryReplyView(item.no)}>{item.subject}</li>
-                            <li>{item.nickname}</li>
-                            <li>{new Date(item.createdAt).toLocaleDateString()}</li>
-                            <li>
-                                <select
-                                    className="form-select form-select-sm"
-                                    value={item.proceed || ''}
-                                    onChange={(e) => handleStatusChangeInList(e, item.no)}
-                                    style={{ minWidth: '100px', lineHeight: '25px', marginTop: '7px' }}
-                                >
-                                    <option value="BEFORE">처리 전</option>
-                                    <option value="PROCEEDING">처리 중</option>
-                                    <option value="CLOSED">처리 완료</option>
-                                </select>
-                            </li>
-                            <li>{item.status}</li>
-                        </ul>
-                    )
-                })
-            }
+            <div className="inquiryreply-container">
+                <table className="inquiryreply-table">
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>작성날짜</th>
+                            <th>진행상황</th>
+                            <th>상태</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            inquiryList.map((item) => {
+                                return (
+                                    <tr className="inquiryreplylist">
+                                        <td>{item.no}</td>
+                                        <td onClick={() => inquiryReplyView(item.no)}>{item.subject}</td>
+                                        <td>{item.nickname}</td>
+                                        <td>{new Date(item.createdAt).toLocaleDateString()}</td>
+                                        <td>
+                                            <select
+                                                className="form-select form-select-sm"
+                                                value={item.proceed || ''}
+                                                onChange={(e) => handleStatusChangeInList(e, item.no)}
+                                                style={{ minWidth: '100px', lineHeight: '25px', marginTop: '7px' }}
+                                            >
+                                                <option value="BEFORE">처리 전</option>
+                                                <option value="PROCEEDING">처리 중</option>
+                                                <option value="CLOSED">처리 완료</option>
+                                            </select>
+                                        </td>
+                                        <td>{item.status}</td>
+                                    </tr>
+                                )
+                            })
+                        }
+                    </tbody>
+                </table>
             </div>
-
             <div className="paging-container">
                 {currentPage > 0 && (
                     <button className="page-buttons" onClick={() => handlePageChange(currentPage - 1)}>

@@ -107,37 +107,43 @@ function BlackList(){
     }
 
     return(
-        <div className="userdau-wrap">
+        <div className="memberlist-wrap">
             <h3 className="contents-title">Admin Page - BlackList</h3>
 
-            <div className="userdau-list">
-                <ul>
-                    <li style={{}}><div className="userdau-list-title">회원번호</div></li>
-                    <li style={{}}><div className="userdau-list-title">회원아이디</div></li>
-                    <li style={{}}><div className="userdau-list-title">회원닉네임</div></li>
-                    <li style={{}}><div className="userdau-list-title">이메일</div></li>
-                    <li style={{}}><div className="userdau-list-title">연락처</div></li>
-                    <li style={{}}><div className="userdau-list-title">상태</div></li>
-                </ul>
+            <div className="memberlist-container">
+                <table className="memberlist-table">
+                    <thead>
+                        <tr>
+                            <th>회원번호</th>
+                            <th>회원아이디</th>
+                            <th>회원닉네임</th>
+                            <th>이메일</th>
+                            <th>연락처</th>
+                            <th>상태</th>
+                        </tr>
+                    </thead>
+                        <tbody>    
                 {
                     blackList.map((item)=>{
                         return(
-                            <ul>
-                                <li style={{}}>{item.no}</li>
-                                <li style={{}}>{item.id}</li>
-                                <li style={{}}>{item.nickname}</li>
-                                <li style={{}}>{item.email}</li>
-                                <li style={{}}>010-0000-0000</li>
-                                <li style={{}}>
+                            <tr key={item.no} className="memberlist-item">
+                                <td style={{}}>{item.no}</td>
+                                <td style={{}}>{item.id}</td>
+                                <td style={{}}>{item.nickname}</td>
+                                <td style={{}}>{item.email}</td>
+                                <td style={{}}>010-0000-0000</td>
+                                <td style={{}}>
                                     <select className="list-select-box" value={selectStatus[item.no] || item.status} onChange={(e) => handleStatusChange(e, item.no)}>
                                         <option value={item.status}>{item.status}</option>
                                         <option value="active">ACTIVE</option>
                                     </select>
-                                </li>
-                            </ul>
+                                </td>
+                            </tr>
                         )
                     })
                 }
+                    </tbody>
+                </table>
             </div>
 
             {/* 페이징 */}

@@ -88,44 +88,49 @@ function ManagerList(){
     }
 
     return(
-        <div className='userdau-wrap'>
+        <div className='memberlist-wrap'>
             <h3>Admin Page - Manager List</h3>
 
-            <div className='userdau-list'>
-                <ul>
-                    <li><div className="userdau-list-title">관리자번호</div></li>
-                    <li><div className="userdau-list-title">관리자아이디</div></li>
-                    <li><div className="userdau-list-title">관리자닉네임</div></li>
-                    <li><div className="userdau-list-title">이메일</div></li>
-                    <li><div className="userdau-list-title">연락처</div></li>
-                    <li><div className="userdau-list-title">관리자권한</div></li>
-                </ul>
-
-                {
-                    managerList.map((item)=>{
-                        return(
-                            <ul className="list-content-ul">
-                                <li>{item.no}</li>
-                                <li>{item.id}</li>
-                                <li>{item.nickname}</li>
-                                <li>{item.email}</li>
-                                <li>010-0000-0000</li>
-                                <li>
-                                    {
-                                        item.role === "ADMIN" ? (
-                                            <>{item.role}</>
-                                        ):(
-                                            <select className="list-select-box" value={selectStates[item.no] || item.role} onChange={(e) => handleRoleChange(e, item.no)}>
-                                                <option value={item.role}>{item.role}</option>
-                                                <option value="delete">DELETE</option>
-                                            </select>
-                                        )
-                                    }
-                                </li>
-                            </ul>
-                        )
-                    })
-                }
+            <div className='memberlist-container'>
+                <table className="memberlist-table">
+                    <thead>
+                        <tr>
+                            <th>관리자번호</th>
+                            <th>관리자아이디</th>
+                            <th>관리자닉네임</th>
+                            <th>이메일</th>
+                            <th>연락처</th>
+                            <th>관리자권한</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                            {
+                                managerList.map((item)=>{
+                                    return(
+                                        <tr key={item.no} className="list-content-ul">
+                                            <td>{item.no}</td>
+                                            <td>{item.id}</td>
+                                            <td>{item.nickname}</td>
+                                            <td>{item.email}</td>
+                                            <td>010-0000-0000</td>
+                                            <td>
+                                                {
+                                                    item.role === "ADMIN" ? (
+                                                        <>{item.role}</>
+                                                    ):(
+                                                        <select className="list-select-box" value={selectStates[item.no] || item.role} onChange={(e) => handleRoleChange(e, item.no)}>
+                                                            <option value={item.role}>{item.role}</option>
+                                                            <option value="delete">DELETE</option>
+                                                        </select>
+                                                    )
+                                                }
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                    </tbody>
+                </table>
             </div>
             {/* 페이징 */}
             <div className="paging-container">
