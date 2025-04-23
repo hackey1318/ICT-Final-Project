@@ -2,7 +2,7 @@ package com.ict.finalProject.inquiry.service.impl;
 
 import com.ict.finalProject.common.exception.custom.UserAuthenticationException;
 import com.ict.finalProject.domain.constant.ImageWriteType;
-import com.ict.finalProject.domain.constant.InquiryProceed;
+import com.ict.finalProject.domain.constant.Proceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.fileSystem.domain.ImageInfo;
@@ -58,7 +58,7 @@ public class InquiryServiceImpl implements InquiryService {
                     .subject(request.getSubject())
                     .content(request.getContent())
                     .password(hashedPwd)
-                    .proceed(InquiryProceed.BEFORE)
+                    .proceed(Proceed.BEFORE)
                     .status(StatusInfo.ACTIVE).build());
 
             List<ImageInfo> inquiryImagesList = new ArrayList<>();
@@ -290,8 +290,8 @@ public class InquiryServiceImpl implements InquiryService {
             entityManager.persist(comment);
             log.info("새 댓글 저장됨. inquiryNo: {}, commentId: {}, userNo: {}", no, comment.getNo(), comment.getUserNo());
 
-            if (inquiry.getProceed() == InquiryProceed.BEFORE && currentRole == UserRole.ADMIN) {
-                inquiry.setProceed(InquiryProceed.PROCEEDING);
+            if (inquiry.getProceed() == Proceed.BEFORE && currentRole == UserRole.ADMIN) {
+                inquiry.setProceed(Proceed.PROCEEDING);
                 inquiryRepository.save(inquiry);
                 log.info("문의글(No: {}) 상태가 '처리중'으로 변경되었습니다.", no);
             }
@@ -312,7 +312,7 @@ public class InquiryServiceImpl implements InquiryService {
 
     @Override
     @Transactional
-    public boolean updateInquiryStatus(int inquiryNo, InquiryProceed newStatus) {
+    public boolean updateInquiryStatus(int inquiryNo, Proceed newStatus) {
         try {
             Inquiry inquiry = inquiryRepository.findByNo(inquiryNo)
                     .orElseThrow(() -> new NoSuchElementException("상태변경할 문의글을 찾을 수 없습니다." + inquiryNo));

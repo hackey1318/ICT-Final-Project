@@ -31,6 +31,9 @@ public class CineMates {
     
     private Integer movieNo;
 
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
     private Integer maxMemberCount;
 
     private LocalDateTime meetingDate;

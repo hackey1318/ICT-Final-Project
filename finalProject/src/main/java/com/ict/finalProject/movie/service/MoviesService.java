@@ -22,4 +22,6 @@ public interface MoviesService {
     Page<Movies> getRelateGenreMovieInfo(Pageable pageable, int movieNo);
 
     List<Movies> getRecommendationMovie(Integer userNo, int count);
+
+    Page<Movies> searchMovieByBanner(Pageable pageable, String name);
 }
