@@ -1,6 +1,7 @@
 package com.ict.finalProject.cinemate.service.impl;
 
 import com.ict.finalProject.cinemate.controller.request.CineMateRequest;
+import com.ict.finalProject.cinemate.controller.response.CineMateResponse;
 import com.ict.finalProject.cinemate.repository.CineMateRepository;
 import com.ict.finalProject.cinemate.repository.domain.CineMates;
 import com.ict.finalProject.cinemate.service.CineMateService;
@@ -9,10 +10,9 @@ import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.domain.Movies;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -42,15 +42,15 @@ public class CineMateServiceImpl implements CineMateService {
     }
 
     @Override
-    public List<CineMateRequest> getCineMateMovies() {
-        List<CineMates> result = cineMateRepository.findAll();
+    public Page<CineMateResponse> getCineMateMovies(Pageable pageable) {
+        Page<CineMates> result = cineMateRepository.findAll(pageable);
 
-        return result.stream().map(entity -> {
+        return result.map(entity -> {
             //영화 정보를 movieNo를 통해 Movies 테이블에서 가져옴
             Movies movie = moviesRepository.findByNo(entity.getMovieNo())
                     .orElseThrow(() -> new RuntimeException("Movie not found for movieNo: " + entity.getMovieNo()));
 
-            return CineMateRequest.builder()
+            return CineMateResponse.builder()
                     .userNo(entity.getUserNo())
                     .movieNo(entity.getMovieNo())
                     .theaterNo(entity.getTheaterNo())
@@ -61,6 +61,6 @@ public class CineMateServiceImpl implements CineMateService {
                     .postImage(movie.getPostImage())
                     .ageGrade(movie.getAgeGrade())
                     .build();
-        }).collect(Collectors.toList());
+        });
     }
 }
