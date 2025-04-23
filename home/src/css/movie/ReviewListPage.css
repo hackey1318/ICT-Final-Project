@@ -1,0 +1,85 @@
+.review-list-page {
+    padding: 20px;
+  }
+  
+  .review-list-page h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  .review-cards {
+    display: grid;
+    /* 고정된 5열, 각 열 너비 200px */
+    grid-template-columns: repeat(5, 200px);
+    gap: 16px;
+    justify-content: center;   /* 전체 그리드를 가운데로 */
+
+  }
+  
+  .review-card {
+    width: 200px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.2s ease;
+    
+  }
+  
+  .review-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .review-card-image {
+    max-height: 50%;
+    min-height: 50%;
+    width: 100%;
+    height: auto;
+  }
+  
+/* 제목 스타일 */
+.review-card-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 8px;
+  /* 카드 안에서 잘리지 않도록 컨텐츠 높이에서 제외하려면 review-card-content 높이를 늘리거나 auto로 */
+}
+
+/* (기존) content 영역 높이 조정 */
+.review-card-content {
+  padding: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  /* height: 60px;  ← 이 값을 삭제하거나 auto로 수정하세요 */
+  height: auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background: #3498db;
+  color: #fff;
+  border-color: #3498db;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

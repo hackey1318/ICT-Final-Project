@@ -89,4 +89,19 @@ public class FileSystemServiceImpl implements FileSystemService {
     public List<String> getCartFileIds(int boardNo) {
         return imageInfoRepository.findImageIdsByBoardNoAndTypeAndStatus(boardNo, ImageWriteType.GOODS, StatusInfo.ACTIVE);
     }
+
+    @Override
+    public void createPendingImageInfos(List<String> imageIds, int boardNo, ImageWriteType type){
+        if (imageIds == null || imageIds.isEmpty()) return;
+        List<ImageInfo> infos = imageIds.stream()
+                .map(id -> ImageInfo.builder()
+                        .imageId(id)
+                        .status(StatusInfo.PENDING)
+                        .type(type)
+                        .boardNo(boardNo)
+                        .build())
+                .toList();
+        imageInfoRepository.saveAll(infos);
+    }
+
 }
