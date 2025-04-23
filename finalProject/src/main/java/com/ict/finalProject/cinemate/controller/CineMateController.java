@@ -7,10 +7,9 @@ import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,5 +26,10 @@ public class CineMateController {
         request.setUserNo(userNo);
 
         return SuccessOfFailResponse.builder().result(cineMateService.generateCineMateInfo(request)).build();
+    }
+
+    @GetMapping("/movies")
+    public List<CineMateRequest> getCineMateMovies(){
+        return cineMateService.getCineMateMovies();
     }
 }

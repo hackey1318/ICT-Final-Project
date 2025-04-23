@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -26,4 +27,10 @@ public class CineMateRequest {
     private LocalDateTime meetingDate;
 
     private String content;
+
+    //영화 정보
+    private String name; // 영화이름
+    private LocalDate openDate; // 영화 공개일
+    private String postImage; // 포스터 URL
+    private String ageGrade; // 연령 등급
 }
