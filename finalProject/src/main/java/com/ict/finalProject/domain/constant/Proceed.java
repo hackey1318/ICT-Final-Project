@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum InquiryProceed {
+public enum Proceed {
 
     BEFORE("처리 전"),
     PROCEEDING("진행 중"),
@@ -13,7 +13,7 @@ public enum InquiryProceed {
 
     private final String description;
 
-    public InquiryProceed toggle() {
+    public Proceed toggle() {
         return this == BEFORE ? PROCEEDING : CLOSED;
     }
 }
