@@ -1,12 +1,13 @@
 package com.ict.finalProject.cinemate.service;
 
 import com.ict.finalProject.cinemate.controller.request.CineMateRequest;
-
-import java.util.List;
+import com.ict.finalProject.cinemate.controller.response.CineMateResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CineMateService {
 
     boolean generateCineMateInfo(CineMateRequest request);
 
-    List<CineMateRequest> getCineMateMovies();
+    Page<CineMateResponse> getCineMateMovies(Pageable pageable);
 }

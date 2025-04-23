@@ -1,15 +1,16 @@
 package com.ict.finalProject.cinemate.controller;
 
 import com.ict.finalProject.cinemate.controller.request.CineMateRequest;
+import com.ict.finalProject.cinemate.controller.response.CineMateResponse;
 import com.ict.finalProject.cinemate.service.CineMateService;
 import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class CineMateController {
     }
 
     @GetMapping("/movies")
-    public List<CineMateRequest> getCineMateMovies(){
-        return cineMateService.getCineMateMovies();
+    public Page<CineMateResponse> getCineMateMovies(Pageable pageable){
+        return cineMateService.getCineMateMovies(pageable);
     }
 }
