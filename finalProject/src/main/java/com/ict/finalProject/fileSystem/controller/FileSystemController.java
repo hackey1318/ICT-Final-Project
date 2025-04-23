@@ -1,20 +1,25 @@
 package com.ict.finalProject.fileSystem.controller;
 
-import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.common.config.AuthRequired;
-import com.ict.finalProject.domain.constant.UserRole;
+import com.ict.finalProject.domain.constant.ImageWriteType;
+import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.fileSystem.controller.request.ImageRequest;
 import com.ict.finalProject.fileSystem.controller.response.FileUploadResponse;
 import com.ict.finalProject.fileSystem.domain.Images;
+import com.ict.finalProject.fileSystem.repository.FileSystemRepository;
+import com.ict.finalProject.fileSystem.repository.ImageInfoRepository;
 import com.ict.finalProject.fileSystem.service.FileSystemService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +29,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -38,6 +42,8 @@ import static com.ict.finalProject.domain.constant.UserRole.*;
 public class FileSystemController {
 
     private final FileSystemService fileSystemService;
+    private final FileSystemRepository fileSystemRepository;
+    private final ImageInfoRepository imageInfoRepository;
 
     @PostMapping("/upload/register-image")
     public List<FileUploadResponse> uploadRegisterImage(@RequestParam("files") List<MultipartFile> files) throws IOException {
@@ -154,5 +160,46 @@ public class FileSystemController {
         } catch (IOException e) {
             return "application/octet-stream";
         }
+    }
+
+    @GetMapping("/showPreview/{imageId}")
+    public void showPreviewByImageId(@PathVariable("imageId") String imageId,
+                                     HttpServletResponse response) {
+        // ✅ FileSystemRepository 사용
+        List<Images> list = fileSystemRepository.findByIdIn(List.of(imageId));
+        if (list.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다: " + imageId);
+        }
+
+        Images image = list.get(0);
+        Path filePath = Paths.get(image.getPath());
+
+        if (!Files.exists(filePath)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "서버에 이미지 파일이 없습니다: " + imageId);
+        }
+
+        response.setContentType(getContentType(filePath));
+
+        try (InputStream in = Files.newInputStream(filePath);
+             OutputStream out = response.getOutputStream()) {
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+            out.flush();
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 전송 실패", e);
+        }
+    }
+
+    @PatchMapping("/delete-image/{imageId}")
+    @Transactional
+    public ResponseEntity<Void> deleteImage(
+            @PathVariable String imageId,
+            @RequestParam ImageWriteType type
+    ) {
+        imageInfoRepository.updateImageStatus(imageId, type, StatusInfo.DELETE);
+        return ResponseEntity.noContent().build();
     }
 }

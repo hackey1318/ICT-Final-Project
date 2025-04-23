@@ -1,6 +1,6 @@
 package com.ict.finalProject.inquiry.controller.response;
 
-import com.ict.finalProject.domain.constant.InquiryProceed;
+import com.ict.finalProject.domain.constant.Proceed;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.domain.constant.UserRole;
 import lombok.AllArgsConstructor;
@@ -31,7 +31,7 @@ public class InquiryResponse {
 
     private List<String> imageIdList;
 
-    private InquiryProceed proceed;
+    private Proceed proceed;
 
     private String proceedDescription;
 

@@ -24,6 +24,7 @@ public class CineMateServiceImpl implements CineMateService {
                     .userNo(request.getUserNo())
                     .theaterNo(request.getTheaterNo())
                     .movieNo(request.getMovieNo())
+                    .content(request.getContent())
                     .maxMemberCount(request.getMaxMemberCount())
                     .meetingDate(request.getMeetingDate())
                     .status(StatusInfo.ACTIVE).build());
