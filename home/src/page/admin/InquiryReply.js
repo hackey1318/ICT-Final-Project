@@ -2,8 +2,8 @@ import { useEffect, useState,useCallback } from "react";
 import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 import { useNavigate } from "react-router-dom";
 import '../../css/admin/InquiryReply.css';
-import Pagination from "../../js/public/Pagination";
 import apiClient from "../../js/public/axiosConfig";
+import Pagination from "../../js/public/Pagination";
 
 function InquiryReply() {
     const [inquiryList, setInquiryList] = useState([]);
