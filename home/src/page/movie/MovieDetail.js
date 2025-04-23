@@ -4,9 +4,10 @@ import { useParams, Link } from "react-router-dom"
 import { ArrowLeft, Share2, Heart } from "lucide-react"
 import "./../../css/movie/MovieDetail.css" // CSS 파일 경로는 실제 프로젝트 구조에 맞게 조정하세요
 import LikeType from "../../js/common/LikeType"
-import RecruitMovieModal from "./RecruitMovieModal"
+import RelatedMovie from './RelatedMovie';
 
 const BASE_URL = 'http://192.168.1.252:9988/file-system/download/';
+
 
 function MovieDetail() {
 	// URL 경로에서 영화 ID를 가져옵니다 (예: /movies/10 -> id는 "10")
@@ -22,7 +23,6 @@ function MovieDetail() {
 	const [likeId, setLikeId] = useState(null); // 좋아요 ID (DB에서 받은 값)
 	const [relatedGoods, setRelatedGoods] = useState([]); // 관련 상품 목록
 	const [relatedMovies, setRelatedMovies] = useState([]); // 관련 영화 목록
-	const [showRecruitModal, setShowRecruitModal] = useState(false)
 
 	// 컴포넌트가 마운트되거나 URL의 id 값이 변경될 때 실행됩니다.
 	useEffect(() => {
@@ -224,16 +224,17 @@ function MovieDetail() {
 						>
 							자세히 보기
 						</a>
-						<button
-							className="movie_detail_btn_primary btn btn-primary ms-2"
-							onClick={() => setShowRecruitModal(true)}
-						>같이 볼 사람 구하기</button>
+
+			                <Link
+								to={`/movies/${id}/reviews`}
+								className="movie_detail_btn_secondary btn btn-outline-secondary"
+							>
+								리뷰보기
+							</Link>
+
 					</div>
 				</div>
 			</div>
-			{showRecruitModal && (
-				<RecruitMovieModal movie={movie} closeModal={() => setShowRecruitModal(false)} />
-			)}
 
 			{/* === 관련 상품 섹션 수정 === */}
 			<div className="movie_detail_related_section mt-5">
@@ -292,10 +293,8 @@ function MovieDetail() {
 				<div className="movie_detail_items row">
 					{relatedMovies.map((movieItem) => (
 						<div key={movieItem.no} className="movie_detail_item col-6 col-sm-2 mb-3">
-							<Link to={`/movies/${movieItem.no}`}>
-								<img src={movieItem.postImage} alt={movieItem.name} className="movie_detail_item_img img-fluid rounded mb-2" />
-								<span className="movie_detail_item_name d-block">{movieItem.name}</span>
-							</Link>
+							<img src={movieItem.postImage} alt={movieItem.name} className="movie_detail_item_img img-fluid rounded mb-2" />
+							<span className="movie_detail_item_name d-block">{movieItem.name}</span>
 						</div>
 					))}
 				</div>

@@ -57,6 +57,7 @@ public class SecurityConfig {
                 mvc.pattern( "/oauth/api/users/check-phone/**"),
                 mvc.pattern("/file-system/download/**"),
                 mvc.pattern("/file-system/showImage/**"),
+                mvc.pattern("/file-system/showPreview/**"),
                 mvc.pattern("/user/**"),
                 mvc.pattern("/banner/**"),
                 mvc.pattern("/movies/**"),
@@ -92,6 +93,7 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.GET, "/announce/**").permitAll()
                                         .requestMatchers("/admin/**").permitAll()
                                         .requestMatchers(HttpMethod.DELETE, "/user").hasAnyRole(UserRole.ADMIN.name())
+                                        .requestMatchers(HttpMethod.GET, "/movies/{movieNo}/reviews").permitAll()
                                         .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(activeUserTrackingFilter, JwtRequestFilter.class)
