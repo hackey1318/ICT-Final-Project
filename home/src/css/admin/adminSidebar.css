@@ -26,8 +26,8 @@
     border-radius: 0 15px 15px 0;
     position: sticky;
     padding: 20px 0;
-    color: #ddd;
-    background-color: rgb(53, 53, 53);
+    color:  #2b2b2b;
+    background-color: rgb(243, 243, 243);
     height: 850px;
 }
 
@@ -36,8 +36,6 @@
     width: 200px;
     margin: 0 auto;
     display: block;
-    background-color: #ddd;
-    opacity: 0.5;
 }
 
 /* 관리자 닉네임, role 부분 */
@@ -49,7 +47,7 @@
     border-radius: 10px;
     margin: 10px auto;
     font-size: 1.5rem;
-    color: #ddd;
+    color: #2b2b2b;
 }
 
 /* 사이드바 탑메뉴 */
@@ -60,12 +58,13 @@
     width: 150px;
     height: 40px;
     font-weight: bold;
-    text-align: center;
+    text-align: left;
+    padding-left: 15px;
     line-height: 40px;
     border-radius: 10px;
     margin-bottom: 8px;
     cursor: pointer;
-    color: rgb(211, 124, 63);
+    color: rgb(81, 80, 155);
     font-size: 1.5rem;
 }
 
@@ -85,5 +84,5 @@
 .admin-nav-link:hover, .admin-nav-link.active{
     font-weight: bold;
     size: 1.5rem;
-    border-bottom: 3px solid rgb(211, 124, 63);
+    border-bottom: 3px solid rgb(233, 186, 115);
 }

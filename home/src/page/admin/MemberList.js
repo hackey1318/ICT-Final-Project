@@ -67,7 +67,7 @@ function MemberList(){
     };
     
     return(
-        <div className='userdau-wrap'>
+        <div className='memberlist-wrap'>
             <h3>Admin Page - User list</h3>
             <div className="member_search-container">
                 <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="md_dropdown">
@@ -88,30 +88,35 @@ function MemberList(){
                 </button>
             </div>
             
-            <div className='userdau-list'>
-                <ul>
-                    <li><div className="userdau-list-title">회원번호</div></li>
-                    <li><div className="userdau-list-title">회원아이디</div></li>
-                    <li><div className="userdau-list-title">회원닉네임</div></li>
-                    <li><div className="userdau-list-title">이메일</div></li>
-                    <li><div className="userdau-list-title">연락처</div></li>
-                    <li><div className="userdau-list-title">회원상태</div></li>
-                </ul>
-                {
-                    userList.map((item)=>{
-                        return(
-                            <ul key={item.no} className="userdau-list-item">
-                                <li>{item.no}</li>
-                                <li>{item.id}</li>
-                                <li>{item.nickname}</li>
-                                <li>{item.email}</li>
-                                <li>010-6385-467{Math.floor(Math.random()*10)}</li>
-                                <li>{item.status}</li>
-                            </ul>
-                        )
-                    })
-                }
-
+            <div className='memberlist-container'>
+                <table className="memberlist-table">
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>회원아이디</th>
+                            <th>회원닉네임</th>
+                            <th>이메일</th>
+                            <th>연락처</th>
+                            <th>회원상태</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                    {
+                        userList.map((item)=>{
+                            return(
+                                <tr key={item.no} className="memberlist-item">
+                                    <td>{item.no}</td>
+                                    <td>{item.id}</td>
+                                    <td>{item.nickname}</td>
+                                    <td>{item.email}</td>
+                                    <td>{item.phone}</td>
+                                    <td>{item.status}</td>
+                                </tr>
+                            )
+                        })
+                    }
+                    </tbody>
+                </table>
             </div>
 
                  {/* 페이징 */}
@@ -133,8 +138,6 @@ function MemberList(){
                         </button>
                     )}
                 </div>
-
-
         </div>
     )
 }
