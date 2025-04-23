@@ -4,17 +4,24 @@ import com.ict.finalProject.cart.controller.response.CartRequest;
 import com.ict.finalProject.cart.controller.response.CartsResponse;
 import com.ict.finalProject.cart.service.CartsService;
 import com.ict.finalProject.common.config.JwtTokenProvider;
+import com.ict.finalProject.domain.constant.OrdersStatus;
+import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.fileSystem.domain.Images;
 import com.ict.finalProject.fileSystem.service.FileSystemService;
 import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.oauth.service.UserService;
+import com.ict.finalProject.orders.service.OrderItemService;
+import com.ict.finalProject.orders.service.OrdersService;
+import com.ict.finalProject.orders.service.dto.OrderItemDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -22,11 +29,12 @@ import java.util.List;
 @AllArgsConstructor
 public class CartsController {
 
-    private final FileSystemService fileSystemService;
     private final CartsService cartsService;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final MdShopService mdShopService;
+    private final OrdersService ordersService;
+    private final OrderItemService orderItemService;
 
     private int getUserNoFromRequest(HttpServletRequest request) {
         final String token = request.getHeader("Authorization");
@@ -39,7 +47,7 @@ public class CartsController {
     }
 
     @GetMapping("/addGoods")
-    public ResponseEntity<String> addGoods(@RequestParam("goodsId") int goodsId, @RequestParam("goodsQuantity") int goodsQuantity, HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> addGoods(@RequestParam("goodsId") int goodsId, @RequestParam("goodsQuantity") int goodsQuantity, @RequestParam("act") String act, HttpServletRequest request) {
         final String token = request.getHeader("Authorization");
         String userId = null;
         int userNo = -1;
@@ -50,15 +58,43 @@ public class CartsController {
             userNo = userService.getUser(userId).getNo();
         }
 
+        Map<String, Object> result = new HashMap<>();
+
         if (mdShopService.getGoodsInfo(goodsId).getCount() < 1) {
-            return ResponseEntity.ok("재고가 없는 상품입니다.");
+            result.put("isRedirect", false);
+            result.put("message", "재고가 없는 상품입니다.");
+            return ResponseEntity.ok(result);
         }
 
         if (cartsService.checkCartGoodsExist(userNo, goodsId)) {
-            return ResponseEntity.ok("이미 장바구니에 있는 상품입니다.");
+            if (act.equals("Purchase")) {
+                result.put("isRedirect", true);
+                result.put("message", "이미 추가된 상품입니다. 장바구니 페이지로 이동합니다.");
+                return ResponseEntity.ok(result);
+            } else if (act.equals("Add")) {
+                result.put("isRedirect", false);
+                result.put("message", "이미 장바구니에 추가된 상품입니다.");
+                return ResponseEntity.ok(result);
+            } else {
+                result.put("isRedirect", false);
+                result.put("message", "Unknown Act");
+                return ResponseEntity.ok(result);
+            }
         } else {
             cartsService.insertCartGoods(userNo, goodsId, goodsQuantity);
-            return ResponseEntity.ok("장바구니에 상품이 추가되었습니다.");
+            if (act.equals("Purchase")) {
+                result.put("isRedirect", true);
+                result.put("message", "상품이 추가되었습니다. 장바구니 페이지로 이동합니다.");
+                return ResponseEntity.ok(result);
+            } else if (act.equals("Add")) {
+                result.put("isRedirect", false);
+                result.put("message", "장바구니에 상품이 추가되었습니다.");
+                return ResponseEntity.ok(result);
+            } else {
+                result.put("isRedirect", false);
+                result.put("message", "Unknown Act");
+                return ResponseEntity.ok(result);
+            }
         }
     }
 
@@ -74,7 +110,6 @@ public class CartsController {
             userNo = userService.getUser(userId).getNo();
         }
         List<CartsResponse> cartsResponses = cartsService.getCartsGoods(userNo);
-        System.out.println(cartsResponses);
         return ResponseEntity.ok(cartsResponses);
     }
 
@@ -86,15 +121,15 @@ public class CartsController {
         }
     }
 
-//    @GetMapping("/images")
-//    public List<Images> getGoodsImages(@RequestParam("goodsId") int goodsId) {
-//
-//        List<String> imageIds = fileSystemService.getCartFileIds(goodsId);
-//        List<Images> images = fileSystemService.getImageInfo(imageIds);
-//        System.out.println("응답체크");
-//        System.out.println(images);
-//        return images;
-//    }
+    @PostMapping("/paidGoods")
+    public void paidGoods (@RequestBody CartRequest cartRequest, HttpServletRequest request){
+        int userNo = getUserNoFromRequest(request);
+        int orderId = ordersService.getOrders(cartRequest.getOrderNumber()).getId();
+        List<OrderItemDto> orderItemDtoList = orderItemService.getOrderItems(orderId);
+        for (OrderItemDto orderItemDto : orderItemDtoList) {
+            cartsService.paidCartGoods(userNo, orderItemDto.getGoodsNo());
+        }
+    }
 
     @PostMapping("/updateQuantity")
     public void updateQuantity (@RequestBody CartRequest cartRequest, HttpServletRequest request){
