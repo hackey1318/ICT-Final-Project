@@ -5,8 +5,6 @@ import axios from 'axios';
 import TossPayment from "./../payment/TossPayment";
 import CartApi, { deleteGoodsList, getGoodsList, getTheaterList } from "./CartApi";
 
-const accessToken = sessionStorage.getItem("accessToken");
-
 function Cart() {
     const [goods, setGoods] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -36,6 +34,7 @@ function Cart() {
     }, []);
 
     const cartQuantityUpdate = () => {
+        const accessToken = sessionStorage.getItem("accessToken");
         axios.post("http://localhost:9988/cart/updateQuantity",
             {
                 goodsNos: goodsRef.current.map(element => element.goodsNo),
@@ -50,8 +49,10 @@ function Cart() {
     }
 
     useEffect(() => {
+        const accessToken = sessionStorage.getItem("accessToken");
         // 로그인 확인
         if (!accessToken) {
+            sessionStorage.setItem("redirectAfterLoginPath", window.location.href);
             window.location.href = "/login";
             return null;
         }
@@ -160,6 +161,7 @@ function Cart() {
     }
 
     const order = () => {
+        const accessToken = sessionStorage.getItem("accessToken");
         const selectedGoods = goods.filter(item => item.selected);
         if (selectedGoods.length === 0) {
             alert("선택된 상품이 없습니다.");

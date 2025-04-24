@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import './../../css/order/OrderList.css';
 
-const accessToken = sessionStorage.getItem("accessToken");
-
 function OrderList() {
     const [orderList, setOrderList] = useState([]);
     const [orderItemList, setOrderItemList] = useState([]);
     const [paymentKeyList, setPaymentKeyList] = useState([]);
 
     const fetchOrderList = async () => {
+        const accessToken = sessionStorage.getItem("accessToken");
         const response = await fetch("http://localhost:9988/order/list", {
             method: "GET",
             headers: {
@@ -35,6 +34,10 @@ function OrderList() {
     }, []);
 
     const cancelOrder = (paymentKey, orderNo) => {
+        if(!window.confirm("주문을 취소하시겠습니까?")) {
+           return; 
+        }
+        const accessToken = sessionStorage.getItem("accessToken");
         const fetchCancelOrder = async () => {
             const paymentResponse = await fetch("http://localhost:9988/payment/cancel", {
                 method: "POST",
@@ -107,7 +110,7 @@ function OrderList() {
                                             <span className="orderList_link" onClick={() => window.location.href = `/order/detail?orderNumber=${order.orderNumber}`}><b>{"상세 보기 >"}</b></span>
                                             <br />
                                             {
-                                                order?.statusText !== "결제 취소" &&
+                                                order?.statusText === "결제 완료" &&
                                                 <span className="orderList_link" onClick={() => cancelOrder(paymentKeyList[orderIndex], order.id)}><b>{"주문 취소 >"}</b></span>
                                             }
                                         </div>
