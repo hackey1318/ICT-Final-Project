@@ -1,6 +1,10 @@
 package com.ict.finalProject.review.controller;
 
+import com.ict.finalProject.common.config.AuthRequired;
 import com.ict.finalProject.domain.constant.OrdersStatus;
+import com.ict.finalProject.domain.constant.UserRole;
+import com.ict.finalProject.oauth.repository.UsersRepository;
+import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.orders.controller.response.OrderListResponse;
 import com.ict.finalProject.orders.repository.OrdersRepository;
 import com.ict.finalProject.orders.repository.domain.Orders;
@@ -12,6 +16,7 @@ import com.ict.finalProject.review.repository.GoodsReviewRepository;
 import com.ict.finalProject.review.service.GoodsReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -25,15 +30,21 @@ public class GoodsReviewController {
     private final GoodsReviewService reviewService;
     private final OrdersRepository orderRepo;
     private final GoodsReviewRepository reviewRepo;
+    private final UsersRepository usersRepository;
 
     /** 1) 리뷰 가능한 “결제 완료 주문” 목록 조회 */
+    @AuthRequired({UserRole.USER, UserRole.ADMIN, UserRole.MANAGER})
     @GetMapping("/{goodsId}/orders-for-review")
     public ResponseEntity<OrderListResponse> getOrdersForReview(
             @PathVariable Long goodsId,
-            @RequestParam Long userNo) {
+            Authentication authentication) {
+
+        Users user = usersRepository.findById(authentication.getName())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        int userNo = user.getNo();
 
         List<Orders> orders = orderRepo.findPaidOrdersByGoodsNoAndUserNo(
-                goodsId.intValue(), OrdersStatus.PAID, userNo.intValue()
+                goodsId.intValue(), OrdersStatus.PAID, userNo
         );
 
         List<OrdersDto> ordersDtoList = orders.stream()
@@ -59,6 +70,7 @@ public class GoodsReviewController {
     }
 
     /** 2) 이미 리뷰 작성된 orderNo 리스트 조회 */
+    @AuthRequired({UserRole.USER, UserRole.ADMIN, UserRole.MANAGER})
     @GetMapping("/{goodsId}/orders-reviewed")
     public ResponseEntity<List<Long>> getReviewedOrderNos(
             @PathVariable Long goodsId,
@@ -68,16 +80,24 @@ public class GoodsReviewController {
     }
 
     // 기존 리뷰 조회/작성 메서드 유지
+    @AuthRequired({UserRole.USER, UserRole.ADMIN, UserRole.MANAGER})
     @GetMapping("/{goodsId}/reviews")
     public ResponseEntity<List<GoodsReviewResponse>> getReviews(@PathVariable long goodsId) {
         return ResponseEntity.ok(reviewService.getReviewsByGoodsId(goodsId));
     }
 
     @PostMapping("/{goodsId}/reviews")
+    @AuthRequired({UserRole.USER, UserRole.ADMIN, UserRole.MANAGER})
     public ResponseEntity<GoodsReviewResponse> writeReview(
             @PathVariable Long goodsId,
-            @RequestBody GoodsReviewRequest request) {
-        request.setGoodsId(goodsId);
-        return ResponseEntity.ok(reviewService.writeReview(request));
+            Authentication authentication,
+            @RequestBody GoodsReviewRequest req) {
+
+        Users user = usersRepository.findById(authentication.getName())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        req.setUserNo(user.getNo().longValue());
+        req.setGoodsId(goodsId);
+
+        return ResponseEntity.ok(reviewService.writeReview(req));
     }
 }

@@ -25,6 +25,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
 
     @Override
+    @Transactional
     public void insertOrderItem(OrderItem orderItem) {
 // ② Orders 엔티티 조회
         Orders order = ordersRepository.findById(orderItem.getOrderNo())
@@ -38,7 +39,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         item.setName(orderItem.getName());
         item.setPrice(orderItem.getPrice());
         item.setQuantity(orderItem.getQuantity());
-
+        order.getItems().add(item);
         orderItemRepository.save(item);
     }
 
