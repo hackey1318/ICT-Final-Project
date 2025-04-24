@@ -8,6 +8,13 @@ function OrderList() {
 
     const fetchOrderList = async () => {
         const accessToken = sessionStorage.getItem("accessToken");
+
+        if (!accessToken) {
+            sessionStorage.setItem("redirectAfterLoginPath", window.location.href);
+            window.location.href = "/login";
+            return null;
+        }
+
         const response = await fetch("http://localhost:9988/order/list", {
             method: "GET",
             headers: {
@@ -89,6 +96,7 @@ function OrderList() {
                             <hr />
                             <div className="orderList_head">
                                 <div className="orderList_date_state">
+                                    <div>dz</div>
                                     {
                                         new Date(order?.updatedAt)
                                             .toLocaleString('ko-KR', {
@@ -103,7 +111,7 @@ function OrderList() {
                                             .replace(/(\d{4}) (\d{2}) (\d{2})/, '$1-$2-$3')
                                     } - {order?.statusText}
                                 </div>
-                                <div>
+                                <div className="orderList_actions">
                                     {
                                         order?.statusText !== "결제 대기" &&
                                         <div>

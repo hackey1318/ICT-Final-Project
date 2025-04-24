@@ -34,7 +34,8 @@ const GoodsInfo = ({ goods }) => {
                 }
             })
             .catch(error => {
-                alert("로그인이 필요합니다.");
+                sessionStorage.setItem("redirectAfterLoginPath", window.location.href);
+                window.location.href = "/login";
                 console.log(error);
             });
     }
