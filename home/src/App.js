@@ -117,7 +117,8 @@ function App() {
 				<Route path="/related-movie/:movieId" element={<RelatedMovie />} />
 				<Route path="/announcements" element={<UserAnnounce />} />
 				<Route path="/announcements/:id" element={<UserAnnounceDetail />} />
-				<Route path="/mypage" element={<MypageSidebar />} >
+				<Route path="mypage" element={<MypageSidebar />} >
+					<Route index element={<LikedItemsPage />} />
 					<Route path="likes" element={<LikedItemsPage />} />
 				</Route>
 
