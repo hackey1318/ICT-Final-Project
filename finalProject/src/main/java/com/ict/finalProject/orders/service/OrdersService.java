@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface OrdersService {
     List<OrdersDto> getOrdersList(int userNo);
-    void insertOrders(Orders orders);
+    Orders insertOrders(Orders orders);
     Orders getOrdersByStatus(int userNo, OrdersStatus status);
     Orders getExistOrders(int userNo, int totalPrice, int theaterNo, OrdersStatus status);
     void deleteOrdersByUserNoAndStatus(int userNo, OrdersStatus status);
