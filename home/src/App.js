@@ -52,6 +52,7 @@ import AdminFindId from './page/admin/AdminFindId';
 import AdminFindPwd from './page/admin/AdminFindPwd';
 import Report from './page/admin/Report';
 import BannerList from './page/admin/banner/BannerList';
+import UserEditForm from './page/user/UserEditForm';
 import MypageSidebar from './js/sidebar/MyPageSidebar';
 import LikedItemsPage from './page/user/mypage/LikedItemsPage';
 import MovieTheater from './page/cinemate/MovieTheater';
@@ -121,6 +122,7 @@ function App() {
 				<Route path="/related-movie/:movieId" element={<RelatedMovie />} />
 				<Route path="/announcements" element={<UserAnnounce />} />
 				<Route path="/announcements/:id" element={<UserAnnounceDetail />} />
+        <Route path="/user-edit" element={<UserEditForm />} />
 				<Route path="mypage" element={<MypageSidebar />} >
 					<Route index element={<LikedItemsPage />} />
 					<Route path="likes" element={<LikedItemsPage />} />

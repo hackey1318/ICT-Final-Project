@@ -34,4 +34,10 @@ public interface FindUserService {
 
     //문의 댓글용 사용자 정보가져오기
     Optional<Users> findUserById(String id);
+
+    //회원정보 가져오기
+    Optional<Users> userSelect(String userId);
+
+    //회원수정(DB)
+    int userUpdate(Users users);
 }
