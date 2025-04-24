@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AnnounceCreateModal from "./AnnounceCreatedModal";
+import Button from "../../js/common/Buttons";
 
 export default function AnnounceList() {
     const [announces, setAnnounces] = useState([]);
@@ -102,7 +103,7 @@ export default function AnnounceList() {
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                 />
-                <button type="submit" className="btn btn-primary">검색</button>
+                <Button variant='primary'type="submit">검색</Button>
             </form>
 
             {/* 📄 테이블 */}
@@ -149,24 +150,31 @@ export default function AnnounceList() {
                     </tbody>
                 </table>
             </div>
+             {/* 페이지네이션 */}
+             <div className="paging-container">
+                {pageInfo.pageNumber > 0 && (
+                    <button className="page-buttons" onClick={() => handlePageChange(pageInfo.pageNumber - 1)}>
+                    이전
+                    </button>
+                )}
 
-            {/* 페이지네이션 */}
-            <div className="d-flex justify-content-center mt-3">
-                <nav>
-                    <ul className="pagination mb-0">
-                        <li className={`page-item ${pageInfo.pageNumber === 0 && 'disabled'}`}>
-                            <button className="page-link" onClick={() => handlePageChange(pageInfo.pageNumber - 1)}>이전</button>
-                        </li>
-                        {Array.from({ length: pageInfo.totalPages }, (_, i) => (
-                            <li key={i} className={`page-item ${pageInfo.pageNumber === i ? 'active' : ''}`}>
-                                <button className="page-link" onClick={() => handlePageChange(i)}>{i + 1}</button>
-                            </li>
-                        ))}
-                        <li className={`page-item ${pageInfo.pageNumber + 1 === pageInfo.totalPages && 'disabled'}`}>
-                            <button className="page-link" onClick={() => handlePageChange(pageInfo.pageNumber + 1)}>다음</button>
-                        </li>
-                    </ul>
-                </nav>
+                <div className="page-buttons">
+                    {Array.from({ length: pageInfo.totalPages }, (_, i) => (
+                    <button
+                        key={i}
+                        onClick={() => handlePageChange(i)}
+                        className={pageInfo.pageNumber === i ? 'active' : ''}
+                    >
+                        {i + 1}
+                    </button>
+                    ))}
+                </div>
+
+                {pageInfo.pageNumber < pageInfo.totalPages - 1 && (
+                    <button className="page-buttons" onClick={() => handlePageChange(pageInfo.pageNumber + 1)}>
+                    다음
+                    </button>
+                )}
             </div>
         </div>
     );
