@@ -26,6 +26,6 @@ public class ReportController {
     @PostMapping("/reportUser")
     public ResponseEntity<SuccessOfFailResponse> reportUser(
             @RequestBody ReportRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        return null;
+        return ResponseEntity.ok(new SuccessOfFailResponse(true, "임시 성공 응답"));
     }
 }
