@@ -46,7 +46,7 @@ function AdminSidebar({activeMenu}){
                 
                 return
             }
-
+            
             //if문 통과시 role, 닉네임 셋팅
             setRole(getUserInfo); //role 정보 셋팅
             setNickname(getUserNickname); //닉네임 정보 셋팅
@@ -80,7 +80,7 @@ function AdminSidebar({activeMenu}){
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>
+                                    <Link to="/manager/home/report" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>
                                         신고 목록 조회
                                     </Link>
                                 </li>

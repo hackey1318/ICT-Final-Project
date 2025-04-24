@@ -5,8 +5,10 @@ import { ArrowLeft, Share2, Heart } from "lucide-react"
 import "./../../css/movie/MovieDetail.css" // CSS 파일 경로는 실제 프로젝트 구조에 맞게 조정하세요
 import LikeType from "../../js/common/LikeType"
 import RecruitMovieModal from "./RecruitMovieModal"
+import RelatedMovie from './RelatedMovie';
 
 const BASE_URL = 'http://192.168.1.252:9988/file-system/download/';
+const accessToken = sessionStorage.getItem("accessToken") // 세션 스토리지에서 accessToken을 가져옵니다.
 
 function MovieDetail() {
 	// URL 경로에서 영화 ID를 가져옵니다 (예: /movies/10 -> id는 "10")
@@ -23,6 +25,7 @@ function MovieDetail() {
 	const [relatedGoods, setRelatedGoods] = useState([]); // 관련 상품 목록
 	const [relatedMovies, setRelatedMovies] = useState([]); // 관련 영화 목록
 	const [showRecruitModal, setShowRecruitModal] = useState(false)
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	// 컴포넌트가 마운트되거나 URL의 id 값이 변경될 때 실행됩니다.
 	useEffect(() => {
@@ -103,6 +106,7 @@ function MovieDetail() {
 			}
 		};
 
+		setIsLoggedIn(!!accessToken);
 		// URL 파라미터 'id' 값이 존재할 때만 API 호출 함수를 실행합니다.
 		if (id) {
 			fetchMovieDetail()
@@ -224,17 +228,27 @@ function MovieDetail() {
 						>
 							자세히 보기
 						</a>
-						<button
-							className="movie_detail_btn_primary btn btn-primary ms-2"
-							onClick={() => setShowRecruitModal(true)}
-						>같이 볼 사람 구하기</button>
+						{isLoggedIn && (
+							<button
+								className="movie_detail_btn_primary btn btn-primary ms-2"
+								onClick={() => setShowRecruitModal(true)}
+							>
+								같이 볼 사람 구하기
+							</button>
+						)}
+						<Link
+							to={`/movies/${id}/reviews`}
+							className="movie_detail_btn_secondary btn btn-outline-secondary"
+						>
+							리뷰보기
+						</Link>
+
 					</div>
 				</div>
 			</div>
 			{showRecruitModal && (
 				<RecruitMovieModal movie={movie} closeModal={() => setShowRecruitModal(false)} />
 			)}
-
 			{/* === 관련 상품 섹션 수정 === */}
 			<div className="movie_detail_related_section mt-5">
 				{/* --- 헤더 --- */}

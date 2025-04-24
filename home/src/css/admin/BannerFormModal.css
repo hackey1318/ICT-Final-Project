@@ -1,115 +1,230 @@
-/* 배경 투명도 및 모달 컨테이너의 스타일 */
-.custom-modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1040;
-}
-
+/* 배경 및 모달 전체 */
 .custom-modal-wrapper {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1050;
-}
-
-/* 모달 자체 스타일 */
-.custom-modal {
-    background-color: white;
-    border-radius: 8px;
     width: 100%;
-    max-width: 450px;
-    padding: 20px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    animation: fadeIn 0.2s ease-out;
-    transition: transform 0.3s ease-in-out;
-    box-sizing: border-box;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* 반투명 배경 */
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* 모달 제목 스타일 */
+.custom-modal {
+    position: relative;
+    background-color: #fff;
+    padding: 20px;
+    width: 450px;
+    max-width: 90%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* 모달 헤더 */
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #f1f1f1;
+    border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .modal-title {
-    font-size: 1.5rem;
+    font-size: 18px;
     font-weight: bold;
-    color: #333;
+    margin: 0;
 }
 
-/* 폼 라벨 스타일 */
+.modal-body {
+    position: relative;
+}
+
+/* 폼 요소 */
 .form-label {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #555;
-    margin-bottom: 5px;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
 }
 
-/* 입력 필드 스타일 */
-input.form-control,
-textarea.form-control {
+.form-control {
+    border-radius: 4px;
     border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 10px 15px;
-    font-size: 1rem;
+    padding: 10px;
     width: 100%;
+    margin-bottom: 15px;
     box-sizing: border-box;
-    transition: border-color 0.2s;
 }
 
-/* 입력 필드에 포커스가 있을 때의 스타일 */
-input.form-control:focus,
-textarea.form-control:focus {
-    border-color: #007bff;
-    outline: none;
+.form-control-color {
+    padding: 5px;
+    height: 40px;
 }
 
-/* 모달 하단 버튼 스타일 */
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    padding-top: 15px;
-    border-top: 2px solid #f1f1f1;
-}
-
+/* 버튼 스타일 */
 .btn {
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.btn-secondary {
-    background-color: #e0e0e0;
-    border: 1px solid #ccc;
-    color: #333;
-}
-
-.btn-secondary:hover {
-    background-color: #e2e2e2;
+    transition: all 0.2s ease;
 }
 
 .btn-primary {
     background-color: #007bff;
-    border: none;
     color: white;
+    border: none;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
+    background-color: #0069d9;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-outline-primary {
+    background-color: white;
+    border: 1px solid #007bff;
+    color: #007bff;
+}
+
+.btn-outline-primary:hover {
+    background-color: #f0f7ff;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.gap-2 {
+    gap: 10px;
+}
+
+.mb-3 {
+    margin-bottom: 1rem;
+}
+
+/* 타입 선택 버튼 */
+button[type="button"]:active,
+button[type="button"]:focus {
+    outline: none;
+}
+
+/* 검색 결과 리스트 - 수정된 부분 */
+.movie-scroll-list {
+    position: absolute;
+    top: 100%;
+    /* 입력창 바로 아래에 위치하도록 수정 */
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    z-index: 1050;
+    /* z-index 값 증가 */
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 5px;
+    /* 검색창과의 간격 추가 */
+}
+
+/* 검색 항목 스타일 */
+.movie-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.movie-item:last-child {
+    border-bottom: none;
+}
+
+.movie-item.selected {
+    background-color: #e0f7fa;
+}
+
+.movie-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* 검색 인풋 박스 */
+input[type="text"],
+input[type="datetime-local"],
+input[type="color"],
+input[type="file"] {
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 이미지를 올렸을 때 상태 */
+.text-success {
+    color: #28a745;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+/* 모달 바닥 */
+.custom-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+}
+
+/* 입력값 검증을 위한 스타일 */
+input:invalid {
+    border-color: #dc3545;
+}
+
+input:focus:invalid {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
+}
+
+/* 모달 푸터 */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+/* 반응형 조정 */
+@media (max-width: 576px) {
+    .custom-modal {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
 }

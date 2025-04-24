@@ -1,7 +1,5 @@
-import { useEffect } from 'react';
 import './../../css/payment/PaymentResult.css';
 import { useSearchParams } from "react-router-dom";
-import axios from 'axios';
 const accessToken = sessionStorage.getItem("accessToken");
 
 

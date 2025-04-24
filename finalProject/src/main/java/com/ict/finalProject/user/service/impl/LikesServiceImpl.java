@@ -1,8 +1,12 @@
 package com.ict.finalProject.user.service.impl;
 
 import com.ict.finalProject.common.exception.custom.NotFoundException;
+import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.fileSystem.domain.ImageInfo;
+import com.ict.finalProject.fileSystem.repository.ImageInfoRepository;
 import com.ict.finalProject.mdShop.repository.MdShopRepository;
+import com.ict.finalProject.mdShop.repository.domain.Goods;
 import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.domain.Movies;
 import com.ict.finalProject.oauth.repository.UsersRepository;
@@ -13,6 +17,7 @@ import com.ict.finalProject.user.repository.domain.LikesRepository;
 import com.ict.finalProject.user.repository.domain.constant.LikeType;
 import com.ict.finalProject.user.service.LikesService;
 import com.ict.finalProject.user.service.dto.LikeItemDto;
+import com.ict.finalProject.user.service.dto.LikedGoodsDto;
 import com.ict.finalProject.user.service.dto.LikedMovieDto;
 import com.ict.finalProject.user.service.dto.LikedUserDto;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +47,7 @@ public class LikesServiceImpl implements LikesService {
     private final LikesRepository likesRepository;
     private final MoviesRepository moviesRepository;
     private final MdShopRepository mdShopRepository;
+    private final ImageInfoRepository imageInfoRepository;
 
     @Override
     public Page<LikeItemDto> getMovieOrGoodsLikeList(Pageable pageable, Integer userNo, LikeType type) {
@@ -57,7 +63,11 @@ public class LikesServiceImpl implements LikesService {
                 items = likeList.stream()
                         .map(like -> {
                             Users user = userMap.get(like.getTargetNo());
-                            return user != null ? new LikedUserDto(user) : null;
+                            LikedUserDto likedUserDto = (user != null ? new LikedUserDto(user) : null);
+                            if (likedUserDto != null) {
+                                likedUserDto.setLikeNo(like.getNo());
+                            }
+                            return likedUserDto;
                         })
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList());
@@ -69,13 +79,36 @@ public class LikesServiceImpl implements LikesService {
                 items = likeList.stream()
                         .map(like -> {
                             Movies movie = movieMap.get(like.getTargetNo());
-                            return movie != null ? new LikedMovieDto(movie) : null;
+                            LikedMovieDto likedMovieDto = (movie != null ? new LikedMovieDto(movie) : null);
+                            if (likedMovieDto != null) {
+                                likedMovieDto.setLikeNo(like.getNo());
+                            }
+                            return likedMovieDto;
                         })
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList());
             }
             case GOODS -> {
+                Map<Integer, Goods> goodsMap = mdShopRepository.findByIdIn(itemIds).stream()
+                        .collect(Collectors.toMap(Goods::getId, Function.identity()));
 
+                Map<Integer, List<String>> imageInfoList = imageInfoRepository.findAllByBoardNoInAndTypeAndStatus(itemIds, ImageWriteType.GOODS, StatusInfo.ACTIVE).stream()
+                        .collect(Collectors.groupingBy(ImageInfo::getBoardNo,
+                                Collectors.mapping(ImageInfo::getImageId, Collectors.toList())));
+
+                items = likeList.stream()
+                        .map(like -> {
+                            Goods goods = goodsMap.get(like.getTargetNo());
+                            // 굿즈 이미지
+                            LikedGoodsDto likedGoodsDto = (goods != null ? new LikedGoodsDto(goods) : null);
+                            if (likedGoodsDto != null) {
+                                likedGoodsDto.setLikeNo(like.getNo());
+                                likedGoodsDto.setImageIdList(imageInfoList.get(like.getTargetNo()));
+                            }
+                            return likedGoodsDto;
+                        })
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
             }
         }
 

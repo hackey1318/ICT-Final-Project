@@ -57,6 +57,7 @@ public class SecurityConfig {
                 mvc.pattern( "/oauth/api/users/check-phone/**"),
                 mvc.pattern("/file-system/download/**"),
                 mvc.pattern("/file-system/showImage/**"),
+                mvc.pattern("/file-system/showPreview/**"),
                 mvc.pattern("/user/**"),
                 mvc.pattern("/banner/**"),
                 mvc.pattern("/movies/**"),
@@ -67,7 +68,9 @@ public class SecurityConfig {
                 mvc.pattern("/dashboard/**"),
                 mvc.pattern("/payment/**"),
                 mvc.pattern("/inquiry/**"),
-                mvc.pattern("/manager/home/register/**") //관리자 등록
+                mvc.pattern("/manager/home/register/**"), //관리자 등록
+                mvc.pattern("/cinemate/movies/**"),
+                mvc.pattern("/cinemate/movieDetail/**"),
         };
 
         return http
@@ -77,7 +80,7 @@ public class SecurityConfig {
                     config.setAllowedOrigins(List.of("http://localhost:3000", "http://192.168.1.252:3000"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
                     config.setAllowedHeaders(List.of("*"));
-                    config.setExposedHeaders(List.of("accessToken")); // accessToken 노출
+                    config.setExposedHeaders(List.of("accessToken", "Content-Disposition")); // accessToken 노출
                     config.setAllowCredentials(true);
                     return config;
                 }))
@@ -92,6 +95,7 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.GET, "/announce/**").permitAll()
                                         .requestMatchers("/admin/**").permitAll()
                                         .requestMatchers(HttpMethod.DELETE, "/user").hasAnyRole(UserRole.ADMIN.name())
+                                        .requestMatchers(HttpMethod.GET, "/movies/{movieNo}/reviews").permitAll()
                                         .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(activeUserTrackingFilter, JwtRequestFilter.class)
