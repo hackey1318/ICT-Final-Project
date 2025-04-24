@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface AdminService {
 
-    Page<UserResponse> getMemberList(Pageable pageable);
+    Page<UserResponse> getMemberList(Pageable pageable, String memnerId, String memberNickname, String memberEmail);
 
     Page<UserResponse> getManagerList(Pageable pageable);
 
