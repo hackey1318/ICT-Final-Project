@@ -14,8 +14,11 @@ function OrderDetail() {
     const [theater, setTheater] = useState();
     const [searchParams] = useSearchParams();
     const orderId = searchParams.get("orderNumber");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+
+
         axios.post("http://localhost:9988/order/detail", JSON.stringify({
             orderNumber: orderId
         }), {
@@ -25,30 +28,27 @@ function OrderDetail() {
             }
         })
             .then((response) => {
-                console.log(response.data);
                 setOrderData(response.data.orders);
                 setGoodsData(response.data.goods);
                 setPaymentData(response.data.payments);
                 setNickName(response.data.nickName);
                 setEmail(response.data.email);
                 setTheater(response.data.theater);
-                console.log(response);
+                setLoading(false);
             })
             .catch((error) => {
                 window.location.href = "/order/error";
             })
-
-        // setGoodsData(prev => [...prev, ...testGoodsData]);
     }, []);
 
     useEffect(() => {
         if (goodsData.length === 0) return;
-        console.log(goodsData);
-        console.log("hf");
         const goodsIdList = goodsData.map(item => item.goodsNo);
-
     }, [goodsData])
 
+    if (loading) {
+        return null;
+    }
 
     return (
         <div className="order_container">
@@ -61,13 +61,13 @@ function OrderDetail() {
                         {goodsData.map((element, index) => (
                             <div key={index} onClick={() => window.location.href = `/mdshop/${goodsData[index].goodsNo}`}>
                                 <div className="order_info_content_goods_img">
-                                    {console.log(element.imageIdList[0])}
                                     <img src={`http://192.168.1.252:9988/file-system/download/${element.imageIdList[0]}`}/>
                                 </div>
                                 <div className="order_info_content_goods_detail">
                                     <span className="goods_name"><b>{element.name}</b></span>
                                     <span>수량: {element.quantity}개</span>
-                                    <span>가격: {(element.price * element.quantity).toLocaleString()}원</span>
+                                    <span>상품 금액: {element.price.toLocaleString()}원</span>
+                                    <span>총 금액: {(element.price * element.quantity).toLocaleString()}원</span>
                                 </div>
                             </div>
                         ))}

@@ -1,14 +1,13 @@
 package com.ict.finalProject.orders.controller;
 
-import com.ict.finalProject.common.config.AuthCheck;
 import com.ict.finalProject.common.config.JwtTokenProvider;
 import com.ict.finalProject.domain.constant.OrdersStatus;
-import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
 import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.movie.service.TheatersService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
+import com.ict.finalProject.orders.controller.response.OrderListResponse;
 import com.ict.finalProject.orders.repository.domain.OrderItem;
 import com.ict.finalProject.orders.repository.domain.Orders;
 import com.ict.finalProject.orders.service.OrderItemService;
@@ -25,13 +24,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -201,5 +196,50 @@ public class OrderController {
             jsonObj.put("message", "일치하는 데이터가 없습니다.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonObj);
         }
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<OrderListResponse> getOrderList(HttpServletRequest request) throws Exception {
+        final String token = request.getHeader("Authorization");
+        String userId = null;
+        if (token != null && !token.isEmpty()) {
+            String jwtToken = token.substring(7);
+
+            userId = jwtTokenProvider.getUserNameFromToken(jwtToken);
+        }
+        int userNo = userService.getUser(userId).getNo();
+        List<OrdersDto> ordersDtoList = ordersService.getOrdersList(userNo);
+        List<List<OrderItemDto>> orderItemDtoLists = new ArrayList<>();
+        List<String> paymentKeyList = new ArrayList<>();
+        for (OrdersDto ordersDto : ordersDtoList) {
+            List<OrderItemDto> orderItemDtoList = orderItemService.getOrderItems(ordersDto.getId());
+            orderItemDtoLists.add(orderItemDtoList);
+            int orderNo = ordersDto.getId();
+            String paymentKey = "";
+            if (ordersDto.getStatus().equals(OrdersStatus.PAID)) {
+                paymentKey = paymentsService.getPaymentsDtoByOrderNo(orderNo).getPaymentKey();
+                paymentKeyList.add(paymentKey);
+            } else {
+                paymentKey = "undefined";
+                paymentKeyList.add(paymentKey);
+            }
+        }
+
+        Collections.reverse(ordersDtoList);
+        Collections.reverse(orderItemDtoLists);
+        Collections.reverse(paymentKeyList);
+        OrderListResponse orderListResponse = new OrderListResponse(ordersDtoList, orderItemDtoLists, paymentKeyList);
+        return ResponseEntity.ok(orderListResponse);
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<String> cancelOrder(@RequestBody Map<String, String> request, HttpServletRequest httpRequest) throws Exception {
+        String paymentKey = request.get("paymentKey");
+        int orderNo = Integer.parseInt(request.get("orderNo"));
+        String cancelTransactionKey = request.get("transactionKey");
+        paymentsService.cancelPayments(orderNo, OrdersStatus.CANCELLED, cancelTransactionKey);
+        ordersService.cancelOrders(orderNo);
+
+        return ResponseEntity.ok("취소되었습니다.");
     }
 }

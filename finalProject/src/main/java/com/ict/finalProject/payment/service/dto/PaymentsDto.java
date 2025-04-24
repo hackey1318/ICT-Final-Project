@@ -15,6 +15,8 @@ public class PaymentsDto {
     private int id;
     private int orderNo; // 주문 PK
     private String paymentKey; // 결제번호
+    private String payTransactionKey;
+    private String cancelTransactionKey;
     private OrdersStatus status;
     private String method;
     private LocalDateTime createdAt;
@@ -24,6 +26,8 @@ public class PaymentsDto {
         this.id = payments.getId();
         this.orderNo = payments.getOrderNo();
         this.paymentKey = payments.getPaymentKey();
+        this.payTransactionKey = payments.getPayTransactionKey();
+        this.cancelTransactionKey = payments.getCancelTransactionKey();
         this.status = payments.getStatus();
         this.method = payments.getMethod();
         this.createdAt = payments.getCreatedAt();

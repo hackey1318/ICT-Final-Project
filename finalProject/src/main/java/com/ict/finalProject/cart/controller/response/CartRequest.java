@@ -18,4 +18,8 @@ public class CartRequest {
     @Getter
     @Setter
     private List<Integer> goodsQuantities;
+
+    @Getter
+    @Setter
+    private String orderNumber;
 }

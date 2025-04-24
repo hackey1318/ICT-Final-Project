@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,8 +19,9 @@ public class LikedGoodsDto extends LikeItemDto {
     private Integer price;
     private String option;
     private String description;
+    private Integer likeNo;
+    private List<String> imageIdList;
 
-    // TODO : 굿즈 Entity 추가 후 수정
     public LikedGoodsDto(Goods goods) {
         super(LikeType.GOODS);
         this.id = goods.getId();

@@ -3,7 +3,6 @@ import '../../css/cart/Cart.css';
 import checkMark from '../../img/checkMark.png';
 import axios from 'axios';
 import TossPayment from "./../payment/TossPayment";
-// import { debounce } from 'lodash';
 import CartApi, { deleteGoodsList, getGoodsList, getTheaterList } from "./CartApi";
 
 const accessToken = sessionStorage.getItem("accessToken");
@@ -71,7 +70,6 @@ function Cart() {
         // 장바구니 데이터 가져오기
         getGoodsList()
             .then((response) => {
-                console.log(response.data);
                 const updateGoods = response.data.map(item => ({
                     ...item,
                     quantity: item.quantity,
@@ -176,8 +174,8 @@ function Cart() {
         cartQuantityUpdate();
 
         setOrderName(selectedGoods.length === 1
-            ? selectedGoods[0].name
-            : `${selectedGoods[0].name} 외 ${selectedGoods.length - 1}건`);
+            ? selectedGoods[0].goodsName
+            : `${selectedGoods[0].goodsName} 외 ${selectedGoods.length - 1}건`);
 
         const length = 25;
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -190,7 +188,6 @@ function Cart() {
 
         const userInfoStr = sessionStorage.getItem("userInfo");
         const userInfo = JSON.parse(userInfoStr);
-        console.log(accessToken);
         // axios로 주문 정보 서버에 저장
         axios.post("http://localhost:9988/order/save", {
             orderNumber: randomChars,
@@ -214,7 +211,6 @@ function Cart() {
             })
             .catch((error) => {
                 alert("상품 정보 오류");
-                console.log(error);
             });
     }
 
@@ -227,7 +223,7 @@ function Cart() {
     const selectTheater = (e) => {
         theaterRef.current.value = e.target.innerText;
     }
-
+    
     if (loading) {
         return null;
     }
