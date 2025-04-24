@@ -1,6 +1,8 @@
 package com.ict.finalProject.fileSystem.service;
 
+import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.fileSystem.controller.response.FileUploadResponse;
+import com.ict.finalProject.fileSystem.domain.ImageInfo;
 import com.ict.finalProject.fileSystem.domain.Images;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,4 +18,6 @@ public interface FileSystemService {
     List<String> getInquiryFileIds(int boardNo);
 
     List<String> getCartFileIds(int boardNo);
+
+    void createPendingImageInfos(List<String> imageIds, int boardNo, ImageWriteType type);
 }

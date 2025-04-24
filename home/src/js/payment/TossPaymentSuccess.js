@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 const accessToken = sessionStorage.getItem("accessToken");
@@ -17,6 +18,7 @@ function SuccessPage() {
     };
 
     async function confirm() {
+
       const response = await fetch("http://localhost:9988/payment/confirm", {
         method: "POST",
         headers: {
@@ -34,11 +36,18 @@ function SuccessPage() {
         return;
       }
 
-      
       console.log(json);
-      console.log(json.orderId);
 
       // 결제 성공 비즈니스 로직을 구현하세요.
+      axios.post("http://localhost:9988/cart/paidGoods", {
+        orderNumber: json.orderId
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+
       // 결과창으로 이동시키는 부분
       window.location.href = `/payment/result?orderNumber=${json.orderId}&totalPrice=${json.totalAmount}&paymentKey=${json.paymentKey}`;
     }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MoviesRepository extends JpaRepository<Movies, Integer> {
@@ -27,4 +28,12 @@ public interface MoviesRepository extends JpaRepository<Movies, Integer> {
 
     @Query("SELECT DISTINCT m.genre FROM Movies AS m WHERE m.no IN (:targetNoList)")
     List<String> getGenreByLike(@Param("targetNoList") List<Integer> targetNoList);
+
+    @Query("SELECT m FROM Movies AS m WHERE (:name IS NULL OR m.name LIKE %:name%) AND m.openStatus IN (:statuses)")
+    Page<Movies> searchMoviesByBanner(@Param("name") String name, @Param("statuses") List<MovieStatus> statuses, Pageable pageable);
+
+    List<Movies> findByNoIn(List<Integer> ids);
+
+    //movieNo로 영화 조회
+    Optional<Movies> findByNo(Integer no);
 }
