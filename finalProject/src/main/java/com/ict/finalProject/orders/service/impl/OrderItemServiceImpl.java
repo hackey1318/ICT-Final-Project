@@ -40,7 +40,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         item.setPrice(orderItem.getPrice());
         item.setQuantity(orderItem.getQuantity());
         order.getItems().add(item);
-        orderItemRepository.save(item);
+        ordersRepository.save(order);
     }
 
     @Override

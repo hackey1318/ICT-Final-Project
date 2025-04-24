@@ -24,6 +24,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -48,6 +49,7 @@ public class OrderController {
     }
 
     @PostMapping("/save")
+    @Transactional
     public String savePaymentInfo(@RequestBody String jsonBody, HttpServletRequest request) {
         final String token = request.getHeader("Authorization");
         String userId = null;
@@ -121,9 +123,11 @@ public class OrderController {
                     orders.setOrderNumber(orderNumber);
                     orders.setStatus(OrdersStatus.PENDING);
                     orders.setTotalPrice((int)requestTotalPrice);
-                    ordersService.insertOrders(orders);
+                    Orders saved = ordersService.insertOrders(orders);
 
-                    int orderNo = ordersService.getOrders(orderNumber).getId();
+
+                    int orderNo = saved.getId();
+
 
                     for (Object itemObj : goods) {
                         JSONObject item = (JSONObject) itemObj;
@@ -210,17 +214,25 @@ public class OrderController {
         List<List<OrderItemDto>> orderItemDtoLists = new ArrayList<>();
         List<String> paymentKeyList = new ArrayList<>();
         for (OrdersDto ordersDto : ordersDtoList) {
-            List<OrderItemDto> orderItemDtoList = orderItemService.getOrderItems(ordersDto.getId());
-            orderItemDtoLists.add(orderItemDtoList);
             int orderNo = ordersDto.getId();
-            String paymentKey = "";
+            log.info("▶▶▶ Fetching payments for orderNo = {}", orderNo);
+
+            List<OrderItemDto> orderItemDtoList = orderItemService.getOrderItems(orderNo);
+            orderItemDtoLists.add(orderItemDtoList);
+
+            String paymentKey = "undefined";
             if (ordersDto.getStatus().equals(OrdersStatus.PAID)) {
-                paymentKey = paymentsService.getPaymentsDtoByOrderNo(orderNo).getPaymentKey();
-                paymentKeyList.add(paymentKey);
-            } else {
-                paymentKey = "undefined";
-                paymentKeyList.add(paymentKey);
+                log.info("   Status=PAID, attempting to load payment record for orderNo {}", orderNo);
+                try {
+                    paymentKey = paymentsService
+                            .getPaymentsDtoByOrderNo(orderNo)
+                            .getPaymentKey();
+                } catch (Exception ex) {
+                    log.warn("No payment record for orderNo={}", orderNo);
+                    // paymentKey remains "undefined"
+                }
             }
+            paymentKeyList.add(paymentKey);
         }
 
         Collections.reverse(ordersDtoList);

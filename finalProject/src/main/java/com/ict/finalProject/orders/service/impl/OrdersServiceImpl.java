@@ -36,18 +36,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public void insertOrders(Orders orders) {
-        Orders entity = new Orders();
-        entity.setId(orders.getId());
-        entity.setUserNo(orders.getUserNo());
-        entity.setTheaterNo(orders.getTheaterNo());
-        entity.setOrderNumber(orders.getOrderNumber());
-        entity.setStatus(orders.getStatus());
-        entity.setTotalPrice(orders.getTotalPrice());
-        entity.setCreatedAt(orders.getCreatedAt());
-        entity.setUpdatedAt(orders.getUpdatedAt());
-
-        ordersRepository.save(entity);
+    public Orders insertOrders(Orders orders) {
+        return ordersRepository.save(orders);
     }
 
     @Override
