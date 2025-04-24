@@ -12,7 +12,7 @@ import { Navigation } from "swiper/modules"
 import "swiper/swiper-bundle.css"
 
 // your own styles
-import "../../css/movie/ReviewDetailModal.css"
+import "../../css/movie/ReviewDetailModal.css";
 import apiClient from "../../js/public/axiosConfig";
 
 const reportCategory = {
