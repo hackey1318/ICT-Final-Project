@@ -239,6 +239,12 @@ function MovieDetail() {
 						<Link
 							to={`/movies/${id}/reviews`}
 							className="movie_detail_btn_secondary btn btn-outline-secondary"
+							onClick={() => {
+								//리뷰페이지에서 사용할 영화명, 줄거리 세션에 저장
+								sessionStorage.setItem('movieName', movie.name);
+								sessionStorage.setItem('movieDescription', movie.description);
+								sessionStorage.setItem('reviewPageMoviePoster', movie.postImage);
+							}}
 						>
 							리뷰보기
 						</Link>

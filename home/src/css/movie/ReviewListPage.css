@@ -1,64 +1,154 @@
-.review-list-page {
-    padding: 20px;
-  }
-  
-  .review-list-page h2 {
-    font-size: 24px;
-    margin-bottom: 16px;
-  }
-  
-  .review-cards {
-    display: grid;
-    /* 고정된 5열, 각 열 너비 200px */
-    grid-template-columns: repeat(5, 200px);
-    gap: 16px;
-    justify-content: center;   /* 전체 그리드를 가운데로 */
+/* 전체 페이지 여백 설정 */
+.review-list-page_container{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 15px;
+}
 
-  }
-  
-  .review-card {
-    width: 200px;
-    cursor: pointer;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #fff;
-    transition: box-shadow 0.2s ease;
-    
-  }
-  
-  .review-card:hover {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-  
-  .review-card-image {
-    max-height: 50%;
-    min-height: 50%;
-    width: 100%;
-    height: auto;
-  }
-  
-/* 제목 스타일 */
+/* ── 헤더 ── */
+.review-list-header {
+  margin-bottom: 30px;
+}
+
+/* 상단 타이틀 행 */
+.review-list-top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* 영화 리뷰페이지 */
+.review-list-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* 메뉴 항목 */
+.review-list-menu {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 뒤로가기 + 영화명 row */
+.review-list-sub-header {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* 뒤로가기 버튼 */
+.review-back-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  margin-right: 8px;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+/* 영화 제목 텍스트 */
+.review-movie-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0
+}
+
+.review-movie-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.review-movie-poster {
+  width: 120px;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.review-movie-info-text h2 {
+  font-size: 1.25rem;
+  margin: 0 0 8px;
+}
+
+.review-movie-info-text .review-movie-desc {
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 영화정보와 리뷰사이 어딘가그곳 */
+.review-list-section-header {
+  display: flex;                    /* 플렉스 컨테이너로 만들고 */
+  justify-content: space-between;  /* h2와 버튼을 좌·우 끝으로 분배 */
+  align-items: center;             /* 수직 중앙 정렬 */
+}
+
+
+/* 리뷰 카드 그리드 레이아웃 */
+/* 5열 고정, 각 열 200px, 칸 사이 16px, 전체 가운데 정렬 */
+.review-cards {
+  display: grid;
+  grid-template-columns: repeat(5, 200px);
+  gap: 16px;
+  justify-content: center;
+}
+
+/* 개별 리뷰 카드 공통 스타일 */
+/* 크기, 테두리, 둥근 모서리, 배경, 호버 시 그림자 효과 */
+.review-card {
+  width: 200px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  transition: box-shadow 0.2s ease;
+}
+.review-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 카드 내 이미지 영역 */
+/* 높이 50% 고정, 너비 100% */
+.review-card-image {
+  max-height: 50%;
+  min-height: 50%;
+  width: 100%;
+  height: auto;
+}
+
+/* 카드 제목 스타일 */
+/* 여백, 글자 크기·굵기 */
 .review-card-title {
   font-size: 16px;
   font-weight: bold;
   margin: 8px;
-  /* 카드 안에서 잘리지 않도록 컨텐츠 높이에서 제외하려면 review-card-content 높이를 늘리거나 auto로 */
 }
 
-/* (기존) content 영역 높이 조정 */
+/* 카드 내용 영역 */
+/* padding, 줄간격, 자동 높이, 넘칠 때 말줄임 표시 */
 .review-card-content {
   padding: 8px;
   font-size: 14px;
   line-height: 1.4;
-  /* height: 60px;  ← 이 값을 삭제하거나 auto로 수정하세요 */
   height: auto;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-
+/* 페이지네이션 컨테이너 */
+.review-list-pagination-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+/* 가로 중앙 정렬, 버튼 간격, 위쪽 마진 */
 .pagination {
   display: flex;
   justify-content: center;
@@ -66,6 +156,8 @@
   margin-top: 24px;
 }
 
+/* 페이지네이션 버튼 공통 */
+/* 여백, 테두리, 배경, 커서 */
 .pagination button {
   padding: 6px 12px;
   border: 1px solid #ddd;
@@ -73,12 +165,14 @@
   cursor: pointer;
 }
 
+/* 활성화된 페이지 버튼 스타일 */
 .pagination button.active {
   background: #3498db;
   color: #fff;
   border-color: #3498db;
 }
 
+/* 비활성(이전/다음 끝) 버튼 스타일 */
 .pagination button:disabled {
   opacity: 0.5;
   cursor: default;
