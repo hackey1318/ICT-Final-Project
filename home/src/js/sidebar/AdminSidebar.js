@@ -46,7 +46,7 @@ function AdminSidebar({activeMenu}){
                 
                 return
             }
-
+            
             //if문 통과시 role, 닉네임 셋팅
             setRole(getUserInfo); //role 정보 셋팅
             setNickname(getUserNickname); //닉네임 정보 셋팅
