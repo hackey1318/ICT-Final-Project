@@ -15,6 +15,7 @@ public class LikedMovieDto extends LikeItemDto {
     private String director;
     private String ageGrade;
     private String postImage;
+    private Integer likeNo;
 
     public LikedMovieDto(Movies movie) {
         super(LikeType.MOVIE);

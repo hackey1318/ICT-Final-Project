@@ -1,59 +1,145 @@
-/* 관리자 - 문의답변리스트 */
-#inquiryreply-container {
+.inquiryreply-wrap {
+    padding: 20px 40px;
     width: 95%;
-    min-width: 680px;
     margin: 0 auto;
-    
 }
 
-#inquiryreply-container>ul {
-    overflow: auto;
-    text-align: center;
-    padding: 0;
-    margin: 0;
-    height: 50px;
-    line-height: 48px;
-    border-bottom: 1px solid #ddd;
-    transition: all 0.500s;
+/*제목*/
+.inquiryreply-title {
+    margin-bottom: 30px;
 }
 
-#inquiryreply-container>ul:hover {
-    background-color: #ebebeb;
-    transition: all 0.500s;
+.inquiry-list {
+    width: 100%;
+    overflow: hidden;
+    min-height: 550px;
 }
 
-#inquiryreply-container>ul>li {
-    float: left;
-    list-style-type: none;
-}
-
-#inquiryreply-container>ul>li:first-child {
-    width: 5%;
-}
-
-#inquiryreply-container>ul>li:nth-of-type(2) {
+  /* 검색창 스타일 (오른쪽 정렬 + 정리된 박스) */
+  .inquiryreply_search-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
     width: 40%;
+  }
+
+  .form-control-search {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 180px;
+  }
+
+  .inquiryreply_dropdown {
+    padding: 12px 12px !important;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+    color: #333;
+    appearance: none; /* 기본 화살표 제거 (브라우저 기본 스타일 제거) */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%23333' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;    min-width: 120px;
+  }
+
+  .btn.btn-primary {
+    padding: 6px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn.btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+  /* 테이블 영역 */
+  .inquiryreply-container {
+    margin-top: 20px;
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .inquiryreply-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    font-size: 14px;
+    height: 100%;
+  }
+
+  .inquiryreply-table th,
+  .inquiryreply-table td {
+    padding: 1px;
+    border: 1px solid #dee2e6;
+    text-align: center;
+    vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    cursor: pointer;
+  }
+
+  .inquiryreply-table th {
+    padding: 12px;
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .inquiryreply-table th:nth-child(1),
+  .inquiryreply-table td:nth-child(1) {
+  width: 10%;
 }
 
-#inquiryreply-container>ul>li:nth-of-type(3) {
-    width: 14%;
+  .inquiryreply-table th:nth-child(2),
+  .inquiryreply-table td:nth-child(2) {
+  width: 25%;
 }
 
-#inquiryreply-container>ul>li:nth-of-type(4) {
-    width: 17%;
+  .inquiryreply-table th:nth-child(3),
+  .inquiryreply-table td:nth-child(3) {
+  width: 15%;
 }
 
-#inquiryreply-container>ul>li:nth-of-type(5) {
-    width: 12%;
+  .inquiryreply-table th:nth-child(4),
+  .inquiryreply-table td:nth-child(4) {
+  width: 15%;
 }
 
-#inquiryreply-container>ul>li:last-child {
-    width: 12%;
+  .inquiryreply-table th:nth-child(5),
+  .inquiryreply-table td:nth-child(5) {
+  width: 20%;
 }
 
-/* 관리자 - 문의상세페이지 */
+  .inquiryreply-table th:nth-child(6),
+  .inquiryreply-table td:nth-child(6) {
+  width: 15%;
+}
 
+  .inquiryreply-table tr:hover {
+    background-color: #f1f1f1;
+  }
+
+/* 테이블 셀 세로 중앙 정렬 (기존에도 설정되어 있어야 하지만 아래와 같이 명시해 줍니다) */
+.inquiryreply-table td {
+  vertical-align: middle;
+}
+
+/* 드롭다운 내부 여백·정렬 초기화 */
+.inquiryreply-table td select,
+.inquiryreply-table td .form-select {
+  /* 만약 인라인 스타일로 margin-top:7px 이 들어가 있다면 */
+  margin-top: 0 !important;
+  /* 셀 가운데 딱 붙도록 */
+  vertical-align: middle;
+  /* 필요하다면 높이도 조정 */
+  line-height: normal;
+}

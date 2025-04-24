@@ -10,9 +10,9 @@
     gap: 30px;
 }
 .data-select-btn{
-    width: 200px;
+    width: 100%;
     margin-top: 20px;
-    margin-left: 50px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: center;
 }
@@ -28,48 +28,8 @@
     background: #888;
 }
 .userdau-left{
-    width: 60%;
-}
-.userdau-list{
-    width: 100%;
-    overflow: hidden; /* 스크롤 방지 */
+    width: 50%;
     min-height: 550px;
-}
-.userdau-list>ul{
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    justify-content: center; 
-    box-sizing: border-box;
-    flex-wrap: nowrap; /* 줄바꿈 방지 */
-}
-.userdau-list>ul>li{
-    text-align: center; 
-    border-bottom: 1px solid #aaa;
-    padding: 10px;
-    flex: 1; /* 비율 자동 배분 */
-    min-width: 0; /* 줄어들 수 있도록, flex 아이템이 자동으로 줄어들 수 있게 해줌 */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; /* 줄바꿈 안되게 */
-}
-.userdau-list>ul:first-child>li{
-    border: none;
-}
-.userdau-list>ul:hover{
-    background: #ccc;
-}
-.userdau-list>ul:nth-child(1):hover{
-    background: none;
-}
-.userdau-list-title{
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 7px 20px;
-    white-space: nowrap;
 }
 
 .list-select-box{
@@ -108,7 +68,7 @@
     background-color: rgba(0, 0, 128);
 }
 .userdau-right{
-    width: 40%;
+    width: 50%;
     height: 500px;
 }
 .userdat-chart-totaluser{
@@ -140,3 +100,210 @@
     font-size: 18px;
     line-height: 2;
 }
+.member_search-container {
+    display: flex;
+    justify-content: flex-end; /* 👉 오른쪽 정렬 */
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  /* 전체 페이지 래퍼 */
+.memberlist-wrap {
+    padding: 20px 40px;
+    width: 95%;
+    margin: 0 auto;
+    height: 750px;
+  }
+  
+  /* 테이블 영역(memberlist) */
+  .memberlist-container {
+    margin-top: 20px;
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .memberlist-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    font-size: 14px;
+    height: 100%;
+  }
+  
+  .memberlist-table th,
+  .memberlist-table td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .memberlist-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .memberlist-table th:nth-child(1),
+  .memberlist-table td:nth-child(1) {
+  width: 10%;
+}
+
+  .memberlist-table th:nth-child(2),
+  .memberlist-table td:nth-child(2) {
+  width: 20%;
+}
+
+  .memberlist-table th:nth-child(3),
+  .memberlist-table td:nth-child(3) {
+  width: 20%;
+}
+
+  .memberlist-table th:nth-child(4),
+  .memberlist-table td:nth-child(4) {
+  width: 20%;
+}
+
+  .memberlist-table th:nth-child(5),
+  .memberlist-table td:nth-child(5) {
+  width: 20%;
+}
+
+  .memberlist-table th:nth-child(6),
+  .memberlist-table td:nth-child(6) {
+  width: 10%;
+}
+  
+  .memberlist-table tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  /*userdaulist 테이블 스타일*/
+.userdau-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    font-size: 14px;
+  }
+.userdau-table th,
+.userdau-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .userdau-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+  }
+  .userdau-table th:nth-child(1),
+  .userdau-table td:nth-child(1) {
+  width: 20%;
+}
+
+  .userdau-table th:nth-child(2),
+  .userdau-table td:nth-child(2) {
+  width: 33%;
+}
+
+  .userdau-table th:nth-child(3),
+  .userdau-table td:nth-child(3) {
+  width: 33%;
+}
+
+  
+  /* 검색창 스타일 (오른쪽 정렬 + 정리된 박스) */
+  .member_search-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 50%;
+  }
+  .member_search-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 40%;
+  }
+  
+  .form-control-search {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 180px;
+  }
+  
+  .user_dropdown {
+    padding: 12px 12px !important;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+    color: #333;
+    appearance: none; /* 기본 화살표 제거 (브라우저 기본 스타일 제거) */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%23333' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    min-width: 120px;
+  }
+  
+  .search-button{
+    padding: 30px 40px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn.btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  /* 페이지네이션 (MdList와 통일) */
+  .paging-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 10px;
+  }
+  
+  .page-buttons {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .page-buttons button {
+    padding: 8px 14px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .page-buttons button.active {
+    background-color: navy;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .page-buttons button:hover {
+    background-color: rgba(0, 0, 128, 0.9);
+    color: #fff;
+  }
