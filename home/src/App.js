@@ -52,98 +52,104 @@ import AdminFindId from './page/admin/AdminFindId';
 import AdminFindPwd from './page/admin/AdminFindPwd';
 import Report from './page/report/Report';
 import BannerList from './page/admin/banner/BannerList';
+import MypageSidebar from './js/sidebar/MyPageSidebar';
+import LikedItemsPage from './page/user/mypage/LikedItemsPage';
 
 
 function App() {
 
-  const location = useLocation();
+	const location = useLocation();
 
-  function ReviewListRoute() {
-    const { id } = useParams();                    // URL :movies/:id/reviews
-    const stored = sessionStorage.getItem('userInfo');
-    const currentUser = stored ? JSON.parse(stored) : null;
-    const currentUserNo = currentUser?.userNo;
-    return (
-      <>
-      <ReviewListPage
-        movieNo={Number(id)}
-        currentUserNo={currentUserNo}
-        
-      />
+	function ReviewListRoute() {
+		const { id } = useParams();                    // URL :movies/:id/reviews
+		const stored = sessionStorage.getItem('userInfo');
+		const currentUser = stored ? JSON.parse(stored) : null;
+		const currentUserNo = currentUser?.userNo;
+		return (
+			<>
+				<ReviewListPage
+					movieNo={Number(id)}
+					currentUserNo={currentUserNo}
 
-      <Outlet />
-      </>
-    );
-  }
+				/>
 
-  useEffect(() => {
-    const isManagerPage = location.pathname.startsWith('/manager');
-    document.body.classList.toggle('manager-page', isManagerPage);
-  }, [location.pathname]);
+				<Outlet />
+			</>
+		);
+	}
 
-  return (
-      <Routes>
-  
-        <Route path='/' element={<Layout />}>
-          <Route index element={<Main />} />
-          <Route path='login' element={<KakaoLogin />} />
-          <Route path='kakao/callback' element={<KakaoCallback />} />
-          <Route path="/register" element={<GeneralRegisterForm />} />
-          <Route path='user/findId' element={<FindId />} />
-          <Route path='user/findPwd' element={<FindPwd />} />
-          <Route path='user/pwdReset' element={<PwdReset />} />
-          <Route path='movies' element={<GenreMovie />} />
-          <Route path='payment/tossPayment' element={<TossPayment />} />
-          <Route path='payment/tossPaymentSuccess' element={<TossPaymentSuccess />} />
-          <Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
-          <Route path='payment/result' element={<PaymentResult />} />
-          <Route path='movies/:id' element={<MovieDetail />} />
-          <Route path='movies/:id/reviews' element={<ReviewListRoute />}>
-          <Route path='write' element={<ReviewWritePage />} />
-          <Route path='edit/:reviewNo' element={<ReviewEditPage />} />
-          </Route>
-          <Route path='movies/current' element={<CurrentMovie />} />
-          <Route path='movies/upcoming' element={<UpcomingMovie />} />
-          <Route path='/inquiry' element={<InquiryPage />} />
-          <Route path='/inquiryView/:no' element={<InquiryView />} />
-          <Route path='cart' element={<Cart />} />
-          <Route path='order/list' element={<OrderList />} />
-          <Route path='order/detail' element={<OrderDetail />} />
-          <Route path='order/error' element={<OrderError />} />
-          <Route path='mdshop' element={<MdShop />} />
-          <Route path="mdshop/:goodsNo" element={<GoodsDetail />} />
-          <Route path="/related-movie/:movieId" element={<RelatedMovie />} />
-          <Route path="/announcements" element={<UserAnnounce />} />
-          <Route path="/announcements/:id" element={<UserAnnounceDetail />} />
-          </Route>
+	useEffect(() => {
+		const isManagerPage = location.pathname.startsWith('/manager');
+		document.body.classList.toggle('manager-page', isManagerPage);
+	}, [location.pathname]);
 
-        {/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
-        <Route path="/manager">
-          <Route index element={<ManagerLogin />} />
-          <Route path="find-id" element={<AdminFindId />} />
-          <Route path="find-pwd" element={<AdminFindPwd />} />
-          <Route path="pwdReset" element={<PwdReset />} />
-          <Route path="register" element={<ManagerRegister />} />
+	return (
+		<Routes>
 
-          {/* 로그인 이후 관리자 레이아웃 (사이드바 포함) */}
-          <Route path="home" element={<Admin />}>
-            <Route index element={<DashBoard/>} />
-            <Route path="dau" element={<UserDau />} />
-            <Route path="member-list" element={<MemberList />} />
-            <Route path="manager-list" element={<ManagerList />} />
-            <Route path="blacklist" element={<BlackList />} />
-            <Route path="gender" element={<Gender />} />
-            <Route path="mdlists" element={<MdList />} />
-            <Route path="inquiry" element={<InquiryReply/>}/>
-            <Route path="inquiry/:no" element={<InquiryReplyView/>}/>
-            <Route path="announce" element={<AnnounceList />} />
-            <Route path="announce/:no" element={<AnnounceDetail />} />
-            <Route path="report" element={<Report />} />
-            <Route path='banner' element={<BannerList />} />
-          </Route>
-        </Route>
-      </Routes>
-  );
+			<Route path='/' element={<Layout />}>
+				<Route index element={<Main />} />
+				<Route path='login' element={<KakaoLogin />} />
+				<Route path='kakao/callback' element={<KakaoCallback />} />
+				<Route path="/register" element={<GeneralRegisterForm />} />
+				<Route path='user/findId' element={<FindId />} />
+				<Route path='user/findPwd' element={<FindPwd />} />
+				<Route path='user/pwdReset' element={<PwdReset />} />
+				<Route path='movies' element={<GenreMovie />} />
+				<Route path='payment/tossPayment' element={<TossPayment />} />
+				<Route path='payment/tossPaymentSuccess' element={<TossPaymentSuccess />} />
+				<Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
+				<Route path='payment/result' element={<PaymentResult />} />
+				<Route path='movies/:id' element={<MovieDetail />} />
+				<Route path='movies/:id/reviews' element={<ReviewListRoute />}>
+					<Route path='write' element={<ReviewWritePage />} />
+					<Route path='edit/:reviewNo' element={<ReviewEditPage />} />
+				</Route>
+				<Route path='movies/current' element={<CurrentMovie />} />
+				<Route path='movies/upcoming' element={<UpcomingMovie />} />
+				<Route path='/inquiry' element={<InquiryPage />} />
+				<Route path='/inquiryView/:no' element={<InquiryView />} />
+				<Route path='cart' element={<Cart />} />
+				<Route path='order/list' element={<OrderList />} />
+				<Route path='order/detail' element={<OrderDetail />} />
+				<Route path='order/error' element={<OrderError />} />
+				<Route path='mdshop' element={<MdShop />} />
+				<Route path="mdshop/:goodsNo" element={<GoodsDetail />} />
+				<Route path="/related-movie/:movieId" element={<RelatedMovie />} />
+				<Route path="/announcements" element={<UserAnnounce />} />
+				<Route path="/announcements/:id" element={<UserAnnounceDetail />} />
+				<Route path="/mypage" element={<MypageSidebar />} >
+					<Route path="likes" element={<LikedItemsPage />} />
+				</Route>
+
+			</Route>
+
+			{/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
+			<Route path="/manager">
+				<Route index element={<ManagerLogin />} />
+				<Route path="find-id" element={<AdminFindId />} />
+				<Route path="find-pwd" element={<AdminFindPwd />} />
+				<Route path="pwdReset" element={<PwdReset />} />
+				<Route path="register" element={<ManagerRegister />} />
+
+				{/* 로그인 이후 관리자 레이아웃 (사이드바 포함) */}
+				<Route path="home" element={<Admin />}>
+					<Route index element={<DashBoard />} />
+					<Route path="dau" element={<UserDau />} />
+					<Route path="member-list" element={<MemberList />} />
+					<Route path="manager-list" element={<ManagerList />} />
+					<Route path="blacklist" element={<BlackList />} />
+					<Route path="gender" element={<Gender />} />
+					<Route path="mdlists" element={<MdList />} />
+					<Route path="inquiry" element={<InquiryReply />} />
+					<Route path="inquiry/:no" element={<InquiryReplyView />} />
+					<Route path="announce" element={<AnnounceList />} />
+					<Route path="announce/:no" element={<AnnounceDetail />} />
+					<Route path="report" element={<Report />} />
+					<Route path='banner' element={<BannerList />} />
+				</Route>
+			</Route>
+		</Routes>
+	);
 }
 
 export default App;
