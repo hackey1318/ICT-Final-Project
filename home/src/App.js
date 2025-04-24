@@ -54,6 +54,9 @@ import Report from './page/admin/Report';
 import BannerList from './page/admin/banner/BannerList';
 import MypageSidebar from './js/sidebar/MyPageSidebar';
 import LikedItemsPage from './page/user/mypage/LikedItemsPage';
+import MovieTheater from './page/cinemate/MovieTheater';
+import MovieList from './page/cinemate/MovieList';
+import MovieListDetail from './page/cinemate/MovieListDetail';
 
 
 function App() {
@@ -122,7 +125,13 @@ function App() {
 					<Route path="likes" element={<LikedItemsPage />} />
 				</Route>
 
-			</Route>
+          {/* 시네메이트 */}
+          <Route path="cinemate" element={<MovieTheater />} >
+            <Route index element={<MovieList />} />
+            <Route path="movies" element={<MovieList />} />
+          </Route>
+          <Route path="/cinemate/movie-detail/:movieNo" element={<MovieListDetail />} />
+        </Route>
 
 			{/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
 			<Route path="/manager">
