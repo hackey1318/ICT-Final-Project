@@ -4,6 +4,10 @@ import com.ict.finalProject.mdShop.controller.request.MdshopRequest;
 import com.ict.finalProject.mdShop.controller.response.MdshopResponse;
 import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.mdShop.service.dto.MdShopDto;
+import com.ict.finalProject.orders.controller.request.OrderNumberRequest;
+import com.ict.finalProject.orders.service.OrderItemService;
+import com.ict.finalProject.orders.service.OrdersService;
+import com.ict.finalProject.orders.service.dto.OrderItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +24,8 @@ import java.util.List;
 public class MdShopController {
 
     private final MdShopService mdShopservice;
+    private final OrdersService ordersService;
+    private final OrderItemService orderItemService;
 
     @GetMapping("/lists")
     public ResponseEntity<Page<MdShopDto>> getMdList(@RequestParam(value = "name", required = false) String name,
@@ -54,6 +60,15 @@ public class MdShopController {
     @DeleteMapping("/items/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable int id) {
         mdShopservice.deleteMd(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/updateItemQuantity")
+    public ResponseEntity<Void> updateQuantity(@RequestBody OrderNumberRequest orderNumberRequest) throws Exception {
+        String orderNumber = orderNumberRequest.getOrderNumber();
+        int orderNo = ordersService.getOrdersDtoByOrderNumber(orderNumber).getId();
+        List<OrderItemDto> orderItemDtoList = orderItemService.getOrderItems(orderNo);
+        mdShopservice.updateGoodsQuantity(orderItemDtoList);
         return ResponseEntity.ok().build();
     }
 }
