@@ -123,11 +123,7 @@ public class OrderController {
                     orders.setTotalPrice((int)requestTotalPrice);
                     ordersService.insertOrders(orders);
 
-                    // 주문 상품 저장
-                    OrderItem orderItem = new OrderItem();
-
                     int orderNo = ordersService.getOrders(orderNumber).getId();
-                    orderItem.setOrderNo(orderNo); // 주문PK
 
                     for (Object itemObj : goods) {
                         JSONObject item = (JSONObject) itemObj;
@@ -136,6 +132,8 @@ public class OrderController {
                         int goodsPrice = ((Long) item.get("goodsPrice")).intValue(); // 굿즈 가격
                         int goodsQuantity = ((Long) item.get("quantity")).intValue(); // 굿즈 수량
 
+                        OrderItem orderItem = new OrderItem();
+                        orderItem.setOrderNo(orderNo);
                         orderItem.setGoodsNo(goodsNo);
                         orderItem.setName(goodsName);
                         orderItem.setPrice(goodsPrice);

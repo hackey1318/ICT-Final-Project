@@ -16,7 +16,7 @@ function ReviewListPage({ movieNo, currentUserNo }) {
   const baseUrl = axios.defaults.baseURL;
 
   useEffect(() => {
-    getReviews(movieNo).then(res => setReviews(res.data));
+    getReviews(movieNo).then(res => setReviews(res.data, console.log("ssssss"+res.data))) 
   }, [movieNo]);
 
   const handleDelete = no => setReviews(prev => {
