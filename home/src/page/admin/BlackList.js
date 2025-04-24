@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Button from '../../js/common/Buttons.js';
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -13,6 +14,14 @@ function BlackList(){
 
     //사용자status 선택 상태
     const [selectStatus, setSelectStatus] = useState({}); 
+
+    // 검색어 예시
+    const handleSearch = e => {
+        e.preventDefault();      
+        //setPage(0);
+        //getUserList();           
+      };
+
 
     useEffect(()=>{
         axios.get(`http://localhost:9988/manager/home/blacklist?page=${page}&size=10`, {
@@ -107,37 +116,69 @@ function BlackList(){
     }
 
     return(
-        <div className="userdau-wrap">
+        <div className="memberlist-wrap">
             <h3 className="contents-title">Admin Page - BlackList</h3>
 
-            <div className="userdau-list">
-                <ul>
-                    <li style={{}}><div className="userdau-list-title">회원번호</div></li>
-                    <li style={{}}><div className="userdau-list-title">회원아이디</div></li>
-                    <li style={{}}><div className="userdau-list-title">회원닉네임</div></li>
-                    <li style={{}}><div className="userdau-list-title">이메일</div></li>
-                    <li style={{}}><div className="userdau-list-title">연락처</div></li>
-                    <li style={{}}><div className="userdau-list-title">상태</div></li>
-                </ul>
+            {/* 검색어 예시 */}
+            <form className="d-flex justify-content-end mb-3" onSubmit={handleSearch}>
+                <div className="member_search-container">
+                    <select /*value={searchType}
+                            onChange={(e) => setSearchType(e.target.value)} */
+                            style={{ padding: '0.5rem' }}
+                            className="user_dropdown">
+                        <option value="memberId">아이디</option>
+                        <option value="memberNickname">닉네임</option>
+                        <option value="memberEmail">이메일</option>
+                    </select>
+                    <input
+                        type="text"
+                        /*value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}*/
+                        style={{ padding: '11px' }}
+                        placeholder="검색어를 입력하세요"
+                    />
+                    <Button variant='primary'
+                            /*onClick={() => { setPage(0); getUserList(); }}*/
+                    >
+                        검색
+                    </Button>
+                </div>
+            </form>
+
+            <div className="memberlist-container">
+                <table className="memberlist-table">
+                    <thead>
+                        <tr>
+                            <th>회원번호</th>
+                            <th>회원아이디</th>
+                            <th>회원닉네임</th>
+                            <th>이메일</th>
+                            <th>연락처</th>
+                            <th>상태</th>
+                        </tr>
+                    </thead>
+                        <tbody>    
                 {
                     blackList.map((item)=>{
                         return(
-                            <ul>
-                                <li style={{}}>{item.no}</li>
-                                <li style={{}}>{item.id}</li>
-                                <li style={{}}>{item.nickname}</li>
-                                <li style={{}}>{item.email}</li>
-                                <li style={{}}>010-0000-0000</li>
-                                <li style={{}}>
+                            <tr key={item.no} className="memberlist-item">
+                                <td>{item.no}</td>
+                                <td>{item.id}</td>
+                                <td>{item.nickname}</td>
+                                <td>{item.email}</td>
+                                <td>010-0000-0000</td>
+                                <td>
                                     <select className="list-select-box" value={selectStatus[item.no] || item.status} onChange={(e) => handleStatusChange(e, item.no)}>
                                         <option value={item.status}>{item.status}</option>
                                         <option value="active">ACTIVE</option>
                                     </select>
-                                </li>
-                            </ul>
+                                </td>
+                            </tr>
                         )
                     })
                 }
+                    </tbody>
+                </table>
             </div>
 
             {/* 페이징 */}

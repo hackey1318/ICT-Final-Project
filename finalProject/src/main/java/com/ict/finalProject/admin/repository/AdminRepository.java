@@ -40,4 +40,9 @@ public interface AdminRepository extends JpaRepository<Users, Integer> {
     @Transactional
     @Query(value = "UPDATE users SET status = :status WHERE no = :userNo", nativeQuery = true)
     void updateBlacklistStatus(@Param("status") String status, @Param("userNo") Integer userNo);
+
+    //매니저페이지 유저검색을 위한 매서드
+    Page<Users> findByIdContainingIgnoreCase(String id, Pageable pageable);
+    Page<Users> findByNicknameContaining(String nickname, Pageable pageable);
+    Page<Users> findByEmailContaining(String email, Pageable pageable);
 }
