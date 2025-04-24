@@ -62,7 +62,7 @@ function MovieList(){
                     movieList.map((movieList) => (
                         <div key={movieList.movieNo} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             {/* 영화 상세 페이지 링크 */}
-                            <a href={`/movies/${movieList.no}`} className="text-decoration-none text-dark">
+                            <a href={`/cinemate/movie-detail/${movieList.movieNo}`} className="text-decoration-none text-dark">
                                 <div className="card h-100 shadow-sm position-relative overflow-hidden"> {/* overflow-hidden 추가 */}
                                     {/* 연령 등급 배지 */}
                                     <span
