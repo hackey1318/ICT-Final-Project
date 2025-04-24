@@ -136,13 +136,17 @@ function MovieListDetail() {
 												<span className="text-muted">작성일 : {movie.createdAt?.split('T')[0]}</span>
 											</div>
 											<div className="mb-2">
-												<span className="badge bg-light text-dark p-2 border border-secondary rounded">
-													모집 시간 : {movie.meetingDate?.split('T')[0]} {movie.meetingDate?.split('T')[1]?.slice(0, 5)}
+												<span className="badge bg-info text-dark p-2 rounded me-2">
+													🎥 상영 극장 : {movie.theaterName}
 												</span>
 											</div>
-											<div className="mb-2">
+											<div className="mb-2 d-flex justify-content-between">
+											<span className="badge bg-light text-dark p-2 border border-secondary rounded">
+													모집 시간 : {movie.meetingDate?.split("T")[0]}{" "}
+													{movie.meetingDate?.split("T")[1]?.slice(0, 5)}
+												</span>
 												<span className="badge bg-warning text-dark p-2 rounded">
-													총인원 : {movie.currentMemberCount} / {movie.maxMemberCount}
+													총 인원 : {movie.currentMemberCount} / {movie.maxMemberCount}
 												</span>
 											</div>
 											<div style={{ minHeight: "80px", padding: "8px", backgroundColor: "#fff", borderRadius: "5px", overflow: "hidden" }}>
@@ -156,8 +160,8 @@ function MovieListDetail() {
 						)
 					})
 				}
-			</div>
-		</div>
+			</div >
+		</div >
 	)
 }
 
