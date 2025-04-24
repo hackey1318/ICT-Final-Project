@@ -84,43 +84,6 @@ function App() {
 		document.body.classList.toggle('manager-page', isManagerPage);
 	}, [location.pathname]);
 
-  return (
-      <Routes>
-  
-        <Route path='/' element={<Layout />}>
-          <Route index element={<Main />} />
-          <Route path='login' element={<KakaoLogin />} />
-          <Route path='kakao/callback' element={<KakaoCallback />} />
-          <Route path="/register" element={<GeneralRegisterForm />} />
-          <Route path='user/findId' element={<FindId />} />
-          <Route path='user/findPwd' element={<FindPwd />} />
-          <Route path='user/pwdReset' element={<PwdReset />} />
-          <Route path='movies' element={<GenreMovie />} />
-          <Route path='payment/tossPayment' element={<TossPayment />} />
-          <Route path='payment/tossPaymentSuccess' element={<TossPaymentSuccess />} />
-          <Route path='payment/tossPaymentFail' element={<TossPaymentFail />} />
-          <Route path='payment/result' element={<PaymentResult />} />
-          <Route path='movies/:id' element={<MovieDetail />} />
-          <Route path='movies/:id/reviews' element={<ReviewListRoute />}>
-          <Route path='write' element={<ReviewWritePage />} />
-          <Route path='edit/:reviewNo' element={<ReviewEditPage />} />
-          </Route>
-          <Route path='movies/current' element={<CurrentMovie />} />
-          <Route path='movies/upcoming' element={<UpcomingMovie />} />
-          <Route path='/inquiry' element={<InquiryPage />} />
-          <Route path='/inquiryView/:no' element={<InquiryView />} />
-          <Route path='cart' element={<Cart />} />
-          <Route path='order/list' element={<OrderList />} />
-          <Route path='order/detail' element={<OrderDetail />} />
-          <Route path='order/error' element={<OrderError />} />
-          <Route path='mdshop' element={<MdShop />} />
-          <Route path='mdshop/:goodsNo' element={<GoodsDetail />}>
-          {/* 상세 페이지 안에서 /reviews로 접근할 때 Outlet 자리에 렌더 */}
-          <Route path='reviews' element={<GoodsReviewSection />} />
-          </Route>
-          <Route path="/related-movie/:movieId" element={<RelatedMovie />} />
-          <Route path="/announcements" element={<UserAnnounce />} />
-          <Route path="/announcements/:id" element={<UserAnnounceDetail />} />
 	return (
 		<Routes>
 
@@ -151,7 +114,9 @@ function App() {
 				<Route path='order/detail' element={<OrderDetail />} />
 				<Route path='order/error' element={<OrderError />} />
 				<Route path='mdshop' element={<MdShop />} />
-				<Route path="mdshop/:goodsNo" element={<GoodsDetail />} />
+				<Route path='mdshop/:goodsNo' element={<GoodsDetail />}>
+          		<Route path='reviews' element={<GoodsReviewSection />} />
+          		</Route>
 				<Route path="/related-movie/:movieId" element={<RelatedMovie />} />
 				<Route path="/announcements" element={<UserAnnounce />} />
 				<Route path="/announcements/:id" element={<UserAnnounceDetail />} />

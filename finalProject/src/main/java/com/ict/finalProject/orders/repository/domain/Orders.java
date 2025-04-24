@@ -48,7 +48,12 @@ public class Orders {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orderNo", referencedColumnName = "no")
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<OrderItem> items;
+
+
 }

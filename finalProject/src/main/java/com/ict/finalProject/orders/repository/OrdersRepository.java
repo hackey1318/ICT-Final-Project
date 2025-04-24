@@ -2,12 +2,13 @@ package com.ict.finalProject.orders.repository;
 
 import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.orders.repository.domain.Orders;
+import org.springframework.data.repository.query.Param;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface OrdersRepository extends JpaRepository<Orders, Integer> {
@@ -17,5 +18,20 @@ public interface OrdersRepository extends JpaRepository<Orders, Integer> {
     void deleteByUserNoAndStatus(int userNo, OrdersStatus status);
     Orders findByOrderNumber(String orderNumber);
     Orders findByUserNoAndStatus(int userNo, OrdersStatus status);
-    boolean existsByItemsGoodsNoAndStatusAndUserNo(int goodsNo, OrdersStatus status, int userNo);
+    boolean existsByIdAndStatusAndUserNo(Integer id, OrdersStatus status, int userNo);
+
+    @Query("""
+      SELECT o
+        FROM Orders o
+        JOIN o.items i
+       WHERE i.goodsNo = :goodsNo
+         AND o.status  = :status
+         AND o.userNo  = :userNo
+    ORDER BY o.createdAt DESC
+    """)
+    List<Orders> findPaidOrdersByGoodsNoAndUserNo(
+            @Param("goodsNo") int goodsNo,
+            @Param("status") OrdersStatus status,
+            @Param("userNo") int userNo
+    );
 }
