@@ -10,7 +10,10 @@ import com.ict.finalProject.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,8 +32,15 @@ public class CineMateController {
         return SuccessOfFailResponse.builder().result(cineMateService.generateCineMateInfo(request)).build();
     }
 
+    //시네메이트 영화 목록
     @GetMapping("/movies")
-    public Page<CineMateResponse> getCineMateMovies(Pageable pageable){
+    public Page<CineMateResponse> getCineMateMovies(@PageableDefault(size = 10) Pageable pageable){
         return cineMateService.getCineMateMovies(pageable);
+    }
+
+    //시네메이트 영화 상세
+    @GetMapping("/movieDetail/{movieNo}")
+    public List<CineMateResponse> getMovieDetail(@PathVariable Integer movieNo){
+        return cineMateService.getMovieDetail(movieNo);
     }
 }
