@@ -43,4 +43,28 @@ public class CineMateController {
     public List<CineMateResponse> getMovieDetail(@PathVariable Integer movieNo){
         return cineMateService.getMovieDetail(movieNo);
     }
+
+    @GetMapping("/movies/{movieNo}/room/{no}")
+    public SuccessOfFailResponse getJoinCinemate(@PathVariable Integer no, @PathVariable Integer movieNo) {
+
+        Integer userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
+        return SuccessOfFailResponse.builder()
+                .result(cineMateService.getJoinMovieRoom(no, movieNo, userNo)).build();
+    }
+
+    @PostMapping("/movies/{movieNo}/room/{no}")
+    public SuccessOfFailResponse joinCinemate(@PathVariable Integer no, @PathVariable Integer movieNo) {
+
+        Integer userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
+        return SuccessOfFailResponse.builder()
+                .result(cineMateService.joinMovieRoom(no, movieNo, userNo)).build();
+    }
+
+    @DeleteMapping("/movies/{movieNo}/room/{no}")
+    public SuccessOfFailResponse cancelCinemateJoin(@PathVariable Integer no, @PathVariable Integer movieNo) {
+
+        Integer userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
+        return SuccessOfFailResponse.builder()
+                .result(cineMateService.cancelJoinMovieRoom(no, movieNo, userNo)).build();
+    }
 }

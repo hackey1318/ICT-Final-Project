@@ -16,4 +16,10 @@ public interface CineMateService {
 
     //시네메이트 영화 상세
     List<CineMateResponse> getMovieDetail(Integer movieNo);
+
+    boolean getJoinMovieRoom(Integer cineMateNo, Integer movieNo, Integer userNo);
+
+    boolean joinMovieRoom(Integer cineMateNo, Integer movieNo, Integer userNo);
+
+    boolean cancelJoinMovieRoom(Integer cineMateNo, Integer movieNo, Integer userNo);
 }
