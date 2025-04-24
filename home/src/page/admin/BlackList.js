@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Button from '../../js/common/Buttons.js';
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -13,6 +14,14 @@ function BlackList(){
 
     //사용자status 선택 상태
     const [selectStatus, setSelectStatus] = useState({}); 
+
+    // 검색어 예시
+    const handleSearch = e => {
+        e.preventDefault();      
+        //setPage(0);
+        //getUserList();           
+      };
+
 
     useEffect(()=>{
         axios.get(`http://localhost:9988/manager/home/blacklist?page=${page}&size=10`, {
@@ -111,29 +120,30 @@ function BlackList(){
             <h3 className="contents-title">Admin Page - BlackList</h3>
 
             {/* 검색어 예시 */}
-            <div className="member_search-container">
-                <select /*value={searchType}
-                        onChange={(e) => setSearchType(e.target.value)} */
-                        style={{ padding: '0.5rem' }}
-                        className="md_dropdown">
-                    <option value="memberId">아이디</option>
-                    <option value="memberNickname">닉네임</option>
-                    <option value="memberEmail">이메일</option>
-                </select>
-                <input
-                    type="text"
-                    /*value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}*/
-                    className="form-control-search w-25 me-2"
-                    style={{ padding: '0.5rem' }}
-                    placeholder="검색어를 입력하세요"
-                />
-                <button className="btn btn-primary" 
-                        /*onClick={() => { setPage(0); getUserList(); }}*/
-                >
-                    검색
-                </button>
-            </div>
+            <form className="d-flex justify-content-end mb-3" onSubmit={handleSearch}>
+                <div className="member_search-container">
+                    <select /*value={searchType}
+                            onChange={(e) => setSearchType(e.target.value)} */
+                            style={{ padding: '0.5rem' }}
+                            className="user_dropdown">
+                        <option value="memberId">아이디</option>
+                        <option value="memberNickname">닉네임</option>
+                        <option value="memberEmail">이메일</option>
+                    </select>
+                    <input
+                        type="text"
+                        /*value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}*/
+                        style={{ padding: '11px' }}
+                        placeholder="검색어를 입력하세요"
+                    />
+                    <Button variant='primary'
+                            /*onClick={() => { setPage(0); getUserList(); }}*/
+                    >
+                        검색
+                    </Button>
+                </div>
+            </form>
 
             <div className="memberlist-container">
                 <table className="memberlist-table">

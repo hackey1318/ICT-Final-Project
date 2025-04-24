@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import BannerFormModal from "./BannerFormModal"; // 모달 컴포넌트
 import BannerDetailModal from "./BannerDetailModal"; // 배너 상세 모달 컴포넌트
+import Button from "../../../js/common/Buttons";
 
 export default function BannerList() {
     const [banners, setBanners] = useState([]);
@@ -133,7 +134,7 @@ export default function BannerList() {
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                 />
-                <button type="submit" className="btn btn-primary">검색</button>
+                <Button variant='primary'type="submit">검색</Button>
             </form>
 
             {/* 📄 배너 리스트 테이블 */}
