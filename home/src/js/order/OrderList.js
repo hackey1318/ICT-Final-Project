@@ -41,8 +41,8 @@ function OrderList() {
     }, []);
 
     const cancelOrder = (paymentKey, orderNo) => {
-        if(!window.confirm("주문을 취소하시겠습니까?")) {
-           return; 
+        if (!window.confirm("주문을 취소하시겠습니까?")) {
+            return;
         }
         const accessToken = sessionStorage.getItem("accessToken");
         const fetchCancelOrder = async () => {
@@ -84,6 +84,21 @@ function OrderList() {
         fetchCancelOrder();
     }
 
+    const getStatusText = (text) => {
+        switch (text) {
+            case '결제 완료':
+                return 'PAID';
+            case '결제 대기':
+                return 'PENDING';
+            case '결제 취소':
+                return 'CANCELLED';
+            case '결제 실패':
+                return 'FAILED';
+            default:
+                return 'UNKNOWN';
+        }
+    }
+
     return (
         <div className="orderList_wrapper">
             <div className="orderList_container">
@@ -96,7 +111,7 @@ function OrderList() {
                             <hr />
                             <div className="orderList_head">
                                 <div className="orderList_date_state">
-                                    <div>dz</div>
+                                    <button className={`orderList_state_${getStatusText(order?.statusText)}`} disabled>{order.statusText}</button>
                                     {
                                         new Date(order?.updatedAt)
                                             .toLocaleString('ko-KR', {
@@ -109,7 +124,7 @@ function OrderList() {
                                             })
                                             .replace(/\./g, '')
                                             .replace(/(\d{4}) (\d{2}) (\d{2})/, '$1-$2-$3')
-                                    } - {order?.statusText}
+                                    }
                                 </div>
                                 <div className="orderList_actions">
                                     {
