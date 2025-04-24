@@ -22,8 +22,14 @@
 
 .orderList_date_state {
     display: flex;
+    flex: 1;
     font-size: 1.2em;
     padding-top: 3px;
+}
+
+.orderList_actions {
+    text-align: right;
+    white-space: nowrap;
 }
 
 .orderList_container {
