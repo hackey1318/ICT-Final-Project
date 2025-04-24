@@ -38,4 +38,12 @@ public class CineMateMembers {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public void cancel() {
+        this.status = StatusInfo.DELETE;
+    }
+
+    public void participate() {
+        this.status = StatusInfo.ACTIVE;
+    }
 }

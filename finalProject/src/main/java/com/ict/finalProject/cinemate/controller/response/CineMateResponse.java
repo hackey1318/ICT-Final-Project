@@ -14,9 +14,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CineMateResponse {
+    private Integer no;
     private Integer userNo;
     private Integer movieNo;
     private Integer theaterNo;
+    private Integer currentMemberCount;
     private Integer maxMemberCount;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
