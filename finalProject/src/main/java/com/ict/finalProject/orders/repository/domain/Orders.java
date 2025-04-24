@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -46,4 +47,8 @@ public class Orders {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderNo", referencedColumnName = "no")
+    private List<OrderItem> items;
 }

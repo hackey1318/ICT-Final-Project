@@ -1,5 +1,6 @@
 package com.ict.finalProject.review.service.impl;
 
+import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.orders.repository.OrdersRepository;
 import com.ict.finalProject.review.controller.request.GoodsReviewRequest;
 import com.ict.finalProject.review.controller.response.GoodsReviewResponse;
@@ -34,10 +35,10 @@ public class GoodsReviewServiceImpl implements GoodsReviewService {
     @Transactional
     public GoodsReviewResponse writeReview(GoodsReviewRequest request){
         // 1. 주문확인 : status 가 지불인지, orderNumber가 있는지, 그리고 userNo가 일치하는지
-        boolean hasPaid = orderRepo.existsByGoodsIdAndStatusAndUserNo(
-          request.getGoodsId(),
-          "PAID",
-          request.getUserNo()
+        boolean hasPaid = orderRepo.existsByItemsGoodsNoAndStatusAndUserNo(
+          request.getGoodsId().intValue(),
+          OrdersStatus.PAID,
+          request.getUserNo().intValue()
         );
         if(!hasPaid){
             throw new IllegalStateException("결제완료 상태의 주문이 존재하지 않습니다.");
