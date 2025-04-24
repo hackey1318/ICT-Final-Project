@@ -18,9 +18,9 @@ public class ReportResponse {
     
     private int no;  //신고번호
     
-    private int userNickname;  //신고자닉네임
+    private String reporterNickname;  //신고자닉네임
     
-    private int targetNickname;  //피신고자닉네임
+    private String targetNickname;  //피신고자닉네임
     
     private int boardNo;  //게시글번호
     

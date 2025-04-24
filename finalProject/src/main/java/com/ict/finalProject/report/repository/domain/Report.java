@@ -26,7 +26,7 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int no;  //신고 번호
 
-    private int userNo;  //신고자번호
+    private int reporterNo;  //신고자번호
 
     private int targetNo;  //피신고자번호
 
@@ -52,4 +52,7 @@ public class Report {
     @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdAt;  //신고생성일
+
+    @Column(nullable = true)
+    private LocalDateTime resolvedAt;  //신고처리일
 }
