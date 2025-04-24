@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { deleteReview } from "../../js/api/reviewApi"
 import { createReport } from "../../js/api/reportApi";
-import axios from "../../js/public/axiosConfig"
 
 // Swiper core & required modules
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -14,7 +13,7 @@ import "swiper/swiper-bundle.css"
 
 // your own styles
 import "../../css/movie/ReviewDetailModal.css"
-import { subtract } from "lodash"
+import apiClient from "../../js/public/axiosConfig";
 
 const reportCategory = {
   ABUSE: "욕설",
@@ -126,7 +125,7 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
     })
     : ""
 
-  const baseUrl = axios.defaults.baseURL
+  const baseUrl = apiClient.defaults.baseURL
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -214,7 +213,7 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
 
           {isReporting && (
             <div className="modal-report-form">
-              <h5>리뷰 신고하기</h5>
+              <h5 style={{marginBottom: '30px'}}>리뷰 신고하기</h5>
               <form onSubmit={handleReportSubmit}>
                 <div className="form-group">
                   <label htmlFor="reportCategory">신고 사유:</label>
@@ -223,6 +222,7 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
                     value={selectedCategory}
                     onChange={handleCategoryChange}
                     required
+                    style={{borderRadius: '5px', marginBottom: '15px'}}
                   >
                     <option value="" disabled>-- 사유 선택 --</option>
                     {Object.entries(reportCategory).map(([key, desc]) => (
@@ -239,14 +239,15 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
                     rows="6"
                     placeholder={selectedCategory === 'ETC' ? "기타 사유를 자세히 입력해주세요." : "상세 내용을 입력해주세요."}
                     required={selectedCategory === 'ETC'}
+                    style={{borderRadius: '5px'}}
                   />
                 </div>
                 {errorMessage && <p className="error-message">{errorMessage}</p>}
                 <div className="report-form-actions">
-                  <button type="submit" disabled={isSubmitting}>
+                  <button type="submit" disabled={isSubmitting} style={{borderRadius: '5px'}}>
                     {isSubmitting ? '신고 중...' : '신고 제출'}
                   </button>
-                  <button type="button" onClick={() => setIsReporting(false)} disabled={isSubmitting}>
+                  <button type="button" onClick={() => setIsReporting(false)} disabled={isSubmitting} style={{borderRadius: '5px'}}>
                     취소
                   </button>
                 </div>
