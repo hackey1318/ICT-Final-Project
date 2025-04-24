@@ -34,19 +34,29 @@ public class GoodsReviewServiceImpl implements GoodsReviewService {
     @Override
     @Transactional
     public GoodsReviewResponse writeReview(GoodsReviewRequest request){
-        // 1. 주문확인 : status 가 지불인지, orderNumber가 있는지, 그리고 userNo가 일치하는지
-        boolean hasPaid = orderRepo.existsByItemsGoodsNoAndStatusAndUserNo(
-          request.getGoodsId().intValue(),
-          OrdersStatus.PAID,
-          request.getUserNo().intValue()
+        // 1 먼저 사용자 orderNo 확인해서 PAID 인지 확인하기
+        boolean hasPaid = orderRepo.existsByIdAndStatusAndUserNo(
+                request.getOrderNo().intValue(),
+                OrdersStatus.PAID,
+                request.getUserNo().intValue()
         );
         if(!hasPaid){
-            throw new IllegalStateException("결제완료 상태의 주문이 존재하지 않습니다.");
+            throw new IllegalStateException("해당 주문번호로 결제 완료된 내역이 아닙니다.");
         }
 
+        // 2 이미 이 주문번호로 리뷰를 작성했을 때의 자격검증
+        boolean alreadyReviewed = reviewRepo.existsByGoodsIdAndOrderNoAndUserNo(
+                request.getGoodsId(),
+                request.getOrderNo(),
+                request.getUserNo()
+        );
+        if (alreadyReviewed) {
+            throw new IllegalStateException("이미 이 주문으로 리뷰를 작성하셨습니다.");
+        }
+
+        // 3 엔티티에 담아주기
         GoodsReview entity = mapper.map(request, GoodsReview.class);
         GoodsReview saved = reviewRepo.save(entity);
         return mapper.map(saved, GoodsReviewResponse.class);
     }
-
 }

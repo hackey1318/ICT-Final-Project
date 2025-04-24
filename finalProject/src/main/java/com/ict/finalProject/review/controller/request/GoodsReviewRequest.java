@@ -15,6 +15,7 @@ public class GoodsReviewRequest {
     private Long id;              // 리뷰 수정 시
     private Long goodsId;         // 굿즈 번호
     private Long userNo;          // 작성자
+    private Long orderNo;         // 주문 번호
     private String title;         // 제목
     private String content;       // 내용
     private Integer rating;       // 별점

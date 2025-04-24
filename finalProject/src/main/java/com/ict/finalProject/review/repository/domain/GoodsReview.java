@@ -21,6 +21,9 @@ public class GoodsReview {
     @Column(name = "user_no", nullable = false)
     private Long userNo; //유저 번호
 
+    @Column(name = "order_no", nullable = false)
+    private Long orderNo;
+
     @Column(nullable = false)
     private String title; //제목
 
