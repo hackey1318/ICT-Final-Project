@@ -30,7 +30,7 @@ public class MdShopController {
     @GetMapping("/lists")
     public ResponseEntity<Page<MdShopDto>> getMdList(@RequestParam(value = "name", required = false) String name,
                                                      @RequestParam(value = "movie", required = false) String movieName,
-                                                     @PageableDefault(page = 0, size = 10, sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable) {
+                                                     @PageableDefault(page = 0, size = 5, sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(mdShopservice.getMdList(name, movieName, pageable));
     }
 
