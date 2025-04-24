@@ -22,6 +22,7 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
+    width: 40%;
   }
   
   .form-control-search {
@@ -32,14 +33,17 @@
   }
   
   .inquiryreply_dropdown {
-    padding: 6px 12px;
+    padding: 12px 12px !important;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: white;
     font-size: 14px;
     color: #333;
-    appearance: auto;
-    min-width: 100px;
+    appearance: none; /* 기본 화살표 제거 (브라우저 기본 스타일 제거) */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%23333' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;    min-width: 120px;
   }
   
   .btn.btn-primary {

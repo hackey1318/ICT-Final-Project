@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AnnounceCreateModal from "./AnnounceCreatedModal";
+import Button from "../../js/common/Buttons";
 
 export default function AnnounceList() {
     const [announces, setAnnounces] = useState([]);
@@ -102,7 +103,7 @@ export default function AnnounceList() {
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                 />
-                <button type="submit" className="btn btn-primary">검색</button>
+                <Button variant='primary'type="submit">검색</Button>
             </form>
 
             {/* 📄 테이블 */}

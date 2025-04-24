@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import MdRegisterModal from "./MdRegisterModal";
 import "../../css/md/MdList.css";
+import Button from '../../js/common/Buttons.js';
 
 function MdList() {
   const [mdList, setMdList] = useState([]);
@@ -81,12 +82,12 @@ function MdList() {
 
         <div className="md_sort-container">
           <label>정렬 기준:</label>
-          <select value={sortField} onChange={(e) => setSortField(e.target.value)} className="md_dropdown">
+          <select value={sortField} onChange={(e) => setSortField(e.target.value)} className="md_dropdown" style={{ padding: '12px' }}>
             <option value="updatedAt">등록일</option>
             <option value="name">이름</option>
             <option value="price">가격</option>
           </select>
-          <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)} className="md_dropdown">
+          <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value)} className="md_dropdown" style={{ padding: '12px' }}>
             <option value="desc">내림차순</option>
             <option value="asc">오름차순</option>
           </select>
@@ -105,9 +106,9 @@ function MdList() {
             placeholder="검색어를 입력하세요"
             style={{ padding: '10px' }}
           />
-          <button className="md_search-btn" onClick={() => { setPage(0); getMdList(); }}>
+          <Button variant='primary' onClick={() => { setPage(0); getMdList(); }}>
             검색
-          </button>
+          </Button>
         </div>
 
       </div>

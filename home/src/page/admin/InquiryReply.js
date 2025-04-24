@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import '../../css/admin/InquiryReply.css';
 import apiClient from "../../js/public/axiosConfig";
 import Pagination from "../../js/public/Pagination";
+import Button from "../../js/common/Buttons";
 
 function InquiryReply() {
     const [inquiryList, setInquiryList] = useState([]);
@@ -13,6 +14,13 @@ function InquiryReply() {
     const [totalPages, setTotalPages] = useState(0);
     const [pageSize, setPageSize] = useState(9);
     const [isLoading, setIsLoading] = useState(false);
+
+    // 검색어 예시
+    const handleSearch = e => {
+        e.preventDefault();      
+        //setPage(0);
+        //getUserList();           
+      };
 
     const getInquiryList = useCallback( async (page=0) => {
         setIsLoading(true);
@@ -81,28 +89,29 @@ function InquiryReply() {
             <h3 className="inquiryreply-title">회원 문의 목록</h3>
 
             {/* 검색어 예시 */}
-            <div className="inquiryreply_search-container">
-                <select /*value={searchType}
-                        onChange={(e) => setSearchType(e.target.value)} */
-                        style={{ padding: '12px' }}
-                        className="inquiryreply_dropdown">
-                    <option value="inquiryreplySubject">제목</option>
-                    <option value="inquiryreplyNickname">작성자</option>
-                </select>
-                <input
-                    type="text"
-                    /*value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}*/
-                    className="form-control-search w-25 me-2"
-                    style={{ padding: '10px' }}
-                    placeholder="검색어를 입력하세요"
-                />
-                <button className="btn btn-primary" 
-                        /*onClick={() => { setPage(0); getUserList(); }}*/
-                >
-                    검색
-                </button>
-            </div>
+            <form className="d-flex justify-content-end mb-3" onSubmit={handleSearch}>
+                <div className="inquiryreply_search-container">
+                    <select /*value={searchType}
+                            onChange={(e) => setSearchType(e.target.value)} */
+                            style={{ padding: '12px' }}
+                            className="inquiryreply_dropdown">
+                        <option value="inquiryreplySubject">제목</option>
+                        <option value="inquiryreplyNickname">작성자</option>
+                    </select>
+                    <input
+                        type="text"
+                        /*value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}*/
+                        style={{ padding: '10px' }}
+                        placeholder="검색어를 입력하세요"
+                    />
+                    <Button variant='primary' 
+                            /*onClick={() => { setPage(0); getUserList(); }}*/
+                    >
+                        검색
+                    </Button>
+                </div>
+            </form>
 
             <div className="inquiryreply-container">
                 <table className="inquiryreply-table">
