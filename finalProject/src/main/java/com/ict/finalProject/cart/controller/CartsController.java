@@ -1,13 +1,9 @@
 package com.ict.finalProject.cart.controller;
 
-import com.ict.finalProject.cart.controller.response.CartRequest;
+import com.ict.finalProject.cart.controller.request.CartRequest;
 import com.ict.finalProject.cart.controller.response.CartsResponse;
 import com.ict.finalProject.cart.service.CartsService;
 import com.ict.finalProject.common.config.JwtTokenProvider;
-import com.ict.finalProject.domain.constant.OrdersStatus;
-import com.ict.finalProject.domain.constant.StatusInfo;
-import com.ict.finalProject.fileSystem.domain.Images;
-import com.ict.finalProject.fileSystem.service.FileSystemService;
 import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.oauth.service.UserService;
 import com.ict.finalProject.orders.service.OrderItemService;
@@ -122,20 +118,24 @@ public class CartsController {
     }
 
     @PostMapping("/paidGoods")
-    public void paidGoods (@RequestBody CartRequest cartRequest, HttpServletRequest request){
+    public ResponseEntity<String> paidGoods (@RequestBody CartRequest cartRequest, HttpServletRequest request){
         int userNo = getUserNoFromRequest(request);
         int orderId = ordersService.getOrders(cartRequest.getOrderNumber()).getId();
         List<OrderItemDto> orderItemDtoList = orderItemService.getOrderItems(orderId);
         for (OrderItemDto orderItemDto : orderItemDtoList) {
             cartsService.paidCartGoods(userNo, orderItemDto.getGoodsNo());
         }
+
+        return ResponseEntity.ok("Success");
     }
 
     @PostMapping("/updateQuantity")
-    public void updateQuantity (@RequestBody CartRequest cartRequest, HttpServletRequest request){
+    public ResponseEntity<String> updateQuantity (@RequestBody CartRequest cartRequest, HttpServletRequest request){
         int userNo = getUserNoFromRequest(request);
         List<Integer> goodsNos = cartRequest.getGoodsNos();
         List<Integer> goodsQuantities = cartRequest.getGoodsQuantities();
         cartsService.updateCartGoods(userNo, goodsNos, goodsQuantities);
+
+        return ResponseEntity.ok("Success");
     }
 }

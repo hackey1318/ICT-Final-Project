@@ -2,7 +2,6 @@ import './../../css/order/OrderDetail.css';
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { useSearchParams } from "react-router-dom";
-const accessToken = sessionStorage.getItem("accessToken");
 
 function OrderDetail() {
 
@@ -17,7 +16,7 @@ function OrderDetail() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-
+        const accessToken = sessionStorage.getItem("accessToken");
 
         axios.post("http://localhost:9988/order/detail", JSON.stringify({
             orderNumber: orderId

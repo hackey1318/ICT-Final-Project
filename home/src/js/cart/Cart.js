@@ -5,8 +5,6 @@ import axios from 'axios';
 import TossPayment from "./../payment/TossPayment";
 import CartApi, { deleteGoodsList, getGoodsList, getTheaterList } from "./CartApi";
 
-const accessToken = sessionStorage.getItem("accessToken");
-
 function Cart() {
     const [goods, setGoods] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -36,6 +34,7 @@ function Cart() {
     }, []);
 
     const cartQuantityUpdate = () => {
+        const accessToken = sessionStorage.getItem("accessToken");
         axios.post("http://localhost:9988/cart/updateQuantity",
             {
                 goodsNos: goodsRef.current.map(element => element.goodsNo),
@@ -50,8 +49,10 @@ function Cart() {
     }
 
     useEffect(() => {
+        const accessToken = sessionStorage.getItem("accessToken");
         // 로그인 확인
         if (!accessToken) {
+            sessionStorage.setItem("redirectAfterLoginPath", window.location.href);
             window.location.href = "/login";
             return null;
         }
@@ -73,7 +74,7 @@ function Cart() {
                 const updateGoods = response.data.map(item => ({
                     ...item,
                     quantity: item.quantity,
-                    selected: true
+                    selected: item.quantity === 0 ? true : false
                 }));
                 setGoods(updateGoods);
             })
@@ -84,13 +85,14 @@ function Cart() {
         updateTotalPrice();
         updateCheckBox();
         goodsRef.current = goods;
+        console.log(goods);
     }, [goods]);
 
     const selectGoods = (e) => {
         const index = e.target.getAttribute("goodsIndex");
         setGoods(prev =>
             prev.map((item, idx) =>
-                idx === parseInt(index) ? { ...item, selected: !item.selected } : item
+                idx === parseInt(index) ? { ...item, selected: (item.goodsQuantity !== 0 ) ? !item.selected : item.selected } : item
             )
         );
     }
@@ -110,7 +112,7 @@ function Cart() {
     const updateCheckBox = () => {
         goods.forEach((item, index) => {
             const selectElement = document.getElementsByClassName("select_goods")[index];
-            if (item.selected) {
+            if (item.selected && item.goodsQuantity !== 0) {
                 selectElement.style.backgroundImage = `url(${checkMark})`;
             } else {
                 selectElement.style.backgroundImage = "";
@@ -143,7 +145,8 @@ function Cart() {
 
     const selectAll = () => {
         setGoods(prev =>
-            prev.map((item) => ({ ...item, selected: true }))
+            prev.map((item) => ({ ...item, 
+                selected: item.goodsQuantity !== 0 ? true : item.selected }))
         );
         document.querySelectorAll(".select_goods").forEach((item) => {
             item.style.backgroundImage = `url(${checkMark})`;
@@ -152,14 +155,26 @@ function Cart() {
 
     const deleteSelected = () => {
         deleteGoodsList(goods.filter(item => item.selected))
-            .then(response => {
+            .then(() => {
                 const updatedGoods = goods.filter(item => !item.selected);
                 setGoods(updatedGoods);
             });
+    }
 
+    const deleteGoods = (e) => {
+        const targetIndex = parseInt(e.target.getAttribute("index"), 10);
+        if(window.confirm("상품을 삭제하시겠습니까?")) {
+            const deleteGoods = goods.filter((_, index) => index === targetIndex);
+            const updateGoods = goods.filter((_, index) => index !== targetIndex);
+            deleteGoodsList(deleteGoods)
+            .then(() => {
+                setGoods(updateGoods);
+            });
+        }
     }
 
     const order = () => {
+        const accessToken = sessionStorage.getItem("accessToken");
         const selectedGoods = goods.filter(item => item.selected);
         if (selectedGoods.length === 0) {
             alert("선택된 상품이 없습니다.");
@@ -239,8 +254,10 @@ function Cart() {
                         <div className="goods_info">상품 정보</div>
                         <div className="goods_quantity">수량</div>
                         <div className="goods_price">가격</div>
+                        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                     </div>
                     <div className="goods_container">
+                    
                         {goods.length > 0 ? goods.map((element, index) => (
                             <div className="goods" key={element.goodsId}>
                                 <div className="check_image_container">
@@ -249,17 +266,24 @@ function Cart() {
                                 <div className="goods_info" onClick={() => window.location.href = `/mdshop/${element.goodsNo}`}>
                                 <img src={`http://192.168.1.252:9988/file-system/download/${element.imageIdList[0]}`}/>
                                     <span>{element.goodsName}</span>
+                                    {element.goodsQuantity === 0 && <span style={{color: 'red'}}>&nbsp;품절된 상품입니다.</span>}
                                 </div>
                                 <div className="goods_quantity">
                                     <button onClick={subQuantity} goodsIndex={index}>◀</button>
-                                    {element.quantity}
+                                    {element.goodsQuantity === 0 ? 0 : element.quantity}
                                     <button onClick={addQuantity} goodsIndex={index}>▶</button>
                                 </div>
                                 <div className="goods_price">
                                     {element.goodsPrice}원
                                 </div>
+                                <div className="goods_delete_button">
+                                    <div onClick={deleteGoods} index={index}>×</div>
+                                </div>
                             </div>
-                        )) : <div>장바구니가 비어있습니다.</div>}
+                        )) : <div id="empty_cart_container">
+                                <div id="empty_cart_img"></div>
+                                <div id="empty_cart_desc">장바구니가 비어있습니다.</div>
+                            </div>}
                         <div className="button_container">
                             <div>
                                 <button onClick={selectAll}>전체 선택</button>

@@ -22,20 +22,22 @@ const GoodsInfo = ({ goods }) => {
     };
 
     const increaseQuantity = () => {
-        setQuantity(quantity + 1);
+        if (quantity < goods.count) setQuantity(quantity + 1);
     };
 
     const handleButton = (act) => {
         addGoodsToCart(goodsNo, quantity, act)
-        .then(response => {
-            alert(response.data.message);
-            if (response.data.isRedirect) {
-                window.location.href = "/cart";
-            }
-        })
-        .catch(error => {
-            console.log(error);
-        });
+            .then(response => {
+                alert(response.data.message);
+                if (response.data.isRedirect) {
+                    window.location.href = "/cart";
+                }
+            })
+            .catch(error => {
+                sessionStorage.setItem("redirectAfterLoginPath", window.location.href);
+                window.location.href = "/login";
+                console.log(error);
+            });
     }
 
     return (
@@ -76,7 +78,7 @@ const GoodsInfo = ({ goods }) => {
                 <div className="col-md-6">
                     <h2>{goods.name}</h2>
                     <div dangerouslySetInnerHTML={{ __html: goods.description }} />
-
+                    <div>남은 수량: {goods.count}개</div>
                     <div className="d-flex align-items-center mb-3">
                         <span className="fs-4 fw-semibold text-danger me-3">
                             {goods.price.toLocaleString()}원
@@ -92,10 +94,17 @@ const GoodsInfo = ({ goods }) => {
                         총 금액: {(goods.price * quantity).toLocaleString()}원
                     </p>
 
-                    <div className="d-flex gap-2">
-                        <button className="btn btn-primary" onClick={() => handleButton("Purchase")}>구매하기</button>
-                        <button className="btn btn-outline-dark" onClick={() => handleButton("Add")}>장바구니 담기</button>
-                    </div>
+                    {
+                        goods.count !== 0 ? (
+                            <div className="d-flex gap-2">
+                                <button className="btn btn-primary" onClick={() => handleButton("Purchase")}>구매하기</button>
+                                <button className="btn btn-outline-dark" onClick={() => handleButton("Add")}>장바구니 담기</button>
+                            </div>)
+                            : (
+                            <div>
+                                <button className="btn btn-secondary" disabled>품절된 상품입니다.</button>
+                            </div>)
+                    }
                 </div>
             </div>
         </div>
