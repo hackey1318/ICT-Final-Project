@@ -34,8 +34,11 @@ public class AdminController {
     }
 
     @GetMapping("/member-list")
-    public Page<UserResponse> getMemberList(@PageableDefault(size = 10)Pageable pageable){
-        return adminService.getMemberList(pageable);
+    public Page<UserResponse> getMemberList(@PageableDefault(size = 10)Pageable pageable,
+                                            @RequestParam(required = false) String memberId,
+                                            @RequestParam(required = false) String memberNickname,
+                                            @RequestParam(required = false) String memberEmail){
+        return adminService.getMemberList(pageable, memberId, memberNickname, memberEmail);
     }
 
     @GetMapping("/manager-list")

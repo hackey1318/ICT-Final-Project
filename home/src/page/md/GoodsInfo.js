@@ -25,20 +25,18 @@ const GoodsInfo = ({ goods }) => {
         setQuantity(quantity + 1);
     };
 
-    const handlePurchase = () => {
-        alert(`${goods.name} ${quantity}개를 구매합니다. 총 금액: ${(goods.price * quantity).toLocaleString()}원`);
-    };
-
-    const handleAddToCart = () => {
-        // alert(`${goods.name} ${quantity}개를 장바구니에 담습니다. 총 금액: ${(goods.price * quantity).toLocaleString()}원`);
-        addGoodsToCart(goodsNo, quantity)
+    const handleButton = (act) => {
+        addGoodsToCart(goodsNo, quantity, act)
         .then(response => {
-            alert(response.data);
+            alert(response.data.message);
+            if (response.data.isRedirect) {
+                window.location.href = "/cart";
+            }
         })
         .catch(error => {
             console.log(error);
         });
-    };
+    }
 
     return (
         <div className="container mt-4">
@@ -95,8 +93,8 @@ const GoodsInfo = ({ goods }) => {
                     </p>
 
                     <div className="d-flex gap-2">
-                        <button className="btn btn-primary" onClick={handlePurchase}>구매하기</button>
-                        <button className="btn btn-outline-dark" onClick={handleAddToCart}>장바구니 담기</button>
+                        <button className="btn btn-primary" onClick={() => handleButton("Purchase")}>구매하기</button>
+                        <button className="btn btn-outline-dark" onClick={() => handleButton("Add")}>장바구니 담기</button>
                     </div>
                 </div>
             </div>
