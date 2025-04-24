@@ -17,7 +17,5 @@ public interface OrdersRepository extends JpaRepository<Orders, Integer> {
     void deleteByUserNoAndStatus(int userNo, OrdersStatus status);
     Orders findByOrderNumber(String orderNumber);
     Orders findByUserNoAndStatus(int userNo, OrdersStatus status);
-    boolean existsByGoodsIdAndStatusAndUserNo(String orderNumber, String status, Long userNo);
-
-    boolean existsByGoodsIdAndStatusAndUserNo(Long goodsId, String paid, Long userNo);
+    boolean existsByItemsGoodsNoAndStatusAndUserNo(int goodsNo, OrdersStatus status, int userNo);
 }
