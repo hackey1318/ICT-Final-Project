@@ -215,14 +215,10 @@ public class OrderController {
         List<String> paymentKeyList = new ArrayList<>();
         for (OrdersDto ordersDto : ordersDtoList) {
             int orderNo = ordersDto.getId();
-            log.info("▶▶▶ Fetching payments for orderNo = {}", orderNo);
-
             List<OrderItemDto> orderItemDtoList = orderItemService.getOrderItems(orderNo);
             orderItemDtoLists.add(orderItemDtoList);
-
             String paymentKey = "undefined";
             if (ordersDto.getStatus().equals(OrdersStatus.PAID)) {
-                log.info("   Status=PAID, attempting to load payment record for orderNo {}", orderNo);
                 try {
                     paymentKey = paymentsService
                             .getPaymentsDtoByOrderNo(orderNo)
@@ -234,7 +230,6 @@ public class OrderController {
             }
             paymentKeyList.add(paymentKey);
         }
-
         Collections.reverse(ordersDtoList);
         Collections.reverse(orderItemDtoLists);
         Collections.reverse(paymentKeyList);
