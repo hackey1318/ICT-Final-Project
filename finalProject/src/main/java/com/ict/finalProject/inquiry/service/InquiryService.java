@@ -22,7 +22,7 @@ public interface InquiryService {
 
     void inquiryDel(int no);  //문의 삭제
 
-    Page<InquiryResponse> getAllInquiry(Pageable pageable);  //관리자용 문의목록
+    Page<InquiryResponse> getAllInquiry(Pageable pageable, String subject, String nickname);  //관리자용 문의목록
 
     List<InquiryCommentResponse> getComments(int no);  //문의 댓글 목록
 
