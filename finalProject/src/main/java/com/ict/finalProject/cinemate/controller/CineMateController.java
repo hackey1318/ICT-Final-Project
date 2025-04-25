@@ -76,4 +76,10 @@ public class CineMateController {
         return cineMateService.getCineMateMember(no, userNo);
     }
 
+    @GetMapping("/movies/{movieNo}/room/{no}/members/count")
+    public Integer getCineMateMemberCount(@PathVariable("movieNo") Integer movieNo, @PathVariable("no") Integer no) {
+
+        return cineMateService.getCineMateMemberCount(no);
+    }
+
 }
