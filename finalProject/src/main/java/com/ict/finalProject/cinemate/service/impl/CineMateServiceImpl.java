@@ -1,6 +1,7 @@
 package com.ict.finalProject.cinemate.service.impl;
 
 import com.ict.finalProject.cinemate.controller.request.CineMateRequest;
+import com.ict.finalProject.cinemate.controller.response.CineMateMemberResponse;
 import com.ict.finalProject.cinemate.repository.CineMateChatRoomRepository;
 import com.ict.finalProject.cinemate.repository.CineMateMemberRepository;
 import com.ict.finalProject.cinemate.controller.response.CineMateResponse;
@@ -13,6 +14,9 @@ import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.TheatersRepository;
 import com.ict.finalProject.oauth.repository.UsersRepository;
+import com.ict.finalProject.user.repository.domain.Likes;
+import com.ict.finalProject.user.repository.domain.LikesRepository;
+import com.ict.finalProject.user.repository.domain.constant.LikeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,12 +24,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -38,6 +46,7 @@ public class CineMateServiceImpl implements CineMateService {
     private final MoviesRepository moviesRepository;
     private final TheatersRepository theatersRepository;
     private final UsersRepository usersRepository;
+    private final LikesRepository likesRepository;
 
     @Override
     public boolean generateCineMateInfo(CineMateRequest request) {
@@ -104,26 +113,30 @@ public class CineMateServiceImpl implements CineMateService {
         List<CineMateResponse> responseList = new ArrayList<>();
 
         for (Object[] result : results) {
+
             CineMateResponse response = CineMateResponse.builder()
-                    .movieNo((Integer) result[3])
-                    .maxMemberCount((Integer) result[1])
-                    .meetingDate(result[2] != null ? ((Timestamp) result[2]).toLocalDateTime() : null)
-                    .createdAt(result[0] != null ? ((Timestamp) result[0]).toLocalDateTime() : null)
-                    .content((String) result[7])
-                    .ageGrade((String) result[8])
-                    .director((String) result[10])
-                    .movieName((String) result[11])
-                    .openDate(result[12] != null ? ((Date) result[12]).toLocalDate() : null)
-                    .postImage((String) result[13])
-                    .genre((String) result[14])
-                    .description((String) result[9])
+                    .no((Integer) result[0])
+                    .movieNo((Integer) result[4])
+                    .maxMemberCount((Integer) result[2])
+                    .meetingDate(result[3] != null ? ((Timestamp) result[3]).toLocalDateTime() : null)
+                    .createdAt(result[1] != null ? ((Timestamp) result[1]).toLocalDateTime() : null)
+                    .content((String) result[8])
+                    .ageGrade((String) result[9])
+                    .director((String) result[11])
+                    .movieName((String) result[12])
+                    .openDate(result[13] != null ? ((Date) result[13]).toLocalDate() : null)
+                    .postImage((String) result[14])
+                    .genre((String) result[15])
+                    .description((String) result[10])
+                    .userNo((Integer) result[16])
+                    .currentMemberCount(Math.toIntExact(cineMateMemberRepository.countByCineMateNoAndStatusActive((Integer) result[0])))
                     .theaterName(
-                            theatersRepository.findById((Integer) result[4])
+                            theatersRepository.findById((Integer) result[5])
                                     .orElseThrow(() -> new RuntimeException("해당 극장이 존재하지 않습니다."))
                                     .getName()
                     )
                     .userName(
-                            usersRepository.findById((Integer) result[6])
+                            usersRepository.findById((Integer) result[7])
                                     .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."))
                                     .getNickname()
                     )
@@ -133,5 +146,71 @@ public class CineMateServiceImpl implements CineMateService {
         }
 
         return responseList;
+    }
+
+    @Override
+    public boolean getJoinMovieRoom(Integer cineMateNo, Integer movieNo, Integer userNo) {
+        CineMateMembers cineMateMember = cineMateMemberRepository.findByCineMateNoAndUserNoAndStatus(cineMateNo, userNo, StatusInfo.ACTIVE);
+        return cineMateMember != null;
+    }
+
+    @Override
+    @Transactional
+    public boolean joinMovieRoom(Integer cineMateNo, Integer movieNo, Integer userNo) {
+        CineMateMembers cineMateMember = cineMateMemberRepository.findByCineMateNoAndUserNo(cineMateNo, userNo);
+        if (cineMateMember == null) {
+            // 참여 내역이 없음.
+            cineMateMember = CineMateMembers.builder()
+                    .cineMateNo(cineMateNo)
+                    .userNo(userNo)
+                    .status(StatusInfo.ACTIVE).build();
+        } else if (!StatusInfo.ACTIVE.equals(cineMateMember.getStatus())) {
+            cineMateMember.participate();
+        } else {
+            log.error("Join Cinemate error : [이미 참여중인 사용자[{}]입니다.]", userNo);
+            return false;
+        }
+        cineMateMemberRepository.save(cineMateMember);
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean cancelJoinMovieRoom(Integer cineMateNo, Integer movieNo, Integer userNo) {
+
+        try {
+
+            CineMateMembers cineMateMember = cineMateMemberRepository.findByCineMateNoAndUserNoAndStatus(cineMateNo, userNo, StatusInfo.ACTIVE);
+            if (cineMateMember == null) {
+                // 참여 내역이 없음.
+            }
+            cineMateMember.cancel();
+            cineMateMemberRepository.save(cineMateMember);
+            return true;
+        } catch (Exception e) {
+            log.error("Cancel Cinemate error : [{}]", e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public List<CineMateMemberResponse> getCineMateMember(Integer cineMateNo, Integer userNo) {
+
+        Map<Integer, CineMateMemberResponse> memberMap = cineMateMemberRepository.getCineMateMemberInfo(cineMateNo).stream()
+                .collect(Collectors.toMap(CineMateMemberResponse::getUserNo, Function.identity()));
+
+        List<Likes> userLikes = likesRepository.findByUserNoAndType(userNo, LikeType.USER);
+        for (Likes like : userLikes) {
+            Integer targetNo = like.getTargetNo();
+            if (memberMap.containsKey(targetNo)) {
+                memberMap.get(targetNo).setLiked(true);
+            }
+        }
+        CineMateMemberResponse cineMateMemberResponse =  memberMap.get(userNo);
+        if (cineMateMemberResponse!= null) {
+            cineMateMemberResponse.setMe(true);
+        }
+
+        return new ArrayList<>(memberMap.values());
     }
 }

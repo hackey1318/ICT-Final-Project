@@ -62,7 +62,7 @@ function MovieList(){
                     movieList.map((movieList) => (
                         <div key={movieList.movieNo} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             {/* 영화 상세 페이지 링크 */}
-                            <a href={`/cinemate/movie-detail/${movieList.movieNo}`} className="text-decoration-none text-dark">
+                            <a href={`/cinemate/movies/${movieList.movieNo}`} className="text-decoration-none text-dark">
                                 <div className="card h-100 shadow-sm position-relative overflow-hidden"> {/* overflow-hidden 추가 */}
                                     {/* 연령 등급 배지 */}
                                     <span
@@ -87,7 +87,7 @@ function MovieList(){
 
                                     {/* 영화 정보 */}
                                     <div className="card-body py-2 px-3"> {/* 패딩 조정 */}
-                                        <p className="card-title fw-bold text-truncate mb-1">{movieList.name || "제목 없음"}</p> {/* 폴백 텍스트 추가 및 마진 조정 */}
+                                        <p className="card-title fw-bold text-truncate mb-1">{movieList.movieName || "제목 없음"}</p> {/* 폴백 텍스트 추가 및 마진 조정 */}
                                         <p className="card-text text-muted small mb-0">{movieList.openDate ? `${movieList.openDate} 개봉` : "개봉일 정보 없음"}</p> {/* 폴백 텍스트 추가 */}
                                     </div>
                                 </div>
