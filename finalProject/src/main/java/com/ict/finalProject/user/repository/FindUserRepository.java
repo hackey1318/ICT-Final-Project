@@ -18,4 +18,6 @@ public interface FindUserRepository extends JpaRepository<Users, Integer> {
 
     //문의 댓글용 사용자 정보가져오기
     Optional<Users> findById(String id);
+
+    List<Users> findByNicknameContainingIgnoreCase(String nickname);
 }
