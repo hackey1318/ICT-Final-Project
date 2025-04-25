@@ -61,8 +61,8 @@ function Cart() {
         // 영화관 데이터 가져오기
         getTheaterList()
             .then((response) => {
-                setTheaterData(prev => [...prev, ...response.data]);
-                setFilteredTheaters(prev => [...prev, ...response.data]);
+                setTheaterData(response.data);
+                setFilteredTheaters(response.data);
             })
             .catch((error) => {
                 console.error("API 호출 중 오류 발생:", error);
@@ -74,7 +74,7 @@ function Cart() {
                 const updateGoods = response.data.map(item => ({
                     ...item,
                     quantity: item.quantity,
-                    selected: item.quantity === 0 ? true : false
+                    selected: item.quantity !== 0 ? true : false
                 }));
                 setGoods(updateGoods);
             })
@@ -85,7 +85,6 @@ function Cart() {
         updateTotalPrice();
         updateCheckBox();
         goodsRef.current = goods;
-        console.log(goods);
     }, [goods]);
 
     const selectGoods = (e) => {
@@ -229,14 +228,14 @@ function Cart() {
             });
     }
 
-    const searchTheater = (e) => {
+    const searchTheater = () => {
         const filtered = theaterData.filter((theater) =>
-            theater.includes(e.target.value));
+            theater.includes(theaterRef.current.value));
         setFilteredTheaters(filtered);
     }
 
     const selectTheater = (e) => {
-        theaterRef.current.value = e.target.innerText;
+        theaterRef.current.value = e.element;
     }
     
     if (loading) {
@@ -313,11 +312,11 @@ function Cart() {
                     <hr />
                     <div style={{ position: 'relative' }}>
                         <div className="order_info_goods_label">수령 장소</div>
-                        <div className="order_info_goods_quantity"><input type="text" id="theaterList" ref={theaterRef} placeholder="영화관 찾기" onChange={searchTheater} onFocus={() => setTheaterSuggestion(true)} onBlur={() => setTimeout(() => setTheaterSuggestion(false), 100)} /></div>
+                        <div className="order_info_goods_quantity"><input type="text" id="theaterList" ref={theaterRef} placeholder="영화관 찾기" onChange={searchTheater} onFocus={() => {setTheaterSuggestion(true); searchTheater();}} onBlur={() => setTimeout(() => setTheaterSuggestion(false), 100)} /></div>
                         {theaterSuggestion &&
                             <div id="theaterSuggestion">
                                 {filteredTheaters.length != 0 ? filteredTheaters.map((element, idx) => (
-                                    <div key={idx} onClick={selectTheater}>{element}</div>
+                                    <div key={idx} onClick={() => selectTheater({element})}>{element}</div>
                                 )) : <div>결과가 없습니다.</div>}
 
                             </div>
