@@ -33,7 +33,11 @@ public interface AdminRepository extends JpaRepository<Users, Integer> {
             "FROM users WHERE status = 'ACTIVE';", nativeQuery = true)
     List<Object[]> countUsersByActiveUsers();
 
+    //블랙리스트 검색을 위한
     Page<Users> findByStatus(StatusInfo statusInfo, Pageable pageable);
+    Page<Users> findByStatusAndIdContainingIgnoreCase(StatusInfo status, String id, Pageable pageable);
+    Page<Users> findByStatusAndNicknameContainingIgnoreCase(StatusInfo status, String nickname, Pageable pageable);
+    Page<Users> findByStatusAndEmailContainingIgnoreCase(StatusInfo status, String email, Pageable pageable);
 
     //블랙리스트 상태 DEACTIVE -> ACTIVE로 변경
     @Modifying

@@ -103,9 +103,17 @@ public class InquiryController {
     @AuthRequired({UserRole.ADMIN, UserRole.MANAGER})
     @GetMapping("/getAllInquiry") // URL 변경 (getReplies -> getInquiries)
     public ResponseEntity<Page<InquiryResponse>> getAllInquiry(
-            @PageableDefault(size = 10, sort = "no", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(size = 10, sort = "no", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(required = false) String  inquiryreplySubject,
+            @RequestParam(required = false) String  inquiryreplyNickname
+            ) {
         try {
-            Page<InquiryResponse> inquiryResponse = inquiryService.getAllInquiry(pageable);
+            Page<InquiryResponse> inquiryResponse =
+              inquiryService.getAllInquiry(
+                                            pageable,
+                                            inquiryreplySubject,
+                                            inquiryreplyNickname
+                                            );
             return ResponseEntity.ok(inquiryResponse);
         } catch(Exception e) {
             return ResponseEntity.internalServerError().build();

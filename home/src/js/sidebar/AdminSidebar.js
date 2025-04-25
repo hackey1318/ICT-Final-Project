@@ -3,6 +3,7 @@ import './../../css/admin/adminSidebar.css';
 
 import logo from "../../img/cinetogether.png"
 import { Link } from 'react-router-dom';
+import logouticon from '../../img/logout.png';
 
 function AdminSidebar({activeMenu}){
     //role 정보 담을 변수
@@ -58,7 +59,15 @@ function AdminSidebar({activeMenu}){
         <div className="admin-sidebar">
             {/* 배너 이미지 */}
             <img src={logo || "/placeholder.svg?height=40&width=150"} alt="CINETOGETHER" className="admin-banner"/>
-            <div className="admin-info">'{nickname}' {role}</div>
+            <div className="admin-info">
+                <div className='admin-user'>
+                    <div className='admin-role'> {role}</div>
+                    <div className='admin-nickname'>{nickname}</div>
+                </div>
+                <div className='admin-logout'>
+                    <img src={logouticon}/>                    
+                </div>
+            </div>
 
             {/* 메뉴 부분 */}
             {role==="ADMIN" ? ( 

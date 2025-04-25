@@ -34,4 +34,6 @@ public interface FindUserService {
 
     //문의 댓글용 사용자 정보가져오기
     Optional<Users> findUserById(String id);
+
+    List<Users> findUsersByNicknameContainingIgnoreCase(String nickname);
 }
