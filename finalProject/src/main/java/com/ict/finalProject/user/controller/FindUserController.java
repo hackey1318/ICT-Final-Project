@@ -1,6 +1,7 @@
 package com.ict.finalProject.user.controller;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.user.controller.request.UserFindRequest;
 import com.ict.finalProject.user.controller.response.UserFindResponse;
@@ -109,6 +110,10 @@ public class FindUserController {
     public String changePwd(@RequestBody Users user){
         Users resetUser = findUserService.findUser(user.getNo()).get();
         resetUser.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if(resetUser.getRole()== UserRole.ADMIN || resetUser.getRole()== UserRole.MANAGER){
+            return "adminOk";
+        }
 
         findUserService.insertUser(resetUser);
 
