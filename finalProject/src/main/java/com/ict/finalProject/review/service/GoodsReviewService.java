@@ -10,4 +10,5 @@ public interface GoodsReviewService {
     List<GoodsReviewResponse> getReviewsByGoodsId(Long goodsId);
     GoodsReviewResponse writeReview(GoodsReviewRequest request);
     OrdersForReviewResponse getOrdersForReview(Long goodsId, Long userNo);
+    GoodsReviewResponse updateReview(GoodsReviewRequest request);
 }

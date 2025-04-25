@@ -134,4 +134,47 @@ public class GoodsReviewServiceImpl implements GoodsReviewService {
         return new OrdersForReviewResponse(ordersDtoList, orderItemDtoList);
     }
 
+    @Override
+    @Transactional
+    public GoodsReviewResponse updateReview(GoodsReviewRequest request) {
+        // 1) 기존 리뷰 엔티티 조회
+        GoodsReview existing = reviewRepo.findById(request.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Review not found: " + request.getId()));
+
+        // 2) 수정할 필드만 덮어쓰기
+        existing.setTitle(request.getTitle());
+        existing.setContent(request.getContent());
+        existing.setRating(request.getRating());
+        // (orderNo, goodsId, userNo는 바뀌면 안 되므로 건드리지 않습니다)
+
+        // 3) PENDING 레코드 생성 (이미지 다시 편집할 때 대비)
+        fileSystemService.createPendingImageInfos(
+                request.getImageIds(),
+                existing.getId().intValue(),
+                ImageWriteType.GOODSREVIEW
+        );
+
+        // 4) PENDING → ACTIVE 링크 (새로 남긴 이미지들도 활성화)
+        if (request.getImageIds() != null && !request.getImageIds().isEmpty()) {
+            imageInfoRepo.linkImagesToReview(
+                    request.getImageIds(),
+                    existing.getId().intValue(),
+                    ImageWriteType.GOODSREVIEW
+            );
+        }
+
+        // 5) DTO 변환 & ACTIVE 이미지 조회
+        GoodsReviewResponse dto = modelMapper.map(existing, GoodsReviewResponse.class);
+        List<String> activeIds = imageInfoRepo.findImageIdsByBoardNoAndTypeAndStatus(
+                existing.getId().intValue(),
+                ImageWriteType.GOODSREVIEW,
+                StatusInfo.ACTIVE
+        );
+        dto.setImageIds(activeIds);
+
+        return dto;
+    }
+
+
+
 }
