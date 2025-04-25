@@ -137,7 +137,7 @@ function App() {
 				</Route>
 				<Route path="/cinemate/movies/:movieNo" element={<MovieListDetail />} />
 				<Route path="/cinemate/movies/:movieNo/room/:no" element={<MovieRoom />} />
-			    <Route path="/cinemate/theater-detail/:theaterNo" element={<TheaterListDetail />} />
+			    <Route path="/cinemate/theaters/:theaterNo" element={<TheaterListDetail />} />
 			</Route>
 
 			{/* 로그인 & 비로그인 페이지 (사이드바 없음) */}

@@ -47,7 +47,7 @@ function TheaterList(){
                     theaterList.map((theater)=>{
                         return(
                             <div key={theater.theaterNo} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                <a href={`/cinemate/theater-detail/${theater.theaterNo}`} className="text-decoration-none text-dark">
+                                <a href={`/cinemate/theaters/${theater.theaterNo}`} className="text-decoration-none text-dark">
                                     <div className="card shadow-sm">
                                         <div className="card-body">
                                             <h5 className="card-title" style={{textAlign:"center"}}>{theater.theaterName}</h5>
