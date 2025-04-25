@@ -59,6 +59,7 @@ import MovieTheater from './page/cinemate/MovieTheater';
 import MovieList from './page/cinemate/MovieList';
 import MovieListDetail from './page/cinemate/MovieListDetail';
 import MovieRoom from './page/cinemate/MovieRoom';
+import AdminPwdReset from './page/admin/AdminPwdReset';
 
 function App() {
 
@@ -140,7 +141,7 @@ function App() {
 				<Route index element={<ManagerLogin />} />
 				<Route path="find-id" element={<AdminFindId />} />
 				<Route path="find-pwd" element={<AdminFindPwd />} />
-				<Route path="pwdReset" element={<PwdReset />} />
+				<Route path="adminPwdReset" element={<AdminPwdReset />} />
 				<Route path="register" element={<ManagerRegister />} />
 
 				{/* 로그인 이후 관리자 레이아웃 (사이드바 포함) */}

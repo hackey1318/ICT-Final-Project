@@ -4,7 +4,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import arrow from '../../img/arrow.png';
 
-function PwdReset(){
+function AdminPwdReset(){
     //입력한 비밀번호를 보관할 변수
     const [resetPwd, setresetPwd] = useState({});
 
@@ -52,14 +52,12 @@ function PwdReset(){
         //비밀번호 입력 여부 체크
         if(resetPwd.pwd==null || resetPwd.pwd===''){
             alert("비밀번호를 입력하세요");
-            // setAlertMsg((prev) => {return {...prev, id:'아이디를 입력하세요'}})
             return false;
         }
 
         //비밀번호확인 입력 여부 체크
         if(resetPwd.pwdCheck==null || resetPwd.pwdCheck===''){
             alert("비밀번호를 한번 더 입력하세요");
-            // setAlertMsg((prev) => {return {...prev, id:'아이디를 입력하세요'}})
             return false;
         }
 
@@ -89,24 +87,25 @@ function PwdReset(){
     }
 
     return(
-        <div className="find-form">
-            <button onClick={() => window.history.back()} className="back-button" style={{display:"flex"}}>
-                <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
-            </button>
-            <form onSubmit={formCheck}>
-                <h3 className="find-form-subject">비밀번호 재설정</h3>
-                <div className="find-form-line">
-                    <span className="reset-form-title">비밀번호</span><input type="password" name="pwd" className="find-form-input" onChange={setFormData} placeholder="비밀번호를 입력하세요"/>
-                    {/* {alertMsg.nickname!='' && <><span style={{color:'red'}}>{alertMsg.nickname}</span><br/></>} */}
-                </div>
-                <div>
-                    <span className="reset-form-title">비밀번호 확인</span><input type="password" name="pwdCheck" className="find-form-input" onChange={setFormData} placeholder="비밀번호를 한번 더 입력하세요"/>
-                    {/* {alertMsg.email!='' && <><span style={{color:'red'}}>{alertMsg.email}</span><br/></>} */}
-                </div>
-                <input type="submit" value="비밀번호 재설정" className="find-btn"/>
-            </form>
+        <div className="container d-flex justify-content-center align-items-center vh-100">
+            <div className="admin-find-form">
+                <button onClick={() => window.history.back()} className="back-button">
+                    <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
+                </button>
+                <form onSubmit={formCheck}>
+                    <h3 className="find-form-subject">비밀번호 재설정</h3>
+                    <div className="find-form-line">
+                        <span className="reset-form-title">비밀번호</span><input type="password" name="pwd" className="find-form-input" onChange={setFormData} placeholder="비밀번호를 입력하세요"/>
+                    </div>
+                    <div>
+                        <span className="reset-form-title">비밀번호 확인</span><input type="password" name="pwdCheck" className="find-form-input" onChange={setFormData} placeholder="비밀번호를 한번 더 입력하세요"/>
+                    </div>
+                    <input type="submit" value="비밀번호 재설정" className="find-btn"/>
+                </form>
+
+            </div>
         </div>
     )
 }
 
-export default PwdReset;
+export default AdminPwdReset;
