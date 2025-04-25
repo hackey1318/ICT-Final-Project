@@ -59,6 +59,9 @@ import MovieTheater from './page/cinemate/MovieTheater';
 import MovieList from './page/cinemate/MovieList';
 import MovieListDetail from './page/cinemate/MovieListDetail';
 import MovieRoom from './page/cinemate/MovieRoom';
+import TheaterList from './page/cinemate/TheaterList';
+import TheaterListDetail from './page/cinemate/TheaterListDetail';
+
 
 function App() {
 
@@ -130,9 +133,11 @@ function App() {
 				<Route path="cinemate" element={<MovieTheater />} >
 					<Route index element={<MovieList />} />
 					<Route path="movies" element={<MovieList />} />
+					<Route path="theaters" element={<TheaterList />} />
 				</Route>
 				<Route path="/cinemate/movies/:movieNo" element={<MovieListDetail />} />
 				<Route path="/cinemate/movies/:movieNo/room/:no" element={<MovieRoom />} />
+			    <Route path="/cinemate/theater-detail/:theaterNo" element={<TheaterListDetail />} />
 			</Route>
 
 			{/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
