@@ -1,5 +1,6 @@
 package com.ict.finalProject.user.service.impl;
 
+import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.user.controller.request.UserFindRequest;
 import com.ict.finalProject.user.repository.FindUserRepository;
@@ -24,6 +25,7 @@ public class FindUserServiceImpl implements FindUserService {
     private final FindUserRepository findUserRepository;
     private final PwdResetRepository pwdResetRepository;
     private final JavaMailSender mailSender;
+    private final UsersRepository usersRepository;
 
     //properties에 있는 메일 정보 사용을 위해 작성
     @Value("${spring.mail.username}")
@@ -62,6 +64,16 @@ public class FindUserServiceImpl implements FindUserService {
     //비밀번호 재설정 링크 이메일 발송
     @Override
     public void sendPwdResetEmail(String email, Integer userno) {
+        Optional<Users> user = usersRepository.findById(userno);
+        Enum role = user.get().getRole();
+
+        String url;
+        if ("ADMIN".equals(role.name()) || "MANAGER".equals(role.name())) {
+            url = "manager/adminPwdReset";
+        } else {
+            url = "user/pwdReset";
+        }
+
         // 토큰 생성 (앞 6자리만 사용)
         String token = UUID.randomUUID().toString().substring(0, 6);
 
@@ -74,7 +86,7 @@ public class FindUserServiceImpl implements FindUserService {
                 + "<h2 style='text-align: center; color: #4CAF50;'>비밀번호 재설정</h2>"
                 + "<p style='text-align: center;'>안녕하세요. 아래 버튼을 클릭하여 비밀번호를 재설정하세요.</p>"
                 + "<div style='text-align: center; margin-top: 20px;'>"
-                + "<a href='http://localhost:3000/user/pwdReset?token=" + token + "&userNo=" + userno + "' "
+                + "<a href='http://localhost:3000/"+ url +"?token=" + token + "&userNo=" + userno + "' "
                 + "style='background-color: #4CAF50; color: white; padding: 14px 20px; font-size: 16px; text-decoration: none; border-radius: 5px; cursor: pointer; display: inline-block;'>"
                 + "비밀번호 재설정</a>"
                 + "</div>"
