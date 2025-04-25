@@ -25,4 +25,6 @@ public interface CineMateService {
     boolean cancelJoinMovieRoom(Integer cineMateNo, Integer movieNo, Integer userNo);
 
     List<CineMateMemberResponse> getCineMateMember(Integer cineMateNo, Integer userNo);
+
+    Integer getCineMateMemberCount(Integer cineMateNo);
 }
