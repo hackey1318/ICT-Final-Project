@@ -50,14 +50,15 @@ import AnnounceDetail from './page/admin/AnnounceDetail';
 import ManagerRegister from './page/admin/ManagerRegisterForm';
 import AdminFindId from './page/admin/AdminFindId';
 import AdminFindPwd from './page/admin/AdminFindPwd';
-import Report from './page/admin/Report';
+import ReportPage from './page/report/ReportPage';
+import ReportDetail from './page/report/ReportDetail';
 import BannerList from './page/admin/banner/BannerList';
 import MypageSidebar from './js/sidebar/MyPageSidebar';
 import LikedItemsPage from './page/user/mypage/LikedItemsPage';
 import MovieTheater from './page/cinemate/MovieTheater';
 import MovieList from './page/cinemate/MovieList';
 import MovieListDetail from './page/cinemate/MovieListDetail';
-
+import MovieRoom from './page/cinemate/MovieRoom';
 
 function App() {
 
@@ -125,13 +126,14 @@ function App() {
 					<Route path="likes" element={<LikedItemsPage />} />
 				</Route>
 
-          {/* 시네메이트 */}
-          <Route path="cinemate" element={<MovieTheater />} >
-            <Route index element={<MovieList />} />
-            <Route path="movies" element={<MovieList />} />
-          </Route>
-          <Route path="/cinemate/movie-detail/:movieNo" element={<MovieListDetail />} />
-        </Route>
+				{/* 시네메이트 */}
+				<Route path="cinemate" element={<MovieTheater />} >
+					<Route index element={<MovieList />} />
+					<Route path="movies" element={<MovieList />} />
+				</Route>
+				<Route path="/cinemate/movies/:movieNo" element={<MovieListDetail />} />
+				<Route path="/cinemate/movies/:movieNo/room/:no" element={<MovieRoom />} />
+			</Route>
 
 			{/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
 			<Route path="/manager">
@@ -154,7 +156,8 @@ function App() {
 					<Route path="inquiry/:no" element={<InquiryReplyView />} />
 					<Route path="announce" element={<AnnounceList />} />
 					<Route path="announce/:no" element={<AnnounceDetail />} />
-					<Route path="report" element={<Report />} />
+					<Route path="reportPage" element={<ReportPage />} />
+					<Route path="report/:no" element={<ReportDetail />} />
 					<Route path='banner' element={<BannerList />} />
 				</Route>
 			</Route>
