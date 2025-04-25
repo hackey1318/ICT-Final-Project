@@ -43,18 +43,42 @@ export default function GoodsReviewList({
     }
   };
 
+  // 리뷰 삭제 함수 추가
+  const handleDeleteReview = async (reviewId) => {
+    if (!window.confirm('정말로 이 리뷰를 삭제하시겠습니까?')) {
+      return;
+    }
+
+    try {
+      await axios.delete(`/goods/${goodsId}/reviews/${reviewId}`);
+      alert('리뷰가 삭제되었습니다.');
+      fetchReviews(); // 리뷰 목록 새로고침
+    } catch (err) {
+      console.error('리뷰 삭제 오류', err);
+      alert('리뷰 삭제에 실패했습니다.');
+    }
+  };
+
   return (
     <div className="goods-review-list">
       {reviews.map(r => (
         <div key={r.id} className="review-item">
           <div className="review-header">
             <h3>{r.title} ({r.rating}점)</h3>
-            <button
-              className="btn btn-sm btn-outline-primary"
-              onClick={() => onSelectReview && onSelectReview(r)}
-            >
-              이 리뷰 수정
-            </button>
+            <div className="review-actions">
+              <button
+                className="btn btn-sm btn-outline-primary me-2"
+                onClick={() => onSelectReview && onSelectReview(r)}
+              >
+                수정
+              </button>
+              <button
+                className="btn btn-sm btn-outline-danger"
+                onClick={() => handleDeleteReview(r.id)}
+              >
+                삭제
+              </button>
+            </div>
           </div>
           {r.imageUrls.length > 0 && (
             <Swiper

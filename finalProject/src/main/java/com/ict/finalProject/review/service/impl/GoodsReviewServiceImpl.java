@@ -175,6 +175,27 @@ public class GoodsReviewServiceImpl implements GoodsReviewService {
         return dto;
     }
 
+    @Override
+    @Transactional
+    public void deleteReview(Long reviewId, Long userNo) {
+        // 1) 리뷰 조회
+        GoodsReview review = reviewRepo.findById(reviewId)
+            .orElseThrow(() -> new IllegalArgumentException("Review not found: " + reviewId));
+        
+        // 2) 작성자 확인
+        if (!review.getUserNo().equals(userNo)) {
+            throw new IllegalArgumentException("Not authorized to delete this review");
+        }
 
+        // 3) 리뷰에 연결된 이미지들의 상태만 DELETE로 변경 (soft delete)
+        imageInfoRepo.updateStatusToDelete(
+            review.getId().intValue(),
+            ImageWriteType.GOODSREVIEW,
+            StatusInfo.DELETE
+        );
+
+        // 4) 리뷰 삭제
+        reviewRepo.delete(review);
+    }
 
 }
