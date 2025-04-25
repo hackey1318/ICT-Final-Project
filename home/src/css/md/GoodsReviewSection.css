@@ -56,6 +56,7 @@
     justify-content: center; align-items: center;
   }
   .modal-content {
+    height: auto;
     background: #fff; padding: 1rem; border-radius: 0.5rem;
     width: 90%; max-width: 500px; position: relative;
   }
@@ -73,3 +74,79 @@
   .btn-review {
     margin-bottom: 1rem; padding: 0.5rem 1rem;
   }
+
+
+  /* 이미지 업로드 버튼 영역 */
+.image-upload-section {
+  margin: 0.75rem 0;
+}
+.btn-add-image {
+  padding: 0.5rem 1rem;
+  background-color: white;
+  color: gray;
+  border: 1px solid #4a90e2;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+/* 이미지 미리보기 컨테이너 */
+.image-preview-container {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+/* 개별 미리보기 박스 */
+.image-preview-item {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+/* 썸네일 이미지 */
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 삭제 버튼 */
+.btn-remove-image {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+}
+
+/* 모달 하단 버튼들 레이아웃 & 스타일 */
+.modal-actions {
+  display: flex;
+  gap: 0.75rem; /* 버튼 사이 간격 */
+}
+
+.modal-actions button {
+  padding: 0.5rem 1rem;
+  background: #4a90e2;       /* + 이미지 추가 스타일과 동일 */
+  color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.modal-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

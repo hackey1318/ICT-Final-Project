@@ -9,6 +9,7 @@ import './../../css/md/GoodsReviewSection.css';
 
 export default function GoodsReviewList({ goodsId }) {
   const [reviews, setReviews] = useState([]);
+  const API = axios.defaults.baseURL;
 
   useEffect(() => {
     fetchReviews();
@@ -17,9 +18,11 @@ export default function GoodsReviewList({ goodsId }) {
   const fetchReviews = async () => {
     try {
       const { data } = await axios.get(`/goods/${goodsId}/reviews`);
+      console.log("리뷰 데이터:", data);
+
       setReviews(data.map(r => ({
         ...r,
-        imageUrls: r.imageIds.map(id => `/file-system/download/${id}`)
+        imageUrls: r.imageIds.map(id => `${API}/file-system/download/${id}`)
       })));
     } catch (err) {
       console.error(err);
