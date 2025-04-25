@@ -11,4 +11,5 @@ public interface GoodsReviewService {
     GoodsReviewResponse writeReview(GoodsReviewRequest request);
     OrdersForReviewResponse getOrdersForReview(Long goodsId, Long userNo);
     GoodsReviewResponse updateReview(GoodsReviewRequest request);
+    void deleteReview(Long reviewId, Long userNo);
 }
