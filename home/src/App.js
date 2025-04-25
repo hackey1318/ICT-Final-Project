@@ -50,7 +50,8 @@ import AnnounceDetail from './page/admin/AnnounceDetail';
 import ManagerRegister from './page/admin/ManagerRegisterForm';
 import AdminFindId from './page/admin/AdminFindId';
 import AdminFindPwd from './page/admin/AdminFindPwd';
-import Report from './page/report/Report';
+import ReportPage from './page/report/ReportPage';
+import ReportDetail from './page/report/ReportDetail';
 import BannerList from './page/admin/banner/BannerList';
 import MypageSidebar from './js/sidebar/MyPageSidebar';
 import LikedItemsPage from './page/user/mypage/LikedItemsPage';
@@ -58,7 +59,6 @@ import MovieTheater from './page/cinemate/MovieTheater';
 import MovieList from './page/cinemate/MovieList';
 import MovieListDetail from './page/cinemate/MovieListDetail';
 import MovieRoom from './page/cinemate/MovieRoom';
-
 
 function App() {
 
@@ -156,7 +156,8 @@ function App() {
 					<Route path="inquiry/:no" element={<InquiryReplyView />} />
 					<Route path="announce" element={<AnnounceList />} />
 					<Route path="announce/:no" element={<AnnounceDetail />} />
-					<Route path="report" element={<Report />} />
+					<Route path="reportPage" element={<ReportPage />} />
+					<Route path="report/:no" element={<ReportDetail />} />
 					<Route path='banner' element={<BannerList />} />
 				</Route>
 			</Route>
