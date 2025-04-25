@@ -18,11 +18,11 @@ function InquiryReply() {
     const [searchType, setSearchType] = useState("inquiryreplySubject");
     const [searchValue, setSearchValue] = useState(""); // 검색어 예시
 
-    // 검색어 
+    // 검색어
     const handleSearch = e => {
         e.preventDefault();      
         setCurrentPage(0);
-        getInquiryList();           
+        getInquiryList();
       };
 
       const getInquiryList = useCallback(async (page = 0) => {
@@ -133,7 +133,7 @@ function InquiryReply() {
                                 return (
                                     <tr className="inquiryreplylist" key={item.no}>
                                         <td>{item.no}</td>
-                                        <td onClick={() => inquiryReplyView(item.no)}>{item.subject}</td>
+                                        <td onClick={() => inquiryReplyView(item.no)} style={{cursor:'pointer'}}>{item.subject}</td>
                                         <td>{item.nickname}</td>
                                         <td>{new Date(item.createdAt).toLocaleDateString()}</td>
                                         <td>

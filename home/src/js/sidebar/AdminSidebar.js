@@ -89,7 +89,7 @@ function AdminSidebar({activeMenu}){
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="/manager/home/report" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>
+                                    <Link to="/manager/home/reportPage" className={`admin-nav-link ${activeMenu === "" ? "active":""}`}>
                                         신고 목록 조회
                                     </Link>
                                 </li>

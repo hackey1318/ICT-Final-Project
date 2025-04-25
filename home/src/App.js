@@ -50,7 +50,8 @@ import AnnounceDetail from './page/admin/AnnounceDetail';
 import ManagerRegister from './page/admin/ManagerRegisterForm';
 import AdminFindId from './page/admin/AdminFindId';
 import AdminFindPwd from './page/admin/AdminFindPwd';
-import Report from './page/admin/Report';
+import ReportPage from './page/report/ReportPage';
+import ReportDetail from './page/report/ReportDetail';
 import BannerList from './page/admin/banner/BannerList';
 import MypageSidebar from './js/sidebar/MyPageSidebar';
 import LikedItemsPage from './page/user/mypage/LikedItemsPage';
@@ -58,7 +59,7 @@ import MovieTheater from './page/cinemate/MovieTheater';
 import MovieList from './page/cinemate/MovieList';
 import MovieListDetail from './page/cinemate/MovieListDetail';
 import MovieRoom from './page/cinemate/MovieRoom';
-
+import AdminPwdReset from './page/admin/AdminPwdReset';
 
 function App() {
 
@@ -140,7 +141,7 @@ function App() {
 				<Route index element={<ManagerLogin />} />
 				<Route path="find-id" element={<AdminFindId />} />
 				<Route path="find-pwd" element={<AdminFindPwd />} />
-				<Route path="pwdReset" element={<PwdReset />} />
+				<Route path="adminPwdReset" element={<AdminPwdReset />} />
 				<Route path="register" element={<ManagerRegister />} />
 
 				{/* 로그인 이후 관리자 레이아웃 (사이드바 포함) */}
@@ -156,7 +157,8 @@ function App() {
 					<Route path="inquiry/:no" element={<InquiryReplyView />} />
 					<Route path="announce" element={<AnnounceList />} />
 					<Route path="announce/:no" element={<AnnounceDetail />} />
-					<Route path="report" element={<Report />} />
+					<Route path="reportPage" element={<ReportPage />} />
+					<Route path="report/:no" element={<ReportDetail />} />
 					<Route path='banner' element={<BannerList />} />
 				</Route>
 			</Route>

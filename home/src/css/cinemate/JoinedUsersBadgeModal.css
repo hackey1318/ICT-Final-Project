@@ -1,0 +1,87 @@
+/* 모달 오버레이: dim 제거 + absolute 위치 */
+.badge-modal-overlay {
+    position: absolute;
+    top: 100%; /* 뱃지 바로 아래 */
+    left: 0;
+    background-color: transparent;
+    width: auto;
+    height: auto;
+    padding: 0;
+    z-index: 999;
+}
+
+/* 모달 컨텐츠 */
+.badge-modal-content {
+    background-color: white;
+    border-radius: 10px;
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    position: relative;
+}
+
+/* 헤더 */
+.badge-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.badge-modal-title {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.badge-modal-close {
+    border: none;
+    background: transparent;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+/* 바디 */
+.badge-modal-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.badge-user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.badge-user-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.badge-user-profile {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.badge-user-nickname {
+    flex-grow: 1;
+}
+
+.like-btn {
+    border: none;
+    background: transparent;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: crimson;
+}
+
+.empty-text {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+}

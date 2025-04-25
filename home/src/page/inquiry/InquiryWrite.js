@@ -103,7 +103,7 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
             formData.append("files", img);
         })
 
-        const fileUpload = await axios.post("http://192.168.1.252:9988/file-system/upload", formData, {
+        const fileUpload = await apiClient.post("/file-system/upload", formData, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'multipart/form-data'
