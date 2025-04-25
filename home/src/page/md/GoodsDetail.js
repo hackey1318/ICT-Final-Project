@@ -34,11 +34,19 @@ const GoodsDetail = () => {
   const [showReviews, setShowReviews] = useState(false);
   const [writeModalOpen, setWriteModalOpen] = useState(false);
   const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
+  const [editingReview, setEditingReview] = useState(null);
+  const [reviews, setReviews] = useState([]);
+
+  const fetchReviews = async () => {
+    try {
+      const { data } = await axios.get(`/goods/${goodsNo}/reviews`);
+      setReviews(data);
+    } catch (err) {
+      console.error('리뷰 목록 조회 오류', err);
+    }
+  };
 
   useEffect(() => {
-
-
-
     const fetchData = async () => {
       try {
         const goodsInfo = await axios.get(
@@ -71,7 +79,10 @@ const GoodsDetail = () => {
 
     fetchData();
     fetchLikeStatus();
-  }, [goodsNo]);
+    if (showReviews) {
+      fetchReviews();
+    }
+  }, [goodsNo, showReviews]);
 
   const toggleLike = async () => {
     try {
@@ -154,28 +165,41 @@ const GoodsDetail = () => {
        {showReviews && (
          <>
            <div className="mt-3">
-             <GoodsReviewList goodsId={goodsNo} />
+             <div className="review-buttons">
+               <button
+                 className="btn btn-outline-secondary mt-2"
+                 onClick={() => {
+                   setEditingReview(null);
+                   setWriteModalOpen(true);
+                 }}
+               >
+                 리뷰 작성
+               </button>
+             </div>
+             <GoodsReviewList
+               goodsId={goodsNo}
+               refreshKey={reviewRefreshKey}
+               onReviewsLoad={setReviews}
+               onSelectReview={(review) => {
+                 setEditingReview(review);
+                 setWriteModalOpen(true);
+               }}
+             />
            </div>
-
-              {/* 리뷰 작성 모달 열기/닫기는 여기서 onSubmitSuccess 로 showReviews 조작해도 됩니다 */}
-
-                 {/* 리뷰 작성 모달을 여는 버튼 */}
-                <button
-                  className="btn btn-outline-secondary mt-2"
-                  onClick={() => setWriteModalOpen(true)}
-                >
-                  리뷰 작성
-                </button>
 
            <GoodsReviewWriteModal
              goodsId={goodsNo}
              userNo={userNo}
+             review={editingReview}
              isOpen={writeModalOpen}
-             onClose={() => setWriteModalOpen(false)}
+             onClose={() => {
+               setWriteModalOpen(false);
+               setEditingReview(null);
+             }}
              onSubmitSuccess={() => {
-              setWriteModalOpen(false);
-              // 리뷰 등록 성공 시 키를 바꿔서 리스트 useEffect를 재발동시킵니다
-              setReviewRefreshKey(k => k + 1);
+               setWriteModalOpen(false);
+               setEditingReview(null);
+               setReviewRefreshKey(k => k + 1);
              }}
            />
          </>
