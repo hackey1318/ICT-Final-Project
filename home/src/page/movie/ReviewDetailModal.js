@@ -125,7 +125,7 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
     })
     : ""
 
-  const baseUrl = apiClient.defaults.baseURL
+  const baseUrl = apiClient.defaults.baseURL;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
