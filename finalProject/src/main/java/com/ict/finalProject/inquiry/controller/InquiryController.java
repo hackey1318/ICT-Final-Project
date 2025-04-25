@@ -64,7 +64,6 @@ public class InquiryController {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
-
     }
 
     // 문의디테일페이지
