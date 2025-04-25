@@ -1,45 +1,60 @@
 import axios from "axios";
 import { ArrowLeft, ArrowRight, Heart, Share2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-function MovieListDetail(){
-    //URL에서 movieNo 파라미터 가져옴
-    const { movieNo } = useParams();  
-    console.log(movieNo);
+const accessToken = sessionStorage.getItem("accessToken");
+
+function MovieListDetail() {
+
+	const navigation = useNavigate();
+	//URL에서 movieNo 파라미터 가져옴
+	const { movieNo } = useParams();
+	console.log(movieNo);
 
 	//영화 상세 정보 담을 변수
-    const [movies, setMovies] = useState([]); //리스트로 들어와서 배열로 받음.
+	const [movies, setMovies] = useState([]); //리스트로 들어와서 배열로 받음.
 
 	// 로딩 상태 추가
-    const [loading, setLoading] = useState(true); 
+	const [loading, setLoading] = useState(true);
 
 	const [liked, setLiked] = useState(false); // 현재 좋아요 여부
 	const [likeId, setLikeId] = useState(null); // 좋아요 ID (DB에서 받은 값)
-    
-    useEffect(()=>{
-        axios.get(`http://localhost:9988/cinemate/movieDetail/${movieNo}`)
-        .then((response)=>{
-            console.log("시네메이트 영화 정보로 들어옴",response.data);
-			console.log("0번째",response.data[0]);
 
-            setMovies(response.data);
-            setLoading(false);  // 로딩 완료
-        }).catch((error)=>{
-            console.log("영화상세정보 에러",error);
-            setLoading(false);  // 로딩 완료
-        });
-    },[movieNo]);
+	useEffect(() => {
+		axios.get(`http://localhost:9988/cinemate/movieDetail/${movieNo}`)
+			.then((response) => {
+				console.log("시네메이트 영화 정보로 들어옴", response.data);
+				console.log("0번째", response.data[0]);
 
-    // 로딩 중이면 로딩 메시지 출력
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+				setMovies(response.data);
+				setLoading(false);  // 로딩 완료
+			}).catch((error) => {
+				console.log("영화상세정보 에러", error);
+				setLoading(false);  // 로딩 완료
+			});
+	}, [movieNo]);
 
-    // movie가 null인 경우 처리
-    if (!movies) {
-        return <div>영화 정보를 불러올 수 없습니다.</div>;
-    }
+	// 로딩 중이면 로딩 메시지 출력
+	if (loading) {
+		return <div>Loading...</div>;
+	}
+
+	// movie가 null인 경우 처리
+	if (!movies) {
+		return <div>영화 정보를 불러올 수 없습니다.</div>;
+	}
+
+	const handleCardClick = (movie) => {
+
+		if (accessToken !== null) {
+			navigation(`/cinemate/movies/${movie.movieNo}/room/${movie.no}`, { state: { movie } });
+		} else {
+			alert("로그인이 필요합니다.");
+            navigation("/login");
+		}
+	}
 
 	const toggleLike = async () => {
 		try {
@@ -67,8 +82,8 @@ function MovieListDetail(){
 			});
 	};
 
-    return(
-        <div className="movie_detail_container container">
+	return (
+		<div className="movie_detail_container container">
 			{/* 헤더 섹션 */}
 			<header className="movie_detail_header">
 				<div className="movie_detail_top_nav row">
@@ -91,11 +106,11 @@ function MovieListDetail(){
 					<div className="movie_detail_actions col-2 d-flex justify-content-end">
 						{/* 북마크 및 공유 아이콘 (기능 구현 필요) */}
 						<div onClick={toggleLike} style={{ cursor: 'pointer' }}>
-							<Heart
+							{/* <Heart
 								className="movie_detail_icon"
 								color={liked ? 'red' : 'black'}
 								fill={liked ? 'red' : 'none'}
-							/>
+							/> */}
 							<Share2 className="movie_detail_icon ms-2" onClick={handleCopyUrl} />
 						</div>
 					</div>
@@ -116,46 +131,53 @@ function MovieListDetail(){
 					<h2 className="movie_detail_section_title mb-3">줄거리</h2>
 					{/* 백엔드에서 받은 영화 설명 표시 */}
 					<p className="movie_detail_description">{movies[0].description}</p>
-                    <p>감독 : {movies[0].director}</p>
-                    <p>장르 : {movies[0].genre}</p>
-                    <p>개봉 : {movies[0].openDate}</p>
+					<p>감독 : {movies[0].director}</p>
+					<p>장르 : {movies[0].genre}</p>
+					<p>개봉 : {movies[0].openDate}</p>
 				</div>
 			</div>
 
-            {/* 해당 영화에 관련된 시네메이트 신청 정보 */}
+			{/* 해당 영화에 관련된 시네메이트 신청 정보 */}
 			<div className="row">
 				{
-					movies.map((movie, index)=>{
-						return(
+					movies.map((movie, index) => {
+						return (
 							<div key={index} className="col-md-4 mb-4">
-								<div style={{ border: "1px solid #ddd", padding: "15px", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0,0,0,0.1)", height:"260px" }}>
-									<div>
-										<p className="fw-bold">제목 : dddddddd</p>
-										<div className="d-flex gap-2 mb-3">
-											<span className="badge bg-light text-dark p-2 border border-secondary rounded" >{movie.meetingDate?.split('T')[0]}</span> 
-											<span className="badge bg-light text-dark p-2 border border-secondary rounded" >{movie.meetingDate?.split('T')[1]?.slice(0,5)}</span> 
-											<span className="badge bg-light text-dark p-2 border border-secondary rounded" >{movie.theaterName}</span>
-											<span className="fw-bold align-self-center">{movie.userName}</span>
-										</div>
-										<div className="mb-3" style={{height:"100px", padding:"3px", backgroundColor: "#f8f9fa", borderRadius: "5px", overflow: "hidden"}}>
-											<p style={{textOverflow:"ellipsis"}}><strong>{movie.content}</strong></p>
-										</div>
-										<div className="d-flex justify-content-between align-items-center">
-											<span className="badge text-dark p-1">작성일 : {movie.createdAt?.split('T')[0]}</span>
-											<div className="d-flex align-items-center gap-2">
-												<span className="badge bg-warning text-dark p-2 rounded">총인원 : 현재인원 / {movie.maxMemberCount}</span>
-												<ArrowRight className="movie_detail_icon" />
+								<div onClick={() => handleCardClick(movie)} style={{ textDecoration: "none", color: "inherit" }}>
+									<div style={{ border: "1px solid #ddd", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0,0,0,0.1)", height: "auto" }}>
+										<div style={{ padding: "12px", backgroundColor: "#f8f9fa", borderRadius: "8px" }}>
+											<div className="d-flex justify-content-between mb-2">
+												<span className="fw-bold">작성자 : {movie.userName}</span>
+												<span className="text-muted">작성일 : {movie.createdAt?.split('T')[0]}</span>
+											</div>
+											<div className="mb-2">
+												<span className="badge bg-info text-dark p-2 rounded me-2">
+													🎥 상영 극장 : {movie.theaterName}
+												</span>
+											</div>
+											<div className="mb-2 d-flex justify-content-between">
+											<span className="badge bg-light text-dark p-2 border border-secondary rounded">
+													모집 시간 : {movie.meetingDate?.split("T")[0]}{" "}
+													{movie.meetingDate?.split("T")[1]?.slice(0, 5)}
+												</span>
+												<span className="badge bg-warning text-dark p-2 rounded">
+													총 인원 : {movie.currentMemberCount} / {movie.maxMemberCount}
+												</span>
+											</div>
+											<div style={{ minHeight: "80px", padding: "8px", backgroundColor: "#fff", borderRadius: "5px", overflow: "hidden" }}>
+												<strong>{movie.content}</strong>
 											</div>
 										</div>
+
 									</div>
 								</div>
 							</div>
 						)
 					})
 				}
-			</div>
-        </div>
-    )
+			</div >
+		</div >
+	)
 }
 
 export default MovieListDetail;
