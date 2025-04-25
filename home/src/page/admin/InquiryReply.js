@@ -17,9 +17,9 @@ function InquiryReply() {
 
     // 검색어 예시
     const handleSearch = e => {
-        e.preventDefault();      
+        e.preventDefault();
         //setPage(0);
-        //getUserList();           
+        //getUserList();
       };
 
     const getInquiryList = useCallback( async (page=0) => {
@@ -105,7 +105,7 @@ function InquiryReply() {
                         style={{ padding: '10px' }}
                         placeholder="검색어를 입력하세요"
                     />
-                    <Button variant='primary' 
+                    <Button variant='primary'
                             /*onClick={() => { setPage(0); getUserList(); }}*/
                     >
                         검색
