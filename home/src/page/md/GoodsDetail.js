@@ -1,24 +1,44 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import GoodsInfo from "./GoodsInfo";
-import { useParams, Outlet, Link } from "react-router-dom"; // Outlet & Link import
-
+import { useParams} from "react-router-dom"; // Outlet & Link import
 import arrow from '../../img/arrow.png';
 import RelatedMovie from "../movie/RelatedMovie";
 import LikeType from "../../js/common/LikeType";
 import { Heart, Share } from "lucide-react";
+import GoodsReviewList from "./GoodsReviewList";
+import GoodsReviewWriteModal from "./GoodsReviewWriteModal";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
+const getUserNoFromToken = () => {
+  const token = sessionStorage.getItem('accessToken');
+  if (!token) return null;
+  try {
+    const [, payload] = token.split('.');
+    const { userNo } = JSON.parse(atob(payload));
+    return userNo;
+  } catch {
+    return null;
+  }
+};
+
 const GoodsDetail = () => {
   const { goodsNo } = useParams();
+  const userNo = getUserNoFromToken();
   const [product, setProduct] = useState(null);
   const [movieId, setMovieId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [liked, setLiked] = useState(false);
   const [likeId, setLikeId] = useState(null);
+  const [showReviews, setShowReviews] = useState(false);
+  const [writeModalOpen, setWriteModalOpen] = useState(false);
+  const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
 
   useEffect(() => {
+
+
+
     const fetchData = async () => {
       try {
         const goodsInfo = await axios.get(
@@ -120,15 +140,46 @@ const GoodsDetail = () => {
           </div>
         </div>
 
-        {/* 리뷰 보기/작성 버튼 */}
-        <div className="mt-4">
-          <Link to="reviews" className="btn btn-primary">
-            리뷰 보기/작성하기
-          </Link>
-        </div>
+{/* 리뷰 토글 버튼 */}
+       <div className="mt-4">
+         <button
+           className="btn btn-primary"
+           onClick={() => setShowReviews(v => !v)}
+         >
+           {showReviews ? '리뷰 닫기' : '리뷰 보기'}
+         </button>
+       </div>
 
-        {/* Nested routes render here */}
-        <Outlet />
+       {/* 리뷰 리스트 렌더링 */}
+       {showReviews && (
+         <>
+           <div className="mt-3">
+             <GoodsReviewList goodsId={goodsNo} />
+           </div>
+
+              {/* 리뷰 작성 모달 열기/닫기는 여기서 onSubmitSuccess 로 showReviews 조작해도 됩니다 */}
+
+                 {/* 리뷰 작성 모달을 여는 버튼 */}
+                <button
+                  className="btn btn-outline-secondary mt-2"
+                  onClick={() => setWriteModalOpen(true)}
+                >
+                  리뷰 작성
+                </button>
+
+           <GoodsReviewWriteModal
+             goodsId={goodsNo}
+             userNo={userNo}
+             isOpen={writeModalOpen}
+             onClose={() => setWriteModalOpen(false)}
+             onSubmitSuccess={() => {
+              setWriteModalOpen(false);
+              // 리뷰 등록 성공 시 키를 바꿔서 리스트 useEffect를 재발동시킵니다
+              setReviewRefreshKey(k => k + 1);
+             }}
+           />
+         </>
+       )}
       </div>
     </>
   );

@@ -74,7 +74,13 @@ public class GoodsReviewController {
     @GetMapping("/{goodsId}/orders-reviewed")
     public ResponseEntity<List<Long>> getReviewedOrderNos(
             @PathVariable Long goodsId,
-            @RequestParam Long userNo) {
+            Authentication authentication) {
+        // 1) Authentication 에서 현재 사용자 조회
+        Users user = usersRepository.findById(authentication.getName())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        long userNo = user.getNo();
+
+        // 2) 서비스 호출
         List<Long> reviewed = reviewRepo.findReviewedOrderNos(goodsId, userNo);
         return ResponseEntity.ok(reviewed);
     }

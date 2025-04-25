@@ -1,6 +1,10 @@
 package com.ict.finalProject.review.service.impl;
 
+import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.domain.constant.OrdersStatus;
+import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.fileSystem.repository.ImageInfoRepository;
+import com.ict.finalProject.fileSystem.service.FileSystemService;
 import com.ict.finalProject.orders.repository.OrderItemRepository;
 import com.ict.finalProject.orders.repository.OrdersRepository;
 import com.ict.finalProject.orders.repository.domain.OrderItem;
@@ -27,53 +31,72 @@ public class GoodsReviewServiceImpl implements GoodsReviewService {
 
     private final GoodsReviewRepository reviewRepo;
     private final OrdersRepository orderRepo;
-    private final ModelMapper mapper;
     private final OrderItemRepository itemRepo;
-
+    private final ImageInfoRepository imageInfoRepo;
+    private final FileSystemService fileSystemService;
+    private final ModelMapper modelMapper;
 
     @Override
-    public List<GoodsReviewResponse> getReviewsByGoodsId(Long goodsID){
-        return reviewRepo.findByGoodsId(goodsID)
+    public List<GoodsReviewResponse> getReviewsByGoodsId(Long goodsId) {
+        return reviewRepo.findByGoodsId(goodsId)
                 .stream()
-                .map(entity -> mapper.map(entity, GoodsReviewResponse.class))
+                .map(entity -> {
+                    GoodsReviewResponse dto = modelMapper.map(entity, GoodsReviewResponse.class);
+
+                    // 기존 JPQL 메서드 사용
+                    List<String> imageIds = imageInfoRepo.findImageIdsByBoardNoAndTypeAndStatus(
+                            entity.getId().intValue(),
+                            ImageWriteType.GOODSREVIEW,
+                            StatusInfo.ACTIVE
+                    );
+                    dto.setImageIds(imageIds);
+
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public GoodsReviewResponse writeReview(GoodsReviewRequest request){
-        // 1 먼저 사용자 orderNo 확인해서 PAID 인지 확인하기
-        boolean hasPaid = orderRepo.existsByIdAndStatusAndUserNo(
-                request.getOrderNo().intValue(),
-                OrdersStatus.PAID,
-                request.getUserNo().intValue()
+    public GoodsReviewResponse writeReview(GoodsReviewRequest request) {
+        // 1) 리뷰 저장
+        GoodsReview saved = reviewRepo.save(
+                GoodsReview.builder()
+                        .goodsId(request.getGoodsId())
+                        .userNo(request.getUserNo())
+                        .orderNo(request.getOrderNo())
+                        .title(request.getTitle())
+                        .content(request.getContent())
+                        .rating(request.getRating())
+                        .build()
         );
-        if(!hasPaid){
-            throw new IllegalStateException("해당 주문번호로 결제 완료된 내역이 아닙니다.");
-        }
 
-        boolean containsGoods = orderRepo.findById(request.getOrderNo().intValue())
-                .map(order -> order.getItems().stream()
-                        .anyMatch(item -> item.getGoodsNo() == request.getGoodsId().intValue())
-                ).orElse(false);
-        if (!containsGoods) {
-            throw new IllegalStateException("해당 주문에 리뷰하려는 상품이 포함되어 있지 않습니다.");
-        }
-
-        // 2 이미 이 주문번호로 리뷰를 작성했을 때의 자격검증
-        boolean alreadyReviewed = reviewRepo.existsByGoodsIdAndOrderNoAndUserNo(
-                request.getGoodsId(),
-                request.getOrderNo(),
-                request.getUserNo()
+        // 2) PENDING 레코드 생성
+        fileSystemService.createPendingImageInfos(
+                request.getImageIds(),
+                saved.getId().intValue(),
+                ImageWriteType.GOODSREVIEW
         );
-        if (alreadyReviewed) {
-            throw new IllegalStateException("이미 이 주문으로 리뷰를 작성하셨습니다.");
+
+        // 3) PENDING → ACTIVE 링크
+        if (request.getImageIds() != null && !request.getImageIds().isEmpty()) {
+            imageInfoRepo.linkImagesToReview(
+                    request.getImageIds(),
+                    saved.getId().intValue(),
+                    ImageWriteType.GOODSREVIEW
+            );
         }
 
-        // 3 엔티티에 담아주기
-        GoodsReview entity = mapper.map(request, GoodsReview.class);
-        GoodsReview saved = reviewRepo.save(entity);
-        return mapper.map(saved, GoodsReviewResponse.class);
+        // 4) DTO 변환 & ACTIVE 이미지만 조회
+        GoodsReviewResponse dto = modelMapper.map(saved, GoodsReviewResponse.class);
+        List<String> activeIds = imageInfoRepo.findImageIdsByBoardNoAndTypeAndStatus(
+                saved.getId().intValue(),           // int 파라미터에 맞춰 변환
+                ImageWriteType.GOODSREVIEW,
+                StatusInfo.ACTIVE
+        );
+        dto.setImageIds(activeIds);
+
+        return dto;
     }
 
     @Override
@@ -100,11 +123,11 @@ public class GoodsReviewServiceImpl implements GoodsReviewService {
 
         // 5) DTO 변환
         List<OrdersDto> ordersDtoList = orders.stream()
-                .map(o -> mapper.map(o, OrdersDto.class))
+                .map(o -> modelMapper.map(o, OrdersDto.class))
                 .toList();
 
         List<OrderItemDto> orderItemDtoList = items.stream()
-                .map(i -> mapper.map(i, OrderItemDto.class))
+                .map(i -> modelMapper.map(i, OrderItemDto.class))
                 .toList();
 
         // 6) 응답 객체 리턴 (paymentKeys 제거된 2-인자 생성자 사용)
