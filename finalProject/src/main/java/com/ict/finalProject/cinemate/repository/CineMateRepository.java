@@ -24,7 +24,7 @@ public interface CineMateRepository extends JpaRepository<CineMates, Integer> {
     //시네메이트 영화 상세
     @Query(
             value="select c.no, c.created_at, c.max_member_count, c.meeting_date, c.movie_no, c.theater_no, c.updated_at, c.user_no, c.content, " +
-            "m.age_grade, m.description, m.director, m.name, m.open_date, m.post_image, m.genre " +
+            "m.age_grade, m.description, m.director, m.name, m.open_date, m.post_image, m.genre, c.user_no " +
             "from cine_mates c left join movies m on c.movie_no = m.no " +
             "where c.movie_no = :movieNo",
             nativeQuery = true
