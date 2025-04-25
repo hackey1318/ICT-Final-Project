@@ -131,7 +131,7 @@ function InquiryReply() {
                                 return (
                                     <tr className="inquiryreplylist">
                                         <td>{item.no}</td>
-                                        <td onClick={() => inquiryReplyView(item.no)}>{item.subject}</td>
+                                        <td onClick={() => inquiryReplyView(item.no)} style={{cursor:'pointer'}}>{item.subject}</td>
                                         <td>{item.nickname}</td>
                                         <td>{new Date(item.createdAt).toLocaleDateString()}</td>
                                         <td>

@@ -1,9 +1,9 @@
 package com.ict.finalProject.report.controller;
 
 import com.ict.finalProject.common.config.AuthCheck;
+import com.ict.finalProject.common.config.AuthRequired;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.domain.constant.UserRole;
-import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
 import com.ict.finalProject.report.controller.request.ReportRequest;
 import com.ict.finalProject.report.controller.response.ReportResponse;
@@ -11,9 +11,12 @@ import com.ict.finalProject.report.service.ReportService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -25,6 +28,7 @@ public class ReportController {
     private final UserService userService;
     private final ReportService reportService;
 
+    //신고기능
     @PostMapping("/reportUser")
     public ResponseEntity<SuccessOfFailResponse> reportUser(
             @RequestBody ReportRequest request) {
@@ -57,7 +61,32 @@ public class ReportController {
         }
     }
 
-    //@GetMapping("/getReportList")
+    //신고목록
+    @AuthRequired({UserRole.ADMIN, UserRole.MANAGER})
+    @GetMapping("/getReports")
+    public ResponseEntity<Page<ReportResponse>> getReportList(
+            @PageableDefault(size=9, sort="createdAt", direction= Sort.Direction.DESC) Pageable pageable) {
+        try {
+            Page<ReportResponse> reportResponse = reportService.getReportList(pageable);
+            return ResponseEntity.ok(reportResponse);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
+    //신고상세페이지
+    @GetMapping("/getReportBy/{no}")
+    public ResponseEntity<ReportResponse> getReportDetail(@PathVariable("no") int no) {
+        try {
+            ReportResponse reportResponse = reportService.getReportDetail(no);
+            if(reportResponse == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(reportResponse);
+        } catch (Exception e) {
+            log.error("신고 상세 정보 조회 중 서버 오류 발생 : reportNo={}", no, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
 
