@@ -176,4 +176,12 @@ public class FindUserServiceImpl implements FindUserService {
     public Optional<Users> findUserById(String id) {
         return findUserRepository.findById(id);
     }
+
+    @Override
+    public List<Users> findUsersByNicknameContainingIgnoreCase(String nickname) {
+        if (nickname == null || nickname.isBlank()) {
+            return Collections.emptyList();
+        }
+        return findUserRepository.findByNicknameContainingIgnoreCase(nickname);
+    }
 }
