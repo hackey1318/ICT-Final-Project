@@ -28,4 +28,6 @@ public interface LikesRepository extends JpaRepository<Likes, Integer> {
 
     @Query("SELECT new com.ict.finalProject.user.service.dto.LikeCountDto(l.type AS type, l.targetNo AS targetNo, COUNT(l.targetNo) AS count) FROM Likes AS l WHERE l.type = :type AND status = :status GROUP BY l.targetNo ORDER BY COUNT(l.targetNo) DESC")
     List<LikeCountDto> getAllLikeTargetNo(@Param("type") LikeType type, @Param("status") StatusInfo statusInfo);
+
+    List<Likes> findByUserNoAndType(Integer userNo, LikeType type);
 }

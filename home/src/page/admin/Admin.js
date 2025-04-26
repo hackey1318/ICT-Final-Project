@@ -2,6 +2,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import AdminSidebar from "../../js/sidebar/AdminSidebar";
 import arrow from '../../img/arrow.png';
 import { useEffect } from "react";
+import logouticon from '../../img/logout.png';
 
 function Admin(){
     const location = useLocation();
