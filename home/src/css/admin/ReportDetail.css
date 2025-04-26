@@ -1,0 +1,106 @@
+.report-detail-container {
+    padding: 20px 40px;
+    max-width: 800px; 
+    margin: 20px auto; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.report-detail-container h3 {
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.detail-section {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #eee; 
+}
+
+.detail-section:last-of-type {
+    border-bottom: none; 
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+
+.detail-row {
+    display: flex;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.detail-label {
+    font-weight: bold;
+    width: 120px;
+    color: #555;
+    flex-shrink: 0;
+    padding-right: 10px;
+}
+
+.detail-value {
+    flex-grow: 1; 
+    color: #333;
+}
+
+.report-content-section .detail-label {
+    margin-bottom: 8px;
+    display: block; 
+    width: auto;
+}
+
+.report-content {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-wrap: break-word; 
+    min-height: 100px; 
+    font-family: inherit;
+    font-size: 0.95em;
+}
+
+.report-status-section .detail-row {
+    align-items: center; 
+}
+
+.status-update-controls {
+    display: flex;
+    align-items: center;
+}
+
+.status-indicator {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: white;
+}
+.status-pending { background-color: #ffc107; }
+.status-processing { background-color: #17a2b8; } 
+.status-accepted { background-color: #28a745; }
+.status-rejected { background-color: #dc3545; }
+
+
+.detail-actions {
+    margin-top: 30px;
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.report-detail-container.loading,
+.report-detail-container.error,
+.report-detail-container.not-found {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.1em;
+    color: #777;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+}

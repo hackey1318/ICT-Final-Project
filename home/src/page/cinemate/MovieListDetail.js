@@ -1,9 +1,14 @@
 import axios from "axios";
 import { ArrowLeft, ArrowRight, Heart, Share2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+const accessToken = sessionStorage.getItem("accessToken");
+
 function MovieListDetail() {
+
+	const navigation = useNavigate();
 	//URL에서 movieNo 파라미터 가져옴
 	const { movieNo } = useParams();
 	console.log(movieNo);
@@ -39,6 +44,16 @@ function MovieListDetail() {
 	// movie가 null인 경우 처리
 	if (!movies) {
 		return <div>영화 정보를 불러올 수 없습니다.</div>;
+	}
+
+	const handleCardClick = (movie) => {
+
+		if (accessToken !== null) {
+			navigation(`/cinemate/movies/${movie.movieNo}/room/${movie.no}`, { state: { movie } });
+		} else {
+			alert("로그인이 필요합니다.");
+            navigation("/login");
+		}
 	}
 
 	const toggleLike = async () => {
@@ -91,11 +106,11 @@ function MovieListDetail() {
 					<div className="movie_detail_actions col-2 d-flex justify-content-end">
 						{/* 북마크 및 공유 아이콘 (기능 구현 필요) */}
 						<div onClick={toggleLike} style={{ cursor: 'pointer' }}>
-							<Heart
+							{/* <Heart
 								className="movie_detail_icon"
 								color={liked ? 'red' : 'black'}
 								fill={liked ? 'red' : 'none'}
-							/>
+							/> */}
 							<Share2 className="movie_detail_icon ms-2" onClick={handleCopyUrl} />
 						</div>
 					</div>
@@ -128,7 +143,7 @@ function MovieListDetail() {
 					movies.map((movie, index) => {
 						return (
 							<div key={index} className="col-md-4 mb-4">
-								<Link to={`/cinemate/movies/${movie.movieNo}/room/${movie.no}`} state={{ movie }} style={{ textDecoration: "none", color: "inherit" }}>
+								<div onClick={() => handleCardClick(movie)} style={{ textDecoration: "none", color: "inherit" }}>
 									<div style={{ border: "1px solid #ddd", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0,0,0,0.1)", height: "auto" }}>
 										<div style={{ padding: "12px", backgroundColor: "#f8f9fa", borderRadius: "8px" }}>
 											<div className="d-flex justify-content-between mb-2">
@@ -155,7 +170,7 @@ function MovieListDetail() {
 										</div>
 
 									</div>
-								</Link>
+								</div>
 							</div>
 						)
 					})
