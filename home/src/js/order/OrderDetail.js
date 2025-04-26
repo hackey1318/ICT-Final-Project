@@ -2,7 +2,6 @@ import './../../css/order/OrderDetail.css';
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { useSearchParams } from "react-router-dom";
-const accessToken = sessionStorage.getItem("accessToken");
 
 function OrderDetail() {
 
@@ -17,7 +16,7 @@ function OrderDetail() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-
+        const accessToken = sessionStorage.getItem("accessToken");
 
         axios.post("http://localhost:9988/order/detail", JSON.stringify({
             orderNumber: orderId
@@ -52,7 +51,7 @@ function OrderDetail() {
 
     return (
         <div className="order_container">
-            <button id="back_button" onClick={() => window.location.href = "/order/list"}></button>
+            <button id="back_button" onClick={() => window.location.href = "/mypage/order/list"}></button>
             <p><b>주문 상세 정보</b> (주문 번호: {orderId})</p>
             <div className="info_container">
                 <b>상품 정보</b>

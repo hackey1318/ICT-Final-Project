@@ -10,4 +10,53 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }  
+  }
+
+  .goodsInfoModal_container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index:1001;
+    width: 15%;
+    min-width: 200px;
+    height: 235px;
+    background-color: white;
+    border: 3px solid #ddd;
+    border-radius: 30px;
+}
+
+.goodsInfoModal_bg {
+  position: fixed;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-image: url('./../../img/cart.png');
+  background-size: cover;
+  width: 160px;
+  height: auto;
+  aspect-ratio: 1 / 0.9;
+}
+
+.goodsInfoModal_button_container {
+  position: fixed;
+  top: 87%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 10px;
+}
+
+.goodsInfoModal_button_container > button{
+  background-color: white;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  width: 80px;
+  height: 30px;
+  color: rgb(59, 59, 59);
+}
+
+.goodsInfoModal_button_container > button:hover{
+  background-color: rgb(180, 180, 180);
+  color: rgb(255, 255, 255);
+}

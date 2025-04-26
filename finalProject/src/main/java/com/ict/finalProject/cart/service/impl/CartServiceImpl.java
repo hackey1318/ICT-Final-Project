@@ -24,14 +24,17 @@ public class CartServiceImpl implements CartsService {
 
     @Override
     public void insertCartGoods(int userNo, int goodsNo, int goodsQuantity) {
-        Optional<Goods> goods = mdShopService.getMd(goodsNo);
-        Carts entity = new Carts();
-        entity.setUserNo(userNo);
-        entity.setGoodsNo(goods.get().getId());
-        entity.setQuantity(goodsQuantity);
-        entity.setStatus(OrdersStatus.PENDING);
-
-        cartsReposity.save(entity);
+        cartsReposity.findByUserNoAndGoodsNoAndStatus(userNo, goodsNo, OrdersStatus.PENDING).ifPresentOrElse(entity -> {
+            entity.setQuantity(entity.getQuantity() + goodsQuantity);
+            cartsReposity.save(entity);
+        }, () -> {
+            Carts newCarts = new Carts();
+            newCarts.setUserNo(userNo);
+            newCarts.setGoodsNo(goodsNo);
+            newCarts.setQuantity(goodsQuantity);
+            newCarts.setStatus(OrdersStatus.PENDING);
+            cartsReposity.save(newCarts);
+        });
     }
 
     @Override
@@ -49,11 +52,11 @@ public class CartServiceImpl implements CartsService {
     }
 
 
-    @Override
-    public boolean checkCartGoodsExist(int userNo, int goodsNo) {
-        Optional<Carts> cart = cartsReposity.findByUserNoAndGoodsNoAndStatus(userNo, goodsNo, OrdersStatus.PENDING);
-        return cart.isPresent();
-    }
+//    @Override
+//    public boolean checkCartGoodsExist(int userNo, int goodsNo) {
+//        Optional<Carts> cart = cartsReposity.findByUserNoAndGoodsNoAndStatus(userNo, goodsNo, OrdersStatus.PENDING);
+//        return cart.isPresent();
+//    }
 
     @Override
     public List<CartsResponse> getCartsGoods(int userNo) {

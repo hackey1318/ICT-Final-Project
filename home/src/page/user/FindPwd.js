@@ -82,15 +82,15 @@ function FindPwd(){
                 <form onSubmit={formCheck}>
                     <h3 className="find-form-subject">비밀번호 찾기</h3>
                     <p>아이디와 이메일을 입력하세요.</p>
-                    <div className="find-form-line">
-                        <span className="find-form-title">아이디</span><input type="text" name="id" className="find-form-input" onChange={setFormData} placeholder="아이디를 입력하세요"/>
-                        {/* {alertMsg.nickname!='' && <><span style={{color:'red'}}>{alertMsg.nickname}</span><br/></>} */}
+                    <div className="find-form-div">
+                        <span className="find-form-title">아이디</span>
+                        <input type="text" name="id" className="find-form-input" onChange={setFormData} placeholder="아이디를 입력하세요"/>
                     </div>
-                    <div>
-                    <span className="find-form-title">이메일</span><input type="text" name="email" className="find-form-input" onChange={setFormData} placeholder="이메일을 입력하세요"/>
-                        {/* {alertMsg.email!='' && <><span style={{color:'red'}}>{alertMsg.email}</span><br/></>} */}
-                        <input type="submit" value="비밀번호 찾기" className="find-btn"/>
+                    <div className="find-form-div">
+                        <span className="find-form-title">이메일</span>
+                        <input type="text" name="email" className="find-form-input" onChange={setFormData} placeholder="이메일을 입력하세요"/>
                     </div>
+                    <input type="submit" value="비밀번호 찾기" className="find-btn"/>
                 </form>
             ):(
                 <div>

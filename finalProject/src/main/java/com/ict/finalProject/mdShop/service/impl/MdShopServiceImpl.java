@@ -18,6 +18,9 @@ import com.ict.finalProject.mdShop.service.dto.MdShopDto;
 import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
 import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.domain.Movies;
+import com.ict.finalProject.orders.repository.OrderItemRepository;
+import com.ict.finalProject.orders.repository.domain.OrderItem;
+import com.ict.finalProject.orders.service.dto.OrderItemDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -28,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,6 +47,7 @@ public class MdShopServiceImpl implements MdShopService {
     private final GoodsStockRepository goodsStockRepository;
     private final ImageInfoRepository imageInfoRepository;
     private final FileSystemRepository fileSystemRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Override
     public Page<MdShopDto> getMdList(String name, String movieName, Pageable pageable) {
@@ -231,5 +236,30 @@ public class MdShopServiceImpl implements MdShopService {
             }
         }
         fileSystemRepository.saveAll(images);
+    }
+
+    @Override
+    public void updateGoodsQuantity(List<OrderItemDto> orderItemDtoList) {
+        for(OrderItemDto orderItemDto : orderItemDtoList) {
+            OrderItem orderItem = orderItemRepository.findById(orderItemDto.getId()).get();
+            int goodsNo = orderItem.getGoodsNo();
+            GoodsStocks goodsStocks = goodsStockRepository.findByGoodsNo(goodsNo).get();
+            int beforeQuantity = goodsStocks.getQuantity();
+            int purchasedQuantity = orderItemDto.getQuantity();
+            int updateQuantity = beforeQuantity - purchasedQuantity;
+            goodsStocks.setQuantity(updateQuantity);
+            goodsStockRepository.save(goodsStocks);
+        }
+    }
+
+    @Override
+    public List<GoodsStocks> getGoodsStocks(List<Integer> goodsNoList) {
+        List<GoodsStocks> goodsStocksList = new ArrayList<>();
+        for (Integer goodsNo : goodsNoList) {
+            GoodsStocks goodsStocks = goodsStockRepository.findByGoodsNo(goodsNo).get();
+            goodsStocksList.add(goodsStocks);
+        }
+
+        return goodsStocksList;
     }
 }

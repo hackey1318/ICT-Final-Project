@@ -1,6 +1,7 @@
 package com.ict.finalProject.cinemate.controller;
 
 import com.ict.finalProject.cinemate.controller.request.CineMateRequest;
+import com.ict.finalProject.cinemate.controller.response.CineMateMemberResponse;
 import com.ict.finalProject.cinemate.controller.response.CineMateResponse;
 import com.ict.finalProject.cinemate.service.CineMateService;
 import com.ict.finalProject.common.config.AuthCheck;
@@ -67,4 +68,18 @@ public class CineMateController {
         return SuccessOfFailResponse.builder()
                 .result(cineMateService.cancelJoinMovieRoom(no, movieNo, userNo)).build();
     }
+
+    @GetMapping("/movies/{movieNo}/room/{no}/members")
+    public List<CineMateMemberResponse> getCineMateMember(@PathVariable("movieNo") Integer movieNo, @PathVariable("no") Integer no) {
+
+        Integer userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
+        return cineMateService.getCineMateMember(no, userNo);
+    }
+
+    @GetMapping("/movies/{movieNo}/room/{no}/members/count")
+    public Integer getCineMateMemberCount(@PathVariable("movieNo") Integer movieNo, @PathVariable("no") Integer no) {
+
+        return cineMateService.getCineMateMemberCount(no);
+    }
+
 }
