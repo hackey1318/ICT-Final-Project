@@ -49,8 +49,13 @@ export const useLoginForm = () => {
             sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
 
             // 3. 페이지 이동
-            window.location.href = "/";
-
+            const redirectAfterLoginPath = sessionStorage.getItem('redirectAfterLoginPath');
+            if (redirectAfterLoginPath) {
+                sessionStorage.removeItem('redirectAfterLoginPath');
+                window.location.href = redirectAfterLoginPath;
+            } else {
+                window.location.href = "/";
+            }
         } catch (error) {
             setLoginError(error.message || "로그인 중 알 수 없는 오류가 발생했습니다.");
         } finally {

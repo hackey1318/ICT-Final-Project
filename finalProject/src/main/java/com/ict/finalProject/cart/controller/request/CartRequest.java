@@ -1,10 +1,9 @@
-package com.ict.finalProject.cart.controller.response;
+package com.ict.finalProject.cart.controller.request;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Map;
 
 public class CartRequest {
     @Getter
