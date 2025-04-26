@@ -32,7 +32,7 @@ public class GoodsReviewController {
     private final GoodsReviewRepository reviewRepo;
     private final UsersRepository usersRepository;
 
-    /** 1) 리뷰 가능한 “결제 완료 주문” 목록 조회 */
+    /** 1) 리뷰 가능한 "결제 완료 주문" 목록 조회 */
     @AuthRequired({UserRole.USER, UserRole.ADMIN, UserRole.MANAGER})
     @GetMapping("/{goodsId}/orders-for-review")
     public ResponseEntity<OrderListResponse> getOrdersForReview(
@@ -125,5 +125,18 @@ public class GoodsReviewController {
               return ResponseEntity.ok(updated);
         }
 
+    @DeleteMapping("/{goodsId}/reviews/{reviewId}")
+    @AuthRequired({UserRole.USER, UserRole.ADMIN, UserRole.MANAGER})
+    public ResponseEntity<Void> deleteReview(
+        @PathVariable Long goodsId,
+        @PathVariable Long reviewId,
+        Authentication authentication
+    ) {
+        Users user = usersRepository.findById(authentication.getName())
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        
+        reviewService.deleteReview(reviewId, user.getNo().longValue());
+        return ResponseEntity.ok().build();
+    }
 
 }
