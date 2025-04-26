@@ -103,10 +103,8 @@ function FindId(){
                     <>
                     <form onSubmit={formCheck}>
                         <h3 className="find-form-subject">아이디 찾기</h3>
-                        <span className="find-form-title">닉네임</span><input type="text" name="nickname" className="find-form-input" onChange={setFormData} placeholder="이름을 입력하세요"/><br/><br/>
-                        {/* {alertMsg.nickname!='' && <><span style={{color:'red'}}>{alertMsg.nickname}</span><br/></>} */}
-                        <span className="find-form-title">이메일</span><input type="text" name="email" className="find-form-input" onChange={setFormData} placeholder="이메일을 입력하세요"/><br/>
-                        {/* {alertMsg.email!='' && <><span style={{color:'red'}}>{alertMsg.email}</span><br/></>} */}
+                        <div className="find-form-div"><span className="find-form-title">닉네임</span><input type="text" name="nickname" className="find-form-input" onChange={setFormData} placeholder="이름을 입력하세요"/></div>
+                        <div className="find-form-div"><span className="find-form-title">이메일</span><input type="text" name="email" className="find-form-input" onChange={setFormData} placeholder="이메일을 입력하세요"/></div>
                         <input type="submit" value="아이디 찾기" className="find-btn"/>
                     </form>
                     </>

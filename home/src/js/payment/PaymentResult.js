@@ -1,7 +1,5 @@
 import './../../css/payment/PaymentResult.css';
 import { useSearchParams } from "react-router-dom";
-const accessToken = sessionStorage.getItem("accessToken");
-
 
 function PaymentResult() {
 
@@ -15,7 +13,7 @@ function PaymentResult() {
     }
 
     const continueShopping = () => {
-
+        window.location.href = "/mdshop";
     }
 
     return (

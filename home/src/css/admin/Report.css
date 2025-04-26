@@ -1,0 +1,51 @@
+/* 관리자페이지 - 신고리스트 */
+.report-container {
+    width: 100%;
+    min-width: 680px;
+}
+
+#report-info-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+#report-info-container>ul {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    padding: 0;
+    overflow: none;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+#report-info-container>ul>li {
+    float: left;
+    list-style-type: none;
+}
+
+#report-info-container>ul>li:first-child {
+    width: 8%;
+}
+
+#report-info-container>ul>li:nth-of-type(2) {
+    width: 20%;
+}
+
+#report-info-container>ul>li:nth-of-type(3) {
+    width: 15%;
+}
+
+#report-info-container>ul>li:nth-of-type(4) {
+    width: 27%;
+}
+
+#report-info-container>ul>li:nth-of-type(5) {
+    width: 20%;
+}
+
+#report-info-container>ul>li:nth-of-type(6) {
+    width: 10%;
+}
+
+

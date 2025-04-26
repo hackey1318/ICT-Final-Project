@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Cart from './Cart';
-const accessToken = sessionStorage.getItem("accessToken");
 
 export const addGoodsToCart = (id, quantity, act) => {
+    const accessToken = sessionStorage.getItem("accessToken");
     return axios.get("http://localhost:9988/cart/addGoods", {
         params: {
             goodsId: id,
@@ -16,6 +16,7 @@ export const addGoodsToCart = (id, quantity, act) => {
 };
 
 export const getTheaterList = () => {
+    const accessToken = sessionStorage.getItem("accessToken");
     return axios.post("http://localhost:9988/order/theaterList", {}, {
         headers: {
             "Content-Type": "application/json",
@@ -25,6 +26,7 @@ export const getTheaterList = () => {
 };
 
 export const getGoodsList = () => {
+    const accessToken = sessionStorage.getItem("accessToken");
     return axios.get("http://localhost:9988/cart/goods", {
         headers: {
             Authorization: `Bearer ${accessToken}`
@@ -33,6 +35,7 @@ export const getGoodsList = () => {
 }
 
 export const deleteGoodsList = (e) => {
+    const accessToken = sessionStorage.getItem("accessToken");
     const goodsNoArray = e.map(item => item.goodsNo);
     return axios.post("http://localhost:9988/cart/deleteGoods",
             goodsNoArray,

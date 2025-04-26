@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import './../../css/user/FindUser.css';
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import arrow from '../../img/arrow.png';
 
 function PwdReset(){
     //입력한 비밀번호를 보관할 변수
@@ -78,6 +79,9 @@ function PwdReset(){
             if(response.data === "ok"){
                 alert("비밀번호 변경 완료");
                 window.location.href = "/login";
+            }else if(response.data === "adminOk"){
+                alert("비밀번호 변경 완료");
+                window.location.href = "/manager";
             }
         }).catch(function(error){
             console.log(error);
@@ -86,6 +90,9 @@ function PwdReset(){
 
     return(
         <div className="find-form">
+            <button onClick={() => window.history.back()} className="back-button" style={{display:"flex"}}>
+                <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
+            </button>
             <form onSubmit={formCheck}>
                 <h3 className="find-form-subject">비밀번호 재설정</h3>
                 <div className="find-form-line">
