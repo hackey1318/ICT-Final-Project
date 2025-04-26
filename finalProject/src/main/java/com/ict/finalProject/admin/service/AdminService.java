@@ -10,13 +10,19 @@ public interface AdminService {
 
     Page<UserResponse> getMemberList(Pageable pageable, String memnerId, String memberNickname, String memberEmail);
 
-    Page<UserResponse> getManagerList(Pageable pageable);
+    Page<UserResponse> getManagerList(Pageable pageable,
+                                      String memberId,
+                                      String memberNickname,
+                                      String memberEmail);
 
     void deleteManager(Integer userNo);
 
     GenderRatio getGenderRatio();
 
-    Page<UserResponse> getBlackList(Pageable pageable);
+    Page<UserResponse> getBlackList( Pageable pageable,
+                                     String memberId,
+                                     String memberNickname,
+                                     String memberEmail);
 
     //블랙리스트 상태 DEACTIVE -> ACTIVE로 변경
     void updateBlacklistStatus(Integer userNo);

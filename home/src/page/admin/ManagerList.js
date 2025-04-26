@@ -4,126 +4,98 @@ import Button from '../../js/common/Buttons.js';
 
 const accessToken = sessionStorage.getItem("accessToken");
 
-function ManagerList(){
-    //데이터 담을 변수
+function ManagerList() {
+    // 데이터와 상태
     const [managerList, setManagerList] = useState([]);
+    const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [searchType, setSearchType] = useState("memberId");
+    const [searchValue, setSearchValue] = useState("");
+    const [selectStates, setSelectStates] = useState({});
 
-    //페이징 관련 변수
-    const [page, setPage] = useState(0); //현재페이지
-    const [totalPages, setTotalPages] = useState(0); //전체 페이지수
-
-    //관리자권한 선택 상태
-    const [selectStates, setSelectStates] = useState({}); 
-
-    // 검색어 예시
-    const handleSearch = e => {
-        e.preventDefault();      
-        //setPage(0);
-        //getUserList();           
-      };
-
-    useEffect(()=>{
-        axios.get(`http://localhost:9988/manager/home/manager-list?page=${page}&size=10`, {
+    // 관리자 리스트 조회
+    const getManagerList = (pageIndex = 0) => {
+        const params = {
+            page: pageIndex,
+            size: 10,
+            sort: "no,desc"
+        };
+        if (searchValue.trim()) {
+            params[searchType] = searchValue.trim();
+        }
+        axios.get(`http://localhost:9988/manager/home/manager-list`, {
+            params,
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
+                ...(accessToken && { Authorization: `Bearer ${accessToken}` })
             }
         })
-        .then((response)=>{
-            const data = response.data.content;
-
-            setManagerList(response.data.content);
-            setTotalPages(response.data.totalPages);
-
-            //선택 상태 초기화
-            const initialStates = {};
-            data.forEach(item => {
-                initialStates[item.no] = item.role;
-            });
-            setSelectStates(initialStates);
-        }).catch((error)=>{
-            console.log(error);
-        });
-    },[page]);
-    
-    //페이징 버튼
-    const handlePageChange = (newPage)=>{
-        setPage(newPage);
-    }
-
-    //페이지 번호 버튼
-    const pageButtons = () => {
-        const buttons = [];
-        for (let i = 0; i < totalPages; i++) {
-            buttons.push(
-                <button
-                    key={i}
-                    onClick={() => handlePageChange(i)}
-                    className={page === i ? 'active' : ''} // 현재 페이지 버튼에 스타일 추가
-                >
-                    {i + 1}
-                </button>
-            );
-        }
-        return buttons;
+        .then(response => {
+            const data = response.data;
+            setManagerList(data.content);
+            setTotalPages(data.totalPages);
+            // 선택 상태 초기화
+            const initial = {};
+            data.content.forEach(item => { initial[item.no] = item.role; });
+            setSelectStates(initial);
+        })
+        .catch(err => console.error("관리자 리스트 조회 실패:", err));
     };
 
-    //관리자 권한 변경시 실행됨
-    const handleRoleChange = (e, userNo)=>{
-        const selectedValue = e.target.value;
+    // 초기 로드 및 페이지 변경
+    useEffect(() => {
+        getManagerList(page);
+    }, [page]);
 
-        if(selectedValue === "delete"){
-            const isConfirmed = window.confirm(`MANAGER ${userNo}번을 삭제하시겠습니까?\n'확인'을 누르시면 관리자권한이 없어지고, 목록에서 삭제됩니다.`);
+    // 검색 제출
+    const handleSearch = (e) => {
+        e.preventDefault();
+        setPage(0);
+        getManagerList(0);
+    };
 
-            if(isConfirmed){ //관리자 삭제 -> 비활성화
-                axios.post(`http://localhost:9988/manager/home/manager-delete/${userNo}`)
-                .then((response)=>{
-                    //관리자 삭제후 다시 목록 요청해서 갱신
-                    axios.get(`http://localhost:9988/manager/home/manager-list?page=${page}&size=10`)
-                    .then((response)=>{
-                        //매니저리스트, 전체페이지수 셋팅
-                        setManagerList(response.data.content);
-                        setTotalPages(response.data.totalPages);
-                        alert(`${userNo}번 관리자가 삭제되었습니다.`);
-                    }).catch((error)=>{
-                        console.log(error);
-                    });
-                }).catch((error)=>{
-                    console.log(error);
-                });
-            }
+    // 페이지 변경
+    const handlePageChange = (newPage) => setPage(newPage);
+
+    // 관리자 권한 변경
+    const handleRoleChange = (e, userNo) => {
+        const value = e.target.value;
+        if (value === "delete") {
+            if (!window.confirm(`MANAGER ${userNo}번을 삭제하시겠습니까?`)) return;
+            axios.post(`http://localhost:9988/manager/home/manager-delete/${userNo}`, {}, {
+                headers: { Authorization: `Bearer ${accessToken}` }
+            })
+            .then(() => getManagerList(page))
+            .catch(err => console.error(err));
         }
-        
-    }
+    };
 
-    return(
+    return (
         <div className='memberlist-wrap'>
             <h3>Admin Page - Manager List</h3>
-            
-            {/* 검색어 예시 */}
+
             <form className="d-flex justify-content-end mb-3" onSubmit={handleSearch}>
                 <div className="member_search-container">
-                    <select /*value={searchType}
-                            onChange={(e) => setSearchType(e.target.value)} */
-                            className="user_dropdown"
-                            style={{width: '200px'}}>
-                            
+                    <select
+                        value={searchType}
+                        onChange={e => setSearchType(e.target.value)}
+                        className="user_dropdown"
+                        style={{ width: '200px' }}
+                    >
                         <option value="memberId">관리자아이디</option>
                         <option value="memberNickname">관리자닉네임</option>
                         <option value="memberEmail">이메일</option>
                     </select>
+
                     <input
                         type="text"
-                        /*value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}*/
+                        value={searchValue}
+                        onChange={e => setSearchValue(e.target.value)}
                         style={{ padding: '11px' }}
                         placeholder="검색어를 입력하세요"
                     />
-                    <Button variant='primary' 
-                            /*onClick={() => { setPage(0); getUserList(); }}*/
-                    >
-                        검색
-                    </Button>
+
+                    <Button variant='primary' type="submit">검색</Button>
                 </div>
             </form>
 
@@ -139,56 +111,55 @@ function ManagerList(){
                             <th>관리자권한</th>
                         </tr>
                     </thead>
-                        <tbody>
-                            {
-                                managerList.map((item)=>{
-                                    return(
-                                        <tr key={item.no} className="memberlist-item">
-                                            <td>{item.no}</td>
-                                            <td>{item.id}</td>
-                                            <td>{item.nickname}</td>
-                                            <td>{item.email}</td>
-                                            <td>010-0000-0000</td>
-                                            <td>
-                                                {
-                                                    item.role === "ADMIN" ? (
-                                                        <>{item.role}</>
-                                                    ):(
-                                                        <select className="list-select-box" value={selectStates[item.no] || item.role} onChange={(e) => handleRoleChange(e, item.no)}>
-                                                            <option value={item.role}>{item.role}</option>
-                                                            <option value="delete">DELETE</option>
-                                                        </select>
-                                                    )
-                                                }
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                            }
+                    <tbody>
+                        {managerList.map(item => (
+                            <tr key={item.no} className="memberlist-item">
+                                <td>{item.no}</td>
+                                <td>{item.id}</td>
+                                <td>{item.nickname}</td>
+                                <td>{item.email}</td>
+                                <td>010-0000-0000</td>
+                                <td>
+                                    {item.role === "ADMIN" ? (
+                                        item.role
+                                    ) : (
+                                        <select
+                                            value={selectStates[item.no] || item.role}
+                                            onChange={e => handleRoleChange(e, item.no)}
+                                            className="list-select-box"
+                                        >
+                                            <option value={item.role}>{item.role}</option>
+                                            <option value="delete">DELETE</option>
+                                        </select>
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
-            {/* 페이징 */}
+
             <div className="paging-container">
-                    {page > 0 && (
-                        <button className="page-buttons" onClick={() => handlePageChange(page - 1)}>
-                            이전
-                        </button>
-                    )}
+                {page > 0 && (
+                    <button className="page-buttons" onClick={() => handlePageChange(page - 1)}>이전</button>
+                )}
 
-                    {/* 페이지 번호 버튼 */}
-                    <div className="page-buttons">
-                        {pageButtons()}
-                    </div>
-
-                    {page < totalPages - 1 && (
-                        <button className="page-buttons" onClick={() => handlePageChange(page + 1)}>
-                            다음
-                        </button>
-                    )}
+                <div className="page-buttons">
+                    {Array.from({ length: totalPages }, (_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => handlePageChange(i)}
+                            className={page === i ? 'active' : ''}
+                        >{i + 1}</button>
+                    ))}
                 </div>
+
+                {page < totalPages - 1 && (
+                    <button className="page-buttons" onClick={() => handlePageChange(page + 1)}>다음</button>
+                )}
+            </div>
         </div>
-    )
+    );
 }
 
 export default ManagerList;

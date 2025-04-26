@@ -142,11 +142,11 @@ export default function BannerList() {
                 <table className="table table-bordered table-hover mb-0">
                     <thead className="table-light text-center align-middle">
                         <tr>
-                            <th style={{ width: "5%" }}>No</th>
+                            <th style={{ width: "10%" }}>No</th>
                             <th style={{ width: "50%" }}>영화 제목</th>
-                            <th style={{ width: "10%" }}>타입</th>
+                            {/* <th style={{ width: "10%" }}>타입</th> */}
                             <th style={{ width: "15%" }}>배경 색상</th>
-                            <th style={{ width: "20%" }}>기간</th>
+                            <th style={{ width: "25%" }}>기간</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -168,7 +168,7 @@ export default function BannerList() {
                                     >
                                         <td>{displayNo}</td>
                                         <td className="text-start">{banner.targetName}</td>
-                                        <td>{banner.type}</td>
+                                        {/* <td>{banner.type}</td> */}
                                         <td style={{ backgroundColor: banner.color }}>{banner.color}</td>
                                         <td>
                                             {`${new Date(banner.startDate).toLocaleDateString()} ~ ${new Date(banner.endDate).toLocaleDateString()}`}

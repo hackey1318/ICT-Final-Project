@@ -24,14 +24,14 @@
     margin-bottom: 20px;
     width: 40%;
   }
-  
+
   .form-control-search {
     padding: 6px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     min-width: 180px;
   }
-  
+
   .inquiryreply_dropdown {
     padding: 12px 12px !important;
     border: 1px solid #ccc;
@@ -45,7 +45,7 @@
     background-position: right 10px center;
     background-size: 12px;    min-width: 120px;
   }
-  
+
   .btn.btn-primary {
     padding: 6px 12px;
     background-color: #007bff;
@@ -54,7 +54,7 @@
     border-radius: 5px;
     cursor: pointer;
   }
-  
+
   .btn.btn-primary:hover {
     background-color: #0056b3;
   }
@@ -66,7 +66,7 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
+
   .inquiryreply-table {
     width: 100%;
     border-collapse: collapse;
@@ -75,7 +75,7 @@
     font-size: 14px;
     height: 100%;
   }
-  
+
   .inquiryreply-table th,
   .inquiryreply-table td {
     padding: 1px;
@@ -86,7 +86,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  
+
   .inquiryreply-table th {
     padding: 12px;
     background-color: #f8f9fa;
@@ -123,7 +123,7 @@
   .inquiryreply-table td:nth-child(6) {
   width: 15%;
 }
-  
+
   .inquiryreply-table tr:hover {
     background-color: #f1f1f1;
   }
@@ -141,5 +141,5 @@
   /* 셀 가운데 딱 붙도록 */
   vertical-align: middle;
   /* 필요하다면 높이도 조정 */
-  line-height: normal;  
+  line-height: normal;
 }

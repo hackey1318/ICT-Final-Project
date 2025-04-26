@@ -7,6 +7,7 @@ import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.movie.service.TheatersService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
+import com.ict.finalProject.orders.controller.request.OrderNumberRequest;
 import com.ict.finalProject.orders.controller.response.OrderListResponse;
 import com.ict.finalProject.orders.repository.domain.OrderItem;
 import com.ict.finalProject.orders.repository.domain.Orders;
@@ -86,7 +87,8 @@ public class OrderController {
 
                 // id기반으로 상품테이블 DB조회, 상품명과 가격 일치하는지 확인
                 Goods dbGoods = mdShopService.getMd(id).get();
-//                int dbGoods_Stocks = mdShopService.getMdQuantity(id);
+                int dbGoods_Stocks = 0;
+
 
 //                if (dbGoods.getName().equals(name) &&
 //                        dbGoods.getPrice() == price &&
@@ -246,5 +248,15 @@ public class OrderController {
         ordersService.cancelOrders(orderNo);
 
         return ResponseEntity.ok("취소되었습니다.");
+    }
+
+    @PostMapping("/fail")
+    public ResponseEntity<Void> failOrder(@RequestBody OrderNumberRequest orderNumberRequest) throws Exception {
+        String orderNumber = orderNumberRequest.getOrderNumber();
+        OrdersDto ordersDto = ordersService.getOrdersDtoByOrderNumber(orderNumber);
+        int orderNo = ordersDto.getId();
+        ordersService.failOrders(orderNo);
+
+        return ResponseEntity.ok().build();
     }
 }
