@@ -40,6 +40,7 @@ import Gender from './page/admin/Gender';
 import InquiryReply from './page/admin/InquiryReply';
 import InquiryReplyView from './page/admin/InquiryReplyView';
 import GoodsDetail from './page/md/GoodsDetail';
+import GoodsReviewSection from './page/md/GoodsReviewSection';
 import MdShop from './page/md/MdShop';
 import RelatedMovie from './page/movie/RelatedMovie';
 import BlackList from './page/admin/BlackList';
@@ -118,7 +119,9 @@ function App() {
 
 				<Route path='order/error' element={<OrderError />} />
 				<Route path='mdshop' element={<MdShop />} />
-				<Route path="mdshop/:goodsNo" element={<GoodsDetail />} />
+				<Route path='mdshop/:goodsNo' element={<GoodsDetail />}>
+          		<Route path='reviews' element={<GoodsReviewSection />} />
+          		</Route>
 				<Route path="/related-movie/:movieId" element={<RelatedMovie />} />
 				<Route path="/announcements" element={<UserAnnounce />} />
 				<Route path="/announcements/:id" element={<UserAnnounceDetail />} />

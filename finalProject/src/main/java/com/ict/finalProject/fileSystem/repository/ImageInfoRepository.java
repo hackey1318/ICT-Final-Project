@@ -46,4 +46,6 @@ public interface ImageInfoRepository extends JpaRepository<ImageInfo, Integer> {
             @Param("status") StatusInfo status
     );
 
+
+
 }
