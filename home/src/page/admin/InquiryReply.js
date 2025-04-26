@@ -15,38 +15,40 @@ function InquiryReply() {
     const [pageSize, setPageSize] = useState(9);
     const [isLoading, setIsLoading] = useState(false);
 
-    // 검색어 예시
+    const [searchType, setSearchType] = useState("inquiryreplySubject");
+    const [searchValue, setSearchValue] = useState(""); // 검색어 예시
+
+    // 검색어
     const handleSearch = e => {
         e.preventDefault();      
-        //setPage(0);
-        //getUserList();           
+        setCurrentPage(0);
+        getInquiryList();
       };
 
-    const getInquiryList = useCallback( async (page=0) => {
+      const getInquiryList = useCallback(async (page = 0) => {
         setIsLoading(true);
         try {
-            const response = await apiClient.get(`/inquiry/getAllInquiry?page=${page}&size=${pageSize}`);
-            if(response.data && response.data.content != null && response.data.totalPages != null) {
+            const params = {
+                page,
+                size: pageSize,
+                sort: "createdAt,desc",
+                ...(searchValue.trim() && { [searchType]: searchValue.trim() })
+            };
+            const response = await apiClient.get(`/inquiry/getAllInquiry`, { params });
+            if (response.data && response.data.content != null && response.data.totalPages != null) {
                 setInquiryList(response.data.content);
                 setTotalPages(response.data.totalPages);
-                console.log(response.data);
-            } else {
-                console.error("잘못된 API 응답구조", response.data);
-                setInquiryList([]);
-                setTotalPages(0);
             }
-        } catch(error) {
-            console.log("관리자 문의 목록 로딩 error발생 : ", error.response?.data);
-            setInquiryList([]);
-            setTotalPages(0);
+        } catch (error) {
+            console.error("Inquiry 조회 실패:", error);
         } finally {
             setIsLoading(false);
         }
-    }, [pageSize]);
+    }, [pageSize, searchType, searchValue]);
 
     useEffect(() => {
         getInquiryList(currentPage);
-    }, [currentPage, getInquiryList]);
+    }, [currentPage]);
 
     const handleStatusChangeInList = async (event, inquiryNo, currentStatus) => {
         const newStatus = event.target.value;
@@ -91,8 +93,8 @@ function InquiryReply() {
             {/* 검색어 예시 */}
             <form className="d-flex justify-content-end mb-3" onSubmit={handleSearch}>
                 <div className="inquiryreply_search-container">
-                    <select /*value={searchType}
-                            onChange={(e) => setSearchType(e.target.value)} */
+                    <select value={searchType}
+                            onChange={(e) => setSearchType(e.target.value)}
                             style={{ padding: '12px' }}
                             className="inquiryreply_dropdown">
                         <option value="inquiryreplySubject">제목</option>
@@ -100,13 +102,13 @@ function InquiryReply() {
                     </select>
                     <input
                         type="text"
-                        /*value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}*/
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
                         style={{ padding: '10px' }}
                         placeholder="검색어를 입력하세요"
                     />
                     <Button variant='primary' 
-                            /*onClick={() => { setPage(0); getUserList(); }}*/
+                            type='submit'
                     >
                         검색
                     </Button>
@@ -129,9 +131,9 @@ function InquiryReply() {
                         {
                             inquiryList.map((item) => {
                                 return (
-                                    <tr className="inquiryreplylist">
+                                    <tr className="inquiryreplylist" key={item.no}>
                                         <td>{item.no}</td>
-                                        <td onClick={() => inquiryReplyView(item.no)}>{item.subject}</td>
+                                        <td onClick={() => inquiryReplyView(item.no)} style={{cursor:'pointer'}}>{item.subject}</td>
                                         <td>{item.nickname}</td>
                                         <td>{new Date(item.createdAt).toLocaleDateString()}</td>
                                         <td>

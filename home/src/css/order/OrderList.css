@@ -22,8 +22,44 @@
 
 .orderList_date_state {
     display: flex;
+    flex: 1;
     font-size: 1.2em;
     padding-top: 3px;
+    gap: 10px;
+}
+
+.orderList_date_state > button {
+    width: 90px;
+    height: 30px;
+    font-size: 0.75em;
+    border-radius: 8px;
+    font-weight: bold;
+    border: 2px solid white;
+}
+
+.orderList_state_PAID {
+    color: white;
+    background: linear-gradient(to right, royalblue, dodgerblue);
+}
+
+.orderList_state_PENDING {
+    color: white;
+    background: linear-gradient(to right, #e9c31d, #f57f17);
+}
+
+.orderList_state_CANCELLED {
+    color: white;
+    background: linear-gradient(to right, #a0a0a0, #5f5f5f);
+}
+
+.orderList_state_FAILED {
+    color: white;
+    background: linear-gradient(to right, #e53935, #b71c1c);
+}
+
+.orderList_actions {
+    text-align: right;
+    white-space: nowrap;
 }
 
 .orderList_container {

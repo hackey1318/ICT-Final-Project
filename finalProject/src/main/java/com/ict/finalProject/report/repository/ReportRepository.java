@@ -1,4 +1,15 @@
 package com.ict.finalProject.report.repository;
 
-public interface ReportRepository {
+import com.ict.finalProject.report.repository.domain.Report;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ReportRepository extends JpaRepository<Report, Integer> {
+
+    @Query(value = "SELECT r FROM Report r ORDER BY r.no DESC")
+    Page<Report> findAllByOrderByNoDesc(Pageable pageable);
 }

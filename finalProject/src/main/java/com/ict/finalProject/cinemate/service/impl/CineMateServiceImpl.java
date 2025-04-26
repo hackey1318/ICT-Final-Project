@@ -1,6 +1,7 @@
 package com.ict.finalProject.cinemate.service.impl;
 
 import com.ict.finalProject.cinemate.controller.request.CineMateRequest;
+import com.ict.finalProject.cinemate.controller.response.CineMateMemberResponse;
 import com.ict.finalProject.cinemate.repository.CineMateChatRoomRepository;
 import com.ict.finalProject.cinemate.repository.CineMateMemberRepository;
 import com.ict.finalProject.cinemate.controller.response.CineMateResponse;
@@ -13,6 +14,9 @@ import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.TheatersRepository;
 import com.ict.finalProject.oauth.repository.UsersRepository;
+import com.ict.finalProject.user.repository.domain.Likes;
+import com.ict.finalProject.user.repository.domain.LikesRepository;
+import com.ict.finalProject.user.repository.domain.constant.LikeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,6 +31,9 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,6 +46,7 @@ public class CineMateServiceImpl implements CineMateService {
     private final MoviesRepository moviesRepository;
     private final TheatersRepository theatersRepository;
     private final UsersRepository usersRepository;
+    private final LikesRepository likesRepository;
 
     @Override
     public boolean generateCineMateInfo(CineMateRequest request) {
@@ -120,6 +128,7 @@ public class CineMateServiceImpl implements CineMateService {
                     .postImage((String) result[14])
                     .genre((String) result[15])
                     .description((String) result[10])
+                    .userNo((Integer) result[16])
                     .currentMemberCount(Math.toIntExact(cineMateMemberRepository.countByCineMateNoAndStatusActive((Integer) result[0])))
                     .theaterName(
                             theatersRepository.findById((Integer) result[5])
@@ -182,5 +191,32 @@ public class CineMateServiceImpl implements CineMateService {
             log.error("Cancel Cinemate error : [{}]", e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public List<CineMateMemberResponse> getCineMateMember(Integer cineMateNo, Integer userNo) {
+
+        Map<Integer, CineMateMemberResponse> memberMap = cineMateMemberRepository.getCineMateMemberInfo(cineMateNo).stream()
+                .collect(Collectors.toMap(CineMateMemberResponse::getUserNo, Function.identity()));
+
+        List<Likes> userLikes = likesRepository.findByUserNoAndType(userNo, LikeType.USER);
+        for (Likes like : userLikes) {
+            Integer targetNo = like.getTargetNo();
+            if (memberMap.containsKey(targetNo)) {
+                memberMap.get(targetNo).setLiked(true);
+            }
+        }
+        CineMateMemberResponse cineMateMemberResponse =  memberMap.get(userNo);
+        if (cineMateMemberResponse!= null) {
+            cineMateMemberResponse.setMe(true);
+        }
+
+        return new ArrayList<>(memberMap.values());
+    }
+
+    @Override
+    public Integer getCineMateMemberCount(Integer cineMateNo) {
+
+        return Math.toIntExact(cineMateMemberRepository.countByCineMateNoAndStatusActive(cineMateNo));
     }
 }
