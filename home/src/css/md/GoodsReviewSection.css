@@ -168,6 +168,22 @@
   margin-bottom: 1rem;
 }
 
+.review-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .review-header h3 {
   margin: 0;
+}
+
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
 }
