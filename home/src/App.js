@@ -114,8 +114,8 @@ function App() {
 				<Route path='/inquiry' element={<InquiryPage />} />
 				<Route path='/inquiryView/:no' element={<InquiryView />} />
 				<Route path='cart' element={<Cart />} />
-				<Route path='order/list' element={<OrderList />} />
-				<Route path='order/detail' element={<OrderDetail />} />
+
+
 				<Route path='order/error' element={<OrderError />} />
 				<Route path='mdshop' element={<MdShop />} />
 				<Route path="mdshop/:goodsNo" element={<GoodsDetail />} />
@@ -125,6 +125,8 @@ function App() {
 				<Route path="mypage" element={<MypageSidebar />} >
 					<Route index element={<LikedItemsPage />} />
 					<Route path="likes" element={<LikedItemsPage />} />
+					<Route path='order/list' element={<OrderList />} />
+					<Route path='order/detail' element={<OrderDetail />} />
 				</Route>
 
 				{/* 시네메이트 */}

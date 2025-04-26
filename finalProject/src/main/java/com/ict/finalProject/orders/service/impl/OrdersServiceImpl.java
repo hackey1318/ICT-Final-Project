@@ -8,6 +8,7 @@ import com.ict.finalProject.orders.service.OrdersService;
 import com.ict.finalProject.orders.service.dto.OrdersDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -90,11 +91,19 @@ public class OrdersServiceImpl implements OrdersService {
         ordersRepository.save(entity);
     }
 
+    @Override
+    public void failOrders(int orderNo) {
+        Orders entity = ordersRepository.findById(orderNo).get();
+        entity.setStatus(OrdersStatus.FAILED);
+        ordersRepository.save(entity);
+    }
+
     private String convertStatusToText(OrdersStatus status) {
         switch (status) {
             case PAID: return "결제 완료";
             case PENDING: return "결제 대기";
             case CANCELLED: return "결제 취소";
+            case FAILED: return "결제 실패";
             default: return "기타";
         }
     }

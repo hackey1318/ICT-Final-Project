@@ -1,8 +1,6 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-const accessToken = sessionStorage.getItem("accessToken");
-
 
 function SuccessPage() {
   const navigate = useNavigate();
@@ -18,7 +16,7 @@ function SuccessPage() {
     };
 
     async function confirm() {
-
+      const accessToken = sessionStorage.getItem("accessToken");
       const response = await fetch("http://localhost:9988/payment/confirm", {
         method: "POST",
         headers: {
@@ -33,20 +31,57 @@ function SuccessPage() {
       if (!response.ok) {
         // 결제 실패 비즈니스 로직을 구현하세요.
         navigate(`/fail?message=${json.message}&code=${json.code}`);
+        // PEDNING인 주문 FAILED로 변경
+        const failOrderResponse = await axios.post("http://localhost:9988/order/fail", 
+          {
+            orderNumber: json.orderId
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          }
+        );
         return;
       }
 
       console.log(json);
 
       // 결제 성공 비즈니스 로직을 구현하세요.
-      axios.post("http://localhost:9988/cart/paidGoods", {
-        orderNumber: json.orderId
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
+
+      // PENDING인 장바구니 상품들 PAID로 변경
+      const paidGoodsResponse = await axios.post("http://localhost:9988/cart/paidGoods",
+        {
+          orderNumber: json.orderId
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
+
+      if (paidGoodsResponse.status !== 200) {
+        alert("paidGoodsResponse Error");
+        console.log(paidGoodsResponse)
+        return;
+      }
+
+      // 상품 수량 업데이트
+      const updateItemQuantityResponse = await axios.post("http://localhost:9988/md-shop/updateItemQuantity",
+        {
+          orderNumber: json.orderId
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
+
+      if (updateItemQuantityResponse.status !== 200) {
+        alert("updateItemQuantityResponse Error");
+        console.log(updateItemQuantityResponse);
+        return;
+      }
 
       // 결과창으로 이동시키는 부분
       window.location.href = `/payment/result?orderNumber=${json.orderId}&totalPrice=${json.totalAmount}&paymentKey=${json.paymentKey}`;
