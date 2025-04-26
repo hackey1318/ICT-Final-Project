@@ -15,104 +15,73 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
-ChartJS.register(CategoryScale,LinearScale,PointElement,LineElement,Title,Tooltip,Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-function UserDau(){
-    //전체 데이터를 저장할 변수
-    const [allDauList, setAllDauList] = useState([]); //목록 출력용 전체 데이터(이 데이터를 가지고 페이징 처리 해야함)
-    const [chartDauList, setChartDauList] = useState([]); //차트용 전체 데이터
-
-    //목록에서 현재 페이지 데이터를 담을 변수
+function UserDau() {
+    const [allDauList, setAllDauList] = useState([]);
+    const [chartDauList, setChartDauList] = useState([]);
     const [dauList, setDauList] = useState([]);
-
-    //총인원수를 담을 변수
     const [totalCount, setTotalCount] = useState(0);
 
-    //페이징 관련 변수
-    const [page, setPage] = useState(0); //현재페이지
-    const [pageSize, setPageSize] = useState(10); //한페이지에 보여줄 목록 수
-    const [totalPages, setTotalPages] = useState(0); //전체 페이지수
+    const [page, setPage] = useState(0);
+    const [pageSize] = useState(10);
+    const [totalPages, setTotalPages] = useState(0);
 
-    //일별, 월별 타입을 담을 변수
-    const [dataType, setDataType] = useState('DAU'); //처음엔 일별 데이터 셋팅
+    const [dataType, setDataType] = useState('DAU');
 
-    //차트 제목을 담을 변수(일별, 월별에 따라 달라짐)
-    const [chartTitle, setChartTitle] = useState('일별'); //처음엔 일별로 셋팅
+    const chartTitle = dataType === 'DAU' ? '일별' : '월별';
 
-    //데이터 요청 함수(일별 of 월별)
-    const selectUserData = (type)=>{
-        let urlType = '';
+    // 데이터 요청 함수
+    const fetchUserData = async (type) => {
+        try {
+            const urlType = type === 'DAU' ? 'getDauList' : 'getMauList';
+            const response = await axios.get(`http://localhost:9988/dashboard/${urlType}`);
 
-        //type에 따라 axios주소 변경
-        if(type === "DAU"){
-            urlType = 'getDauList';
-            setChartTitle('일별');
-        }else if(type === "MAU"){
-            urlType = 'getMauList';
-            setChartTitle('월별');
-        }
+            const dataList = response.data.activeUsers || [];
+            const reverseList = [...dataList].reverse();
 
-        axios.get(`http://localhost:9988/dashboard/${urlType}`)
-        .then((response)=>{
-            console.log("불러온 데이터",response.data);
+            setAllDauList(reverseList);
+            setChartDauList(dataList);
+            setTotalCount(response.data.totalCount || 0);
 
-            const dataList = response.data.activeUsers; //원본 데이터
-            const reverseList = [...dataList].reverse(); //원본 데이터를 복사한 후 역순 정렬
-
-            //목록은 역순으로, 차트는 순서대로 보여주는 것으로 설정.
-            setAllDauList(reverseList); //전체 데이터 저장(목록용)
-            setPage(0); //페이지 번호 초기화. 이걸 해야 버튼 눌러서 목록 바뀔때 페이지 번호 초기화됨.
-            setChartDauList(dataList); //전체 데이터(차트용)
-            setTotalCount(response.data.totalCount); //총 활동 인원수
-
-            const pages = Math.ceil(dataList.length / pageSize); // 전체 페이지 수 계산
+            const pages = Math.ceil(dataList.length / pageSize);
             setTotalPages(pages);
 
-            //처음 페이지의 데이터 설정
-            const firstPageData = reverseList.slice(0, pageSize); //목록 첫페이지
-            setDauList(firstPageData);
-
-        }).catch((error)=>{
-            console.log(error);
-        });
+            setPage(0); // 페이지 초기화
+            setDauList(reverseList.slice(0, pageSize));
+        } catch (error) {
+            console.error('데이터 불러오기 실패:', error);
+        }
     };
 
-    //처음 페이지 접속시 일별 데이터 불러오기
-    useEffect(()=>{
-        selectUserData('DAU');
-    },[]);
+    // dataType이 변경될 때마다 데이터 다시 불러오기
+    useEffect(() => {
+        fetchUserData(dataType);
+    }, [dataType]);
 
-    //페이지 이동 함수
-    const handlePageChange = (newPage)=>{
-        if(newPage >= 0 && newPage < totalPages){
+    // 페이지 이동
+    const handlePageChange = (newPage) => {
+        if (newPage >= 0 && newPage < totalPages) {
             setPage(newPage);
-       
             const start = newPage * pageSize;
             const end = start + pageSize;
-
-            //페이지가 변경될 때마다 해당 페이지에 맞는 목록 설정
             setDauList(allDauList.slice(start, end));
         }
-    }
-
-    //페이지 번호 버튼
-    const pageButtons = () => {
-        const buttons = [];
-        for (let i = 0; i < totalPages; i++) {
-            buttons.push(
-                <button
-                    key={i}
-                    onClick={() => handlePageChange(i)}
-                    className={page === i ? 'active' : ''} // 현재 페이지 버튼에 스타일 추가
-                >
-                    {i + 1}
-                </button>
-            );
-        }
-        return buttons;
     };
 
-    //그래프 LineChart -----------------------------------------------------------------
+    const pageButtons = () => {
+        return Array.from({ length: totalPages }, (_, i) => (
+            <button
+                key={i}
+                onClick={() => handlePageChange(i)}
+                className={page === i ? 'active' : ''}
+            >
+                {i + 1}
+            </button>
+        ));
+    };
+
+    // 차트 설정
     const options = {
         responsive: true,
         plugins: {
@@ -126,37 +95,43 @@ function UserDau(){
         },
         scales: {
             y: {
-                suggestedMin: 0, //y축 최소값 0으로 설정
+                suggestedMin: 0,
             },
         },
     };
 
-    const labels = chartDauList.map(item => item.dateTime); //x축 => 날짜
-
+    const labels = chartDauList.map(item => item.dateTime);
     const data = {
         labels,
         datasets: [
             {
                 label: '활동인원수',
-                data: chartDauList.map(item => item.count), //y축 => 활동인원수
+                data: chartDauList.map(item => item.count),
                 borderColor: 'rgb(75, 192, 192)',
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
             },
         ],
     };
-    //그래프 LineChart 끝 ---------------------------------------------------------------
 
-    return(
+    return (
         <div className='memberlist-wrap'>
             <h3 className='userdau-title'>Admin Page - User's {dataType}</h3>
             <div className='userdau-data-wrap'>
                 <div className='userdau-left'>
                     {/* 일별, 월별 선택 버튼 */}
                     <div className='data-select-btn'>
-                        {/* 1개월을 선택하면 최근 1개월치의 데이터를 일별로 보여줌 */}
-                        <button className={`select-btn ${dataType==='DAU' ? 'active':''}`} onClick={()=>{setDataType('DAU'); selectUserData('DAU')}}>1개월</button>
-                        {/* 1년을 선택하면 최근 1년치의 데이터를 월별로 보여줌 */}
-                        <button className={`select-btn ${dataType==='MAU' ? 'active':''}`} onClick={()=>{setDataType('MAU'); selectUserData('MAU');}}>1년</button>
+                        <button
+                            className={`select-btn ${dataType === 'DAU' ? 'active' : ''}`}
+                            onClick={() => setDataType('DAU')}
+                        >
+                            1개월
+                        </button>
+                        <button
+                            className={`select-btn ${dataType === 'MAU' ? 'active' : ''}`}
+                            onClick={() => setDataType('MAU')}
+                        >
+                            1년
+                        </button>
                     </div>
 
                     {/* 목록 */}
@@ -166,55 +141,48 @@ function UserDau(){
                                 <tr>
                                     <th>날짜</th>
                                     <th>총활동인원수</th>
-                                    <th>일별 시네메이트 완료</th>
                                 </tr>
                             </thead>
                             <tbody>
-                        {
-                            dauList.map((item, index)=>{
-                                return (
-                                    <tr key={index}>
+                                {dauList.map((item) => (
+                                    <tr key={item.dateTime}>
                                         <td>{item.dateTime}</td>
                                         <td>{item.count}</td>
-                                        <td>0</td>
                                     </tr>
-                                )
-                            })
-                        }
+                                ))}
                             </tbody>
                         </table>
                     </div>
+
                     {/* 페이징 */}
                     <div className="paging-container">
-                            {page > 0 && (
-                                <button className="page-buttons" onClick={() => handlePageChange(page - 1)}>
-                                    이전
-                                </button>
-                            )}
+                        {page > 0 && (
+                            <button className="page-buttons" onClick={() => handlePageChange(page - 1)}>
+                                이전
+                            </button>
+                        )}
 
-                            {/* 페이지 번호 버튼 */}
-                            <div className="page-buttons">
-                                {pageButtons()}
-                            </div>
-
-                            {page < totalPages - 1 && (
-                                <button className="page-buttons" onClick={() => handlePageChange(page + 1)}>
-                                    다음
-                                </button>
-                            )}
+                        <div className="page-buttons">
+                            {pageButtons()}
                         </div>
+
+                        {page < totalPages - 1 && (
+                            <button className="page-buttons" onClick={() => handlePageChange(page + 1)}>
+                                다음
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 <div className="userdau-right">
-                    {/* 그래프 */}
                     <div className="userdau-chart">
-                        <Line options={options} data={data}/>
+                        <Line options={options} data={data} />
                         <div className="userdat-chart-totaluser">총인원수 : {totalCount}명</div>
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default UserDau;
