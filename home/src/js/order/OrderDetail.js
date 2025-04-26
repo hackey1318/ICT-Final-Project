@@ -51,7 +51,7 @@ function OrderDetail() {
 
     return (
         <div className="order_container">
-            <button id="back_button" onClick={() => window.location.href = "/order/list"}></button>
+            <button id="back_button" onClick={() => window.location.href = "/mypage/order/list"}></button>
             <p><b>주문 상세 정보</b> (주문 번호: {orderId})</p>
             <div className="info_container">
                 <b>상품 정보</b>

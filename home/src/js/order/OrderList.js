@@ -102,9 +102,9 @@ function OrderList() {
     return (
         <div className="orderList_wrapper">
             <div className="orderList_container">
-                <button id="back_button" onClick={() => window.history.back()}></button>
+                {/* <button id="back_button" onClick={() => window.history.back()}></button> */}
                 <br />
-                <b id="cart_text">주문내역</b>
+                <b id="cart_text">주문 내역</b>
                 {orderList.length > 0 &&
                     orderList.map((order, orderIndex) => {
                         return (<div>
@@ -130,7 +130,7 @@ function OrderList() {
                                     {
                                         order?.statusText !== "결제 대기" &&
                                         <div>
-                                            <span className="orderList_link" onClick={() => window.location.href = `/order/detail?orderNumber=${order.orderNumber}`}><b>{"상세 보기 >"}</b></span>
+                                            <span className="orderList_link" onClick={() => window.location.href = `/mypage/order/detail?orderNumber=${order.orderNumber}`}><b>{"상세 보기 >"}</b></span>
                                             <br />
                                             {
                                                 order?.statusText === "결제 완료" &&
