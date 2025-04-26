@@ -4,12 +4,24 @@ import StarRating from './StarRating';
 import './../../css/md/GoodsReviewSection.css';
 
 
-export default function GoodsReviewWriteModal({
-  goodsId, userNo, isOpen, onClose, onSubmitSuccess
-}) {
-  const [formData, setFormData] = useState({
-    title: '', content: '', rating: 5, orderNo: null, imageIds: []
-  });
+ export default function GoodsReviewWriteModal({
+     goodsId,
+     userNo,
+     isOpen,
+     onClose,
+     onSubmitSuccess,
+     review            // ★ 수정 모드 진입 시 전달되는 review 객체
+   }) {
+     // 수정 모드인지 여부
+     const isEditing = Boolean(review);
+       const [formData, setFormData] = useState({
+          id:       review?.id       || null,   // ★ 여기에 review PK
+          title:    review?.title    || '',
+          content:  review?.content  || '',
+          rating:   review?.rating   || 5,
+          orderNo:  review?.orderNo  || null,
+          imageIds: review?.imageIds || []
+        });
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState([]);
   const [reviewedOrderNos, setReviewedOrderNos] = useState(new Set());
@@ -19,6 +31,19 @@ export default function GoodsReviewWriteModal({
 
   useEffect(() => {
     if (!isOpen) return;
+    if (isEditing) {
+      console.log("수정할 리뷰:", review);
+      setFormData({
+        id: review.id,
+        title: review.title,
+        content: review.content,
+        rating: review.rating,
+        imageIds: review.imageIds
+      });
+    } else {
+      setFormData({ title:'', content:'', rating:5, orderNo:null, imageIds:[] });
+    }
+    
     (async () => {
       try {
         const [listRes, doneRes] = await Promise.all([
@@ -26,19 +51,43 @@ export default function GoodsReviewWriteModal({
           axios.get(`/goods/${goodsId}/orders-reviewed`,     { params: { userNo } })
         ]);
         const { ordersDtoList, orderItemDtoList } = listRes.data;
+        const reviewedOrderNos = new Set(doneRes.data);
 
         // 주문별로 items 묶기
         const grouped = ordersDtoList.map(o => ({
           ...o,
           items: orderItemDtoList.filter(item => item.orderNo === o.id)
         }));
-        setOrders(grouped);
-        setReviewedOrderNos(new Set(doneRes.data));
+
+        console.log("주문 목록:", grouped);
+        console.log("리뷰된 주문:", reviewedOrderNos);
+
+        if (isEditing) {
+          // 수정 모드일 때는 리뷰된 주문 중 하나만 표시
+          // reviewedOrderNos는 Set이므로 첫 번째 값을 가져옴
+          const reviewedOrderNo = Array.from(reviewedOrderNos)[0];
+          const currentReviewOrder = grouped.filter(order => order.id === reviewedOrderNo);
+          console.log("필터링된 주문:", currentReviewOrder);
+          setOrders(currentReviewOrder);
+          
+          // orderNo도 자동으로 설정
+          if (currentReviewOrder.length > 0) {
+            setFormData(prev => ({
+              ...prev,
+              orderNo: currentReviewOrder[0].id
+            }));
+          }
+        } else {
+          // 작성 모드일 때는 리뷰 작성되지 않은 주문만 표시
+          const unreviewed = grouped.filter(order => !reviewedOrderNos.has(order.id));
+          setOrders(unreviewed);
+        }
+        setReviewedOrderNos(reviewedOrderNos);
       } catch (err) {
         console.error('주문 목록 조회 오류', err);
       }
     })();
-  }, [isOpen, goodsId, userNo]);
+  }, [isOpen, goodsId, userNo, review, isEditing]);
 
   const selectOrder = id => {
     setFormData(f => ({ ...f, orderNo: id }));
@@ -102,9 +151,19 @@ export default function GoodsReviewWriteModal({
     if (!formData.content || formData.content.trim() === '') {return alert('리뷰 내용을 입력해주세요.');}
     setLoading(true);
     try {
-      await axios.post(`/goods/${goodsId}/reviews`, {
-        ...formData, userNo
-      });
+            if (isEditing) {
+                // 수정 모드 → PUT /goods/{goodsId}/reviews/{reviewId}
+                await axios.put(
+                  `/goods/${goodsId}/reviews/${formData.id}`,
+                  { ...formData, userNo }
+                );
+              } else {
+                // 작성 모드 → POST /goods/{goodsId}/reviews
+                await axios.post(
+                  `/goods/${goodsId}/reviews`,
+                  { ...formData, userNo }
+                );
+              }
       onSubmitSuccess();
       onClose();
     } catch (err) {
@@ -120,21 +179,22 @@ export default function GoodsReviewWriteModal({
     <div className="modal-overlay">
       <div className="modal-content">
         <button className="modal-close" onClick={onClose}>×</button>
-        <h2>리뷰 작성</h2>
+        <h2>{isEditing ? '리뷰 수정' : '리뷰 작성'}</h2>
 
         <ul className="order-list">
           {orders.map(order => {
             const isDone = reviewedOrderNos.has(order.id);
+            const disabled = !isEditing && isDone;
             return (
               <li
                 key={order.id}
-                className={`order-item ${isDone ? 'disabled' : ''} ${formData.orderNo === order.id ? 'selected' : ''}`}
-                onClick={() => !isDone && selectOrder(order.id)}
+                className={`order-item ${disabled ? 'disabled' : ''} ${formData.orderNo === order.id ? 'selected' : ''}`}
+                onClick={() => !disabled && selectOrder(order.id)}
               >
                 <input
                   type="radio"
                   checked={formData.orderNo === order.id}
-                  disabled={isDone}
+                  disabled={disabled}
                   readOnly
                 />
                 <span>
@@ -216,8 +276,10 @@ export default function GoodsReviewWriteModal({
             <div className="modal-actions">
               <button type="button" onClick={onClose} disabled={loading}>취소</button>
               <button type="submit" disabled={loading}>
-                {loading ? '등록 중…' : '작성 완료'}
-              </button>
+              {loading
+                ? (isEditing ? '수정 중…' : '등록 중…')
+                : (isEditing ? '수정 완료' : '작성 완료')}
+            </button>
             </div>
           </form>
         )}

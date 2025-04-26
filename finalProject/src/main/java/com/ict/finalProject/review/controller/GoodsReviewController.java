@@ -106,4 +106,24 @@ public class GoodsReviewController {
 
         return ResponseEntity.ok(reviewService.writeReview(req));
     }
+
+    @AuthRequired({UserRole.USER, UserRole.ADMIN, UserRole.MANAGER})
+    @PutMapping("/{goodsId}/reviews/{reviewId}")
+   public ResponseEntity<GoodsReviewResponse> updateReview(
+           @PathVariable Long goodsId,
+           @PathVariable Long reviewId,
+           Authentication authentication,
+           @RequestBody GoodsReviewRequest req) {
+               // 1) 토큰에서 사용자 번호 꺼내기
+                Users user = usersRepository.findById(authentication.getName())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+               req.setUserNo(user.getNo().longValue());
+               req.setGoodsId(goodsId);
+               req.setId(reviewId);               // 수정 대상 리뷰 PK
+                // 2) 서비스 호출 (createPending → linkImagesToReview 포함)
+              GoodsReviewResponse updated = reviewService.updateReview(req);
+              return ResponseEntity.ok(updated);
+        }
+
+
 }
