@@ -17,6 +17,17 @@ function TheaterListDetail(){
     const [liked, setLiked] = useState(false); // 현재 좋아요 여부
     const [likeId, setLikeId] = useState(null); // 좋아요 ID (DB에서 받은 값)
 
+    // 연령 등급 배지의 색상을 결정합니다.
+    function getAgeBadgeColor(grade) {
+        switch (String(grade)) { // 등급이 문자열로 처리되도록 보장
+            case "15": return "#f39c12";  // 주황
+            case "12": return "#3498db";  // 파랑
+            case "All": return "#2ecc71"; // 초록
+            case "18": return "#e74c3c"; // 빨강
+            default: return "#7f8c8d";     // 회색
+        }
+    }
+
     useEffect(()=>{
         axios.get(`http://localhost:9988/cinemate/theaterDetail/${theaterNo}`)
         .then((response)=>{
@@ -71,8 +82,8 @@ function TheaterListDetail(){
             {/* 헤더 섹션 */}
 			<header className="movie_detail_header">
 				<div className="movie_detail_top_nav row">
-					<div className="movie_detail_logo col-4">시네메이트 영화관 상세</div>
-					<div className="movie_detail_menu col-8">
+					<div className="movie_detail_logo col-8">시네메이트 영화관 상세 : {theaters[0].theaterName}</div>
+					<div className="movie_detail_menu col-4">
 						{/* 필요한 메뉴 항목 추가 */}
 					</div>
 				</div>
@@ -90,11 +101,11 @@ function TheaterListDetail(){
 					<div className="movie_detail_actions col-2 d-flex justify-content-end">
 						{/* 북마크 및 공유 아이콘 (기능 구현 필요) */}
 						<div onClick={toggleLike} style={{ cursor: 'pointer' }}>
-							<Heart
+							{/* <Heart
 								className="movie_detail_icon"
 								color={liked ? 'red' : 'black'}
 								fill={liked ? 'red' : 'none'}
-							/>
+							/> */}
 							<Share2 className="movie_detail_icon ms-2" onClick={handleCopyUrl} />
 						</div>
 					</div>
@@ -106,43 +117,60 @@ function TheaterListDetail(){
                 {
                     theaters.map((theater, index)=>{
                         return(
-                            <div key={index} className="col-md-4 col-lg-3 mb-4">
-                                <div className="card shadow-sm border-light">
-                                    {/* 영화 포스터 이미지 */}
-                                    <img
-                                        src={theater.postImage || "/placeholder.jpg"} // placeholder 이미지는 public 폴더 등에 위치해야 함
-                                        alt={`${theater.movieName} 포스터`}
-                                        className="card-img-top rounded-3"
-                                        style={{ height: "250px", objectFit: "cover" }} // 이미지 크기 및 스타일 지정
-                                    />
-                                    <div className="card-body bg-light"> {/* 배경색 변경 */}
-                                        {/* 영화 제목 */}
-                                        <h5 className="card-title text-dark text-truncate">{theater.movieName}</h5> {/* 텍스트 색상 변경 */}
-                                        
-                                        {/* 장르 및 감독 */}
-                                        <p className="card-text text-muted">{theater.genre} | 감독: {theater.director}</p>
-                                        
-                                        {/* 미팅 날짜 및 시간 */}
-                                        <p className="card-text text-dark">
-                                            <strong>날짜:</strong> {theater.meetingDate?.split('T')[0]} <br />
-                                            <strong>시간:</strong> {theater.meetingDate?.split('T')[1]?.slice(0,5)}
-                                        </p>
+                            <div key={index} className="col-12 col-md-6 mb-3">
+                                <div className="position-relative"
+                                    style={{display: "flex", flexDirection: "row", height: "260px", backgroundColor: "#f9f9f9", 
+                                            padding: "12px", cursor: "pointer", borderRadius: "6px"}}
+                                >
+                                    {/* 연령 등급 배지 */}
+                                    <span
+                                        className="age-badge position-absolute start-10 m-2 px-2 py-1 text-white rounded shadow-sm"
+                                        style={{backgroundColor: getAgeBadgeColor(theater.ageGrade), zIndex: 2, top: "15px"}}
+                                    >
+                                        {/* 18세 등급은 '청불' 또는 '19'로 표시, 나머지는 등급 그대로 표시 */}
+                                        {String(theater.ageGrade) === "18" ? "청불" : theater.ageGrade}
+                                    </span>
 
-                                        {/* 닉네임 */}
-                                        <p className="card-text text-dark"><strong>작성자:</strong> {theater.userName}</p>
+                                    {/* 왼쪽 이미지 */}
+                                    <div style={{ height: "100%", marginRight: "20px", display: "flex", alignItems: "center" }}>
+                                    <img src={theater.postImage || "/placeholder.jpg"} alt={`${theater.movieName} 포스터`}
+                                        style={{height: "100%", width: "auto", maxWidth: "160px", objectFit: "contain", borderRadius: "10px"}}/>
+                                    </div>
 
-                                        {/* 시네메이트 내용 */}
-                                        <p className="card-text text-dark">{theater.content ? `"${theater.content}"` : "상세 내용 없음"}</p>
+                                    {/* 오른쪽 정보 */}
+                                    <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                                        <div>
+                                            <div className="d-flex justify-content-between mb-2">
+												<span className="fw-bold">작성자 : {theater.userName}</span>
+												<span className="text-muted">작성일 : {theater.createdAt?.split('T')[0]}</span>
+											</div>
+                                            <div className="mb-2">
+                                                <div style={{backgroundColor: "#e9f5ff", borderRadius: "8px", padding: "12px", 
+                                                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)", display: "flex", flexDirection: "column", gap: "8px"}}
+                                                >
+                                                    {/* 상영 영화 제목 */}
+                                                    <span className="fw-bold" style={{fontSize: "16px", color: "#007bff", fontWeight: "500", lineHeight: "1.4"}}>
+                                                        🎥 {theater.movieName}
+                                                    </span>
 
-                                        {/* 총 인원 */}
-                                        <p className="card-text text-dark">
-                                            <strong>총인원:</strong> 현재인원/{theater.maxMemberCount}
-                                        </p>
-
-                                        {/* 카드 하단에 버튼 (선택적) */}
-                                        <div className="d-flex justify-content-between">
-                                            {/* <button className="btn btn-primary btn-sm">자세히 보기</button> */}
-                                            <button className="btn btn-outline-primary btn-sm">신청하기</button>
+                                                    {/* 장르 및 감독 정보 */}
+                                                    <div style={{ fontSize: "14px", color: "#555", fontWeight: "normal" }}>
+                                                        <span style={{ fontWeight: "500" }}>{theater.genre}</span> | <span>{theater.director}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="mb-2 d-flex justify-content-between">
+											    <span className="badge bg-light text-dark p-2 border border-secondary rounded">
+													모집 시간 : {theater.meetingDate?.split("T")[0]}{" "}
+													{theater.meetingDate?.split("T")[1]?.slice(0, 5)}
+												</span>
+												<span className="badge bg-warning text-dark p-2 rounded">
+													총 인원 : {theater.currentMemberCount} / {theater.maxMemberCount}
+												</span>
+											</div>
+                                            <div style={{ height:"80px", fontSize: "14px", backgroundColor: "#fff", padding: "6px", borderRadius: "4px" }}>
+                                                {theater.content}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
