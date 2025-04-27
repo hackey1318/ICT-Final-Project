@@ -114,14 +114,12 @@ function App() {
 				<Route path='movies/upcoming' element={<UpcomingMovie />} />
 				<Route path='/inquiry' element={<InquiryPage />} />
 				<Route path='/inquiryView/:no' element={<InquiryView />} />
-				<Route path='cart' element={<Cart />} />
-
 
 				<Route path='order/error' element={<OrderError />} />
 				<Route path='mdshop' element={<MdShop />} />
 				<Route path='mdshop/:goodsNo' element={<GoodsDetail />}>
-          		<Route path='reviews' element={<GoodsReviewSection />} />
-          		</Route>
+					<Route path='reviews' element={<GoodsReviewSection />} />
+				</Route>
 				<Route path="/related-movie/:movieId" element={<RelatedMovie />} />
 				<Route path="/announcements" element={<UserAnnounce />} />
 				<Route path="/announcements/:id" element={<UserAnnounceDetail />} />
@@ -130,6 +128,7 @@ function App() {
 					<Route path="likes" element={<LikedItemsPage />} />
 					<Route path='order/list' element={<OrderList />} />
 					<Route path='order/detail' element={<OrderDetail />} />
+					<Route path='cart' element={<Cart />} />
 				</Route>
 
 				{/* 시네메이트 */}

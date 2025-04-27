@@ -8,7 +8,7 @@ export const addGoodsToCart = (id, quantity, act) => {
             goodsId: id,
             goodsQuantity: quantity,
             act: act
-         },
+        },
         headers: {
             Authorization: `Bearer ${accessToken}`
         }
@@ -38,7 +38,7 @@ export const deleteGoodsList = (e) => {
     const accessToken = sessionStorage.getItem("accessToken");
     const goodsNoArray = e.map(item => item.goodsNo);
     return axios.post("http://localhost:9988/cart/deleteGoods",
-            goodsNoArray,
+        goodsNoArray,
         {
             headers: {
                 Authorization: `Bearer ${accessToken}`
@@ -46,3 +46,10 @@ export const deleteGoodsList = (e) => {
         }
     )
 }
+
+export const updateCartQuantity = (data) => {
+    const accessToken = sessionStorage.getItem("accessToken");
+    return axios.post("http://localhost:9988/cart/updateQuantity", data, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+    });
+};

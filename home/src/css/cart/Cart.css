@@ -1,21 +1,22 @@
 .cart_container {
+    width: 90%; /* 화면의 90%를 차지 */
+    max-width: 1200px; /* 최대 1200px까지만 넓어지게 */
+    margin: 0 auto;
+    padding: 20px;
     display: flex;
+    justify-content: center;
     gap: 50px;
+    align-items: flex-start;
 }
 
 .cart_list {
-    display: flex;
-    margin-top: 100px;
-    flex-direction: column;
-    margin-left: 20%;
-    /* margin-right: 20%; */
-    width: 40%;
+    width: 65%; /* 전체의 65% */
     min-width: 500px;
 }
 
 #back_button {
     width: 30px;
-    height: 30px;
+    /* height: 30px; */
     background: url('./../../img/leftArrow.png');
     background-size: cover;
     border: none;
@@ -190,12 +191,14 @@
 }
 
 .order_info_container {
-    text-align: center;
-    border: 1px solid rgb(219, 219, 219);
-    margin-top: 240px;
-    padding-top: 10px;
     width: 300px;
     height: 320px;
+    border: 1px solid rgb(219, 219, 219);
+    padding-top: 10px;
+    text-align: center;
+    margin-top: 0; /* 기존 margin-top 제거 */
+    position: sticky; /* 스크롤해도 고정하려면 */
+    top: 100px;
 }
 
 .order_info_container > p {
@@ -305,19 +308,41 @@ button {
     left: 35%;
 }
 
-#theaterSuggestion {
-    width: 100px;
-    min-height: 25px;
-    max-height: 100px;
-    border: 2px solid #ddd;
-    background-color: white;
-    position: absolute;
-    top: 100%;
-    left: 60%;
-    overflow-y: auto;
-    font-size: 0.8em;
-    cursor: default;
-    white-space: nowrap;
-    overflow-x: hidden;
+/* 수령 장소 입력창 */
+#theaterInput {
+    width: 100%;
+    height: 40px;
+    padding: 10px 12px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
+#theaterSuggestion {
+    width: 100%;
+    min-height: 30px;
+    max-height: 150px;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 5px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    overflow-y: auto;
+    font-size: 0.9em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 10;
+}
+
+#theaterSuggestion > div {
+    padding: 8px 12px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+
+#theaterSuggestion > div:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
