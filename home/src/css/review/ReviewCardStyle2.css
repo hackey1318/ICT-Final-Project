@@ -1,0 +1,49 @@
+.MypageReview_card2 {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+.MypageReview_card2:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+.MypageReview_card2 img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.MypageReview_card-body {
+  padding: 16px;
+  flex-grow: 1;
+}
+.MypageReview_card-headline {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+}
+.MypageReview_card-text {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+  flex-grow: 1;
+}
+.MypageReview_card-button {
+  display: inline-block;
+  background: #3478f6;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.MypageReview_card-button:hover {
+  background: #245ec9;
+}
