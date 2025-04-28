@@ -18,8 +18,8 @@ public class OrdersDto {
     private OrdersStatus status;
     private String statusText;
     private int totalPrice;
+    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 
     public OrdersDto(Orders orders) {
         this.id = orders.getId();
@@ -29,6 +29,7 @@ public class OrdersDto {
         this.status = orders.getStatus();
         this.statusText = "";
         this.totalPrice = orders.getTotalPrice();
+        this.createdAt = orders.getCreatedAt();
         this.updatedAt = orders.getUpdatedAt();
     }
 }

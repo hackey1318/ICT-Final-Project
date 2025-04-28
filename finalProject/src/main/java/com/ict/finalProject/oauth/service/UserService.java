@@ -21,4 +21,6 @@ public interface UserService {
     String login(String id, String password);
 
     boolean existsByPhone(String phone);
+
+    Users getUser(int userNo);
 }
