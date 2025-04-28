@@ -259,12 +259,12 @@ tr {
     cursor: pointer;
 }
 
-.modal-content, .modal-dialog, .modal-header, .modal-body, .modal-footer {
-    width: 400px;
+.pwd-modal {
+    width: 410px;
 }
 
-.modal-content {
-    height: 350px;
+.pwd-modal-content, .pwd-modal-dialog, .pwd-modal-header, .pwd-modal-body, .pwd-modal-footer {
+    width: 400px;
 }
 
 /* 댓글영역 */
