@@ -29,7 +29,7 @@ import CurrentMovie from './page/movie/CurrentMovie';
 import UpcomingMovie from './page/movie/UpcomingMovie';
 import MdList from './page/md/MdList';
 import Admin from './page/admin/Admin';
-import DashBoard from './page/dashboard/UserDau';
+import DashBoard from './page/dashboard/Dashboard';
 import Cart from './js/cart/Cart';
 import OrderList from './js/order/OrderList';
 import OrderDetail from './js/order/OrderDetail';
@@ -63,6 +63,10 @@ import MovieRoom from './page/cinemate/MovieRoom';
 import AdminPwdReset from './page/admin/AdminPwdReset';
 import TheaterList from './page/cinemate/TheaterList';
 import TheaterListDetail from './page/cinemate/TheaterListDetail';
+import ReviewHistory from './page/user/mypage/ReviewHistory';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+
 
 
 function App() {
@@ -132,6 +136,7 @@ function App() {
 					<Route path='order/list' element={<OrderList />} />
 					<Route path='order/detail' element={<OrderDetail />} />
 					<Route path='cart' element={<Cart />} />
+					<Route path="reviews" element={<ReviewHistory />} />
 				</Route>
 
 				{/* 시네메이트 */}

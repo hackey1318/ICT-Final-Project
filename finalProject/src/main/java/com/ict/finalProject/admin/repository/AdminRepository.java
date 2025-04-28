@@ -1,6 +1,7 @@
 package com.ict.finalProject.admin.repository;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,8 +46,6 @@ public interface AdminRepository extends JpaRepository<Users, Integer> {
     @Query(value = "UPDATE users SET status = :status WHERE no = :userNo", nativeQuery = true)
     void updateBlacklistStatus(@Param("status") String status, @Param("userNo") Integer userNo);
 
-    //매니저페이지 유저검색을 위한 매서드
-    Page<Users> findByIdContainingIgnoreCase(String id, Pageable pageable);
-    Page<Users> findByNicknameContaining(String nickname, Pageable pageable);
-    Page<Users> findByEmailContaining(String email, Pageable pageable);
+    @Query("SELECT u FROM Users u WHERE (:id IS NULL OR LOWER(u.id) LIKE LOWER(CONCAT('%', :id, '%'))) AND (:nickname IS NULL OR u.nickname LIKE %:nickname%) AND (:email IS NULL OR u.email LIKE %:email%) AND u.role IN :roles")
+    Page<Users> searchUsers(@Param("id") String id, @Param("nickname") String nickname, @Param("email") String email, @Param("roles") List<UserRole> roles, Pageable pageable);
 }

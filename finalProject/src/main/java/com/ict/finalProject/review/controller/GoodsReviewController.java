@@ -139,4 +139,12 @@ public class GoodsReviewController {
         return ResponseEntity.ok().build();
     }
 
+    @AuthRequired({UserRole.USER, UserRole.ADMIN, UserRole.MANAGER})
+    @GetMapping("/users/{userNo}/reviews")
+    public ResponseEntity<List<GoodsReviewResponse>> getMyGoodsReviews(
+            @PathVariable Long userNo) {
+        List<GoodsReviewResponse> list = reviewService.getReviewsByUser(userNo);
+        return ResponseEntity.ok(list);
+    }
+
 }
