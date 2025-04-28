@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Button from '../../js/common/Buttons.js';
+import '../../css/dashboard/AdminList.css';
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -18,28 +19,28 @@ function ManagerList() {
         const params = {
             page: pageIndex,
             size: 10,
-            sort: "no,desc"
+            sort: "no,asc"
         };
         if (searchValue.trim()) {
             params[searchType] = searchValue.trim();
         }
-        axios.get(`http://localhost:9988/manager/home/manager-list`, {
+        axios.get(`http://localhost:9988/manager/home/member-list/admin`, {
             params,
             headers: {
                 "Content-Type": "application/json",
                 ...(accessToken && { Authorization: `Bearer ${accessToken}` })
             }
         })
-        .then(response => {
-            const data = response.data;
-            setManagerList(data.content);
-            setTotalPages(data.totalPages);
-            // 선택 상태 초기화
-            const initial = {};
-            data.content.forEach(item => { initial[item.no] = item.role; });
-            setSelectStates(initial);
-        })
-        .catch(err => console.error("관리자 리스트 조회 실패:", err));
+            .then(response => {
+                const data = response.data;
+                setManagerList(data.content);
+                setTotalPages(data.totalPages);
+                // 선택 상태 초기화
+                const initial = {};
+                data.content.forEach(item => { initial[item.no] = item.role; });
+                setSelectStates(initial);
+            })
+            .catch(err => console.error("관리자 리스트 조회 실패:", err));
     };
 
     // 초기 로드 및 페이지 변경
@@ -65,8 +66,8 @@ function ManagerList() {
             axios.post(`http://localhost:9988/manager/home/manager-delete/${userNo}`, {}, {
                 headers: { Authorization: `Bearer ${accessToken}` }
             })
-            .then(() => getManagerList(page))
-            .catch(err => console.error(err));
+                .then(() => getManagerList(page))
+                .catch(err => console.error(err));
         }
     };
 
@@ -100,7 +101,7 @@ function ManagerList() {
             </form>
 
             <div className='memberlist-container'>
-                <table className="memberlist-table">
+                <table className="manager-list-table">
                     <thead>
                         <tr>
                             <th>관리자번호</th>
@@ -109,32 +110,35 @@ function ManagerList() {
                             <th>이메일</th>
                             <th>연락처</th>
                             <th>관리자권한</th>
+                            <th>관리</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {managerList.map(item => (
-                            <tr key={item.no} className="memberlist-item">
-                                <td>{item.no}</td>
-                                <td>{item.id}</td>
-                                <td>{item.nickname}</td>
-                                <td>{item.email}</td>
-                                <td>010-0000-0000</td>
-                                <td>
+                        {managerList.map((item, index) => {
+                            const number = page * 10 + index + 1;  // ✅ 번호 계산 공식
+                            return (
+                                <tr key={item.no} className="memberlist-item">
+                                    <td>{number}</td> {/* 수정: item.no 대신 number! */}
+                                    <td>{item.id}</td>
+                                    <td>{item.nickname}</td>
+                                    <td>{item.email}</td>
+                                    <td>010-0000-0000</td>
                                     {item.role === "ADMIN" ? (
-                                        item.role
+                                        <>
+                                            <td>관리자</td>
+                                            <td>-</td>
+                                        </>
                                     ) : (
-                                        <select
-                                            value={selectStates[item.no] || item.role}
-                                            onChange={e => handleRoleChange(e, item.no)}
-                                            className="list-select-box"
-                                        >
-                                            <option value={item.role}>{item.role}</option>
-                                            <option value="delete">DELETE</option>
-                                        </select>
+                                        <>
+                                            <td>매니저</td>
+                                            <td>
+                                                <button className="btn btn-danger" value="delete" onClick={(e) => handleRoleChange(e, item.no)}>삭제</button>
+                                            </td>
+                                        </>
                                     )}
-                                </td>
-                            </tr>
-                        ))}
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>
