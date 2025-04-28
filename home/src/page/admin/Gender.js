@@ -1,61 +1,12 @@
 import { useEffect, useState } from "react";
-
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
 import axios from "axios";
+import GenderChart from "../../js/dashboard/GenderChart";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
 function Gender(){
     //데이터를 담을 변수
     const [data, setData] = useState({})
-
-    ChartJS.register(ArcElement, Tooltip, Legend);
-
-    //파이차트
-    const dataSet = {
-      labels: ['남', '여'],
-      datasets: [
-        {
-          label: '# of Votes',
-          data: [data.male, data.female],
-          backgroundColor: [
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 99, 132, 0.2)',
-          ],
-          borderColor: [
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 99, 132, 1)',
-          ],
-          borderWidth: 1,
-        },
-      ],
-    }
-
-    //파이차트 옵션
-    const options = {
-        plugins: {
-            title: {
-                display: true,
-                text: '성별 비율',
-                font: {
-                    size: 18,
-                    weight: 'bold',
-                },
-                padding: {
-                    top: 10,
-                    bottom: 20,
-                },
-                    color: '#333',
-            },
-            legend: {
-                position: 'bottom',
-                labels: {
-                    padding: 20,
-                }
-            },
-        },
-    };
 
     useEffect(()=>{
         axios.get("http://localhost:9988/manager/home/gender-ratio", {
@@ -77,7 +28,7 @@ function Gender(){
             <h3 className="contents-title">Admin Page - Gender Ratio</h3>
             <div className="gender-content">
                 <div className="gender-chart">
-                    <Pie data={dataSet} options={options}/>
+                    <GenderChart data={data} />
                 </div>
                 <div className="gender-info">
                     <div><strong>남성:</strong> {data.male}명 ({Math.round(data.maleRatio*100)/100}%)</div>
