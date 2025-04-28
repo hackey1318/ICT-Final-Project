@@ -17,5 +17,8 @@ public interface GoodsReviewRepository extends JpaRepository<GoodsReview, Long> 
     @Query("SELECT gr.orderNo FROM GoodsReview gr WHERE gr.goodsId = :goodsId AND gr.userNo = :userNo")
     List<Long> findReviewedOrderNos(@Param("goodsId") Long goodsId, @Param("userNo") Long userNo);
 
+    List<GoodsReview> findByUserNo(Long userNo);
+
+
 
 }
