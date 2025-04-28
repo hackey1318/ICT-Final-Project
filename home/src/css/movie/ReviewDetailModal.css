@@ -1,35 +1,280 @@
-.MovieReview_modal-overlay{position:fixed;top:-30%;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000}
-.MovieReview_modal-content{background:#fff;border-radius:12px;position:relative;min-width:400px;min-height:500px;height:30%;max-width:90%;max-height:90vh;box-shadow:0 4px 20px rgba(0,0,0,0.15);transition:min-width .3s ease-out,max-width .3s ease-out}
-.MovieReview_modal-content.MovieReview_reporting-active{min-width:800px}
-.MovieReview_modal-header{display:flex;width:100%;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #f0f0f0}
-.MovieReview_modal-back{background:none;border:none;font-size:16px;font-weight:500;display:flex;align-items:center;gap:8px;cursor:pointer}
-.MovieReview_modal-options{background:none;border:none;font-size:20px;cursor:pointer}
-.MovieReview_report-button{font-size:20px}
-.MovieReview_modal-body-container{padding:0;display:flex;min-height:416px}
-.MovieReview_modal-profile{display:flex;align-items:center;gap:8px;padding:12px 20px;border-bottom:1px solid #f0f0f0}
-.MovieReview_profile-image{width:32px;height:32px;border-radius:50%;object-fit:cover}
-.MovieReview_profile-placeholder{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#666}
-.MovieReview_profile-name{font-size:14px;font-weight:500}
-.MovieReview_modal-content-wrapper{height:30%;display:flex;flex-direction:row;border-top:1px solid #f0f0f0}
-.MovieReview_modal-image-container{width:45%;display:flex;align-items:center;justify-content:center}
-.MovieReview_modal-poster{padding:10px;width:100%;height:100%;object-fit:cover}
-.MovieReview_modal-review-content{width:55%;padding:20px;position:relative;border-left:1px solid #f0f0f0}
-.MovieReview_review-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
-.MovieReview_review-title{margin:0;font-size:18px;font-weight:600;color:#333}
-.MovieReview_review-text{font-size:14px;line-height:1.5;color:#444;margin-bottom:16px}
-.MovieReview_modal-action-buttons{display:flex;gap:8px;margin-top:16px}
-.MovieReview_modal-edit{background:#f39c12;color:#fff;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:12px}
-.MovieReview_modal-edit:hover{background:#d78c0a}
-.MovieReview_modal-delete{position:absolute;top:16px;right:16px;background:#e74c3c;color:#fff;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:12px}
-.MovieReview_modal-report-form{min-width:400px}
-.MovieReview_form-group{margin:10px;display:flex;justify-content:flex-start}
-.MovieReview_form-select{margin-left:15px;border-radius:5px}
-.MovieReview_form-textarea{margin-left:15px;border-radius:5px;width:70%}
-.MovieReview_error-message{color:red;margin:10px}
-.MovieReview_report-form-actions{display:flex;justify-content:flex-end}
-.MovieReview_report-form-actions>button{margin-right:15px;border-radius:5px}
-@media(max-width:600px){.MovieReview_modal-content-wrapper{flex-direction:column}.MovieReview_modal-image-container,.MovieReview_modal-review-content{width:100%}.MovieReview_modal-review-content{border-left:none;border-top:1px solid #f0f0f0}}
-.MovieReview_review-date{font-size:12px;color:#888}
-.MovieReview_review-swiper{width:100%;height:100%}
-.MovieReview_modal-slide-image{width:100%;height:auto;object-fit:cover;border-radius:8px}
-.swiper-button-prev,.swiper-button-next{color:#333}
+/* src/css/movie/ReviewDetailModal.css */
+
+.modal-overlay {
+  position: fixed;
+  top: -10%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#review-modal-content {
+  max-width: 800px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  width: 100%;
+}
+
+.modal-back {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.modal-options {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-body-container {
+  padding: 0;
+}
+
+#review-modal-profile{
+  width: 100%;
+}
+
+.review-modal-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+#review-profile-image{
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #666;
+}
+
+.profile-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.modal-content-wrapper {
+  height: calc(100% - 100px);
+  max-height: 390px;
+  display: flex;
+  flex-direction: row;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* 이미지 컨테이너: 슬라이더 중앙 정렬 */
+.modal-image-container {
+  width: 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  overflow: hidden;
+}
+
+.modal-poster {
+  padding: 10px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-review-content {
+  width: 55%;
+  padding: 20px;
+  position: relative;
+  border-left: 1px solid #f0f0f0;
+  height: 390px;
+  display: flex;
+  flex-direction: column;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.review-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.review-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #444;
+  margin-bottom: 16px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  word-break: break-all;      /* 단어(문자열) 중간에서도 강제로 줄바꿈 */
+  white-space: normal;        /* 공백을 처리하고 줄바꿈 허용 */
+  padding-right: 8px;
+  max-height: calc(100% - 80px);
+}
+
+.review-text::-webkit-scrollbar {
+  width: 6px;
+}
+
+.review-text::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.review-text::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.review-text::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.modal-action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.modal-delete {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .modal-content-wrapper {
+    flex-direction: column;
+  }
+
+  .modal-image-container,
+  .modal-review-content {
+    width: 100%;
+  }
+
+  .modal-review-content {
+    border-left: none;
+    border-top: 1px solid #f0f0f0;
+  }
+}
+
+/* 프로필 영역 소폭 정렬 조정 */
+.modal-profile div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.review-date {
+  font-size: 12px;
+  color: #888;
+}
+
+/* Swiper 슬라이드 스타일 */
+.review-swiper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-top: 50px;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.modal-slide-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* 내비게이션 화살표 색상 조정 */
+.swiper-button-prev,
+.swiper-button-next {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.3);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.swiper-button-disabled {
+  opacity: 0.3;
+}
+
+/* 수정 버튼 스타일 */
+.modal-action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.modal-edit {
+  background: #f39c12;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.modal-edit:hover {
+  background: #d78c0a;
+}
