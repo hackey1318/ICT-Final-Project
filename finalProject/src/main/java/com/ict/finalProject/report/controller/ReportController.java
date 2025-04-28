@@ -7,6 +7,7 @@ import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.oauth.service.UserService;
 import com.ict.finalProject.report.controller.request.ReportRequest;
 import com.ict.finalProject.report.controller.response.ReportResponse;
+import com.ict.finalProject.report.controller.response.ReporterResponse;
 import com.ict.finalProject.report.service.ReportService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -87,6 +92,35 @@ public class ReportController {
             log.error("신고 상세 정보 조회 중 서버 오류 발생 : reportNo={}", no, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    //신고자조회
+    @GetMapping("/getReporters")
+    public ResponseEntity<Page<ReporterResponse>> getReportersList(
+            @PageableDefault(size=9, sort="reportCount", direction=Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(reportService.getReporterList(pageable));
+    }
+
+    //신고자의 신고목록
+    @GetMapping("/getReporters/{userNo}")
+    public ResponseEntity<List<ReportResponse>> getReporterReports(@PathVariable int userNo) {
+        return ResponseEntity.ok(reportService.getReporterReports(userNo));
+    }
+
+    //신고승인버튼
+    @PutMapping("/{no}/accept")
+    public ResponseEntity<Map<String, Boolean>> acceptReport(@PathVariable int no) {
+        boolean isBlacklisted = reportService.processReport(no, true);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("isBlacklisted", isBlacklisted);
+        return ResponseEntity.ok(response);
+    }
+
+    //신고거절버튼
+    @PutMapping("/{no}/reject")
+    public ResponseEntity<Boolean> rejectReport(@PathVariable int no) {
+        reportService.processReport(no, false);
+        return ResponseEntity.ok().build();
     }
 }
 
