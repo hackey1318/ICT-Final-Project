@@ -1,4 +1,4 @@
-package com.ict.finalProject.testCode;
+package com.ict.finalProject.oauth.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
