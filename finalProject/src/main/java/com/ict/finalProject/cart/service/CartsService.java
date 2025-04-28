@@ -12,7 +12,7 @@ public interface CartsService {
     void insertCartGoods(int userNo, int goodsNo, int goodsQuantity);
     void deleteCartGoods(int userNo, int goodsNo);
     void paidCartGoods(int userNo, int goodsNo);
-    boolean checkCartGoodsExist(int userNo, int goodsNo);
+//    boolean checkCartGoodsExist(int userNo, int goodsNo);
     List<CartsResponse> getCartsGoods(int userNo);
     void updateCartGoods(int userNo, List<Integer> goodsNos, List<Integer> goodsQuantities);
 }

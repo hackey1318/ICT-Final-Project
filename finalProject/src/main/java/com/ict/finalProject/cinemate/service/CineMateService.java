@@ -1,6 +1,7 @@
 package com.ict.finalProject.cinemate.service;
 
 import com.ict.finalProject.cinemate.controller.request.CineMateRequest;
+import com.ict.finalProject.cinemate.controller.response.CineMateMemberResponse;
 import com.ict.finalProject.cinemate.controller.response.CineMateResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,4 +23,14 @@ public interface CineMateService {
     boolean joinMovieRoom(Integer cineMateNo, Integer movieNo, Integer userNo);
 
     boolean cancelJoinMovieRoom(Integer cineMateNo, Integer movieNo, Integer userNo);
+
+    List<CineMateMemberResponse> getCineMateMember(Integer cineMateNo, Integer userNo);
+
+    Integer getCineMateMemberCount(Integer cineMateNo);
+
+    //시네메이트 영화관 목록
+    Page<CineMateResponse> getCineMateTheaters(Pageable pageable);
+
+    //시네메이트 영화관 상세
+    List<CineMateResponse> getTheaterDetail(Integer theaterNo);
 }

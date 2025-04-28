@@ -26,4 +26,6 @@ public interface FindUserRepository extends JpaRepository<Users, Integer> {
     //역할에 따른 유저정보 가져오기(userNo을 사용하기위해 위의 findById 오버라이드)
     @Override
     Optional<Users> findById(Integer no);
+
+    List<Users> findByNicknameContainingIgnoreCase(String nickname);
 }

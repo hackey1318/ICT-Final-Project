@@ -87,9 +87,9 @@ export default function AnnounceDetail() {
 
             <div className="mt-4 text-end">
                 {
-                    announce.status === 'AcTIVE' ? (
+                    announce.status === 'ACTIVE' ? (
                         <>
-                            <button className="btn btn-primary" onClick={handleEdit}>수정</button>
+                            <button className="btn my-custom-btn" onClick={handleEdit}>수정</button>
                             <button className="btn btn-danger ms-2" onClick={handleDelete}>삭제</button>
                         </>
                     ): null

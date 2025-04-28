@@ -10,6 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -46,4 +48,15 @@ public class Orders {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @OneToMany(
+            mappedBy = "order",
+            cascade   = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch     = FetchType.LAZY
+    )
+    private List<OrderItem> items = new ArrayList<>();
+
+
+
 }

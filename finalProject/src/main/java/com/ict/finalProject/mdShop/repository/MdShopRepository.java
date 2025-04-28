@@ -3,7 +3,7 @@ package com.ict.finalProject.mdShop.repository;
 import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
-import feign.Param;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
