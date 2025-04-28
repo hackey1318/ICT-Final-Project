@@ -196,6 +196,12 @@ public class CineMateServiceImpl implements CineMateService {
                     .userName((String) result[10])
                     .content((String) result[11])
                     .maxMemberCount((Integer) result[12])
+                    .currentMemberCount(Math.toIntExact(cineMateMemberRepository.countByCineMateNoAndStatusActive((Integer) result[13])))
+                    .theaterName(
+                            theatersRepository.findById((Integer) result[0])
+                                    .orElseThrow(() -> new RuntimeException("해당 극장이 존재하지 않습니다."))
+                                    .getName()
+                    )
                     .build();
 
             responseList.add(response);
