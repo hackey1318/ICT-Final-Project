@@ -7,7 +7,7 @@ import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.constant.movie.MovieStatus;
 import com.ict.finalProject.movie.repository.domain.Movies;
 import com.ict.finalProject.movie.service.MoviesService;
-import com.ict.finalProject.user.repository.domain.LikesRepository;
+import com.ict.finalProject.user.repository.LikesRepository;
 import com.ict.finalProject.user.repository.domain.constant.LikeType;
 import com.ict.finalProject.user.service.dto.LikeCountDto;
 import jakarta.persistence.EntityNotFoundException;

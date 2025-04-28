@@ -7,6 +7,7 @@ import com.ict.finalProject.common.config.AuthRequired;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.inquiry.service.InquiryService;
+import com.ict.finalProject.mdShop.controller.response.MdshopSalesResponse;
 import com.ict.finalProject.oauth.controller.request.LocalRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

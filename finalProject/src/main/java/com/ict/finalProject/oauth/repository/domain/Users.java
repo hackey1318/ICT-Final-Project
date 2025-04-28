@@ -55,6 +55,7 @@ public class Users {
     private UserGender gender; // 성별 (추가 입력값)
 
     @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private StatusInfo status;
 
     @CreatedDate
@@ -70,6 +71,4 @@ public class Users {
 
     @Column(nullable = false, length = 11)
     private String phone;
-
-
 }

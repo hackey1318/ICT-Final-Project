@@ -1,6 +1,7 @@
-package com.ict.finalProject.user.repository.domain;
+package com.ict.finalProject.user.repository;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.user.repository.domain.Likes;
 import com.ict.finalProject.user.repository.domain.constant.LikeType;
 import com.ict.finalProject.user.service.dto.LikeCountDto;
 import org.springframework.data.domain.Page;
@@ -30,4 +31,7 @@ public interface LikesRepository extends JpaRepository<Likes, Integer> {
     List<LikeCountDto> getAllLikeTargetNo(@Param("type") LikeType type, @Param("status") StatusInfo statusInfo);
 
     List<Likes> findByUserNoAndType(Integer userNo, LikeType type);
+
+    @Query("SELECT l.targetNo FROM Likes AS l WHERE l.type = :type AND status = :status")
+    List<Integer> findByTypeAndStatus(LikeType type, StatusInfo status);
 }
