@@ -173,4 +173,24 @@ public class MovieReviewServiceImpl implements MovieReviewService {
         }
         reviewRepository.deleteById(no);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MovieReviewResponse> getReviewsByUser(Integer userNo) {
+        return reviewRepository.findByUserNo(userNo)    // JPA 메서드
+                .stream()
+                .map(r -> {
+                    MovieReviewResponse dto = modelMapper.map(r, MovieReviewResponse.class);
+                    // 이미지·유저 정보 세팅 로직 재사용
+                    dto.setImageIds(imageInfoRepo.findImageIdsByBoardNoAndTypeAndStatus(
+                            r.getNo(), ImageWriteType.MOVIEREVIEW, StatusInfo.ACTIVE));
+                    usersRepository.findById(r.getUserNo())
+                            .ifPresent(u -> {
+                                dto.setUserName(u.getNickname());
+                                dto.setUserProfileImage(u.getProfileImageUrl());
+                            });
+                    return dto;
+                })
+                .toList();
+    }
 }

@@ -8,5 +8,7 @@
     @Repository
     public interface MovieReviewRepository extends JpaRepository<MovieReview, Integer> {
         List<MovieReview> findByMovieNo(Integer movieNo);
+        List<MovieReview> findByUserNo(Integer userNo);
+
 
     }
