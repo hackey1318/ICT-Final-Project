@@ -58,6 +58,7 @@ import MovieTheater from './page/cinemate/MovieTheater';
 import MovieList from './page/cinemate/MovieList';
 import MovieListDetail from './page/cinemate/MovieListDetail';
 import MovieRoom from './page/cinemate/MovieRoom';
+import MdSales from './page/md/MdSales';
 
 
 function App() {
@@ -152,6 +153,7 @@ function App() {
 					<Route path="blacklist" element={<BlackList />} />
 					<Route path="gender" element={<Gender />} />
 					<Route path="mdlists" element={<MdList />} />
+					<Route path='mdsales' element={<MdSales />} />
 					<Route path="inquiry" element={<InquiryReply />} />
 					<Route path="inquiry/:no" element={<InquiryReplyView />} />
 					<Route path="announce" element={<AnnounceList />} />

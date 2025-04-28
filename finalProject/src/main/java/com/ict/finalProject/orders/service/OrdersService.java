@@ -16,4 +16,5 @@ public interface OrdersService {
     OrdersDto getOrdersDtoByOrderNumber(String orderNumber) throws Exception;
     void cancelOrders(int orderNo);
     void failOrders(int orderNo);
+    List<OrdersDto> getTotalOrders();
 }
