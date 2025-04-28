@@ -48,9 +48,13 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
     navigate(`/movies/${review.movieNo}/reviews/edit/${review.no}`);
   };
 
-  const handleReportBnt = () => {
+  const handleReportBtn = () => {
     if (!isReporting) {
-      if (window.confirm(`${review.title || review.content.substring(0, 20)} 리뷰를 신고하시겠습니까?`)) {
+      if (
+        window.confirm(
+          `${review.title || review.content.substring(0, 20)} 리뷰를 신고하시겠습니까?`
+        )
+      ) {
         setIsReporting(true);
       }
     }
@@ -92,84 +96,160 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
   };
 
   const stopPropagation = (e) => e.stopPropagation();
+
   const formattedDate = review.createdAt
-    ? new Date(review.createdAt).toLocaleDateString("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit" })
+    ? new Date(review.createdAt).toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
     : "";
+
   const baseUrl = apiClient.defaults.baseURL;
 
   return (
-    <div className="MovieReview_modal-overlay" onClick={onClose}>
-      <div className={`MovieReview_modal-content ${isReporting ? 'MovieReview_reporting-active' : ''}`} onClick={stopPropagation}>
-        <div className="MovieReview_modal-header">
-          <button className="MovieReview_modal-back" onClick={onClose}>
-            &larr; Movie Review
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        id="review-modal-content"
+        className={`modal-content ${isReporting ? 'reporting-active' : ''}`}
+        onClick={stopPropagation}
+      >
+        <div className="modal-header">
+          <button className="modal-back" onClick={onClose}>
+            <span>&larr;</span> Movie Review
           </button>
-          <button className="MovieReview_modal-options MovieReview_report-button" onClick={handleReportBnt} title="신고하기">🚨</button>
+          <button
+            className="modal-options"
+            onClick={handleReportBtn}
+            title="신고하기"
+          >🚨</button>
         </div>
-        <div className="MovieReview_modal-body-container">
-          <div style={{ width: '400px' }}>
-            <div className="MovieReview_modal-profile">
-              {review.userProfileImage ? (
-                <img src={review.userProfileImage} alt="profile" className="MovieReview_profile-image" />
-              ) : (
-                <div className="MovieReview_profile-placeholder">{review.userName?.charAt(0) || 'U'}</div>
+
+        <div className="modal-body-container">
+          <div className="review-modal-profile">
+            {review.userProfileImage ? (
+              <img
+                src={review.userProfileImage}
+                alt="profile"
+                className="profile-image"
+              />
+            ) : (
+              <div className="profile-placeholder">
+                {review.userName?.charAt(0) || "U"}
+              </div>
+            )}
+            <span className="profile-name">
+              {review.userName || "사용자"}
+              {formattedDate && (
+                <span className="review-date"> · {formattedDate}</span>
               )}
-              <span className="MovieReview_profile-name">
-                {review.userName || '사용자'}
-                {formattedDate && <span className="MovieReview_review-date"> · {formattedDate}</span>}
-              </span>
+            </span>
+          </div>
+
+          <div className="modal-content-wrapper">
+            <div className="modal-image-container">
+              {review.imageIds?.length > 0 ? (
+                <Swiper
+                  modules={[Navigation]}
+                  navigation
+                  spaceBetween={10}
+                  slidesPerView={1}
+                  className="review-swiper"
+                >
+                  {review.imageIds.map((id) => (
+                    <SwiperSlide key={id}>
+                      <img
+                        src={`${baseUrl}/file-system/showPreview/${id}`}
+                        alt="review"
+                        className="modal-slide-image"
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              ) : (
+                <img
+                  src={review.postImage}
+                  alt="poster"
+                  className="modal-poster"
+                />
+              )}
             </div>
-            <div className="MovieReview_modal-content-wrapper">
-              <div className="MovieReview_modal-image-container">
-                {review.imageIds?.length > 0 ? (
-                  <Swiper modules={[Navigation]} navigation spaceBetween={10} slidesPerView={1} className="MovieReview_review-swiper">
-                    {review.imageIds.map(id => (
-                      <SwiperSlide key={id}>
-                        <img src={`${baseUrl}/file-system/showPreview/${id}`} alt="review" className="MovieReview_modal-slide-image" />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                ) : (
-                  review.postImage && <img src={review.postImage} alt="poster" className="MovieReview_modal-poster" />
-                )}
+            <div className="modal-review-content">
+              <div className="review-header">
+                <h3 className="review-title">
+                  {review.title || review.content.substring(0, 20)}
+                </h3>
               </div>
-              <div className="MovieReview_modal-review-content">
-                <div className="MovieReview_review-header">
-                  <h3 className="MovieReview_review-title">{review.title || review.content.substring(0,20)}</h3>
+              <p className="review-text">{review.content}</p>
+
+              {review.userNo === currentUserNo && (
+                <div className="modal-action-buttons">
+                  <button className="modal-edit" onClick={handleEdit}>
+                    수정
+                  </button>
+                  <button className="modal-delete" onClick={handleDelete}>
+                    삭제
+                  </button>
                 </div>
-                <p className="MovieReview_review-text">{review.content}</p>
-                {review.userNo === currentUserNo && (
-                  <div className="MovieReview_modal-action-buttons">
-                    <button className="MovieReview_modal-edit" onClick={handleEdit}>수정</button>
-                    <button className="MovieReview_modal-delete" onClick={handleDelete}>삭제</button>
-                  </div>
-                )}
-              </div>
+              )}
+
+              {isReporting && (
+                <div className="modal-report-form">
+                  <h5>리뷰 신고하기</h5>
+                  <form onSubmit={handleReportSubmit}>
+                    <div className="form-group">
+                      <label htmlFor="reportCategory">신고 사유:</label>
+                      <select
+                        id="reportCategory"
+                        value={selectedCategory}
+                        onChange={handleCategoryChange}
+                      >
+                        <option value="" disabled>
+                          -- 사유 선택 --
+                        </option>
+                        {Object.entries(reportCategory).map(([key, desc]) => (
+                          <option key={key} value={key}>
+                            {desc}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="reportContent">상세 내용:</label>
+                      <textarea
+                        id="reportContent"
+                        value={reportedContent}
+                        onChange={handleContentChange}
+                        placeholder={
+                          selectedCategory === 'ETC'
+                            ? "기타 사유를 자세히 입력해주세요."
+                            : "상세 내용을 입력해주세요."
+                        }
+                      ></textarea>
+                    </div>
+                    {errorMessage && (
+                      <p className="error-message">{errorMessage}</p>
+                    )}
+                    <div className="report-form-actions">
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? '신고 중...' : '신고 제출'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsReporting(false)}
+                        disabled={isSubmitting}
+                      >
+                        취소
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
             </div>
           </div>
-          {isReporting && (
-            <div className="MovieReview_modal-report-form">
-              <h5>리뷰 신고하기</h5>
-              <form onSubmit={handleReportSubmit}>
-                <div className="MovieReview_form-group">
-                  <label htmlFor="reportCategory">신고 사유:</label>
-                  <select id="reportCategory" className="MovieReview_form-select" value={selectedCategory} onChange={handleCategoryChange}>
-                    <option value="" disabled>-- 사유 선택 --</option>
-                    {Object.entries(reportCategory).map(([key, desc]) => <option key={key} value={key}>{desc}</option>)}
-                  </select>
-                </div>
-                <div className="MovieReview_form-group">
-                  <label htmlFor="reportContent">상세 내용:</label>
-                  <textarea id="reportContent" className="MovieReview_form-textarea" value={reportedContent} onChange={handleContentChange} placeholder={selectedCategory==='ETC'?"기타 사유를 자세히 입력해주세요.":"상세 내용을 입력해주세요."}></textarea>
-                </div>
-                {errorMessage && <p className="MovieReview_error-message">{errorMessage}</p>}
-                <div className="MovieReview_report-form-actions">
-                  <button type="submit" className="MovieReview_report-submit" disabled={isSubmitting}>{isSubmitting? '신고 중...':'신고 제출'}</button>
-                  <button type="button" onClick={() => setIsReporting(false)} disabled={isSubmitting}>취소</button>
-                </div>
-              </form>
-            </div>
-          )}
         </div>
       </div>
     </div>
