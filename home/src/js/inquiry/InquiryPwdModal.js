@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import Modal from 'react-bootstrap/Modal'; // react-bootstrap 사용 예시
+import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import '../../css/inquiry/inquiry.css';
@@ -30,7 +30,7 @@ function InquiryPwdModal({ show, item, onConfirm, onCancel }) {
     };
 
     return (
-        <Modal show={show} onHide={handleCancel} centered size="sm" className='pwd-modal'>
+        <Modal show={show} onHide={handleCancel} centered size="sm" dialogClassName='pwd-modal-dialog' contentClassName='pwd-modal-content'>
             <Modal.Header closeButton>
                 <Modal.Title>비밀번호 입력</Modal.Title>
             </Modal.Header>

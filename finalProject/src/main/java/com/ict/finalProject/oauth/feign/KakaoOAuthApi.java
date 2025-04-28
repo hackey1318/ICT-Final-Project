@@ -1,6 +1,6 @@
 package com.ict.finalProject.oauth.feign;
 
-import com.ict.finalProject.testCode.KakaoTokenDto;
+import com.ict.finalProject.oauth.service.dto.KakaoTokenDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

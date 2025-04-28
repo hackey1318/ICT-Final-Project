@@ -69,4 +69,10 @@ public class MovieReviewController {
         reviewService.deleteReview(no);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/users/{userNo}/reviews")
+    public ResponseEntity<List<MovieReviewResponse>> getMyMovieReviews(
+            @PathVariable Integer userNo) {
+        return ResponseEntity.ok(reviewService.getReviewsByUser(userNo));
+    }
 }

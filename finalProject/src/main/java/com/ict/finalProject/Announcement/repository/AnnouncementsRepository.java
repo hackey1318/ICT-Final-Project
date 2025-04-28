@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,4 +21,7 @@ public interface AnnouncementsRepository extends JpaRepository<Announcements, In
 
     @Query("SELECT a FROM Announcements AS a WHERE a.id = :id AND a.status = :status")
     Optional<Announcements> getActiveAnnounce(@Param("id") Integer id, @Param("status") StatusInfo status);
+
+    @Query("SELECT a FROM Announcements a WHERE a.expiredAt <= :now AND a.status = :status")
+    List<Announcements> findExpiredAnnouncements(@Param("now") LocalDateTime now, @Param("status") StatusInfo status);
 }
