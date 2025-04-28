@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import screen from '../../img/screen.jpg';
 
 function TheaterList(){
     //영화관 목록 담을 변수
@@ -46,11 +47,11 @@ function TheaterList(){
                 {theaterList.length > 0 ? (
                     theaterList.map((theater)=>{
                         return(
-                            <div key={theater.theaterNo} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                            <div key={theater.theaterNo} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                                 <a href={`/cinemate/theaters/${theater.theaterNo}`} className="text-decoration-none text-dark">
-                                    <div className="card shadow-sm">
+                                    <div className="card shadow-sm" style={{height:"180px", background: `url(${screen}) center/cover no-repeat`, borderRadius: "10px"}}>
                                         <div className="card-body">
-                                            <h5 className="card-title" style={{textAlign:"center"}}>{theater.theaterName}</h5>
+                                            <h5 className="card-title" style={{textAlign:"center", marginTop:"30px", color: "#fff"}}>{theater.theaterName}</h5>
                                         </div>
                                     </div>
                                 </a>
