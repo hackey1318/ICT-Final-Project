@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import Pagination from "../../js/public/Pagination";
-import { getReporterList, getReporterReports } from "../../js/api/reportApi";
+import { deactiveBadReporter, getReporterList, getReporterReports } from "../../js/api/reportApi";
 import { FaSearch } from 'react-icons/fa';
+import '../../css/admin/ReportDetail.css';
+import ReporterDetail from "./ReporterDetail";
 
 const formatDate = (dateString) => {
     try {
@@ -71,38 +73,21 @@ function ReporterList() {
         }
     };
 
-    const ReporterDetails = ({ reports }) => {
-        return (
-            <div className="reporter-details">
-                <h4>신고 내역</h4>
-                {reports ? (
-                    reports.length > 0 ? (
-                        reports.map((report) => (
-                            <div key={report.no} className="report-detail-item" style={{
-                                backgroundColor: 'white',
-                                padding: '12px',
-                                margin: '8px 0',
-                                borderRadius: '4px',
-                                border: '1px solid #dee2e6'
-                            }}>
-                                <p>신고 번호: {report.no}</p>
-                                <p>게시글 번호: {report.boardNo}</p>
-                                <p>신고 카테고리: {report.category}</p>
-                                <p>신고 내용: {report.content}</p>
-                                <p>신고 대상: {report.targetNickname}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <div>신고 내역이 없습니다.</div>
-                    )
-                ) : (
-                    <div style={{ textAlign: 'center', padding: '10px' }}>
-                        로딩 중...
-                    </div>
-                )}
-            </div>
-        );
-    };
+    const handleDeactiveUser = (reporterNo) => {
+        const confirmed = window.confirm("해당 계정을 비활성화하시겠습니까?");
+        if(confirmed) {
+            deactiveBadReporter(reporterNo)
+                .then(() => {
+                    setReporterList(prev => prev.map(reporter => 
+                        reporter.reporterNo === reporterNo ? {...reporter, status: 'DEACTIVE'} : reporter
+                    ));
+                    alert("해당 계정이 비활성화되었습니다.");
+                })
+                .catch((err) => {
+                    alert(`비활성화 처리 중 오류가 발생했습니다 : ${err.message}`);
+                });
+        }
+    }
 
     return (
         <div className="reporter-list-container">
@@ -126,7 +111,11 @@ function ReporterList() {
                 ) : reporterList.map((reporter) => (
                     <div key={reporter.reporterNo}>
                         <ul className="reporter-item-row">
-                            <li>{reporter.userId}</li>
+                            <li>
+                                <span id="bad-report" title="부적절한 신고" onClick={() => handleDeactiveUser(reporter.reporterNo)}>
+                                    🚨
+                                </span>{reporter.userId}
+                            </li>
                             <li>{reporter.email}</li>
                             <li>{reporter.reportCount}</li>
                             <li>{formatDate(reporter.lastReportDate)}</li>
@@ -142,7 +131,7 @@ function ReporterList() {
                         </ul>
 
                         {expandedUser === reporter.reporterNo && userReports[reporter.reporterNo] && (
-                            <ReporterDetails reports={userReports[reporter.reporterNo]} />
+                            <ReporterDetail reports={userReports[reporter.reporterNo]} />
                         )}
                     </div>
                 ))}

@@ -230,6 +230,26 @@ public class ReportServiceImpl implements ReportService {
         }
     }
 
+    //신고남발자 비활성화
+    @Override
+    public void deactiveBadReporter(int reporterNo) {
+        try {
+            Users user = findUserRepository.findById(reporterNo)
+                    .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
+
+            user.setStatus(StatusInfo.DEACTIVE);
+            findUserRepository.save(user);
+
+            if (user.getEmail() != null) {
+                emailService.sendBadReporterEmail(user.getEmail());  // 이메일 발송
+                log.info("비활성화 이메일 발송 완료 - 이메일: {}", user.getEmail());
+            }
+        } catch (Exception e) {
+            log.error("신고남발자 비활성화 처리 중 오류 발생: ", e);
+            throw new RuntimeException("신고남발자 비활성화 처리 중 오류가 발생했습니다: " + e.getMessage());
+        }
+    }
+
     private Integer findTargetUserId(ReportBoard type, int boardNo) {
         log.debug("신고 대상 사용자 ID 조회 시작: type={}, contentId={}", type, boardNo);
         Optional<Integer> targetUserIdOpt = Optional.empty();
