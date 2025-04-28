@@ -92,7 +92,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (authorize) ->
 
-                                authorize.requestMatchers(permitAllWhiteList).permitAll()
+                                authorize.requestMatchers(HttpMethod.POST, "/user/withdraw").authenticated()
+                                        .requestMatchers(permitAllWhiteList).permitAll()
                                         .requestMatchers(HttpMethod.GET, "/movies/detail/{id}").permitAll()
                                         .requestMatchers(HttpMethod.GET, "/announce/**").permitAll()
                                         .requestMatchers("/admin/**").permitAll()
