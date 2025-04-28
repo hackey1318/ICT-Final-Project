@@ -1,9 +1,13 @@
 import axios from "axios";
 import { ArrowLeft, Heart, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+
+const accessToken = sessionStorage.getItem("accessToken");
 
 function TheaterListDetail(){
+    const navigation = useNavigate();
+
     //URL에서 theaterNo 파라미터 가져옴
     const { theaterNo } = useParams();  
     console.log(theaterNo);
@@ -50,6 +54,16 @@ function TheaterListDetail(){
     if (!theaters) {
         return <div>영화관 정보를 불러올 수 없습니다.</div>;
     }
+
+    const handleCardClick = (theater) => {
+
+		if (accessToken !== null) {
+			navigation(`/cinemate/movies/${theater.movieNo}/room/${theater.no}`, { state: { theater } });
+		} else {
+			alert("로그인이 필요합니다.");
+            navigation("/login");
+		}
+	}
 
     const toggleLike = async () => {
 		try {
@@ -118,7 +132,7 @@ function TheaterListDetail(){
                     theaters.map((theater, index)=>{
                         return(
                             <div key={index} className="col-12 col-md-6 mb-3">
-                                <div className="position-relative"
+                                <div onClick={()=>handleCardClick(theater)} className="position-relative"
                                     style={{display: "flex", flexDirection: "row", height: "260px", backgroundColor: "#f9f9f9", 
                                             padding: "12px", cursor: "pointer", borderRadius: "6px"}}
                                 >
