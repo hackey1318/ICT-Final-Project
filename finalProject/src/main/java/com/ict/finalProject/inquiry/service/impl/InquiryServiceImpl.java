@@ -21,6 +21,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -173,35 +174,65 @@ public class InquiryServiceImpl implements InquiryService {
     //관리자용 문의리스트
     @Override
     @Transactional(readOnly = true)
-    public Page<InquiryResponse> getAllInquiry(Pageable pageable) {
-        Page<Inquiry> inquiryPage = inquiryRepository.findAllByOrderByNoDescForAdmin(pageable);
+    public Page<InquiryResponse> getAllInquiry(
+            Pageable pageable,
+            String subject,
+            String nickname
+    ) {
+        Page<Inquiry> inquiryPage;
 
-        List<Inquiry> inquiriesOnPage = inquiryPage.getContent();
+        // 1) 제목 검색
+        if (subject != null && !subject.isBlank()) {
+            inquiryPage = inquiryRepository.findBySubjectContainingIgnoreCase(subject, pageable);
 
-        Map<Integer, String> userNicknameMap = new HashMap<>();
-        if (!inquiriesOnPage.isEmpty()) {
-            List<Integer> userNos = inquiriesOnPage.stream().map(Inquiry::getUserNo).filter(Objects::nonNull).distinct().collect(Collectors.toList());
-            if (!userNos.isEmpty()) {
-                List<Users> users = findUserService.findUsersByUserNo(userNos);
-                userNicknameMap = users.stream().collect(Collectors.toMap(Users::getNo, Users::getNickname, (e,r)->e));
+            // 2) 작성자 검색
+        } else if (nickname != null && !nickname.isBlank()) {
+            List<Users> users = findUserService.findUsersByNicknameContainingIgnoreCase(nickname);
+            List<Integer> userNos = users.stream()
+                    .map(Users::getNo)
+                    .collect(Collectors.toList());
+            if (userNos.isEmpty()) {
+                return new PageImpl<>(Collections.emptyList(), pageable, 0);
             }
+            inquiryPage = inquiryRepository.findByUserNoIn(userNos, pageable);
+
+            // 3) 검색값 없으면 “전체” 조회
+        } else {
+            inquiryPage = inquiryRepository.findAllByOrderByNoDescForAdmin(pageable);
         }
 
-        final Map<Integer, String> finalUserNicknameMap = userNicknameMap;
-        return inquiryPage.map(inquiry -> {
-            String nickname = finalUserNicknameMap.getOrDefault(inquiry.getUserNo(), "알 수 없음");
-            boolean isPrivate = inquiry.getPassword() != null && !inquiry.getPassword().isEmpty();
+        // --- 이후 기존 닉네임 매핑 + DTO 변환 로직 유지 ---
+        List<Inquiry> list = inquiryPage.getContent();
+        Map<Integer, String> nickMap = new HashMap<>();
+        if (!list.isEmpty()) {
+            List<Integer> nos = list.stream()
+                    .map(Inquiry::getUserNo)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .toList();
+            if (!nos.isEmpty()) {
+                nickMap = findUserService.findUsersByUserNo(nos).stream()
+                        .collect(Collectors.toMap(Users::getNo, Users::getNickname, (e, r) -> e));
+            }
+        }
+        final Map<Integer, String> finalNickMap = nickMap;
 
+        return inquiryPage.map(i -> {
+            String writer = finalNickMap.getOrDefault(i.getUserNo(), "알 수 없음");
+            boolean isPriv = i.getPassword() != null && !i.getPassword().isEmpty();
             return InquiryResponse.builder()
-                    .no(inquiry.getNo())
-                    .subject(inquiry.getSubject())
-                    .nickname(nickname)
-                    .createdAt(inquiry.getCreatedAt())
-                    .isPrivate(isPrivate)
-                    .proceed(inquiry.getProceed())
-                    .proceedDescription(inquiry.getProceed() != null ? inquiry.getProceed().getDescription() : "N/A")
-                    .status(inquiry.getStatus())
-                    .userNo(inquiry.getUserNo())
+                    .no(i.getNo())
+                    .subject(i.getSubject())
+                    .nickname(writer)
+                    .createdAt(i.getCreatedAt())
+                    .isPrivate(isPriv)
+                    .proceed(i.getProceed())
+                    .proceedDescription(
+                            i.getProceed() != null
+                                    ? i.getProceed().getDescription()
+                                    : "N/A")
+                    .status(i.getStatus())
+                    .userNo(i.getUserNo())
                     .build();
         });
     }

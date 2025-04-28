@@ -1,8 +1,12 @@
 package com.ict.finalProject.payment.controller;
 
 import com.ict.finalProject.domain.constant.OrdersStatus;
+import com.ict.finalProject.mdShop.repository.domain.GoodsStocks;
+import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.orders.repository.domain.Orders;
+import com.ict.finalProject.orders.service.OrderItemService;
 import com.ict.finalProject.orders.service.OrdersService;
+import com.ict.finalProject.orders.service.dto.OrderItemDto;
 import com.ict.finalProject.payment.repository.domain.Payments;
 import com.ict.finalProject.payment.service.PaymentsService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +32,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -39,6 +45,8 @@ public class PaymentController {
 
     private final OrdersService ordersService;
     private final PaymentsService paymentsService;
+    private final OrderItemService orderItemService;
+    private final MdShopService mdShopService;
 
     @PostMapping("/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
@@ -55,9 +63,29 @@ public class PaymentController {
             paymentKey = (String) requestData.get("paymentKey");
             amount = (String) requestData.get("amount");
 
+            // 결제 전 최종 확인
+            boolean isCorrectRequest = false;
+
             // order save에서 저장한 주문번호와 총 금액이 일치하는지 확인
             Orders orders = ordersService.getOrders(orderId);
-            boolean isCorrectRequest = (orders.getTotalPrice() == Integer.parseInt(amount));
+            isCorrectRequest = (orders.getTotalPrice() == Integer.parseInt(amount));
+
+            List<OrderItemDto> orderItemDtoList = orderItemService.getOrderItems(orders.getId());
+            List<Integer> goodsNoList = new ArrayList<>();
+            for (OrderItemDto orderItemDto : orderItemDtoList) {
+                Integer goodsNo = orderItemDto.getGoodsNo();
+                goodsNoList.add(goodsNo);
+            }
+
+            List<GoodsStocks> goodsStocksList = mdShopService.getGoodsStocks(goodsNoList);
+            for (int i = 0; i < goodsStocksList.size(); i++) {
+                Integer dbGoodsStocks = goodsStocksList.get(i).getQuantity();
+                Integer orderGoodsStocks = orderItemDtoList.get(i).getQuantity();
+                if (dbGoodsStocks < orderGoodsStocks) {
+                    isCorrectRequest = false;
+                    break;
+                }
+            }
 
             if (!isCorrectRequest) {
                 JSONObject errorResponse = new JSONObject();
@@ -128,7 +156,7 @@ public class PaymentController {
 
         paymentsService.insertPayments(payments);
 
-        // 기존 주문 정보 상태 변경
+        // PENDING인 기존 주문 정보 상태 PAID로 변경
         orders.setStatus(OrdersStatus.PAID);
         ordersService.insertOrders(orders);
 

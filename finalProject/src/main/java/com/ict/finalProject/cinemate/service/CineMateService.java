@@ -26,6 +26,8 @@ public interface CineMateService {
 
     List<CineMateMemberResponse> getCineMateMember(Integer cineMateNo, Integer userNo);
 
+    Integer getCineMateMemberCount(Integer cineMateNo);
+
     //시네메이트 영화관 목록
     Page<CineMateResponse> getCineMateTheaters(Pageable pageable);
 

@@ -1,18 +1,18 @@
 /* 관리자페이지 전체 감싸고 있음(사이드바, 컨텐츠 전체 포함) */
-.admin-container{
+.admin-container {
     display: flex;
     gap: 20px;
     padding-top: 30px;
 }
 
-.container-content{
+.container-content {
     width: 80%;
     border-radius: 15px;
     background: #fff;
     padding: 10px;
 }
 
-.back-button{
+.back-button {
     background: none;
     border: none;
     cursor: pointer;
@@ -20,41 +20,82 @@
 }
 
 /* 사이드바 */
-.admin-sidebar{
+.admin-sidebar {
     width: 300px;
     height: 800px;
     border-radius: 0 15px 15px 0;
     position: sticky;
     padding: 20px 0;
-    color:  #2b2b2b;
+    color: #2b2b2b;
     background-color: rgb(243, 243, 243);
     height: 850px;
 }
 
 /* 배너 부분 */
-.admin-banner{
+.admin-banner {
     width: 200px;
     margin: 0 auto;
     display: block;
 }
 
 /* 관리자 닉네임, role 부분 */
-.admin-info{
-    text-align: center;
-    width: 230px;
-    height: 40px;
-    line-height: 40px;
+.admin-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px 5px 15px;
+    /* background-color: #d4d2d2; */
+    border: 3px solid rgb(233, 186, 115);
+    /* 아래 테두리 추가 */
+    margin: 10px;
     border-radius: 10px;
-    margin: 10px auto;
-    font-size: 1.5rem;
-    color: #2b2b2b;
+}
+
+.admin-user {
+    display: flex;
+    flex-direction: column;
+    /* 역할/닉네임을 위아래로 */
+    gap: 4px;
+    /* 요소 사이 간격 */
+}
+
+.admin-nickname {
+    font-size: 1.2rem;
+    /* 글씨를 살짝 키워줌 */
+    font-weight: bold;
+    margin: 0;
+    text-align: center;
+    display: inline-block;
+    padding-right: 10px;
+}
+
+.admin-role {
+    width: 90%;
+    text-align: center;
+    font-size: 0.8rem;
+    /* 역할 텍스트 크기 조정 */
+    color: #474747;
+    margin: 0;
+    padding: 3px 5px;
+    display: inline-block;
+    border: 1px solid #4d4d4d;
+    /* 여백 없애기 */
+    border-radius: 10px;
+}
+
+/* 오른쪽 로그아웃 아이콘 */
+.admin-logout img {
+    height: 40px;
+    cursor: pointer;
+    margin-left: 5px;
 }
 
 /* 사이드바 탑메뉴 */
-.admin-top-menu{ 
+.admin-top-menu {
     list-style: none;
 }
-.top-menu-div{
+
+.top-menu-div {
     width: 150px;
     height: 40px;
     font-weight: bold;
@@ -69,19 +110,21 @@
 }
 
 /* 사이드바 서브메뉴 */
-.admin-sub-menu>li{
+.admin-sub-menu>li {
     height: 35px;
     list-style: disc;
     margin-left: 20px;
 }
 
 /* 서브메뉴의 링크 부분 */
-.admin-nav-link{
+.admin-nav-link {
     display: inline-block;
     text-decoration: none;
     color: inherit;
 }
-.admin-nav-link:hover, .admin-nav-link.active{
+
+.admin-nav-link:hover,
+.admin-nav-link.active {
     font-weight: bold;
     size: 1.5rem;
     border-bottom: 3px solid rgb(233, 186, 115);
