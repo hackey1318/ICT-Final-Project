@@ -1,18 +1,7 @@
 .orderList_wrapper {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    /* margin-top: 25px; */
-}
-
-#back_button {
-    width: 30px;
-    height: 30px;
-    background: url('./../../img/leftArrow.png');
-    background-size: cover;
-    border: none;
-    /* margin-top: 50px; */
-    /* margin-right: auto; */
+    align-items: left;
 }
 
 .orderList_head {
@@ -63,8 +52,9 @@
 }
 
 .orderList_container {
-    width: 40%;
+    width: 60%;
     max-width: 1000px;
+    margin-left: 10%;
 }
 
 .orderList_link {

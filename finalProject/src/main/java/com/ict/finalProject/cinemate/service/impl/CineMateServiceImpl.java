@@ -13,29 +13,25 @@ import com.ict.finalProject.cinemate.service.CineMateService;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.TheatersRepository;
-import com.ict.finalProject.movie.repository.domain.Theaters;
 import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.user.repository.domain.Likes;
-import com.ict.finalProject.user.repository.domain.LikesRepository;
+import com.ict.finalProject.user.repository.LikesRepository;
 import com.ict.finalProject.user.repository.domain.constant.LikeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -202,6 +198,8 @@ public class CineMateServiceImpl implements CineMateService {
                                     .orElseThrow(() -> new RuntimeException("해당 극장이 존재하지 않습니다."))
                                     .getName()
                     )
+                    .no((Integer) result[13])
+                    .movieNo((Integer) result[14])
                     .build();
 
             responseList.add(response);
