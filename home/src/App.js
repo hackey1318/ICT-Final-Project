@@ -63,6 +63,10 @@ import MovieRoom from './page/cinemate/MovieRoom';
 import AdminPwdReset from './page/admin/AdminPwdReset';
 import TheaterList from './page/cinemate/TheaterList';
 import TheaterListDetail from './page/cinemate/TheaterListDetail';
+import ReviewHistory from './page/user/mypage/ReviewHistory';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+
 
 
 function App() {
@@ -132,6 +136,7 @@ function App() {
 					<Route path='order/list' element={<OrderList />} />
 					<Route path='order/detail' element={<OrderDetail />} />
 					<Route path='cart' element={<Cart />} />
+					<Route path="reviews" element={<ReviewHistory />} />
 				</Route>
 
 				{/* 시네메이트 */}

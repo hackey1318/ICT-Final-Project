@@ -9,4 +9,5 @@ public interface MovieReviewService {
     MovieReviewResponse writeReview(MovieReviewRequest request);
     MovieReviewResponse updateReview(MovieReviewRequest request);
     void deleteReview(Integer no);
+    List<MovieReviewResponse> getReviewsByUser(Integer userNo);
 }
