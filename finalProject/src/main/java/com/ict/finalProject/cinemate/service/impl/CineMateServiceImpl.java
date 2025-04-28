@@ -198,6 +198,8 @@ public class CineMateServiceImpl implements CineMateService {
                                     .orElseThrow(() -> new RuntimeException("해당 극장이 존재하지 않습니다."))
                                     .getName()
                     )
+                    .no((Integer) result[13])
+                    .movieNo((Integer) result[14])
                     .build();
 
             responseList.add(response);
