@@ -9,10 +9,14 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { useParams } from "react-router-dom";
 import Cart from "../../js/cart/Cart";
 import CartApi, { addGoodsToCart } from "../../js/cart/CartApi";
+
+import leftArrow from "./../../img/arrow.png";
+
 const accessToken = sessionStorage.getItem("accessToken");
 
 
 const GoodsInfo = ({ goods }) => {
+    const [redirectModalOpen, setRedirectModalOpen] = useState(false);
     const [quantity, setQuantity] = useState(1);
     const imageRef = useRef(null);
     const { goodsNo } = useParams();
@@ -28,9 +32,16 @@ const GoodsInfo = ({ goods }) => {
     const handleButton = (act) => {
         addGoodsToCart(goodsNo, quantity, act)
             .then(response => {
-                alert(response.data.message);
-                if (response.data.isRedirect) {
-                    window.location.href = "/cart";
+                console.log(response);
+                if (response.data.stockResult) {
+                    if (act === "Purchase") {
+                        alert("구매를 위해 장바구니 페이지로 이동합니다.");
+                        window.location.href = "/cart";
+                    } else if (act === "Add") {
+                        setRedirectModalOpen(true);
+                    }
+                } else {
+                    alert("재고가 부족한 상품입니다.");
                 }
             })
             .catch(error => {
@@ -106,6 +117,22 @@ const GoodsInfo = ({ goods }) => {
                             </div>)
                     }
                 </div>
+            </div>
+            <div>
+                {
+                    (redirectModalOpen) &&
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <div className="modal_overlay"></div>
+                        <div className="goodsInfoModal_container">
+                            <div style={{textAlign: 'center', marginTop: '10px'}}>상품이 추가되었습니다.</div>
+                            <div className="goodsInfoModal_bg"></div>
+                            <div className="goodsInfoModal_button_container">
+                                <button onClick={() => window.location.href = "/cart"}>장바구니</button>
+                                <button onClick={() => setRedirectModalOpen(false)}>쇼핑하기</button>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     );

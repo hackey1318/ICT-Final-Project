@@ -28,4 +28,8 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Integer> {
     //문의 댓글 목록
     @Query("SELECT ic FROM InquiryComment ic WHERE ic.inquiryNo = :inquiryNo ORDER BY ic.createdAt ASC")
     List<InquiryComment> findCommentsByInquiryNoOrderByCreatedAtAsc(@Param("inquiryNo") int inquiryNo);
+
+    Page<Inquiry> findBySubjectContainingIgnoreCase(String subject, Pageable pageable);
+
+    Page<Inquiry> findByUserNoIn(List<Integer> userNos, Pageable pageable);
 }
