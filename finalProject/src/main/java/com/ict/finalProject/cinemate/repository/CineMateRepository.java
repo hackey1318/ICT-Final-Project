@@ -44,7 +44,7 @@ public interface CineMateRepository extends JpaRepository<CineMates, Integer> {
     //시네메이트 영화관 상세
     //해당 영화관에서 시네메이트 신청되어있는 영화관 번호, 영화 이름, 감독, 장르, 포스터 이미지, 등급, 개봉일, 미팅날짜, 작성일, 작성자, 작성내용, 최대인원
     @Query(value="select c.theater_no, m.name, m.director, m.genre, m.post_image, m.age_grade, m.open_date, " +
-            "c.meeting_date, c.created_at, c.user_no, u.nickname, c.content, c.max_member_count, c.no " +
+            "c.meeting_date, c.created_at, c.user_no, u.nickname, c.content, c.max_member_count, c.no, c.movie_no " +
             "from cine_mates c " +
             "left join movies m on c.movie_no = m.no " +
             "left join users u on c.user_no = u.no " +

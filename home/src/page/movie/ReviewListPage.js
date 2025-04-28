@@ -6,7 +6,8 @@ import { getReviews } from '../../js/api/reviewApi';
 import axios from '../../js/public/axiosConfig';
 import { ArrowLeft } from 'lucide-react';
 import '../../css/movie/ReviewListPage.css';
-import MoviePagination from '../../js/public/Pagination'
+import MoviePagination from '../../js/public/Pagination';
+import noreviewig from '../../img/logout.png';
 
 function ReviewListPage({ movieNo, currentUserNo }) {
   const [reviews, setReviews] = useState([]);
@@ -27,7 +28,14 @@ function ReviewListPage({ movieNo, currentUserNo }) {
   };
 
   useEffect(() => {
-    getReviews(movieNo).then(res => setReviews(res.data, console.log("ssssss"+res.data))) 
+    getReviews(movieNo)
+      .then(res => {
+        const sorted = res.data
+          .slice()
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setReviews(sorted);
+      })
+      .catch(err => console.error('리뷰 조회 실패:', err));
   }, [movieNo]);
 
   const handleDelete = no => setReviews(prev => {
@@ -132,13 +140,10 @@ function ReviewListPage({ movieNo, currentUserNo }) {
                 className="review-card-image"
               />
             ) : (
-              r.postImage && (
                 <img
-                  src={r.postImage}
-                  alt="poster"
-                  className="review-card-image"
+                  src={storedPoster}
+                  className="review-card-no-image"
                 />
-              )
             )}
             {r.title && (
               <h4 className="review-card-title">

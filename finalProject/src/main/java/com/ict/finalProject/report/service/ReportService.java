@@ -21,4 +21,6 @@ public interface ReportService {
     List<ReportResponse> getReporterReports(int userNo);
 
     boolean processReport(int no, boolean isAccepted);
+
+    void deactiveBadReporter(int reporterNo);
 }
