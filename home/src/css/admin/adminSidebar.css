@@ -22,13 +22,12 @@
 /* 사이드바 */
 .admin-sidebar {
     width: 300px;
-    height: 800px;
     border-radius: 0 15px 15px 0;
     position: sticky;
     padding: 20px 0;
     color: #2b2b2b;
     background-color: rgb(243, 243, 243);
-    height: 850px;
+    max-height: 920px;
 }
 
 /* 배너 부분 */
@@ -60,7 +59,7 @@
 }
 
 .admin-nickname {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     /* 글씨를 살짝 키워줌 */
     font-weight: bold;
     margin: 0;
