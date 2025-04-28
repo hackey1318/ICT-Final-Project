@@ -2,15 +2,32 @@ package com.ict.finalProject.user.controller;
 
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.domain.constant.UserRole;
+import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.user.controller.request.UserFindRequest;
 import com.ict.finalProject.user.controller.response.UserFindResponse;
 import com.ict.finalProject.user.repository.domain.PwdReset;
 import com.ict.finalProject.user.service.FindUserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import com.ict.finalProject.user.controller.request.WithdrawRequest;
+import com.ict.finalProject.common.config.AuthRequired;
+
+import java.net.URI;
+import java.util.UUID;
+
+import static com.ict.finalProject.domain.constant.UserRole.*;
+
 
 @RestController
 @RequestMapping("/user")
@@ -19,6 +36,7 @@ public class FindUserController {
     private final FindUserService findUserService;
     private final JavaMailSender mailSender;
     private final PasswordEncoder passwordEncoder;
+    private final UsersRepository usersRepository;
 
     @PostMapping("/findIdOk")
     public UserFindResponse findIdOk(@RequestBody UserFindRequest userFindRequest) {
@@ -119,4 +137,42 @@ public class FindUserController {
 
         return "ok";
     }
+
+    @AuthRequired({USER, MANAGER, ADMIN})
+    @PostMapping("/withdraw")
+    public ResponseEntity<?> withdraw(
+            @RequestBody WithdrawRequest req,
+            Authentication authentication
+    ) {
+        // 1) 인증 정보에서 userId 꺼내기
+        String userId = authentication.getName();
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자 정보가 없습니다."));
+
+        // 2) 비밀번호 확인
+        if (!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 3) 탈퇴 처리 (익명화)
+        final int PHONE_MAX = 10;
+        final String PREFIX = "d-";
+
+        String anon = "deleted-" + UUID.randomUUID().toString();
+        String body = anon.substring(0, Math.min(anon.length(), PHONE_MAX - PREFIX.length()));
+        String anonPhone = PREFIX + body;
+
+        user.setStatus(StatusInfo.DELETE);
+        user.setId(anon);
+        user.setPhone(anonPhone);
+        user.setEmail(anon + "@deleted.local");
+        usersRepository.save(user);
+
+        // 4) 단순 200 OK + 메시지 리턴
+        return ResponseEntity
+                .ok("탈퇴 완료");
+    }
+
 }
