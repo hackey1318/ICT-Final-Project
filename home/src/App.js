@@ -65,6 +65,8 @@ import TheaterList from './page/cinemate/TheaterList';
 import TheaterListDetail from './page/cinemate/TheaterListDetail';
 import ReviewHistory from './page/user/mypage/ReviewHistory';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import MovieLikeChart from './page/admin/like/MovieLikeChart';
+import GoodsLikeChart from './page/admin/like/GoodsLikeChart';
 
 
 
@@ -166,6 +168,8 @@ function App() {
 					<Route path="manager-list" element={<ManagerList />} />
 					<Route path="blacklist" element={<BlackList />} />
 					<Route path="gender" element={<Gender />} />
+					<Route path="movie-like" element={<MovieLikeChart />} />
+					<Route path="goods-like" element={<GoodsLikeChart />} />
 					<Route path="mdlists" element={<MdList />} />
 					<Route path="inquiry" element={<InquiryReply />} />
 					<Route path="inquiry/:no" element={<InquiryReplyView />} />
