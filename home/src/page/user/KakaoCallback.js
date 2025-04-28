@@ -91,7 +91,7 @@ const KakaoCallback = () => {
 
                         {/* --- 프로필 이미지 섹션 --- */}
                         <div className="mb-4 text-center">
-                             <label htmlFor="profileImageUpload" className="form-label d-block mb-2">프로필 이미지 (선택)</label>
+                             <label htmlFor="profileImageUpload" className="form-label d-block mb-2">프로필 이미지 (필수)</label>
                              {/* 이미지 미리보기 */}
                              <img
                                  src={previewImageUrl || '/path/to/default/avatar.png'} // previewImageUrl 사용, 없을 경우 기본 이미지 경로
