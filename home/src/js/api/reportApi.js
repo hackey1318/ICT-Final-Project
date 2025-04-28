@@ -60,17 +60,41 @@ export const createReport = async (reportData) => {
   
   // 신고 상태 변경
   export const updateReportStatus = async (reportNo, status) => {
-      try {
-          const response = await apiClient.patch(`/report/${reportNo}/status`, { status }); // <-- 실제 백엔드 엔드포인트로 수정!
-          if (response.data && response.data.result === true) {
-              return response.data;
-          } else {
-              throw new Error(response.data?.message || '신고 상태 변경 중 오류 발생');
-          }
+    try {
+      const endpoint = status === 'ACCEPTED' ? 'accept' : 'reject';
+      const response = await apiClient.put(`/report/${reportNo}/${endpoint}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating report status for ID ${reportNo}:`, error);
+      const message = error.response?.data?.message || error.message || '신고 상태 변경 중 오류 발생';
+      throw new Error(message);
+    }
+  }
+
+  //신고자 목록
+  export const getReporterList = async (page=0, size=9) => {
+    try {
+          const response = await apiClient.get(`/report/getReporters`, {
+              params: {
+                  page: page,
+                  size: size
+              }
+          });
+          return response.data;
       } catch (error) {
-          console.error(`Error updating report status for ID ${reportNo}:`, error);
-          const message = error.response?.data?.message || error.message || '신고 상태 변경 중 오류 발생';
-          throw new Error(message);
+          throw new Error(error.response?.data?.message || 'Failed to fetch reporters list');
       }
   }
   
+  //신고자 신고목록
+  export const getReporterReports = async (reporterNo) => {
+    try {
+        console.log('Calling getReporterReports for userNo:', reporterNo);
+        const response = await apiClient.get(`/report/getReporters/${reporterNo}`);
+        console.log('getReporterReports response:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('getReporterReports error:', error);
+        throw new Error(error.response?.data?.message || 'Failed to fetch reporter reports');
+    }
+  };
