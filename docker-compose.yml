@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  finalProject:
+    build:
+      context: ./finalProject  # Spring Boot 서버 경로
+    ports:
+      - "9988:9988"  # BE 서버 포트
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod  # 프로덕션 프로파일 활성화 (선택사항)
+    networks:
+      - app-network
+    depends_on:
+      - mysql-db
+
+  home:
+    build:
+      context: ./home  # React + Node.js 서버 경로
+    ports:
+      - "3000:3000"  # FE 서버 포트
+    networks:
+      - app-network
+    environment:
+      - REACT_APP_API_URL=http://nginx:80  # Nginx 서버로 프록시
+
+  mysql-db:
+    image: mysql:8
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: 5678  # MySQL root 비밀번호
+      MYSQL_DATABASE: shopping   # 사용할 DB 이름
+    ports:
+      - "3306:3306"  # MySQL 포트
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"  # Nginx 포트
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  # Nginx 설정 파일을 컨테이너에 연결
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
