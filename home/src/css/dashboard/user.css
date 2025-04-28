@@ -28,7 +28,7 @@
     background: #888;
 }
 .userdau-left{
-    width: 50%;
+    width: 30%;
     min-height: 550px;
 }
 
@@ -68,7 +68,7 @@
     background-color: rgba(0, 0, 128);
 }
 .userdau-right{
-    width: 50%;
+    width: 70%;
     height: 500px;
 }
 .userdat-chart-totaluser{
