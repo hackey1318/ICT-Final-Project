@@ -71,6 +71,8 @@ public class SecurityConfig {
                 mvc.pattern("/manager/home/register/**"), //관리자 등록
                 mvc.pattern("/cinemate/movies/**"),
                 mvc.pattern("/cinemate/movieDetail/**"),
+                mvc.pattern("/cinemate/theaters/**"),
+                mvc.pattern("/cinemate/theaterDetail/**")
         };
 
         return http

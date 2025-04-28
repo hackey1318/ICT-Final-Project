@@ -81,10 +81,25 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Page<UserResponse> getManagerList(Pageable pageable) {
-        Page<Users> usersPage = adminRepository.findByRoleInAndStatusNot(pageable); //Users엔터티 목록 가져옴
+    public Page<UserResponse> getManagerList(
+            Pageable pageable,
+            String memberId,
+            String memberNickname,
+            String memberEmail
+    ) {
+        Page<Users> usersPage;
 
-        return usersPage.map(user->UserResponse.builder()
+        if (memberId != null && !memberId.isBlank()) {
+            usersPage = adminRepository.findByIdContainingIgnoreCase(memberId, pageable);
+        } else if (memberNickname != null && !memberNickname.isBlank()) {
+            usersPage = adminRepository.findByNicknameContaining(memberNickname, pageable);
+        } else if (memberEmail != null && !memberEmail.isBlank()) {
+            usersPage = adminRepository.findByEmailContaining(memberEmail, pageable);
+        } else {
+            usersPage = adminRepository.findAll(pageable);
+        }
+
+        return usersPage.map(user -> UserResponse.builder()
                 .no(user.getNo())
                 .id(user.getId())
                 .nickname(user.getNickname())
@@ -92,7 +107,9 @@ public class AdminServiceImpl implements AdminService {
                 .gender(user.getGender().name())
                 .status(user.getStatus().name())
                 .role(user.getRole().name())
-                .build());
+                .phone(user.getPhone())
+                .build()
+        );
     }
 
     //관리자 비활성화
@@ -135,18 +152,48 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Page<UserResponse> getBlackList(Pageable pageable) {
-        Page<Users> result = adminRepository.findByStatus(StatusInfo.DEACTIVE, pageable);
+    public Page<UserResponse> getBlackList(
+            Pageable pageable,
+            String memberId,
+            String memberNickname,
+            String memberEmail
+    ) {
+        Page<Users> usersPage;
 
-        return result.map(user->UserResponse.builder()
-                        .no(user.getNo())
-                        .id(user.getId())
-                        .nickname(user.getNickname())
-                        .email(user.getEmail())
-                        .gender(user.getGender().name())
-                        .status(user.getStatus().name())
-                        .role(user.getRole().name())
-                        .build());
+        // 1) ID 검색
+        if (memberId != null && !memberId.isBlank()) {
+            usersPage = adminRepository.findByStatusAndIdContainingIgnoreCase(
+                    StatusInfo.DEACTIVE, memberId, pageable
+            );
+
+            // 2) 닉네임 검색
+        } else if (memberNickname != null && !memberNickname.isBlank()) {
+            usersPage = adminRepository.findByStatusAndNicknameContainingIgnoreCase(
+                    StatusInfo.DEACTIVE, memberNickname, pageable
+            );
+
+            // 3) 이메일 검색
+        } else if (memberEmail != null && !memberEmail.isBlank()) {
+            usersPage = adminRepository.findByStatusAndEmailContainingIgnoreCase(
+                    StatusInfo.DEACTIVE, memberEmail, pageable
+            );
+
+            // 4) 검색값 없으면 전체 블랙리스트
+        } else {
+            usersPage = adminRepository.findByStatus(StatusInfo.DEACTIVE, pageable);
+        }
+
+        return usersPage.map(user -> UserResponse.builder()
+                .no(user.getNo())
+                .id(user.getId())
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .gender(user.getGender().name())
+                .status(user.getStatus().name())
+                .role(user.getRole().name())
+                .phone(user.getPhone())
+                .build()
+        );
     }
 
     //블랙리스트 상태 DEACTIVE -> ACTIVE로 변경

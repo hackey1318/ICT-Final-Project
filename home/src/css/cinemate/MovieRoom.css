@@ -1,0 +1,73 @@
+/* 채팅 메시지 박스 스타일 */
+.chat-log .chat-message {
+    margin-bottom: 20px;
+    /* 메시지 간 간격을 늘립니다 */
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-log .chat-message .sender {
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+
+.chat-log .chat-message .message {
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 45%;
+    /* 최대 너비는 80%로 설정 */
+    word-wrap: break-word;
+    /* 긴 단어는 줄 바꿈 처리 */
+    white-space: pre-wrap;
+    /* 여러 줄 텍스트 처리 */
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+    flex-shrink: 0;
+    /* 메시지가 줄어들지 않도록 설정 */
+    flex-grow: 0;
+    /* 메시지가 늘어나지 않도록 설정 */
+    width: auto;
+    /* 메시지 길이에 따라 자동으로 크기 조정 */
+    display: block;
+    /* 메시지 박스가 내용 크기에 맞게 커지도록 처리 */
+}
+
+/* 내가 보낸 메시지 스타일 */
+.chat-log .chat-message .message.me {
+    background-color: #d4edda;
+    align-self: flex-end;
+}
+
+/* 시간 표시 */
+.chat-log .chat-message .timestamp {
+    font-size: 0.8rem;
+    color: #6c757d;
+    align-self: flex-end;
+}
+
+/* 메시지 입력창 스타일 */
+.chat-log .chat-input {
+    width: 100%;
+    /* 입력창의 너비를 100%로 설정 */
+    min-height: 40px;
+    /* 최소 높이 */
+    max-height: 150px;
+    /* 최대 높이 */
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    resize: none;
+    /* 사용자가 크기 조정할 수 없도록 설정 */
+    overflow-y: hidden;
+    /* 입력이 늘어나면 스크롤이 생기지 않도록 설정 */
+    font-size: 0.95rem;
+    background-color: #f9f9f9;
+}
+
+.chat-log .chat-input:focus {
+    outline: none;
+    border-color: #007bff;
+    /* 포커스 시 테두리 색 변경 */
+}

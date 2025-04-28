@@ -334,18 +334,18 @@ export default function BannerFormModal({ show, onClose, onSuccess, mode = "crea
 
                         <label className="form-label">시작일</label>
                         <input
-                            type="datetime-local"
+                            type="date"
                             className="form-control mb-3"
                             value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                        />
+                            onChange={(e) => setStartDate(e.target.value + 'T00:00:00')}
+                            />
 
                         <label className="form-label">종료일</label>
                         <input
-                            type="datetime-local"
+                            type="date"
                             className="form-control mb-3"
                             value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
+                            onChange={(e) => setEndDate(e.target.value + 'T00:00:00')}
                         />
 
                         <label className="form-label">배너 이미지</label>

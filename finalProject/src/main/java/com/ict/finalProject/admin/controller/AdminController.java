@@ -11,6 +11,7 @@ import com.ict.finalProject.oauth.controller.request.LocalRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,10 +43,14 @@ public class AdminController {
     }
 
     @GetMapping("/manager-list")
-    public Page<UserResponse> getManagerList(@PageableDefault(size = 10)Pageable pageable){
-        return adminService.getManagerList(pageable);
+    public Page<UserResponse> getManagerList(
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(required = false) String memberId,
+            @RequestParam(required = false) String memberNickname,
+            @RequestParam(required = false) String memberEmail
+    ) {
+        return adminService.getManagerList(pageable, memberId, memberNickname, memberEmail);
     }
-
     //관리자 비활성화
     @PostMapping("/manager-delete/{userNo}")
     public ResponseEntity<String> deleteManager(@PathVariable Integer userNo){
@@ -67,8 +72,18 @@ public class AdminController {
 
     //블랙리스트 목록 조회
     @GetMapping("/blacklist")
-    public Page<UserResponse> getBlackList(@PageableDefault(size = 10)Pageable pageable){
-        return adminService.getBlackList(pageable);
+    public Page<UserResponse> getBlackList(
+            @PageableDefault(size = 10, sort = "no", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(required = false) String memberId,
+            @RequestParam(required = false) String memberNickname,
+            @RequestParam(required = false) String memberEmail
+    ) {
+        return adminService.getBlackList(
+                pageable,
+                memberId,
+                memberNickname,
+                memberEmail
+        );
     }
 
     //블랙리스트 상태 DEACTIVE -> ACTIVE로 변경

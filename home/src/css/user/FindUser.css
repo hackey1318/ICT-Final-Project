@@ -7,9 +7,16 @@
     margin: 200px auto;
 }
 .find-form-subject{
-    margin: 30px 0;
+    margin-bottom: 30px;
     font-size: 1.5em;
     font-weight: bold;
+}
+.find-form-div{
+    display: grid;
+    grid-template-columns: 1fr 3.3fr;
+    padding-bottom: 20px;
+    padding-left: 60px;
+    padding-right: 60px;
 }
 .find-form-title{
     width: 80px;
@@ -47,13 +54,15 @@
     cursor: pointer;
     font-size: 0.9em;
     font-weight: bold;
+    background: navy;
+    color: #fff;
 }
 .find-btn-id{
     width: 200px;
 }
 .find-btn:hover{
     color: #fff;
-    background: navy;
+    background: rgba(0,0,128,0.8);
 }
 
 /* 관리자 아이디, 비밀번호 찾기 */
@@ -64,7 +73,6 @@
     border-radius: 10px;
     padding: 10px;
     margin: 0 auto;
-    margin-top: 100px;
     background: #fff;
 }
 .admin-find-form>.back-button{

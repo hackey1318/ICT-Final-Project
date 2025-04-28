@@ -1,4 +1,4 @@
-package com.ict.finalProject.testCode;
+package com.ict.finalProject.scheduler;
 
 import com.ict.finalProject.movie.repository.domain.Theaters;
 import com.ict.finalProject.movie.service.TheatersService;

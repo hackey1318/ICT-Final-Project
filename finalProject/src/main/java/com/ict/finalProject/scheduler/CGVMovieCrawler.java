@@ -1,4 +1,4 @@
-package com.ict.finalProject.testCode;
+package com.ict.finalProject.scheduler;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +7,6 @@ import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.constant.movie.MovieStatus;
 import com.ict.finalProject.movie.repository.domain.MovieStillCuts;
 import com.ict.finalProject.movie.repository.domain.Movies;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
