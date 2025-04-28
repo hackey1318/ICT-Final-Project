@@ -18,6 +18,7 @@ function Cart() {
     const [theaterName, setTheaterName] = useState('');
     const theaterRef = useRef();
     const goodsRef = useRef(goods);
+    const [isAllSelected, setIsAllSelected] = useState(true);
 
     useEffect(() => {
         const handleBeforeUnload = (e) => {
@@ -72,6 +73,7 @@ function Cart() {
     useEffect(() => {
         updateTotalPrice();
         updateCheckBox();
+        updateButton();
         goodsRef.current = goods;
     }, [goods]);
 
@@ -103,6 +105,18 @@ function Cart() {
         });
     }
 
+    const updateButton = () => {
+        let selectedAllChecked = true;
+        goods.forEach((item) => {
+            if (!item.selected) {
+                selectedAllChecked = false;
+                setIsAllSelected(selectedAllChecked);
+                return;
+            }
+        })
+        setIsAllSelected(selectedAllChecked);
+    }
+
     const subQuantity = (e) => {
         const index = e.target.getAttribute("goodsindex");
         setGoods(prev =>
@@ -126,9 +140,16 @@ function Cart() {
     }
 
     const selectAll = () => {
-        setGoods(prev =>
-            prev.map(item => ({ ...item, selected: item.quantity !== 0 }))
-        );
+        if (!isAllSelected) {
+            setGoods(prev =>
+                prev.map(item => ({ ...item, selected: item.quantity !== 0 }))
+            );
+        } else {
+            setGoods(prev =>
+                prev.map(item => ({ ...item, selected: false }))
+            );
+        }
+
     }
 
     const deleteSelected = () => {
@@ -297,8 +318,10 @@ function Cart() {
                             </div>
                         )}
                         <div className="button_container">
-                            <button onClick={selectAll}>전체 선택</button>
-                            <button onClick={deleteSelected}>선택 삭제</button>
+                            <div>
+                                <button onClick={selectAll}>{isAllSelected ? "전체 해제" : "전체 선택"}</button>
+                                <button onClick={deleteSelected}>선택 삭제</button>
+                            </div>
                         </div>
                     </div>
                 </div>
