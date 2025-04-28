@@ -80,6 +80,10 @@ function ReviewEditPage() {
 
   // 4) 저장(수정) 처리
   const handleSubmit = () => {
+    if (!title.trim() || !content.trim()) {
+      alert("제목과 내용을 모두 입력해주세요.");
+      return;
+    }
     const payload = {
         userNo: currentUserNo,
         title,
@@ -91,9 +95,18 @@ function ReviewEditPage() {
       .catch(err => console.error('리뷰 수정 실패:', err));
   };
 
+  //모달창 바깥클릭하면 창닫기
+  
+  const handleOverlayClick = (e) => {
+    // overlay 자신을 클릭했을 때만 닫히도록
+    if (e.target === e.currentTarget) {
+      navigate(-1);
+    }
+  };
+
   return (
     <div className="review-write-page">
-      <div className="modal-overlay">
+      <div className="modal-overlay" onClick={handleOverlayClick}>
         <div className="modal-content">
           <h2 className="write-title">리뷰 수정</h2>
 
@@ -101,7 +114,7 @@ function ReviewEditPage() {
           <div className="image-upload-wrapper">
             {previews.map((src, idx) => (
               <div key={idx} className="image-wrapper">
-                <img src={src} alt={`미리보기${idx}`} className="preview-img" />
+                <img src={src} alt={`미리보기${idx}`} className="preview-write-img" />
                 <button
                   type="button"
                   className="remove-btn"

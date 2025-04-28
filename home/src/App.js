@@ -42,6 +42,7 @@ import InquiryReplyView from './page/admin/InquiryReplyView';
 import GoodsDetail from './page/md/GoodsDetail';
 import GoodsReviewSection from './page/md/GoodsReviewSection';
 import MdShop from './page/md/MdShop';
+import MdSales from './page/md/MdSales';
 import RelatedMovie from './page/movie/RelatedMovie';
 import BlackList from './page/admin/BlackList';
 import UserAnnounce from './page/user/UserAnnounce';
@@ -66,7 +67,8 @@ import TheaterListDetail from './page/cinemate/TheaterListDetail';
 import ReviewHistory from './page/user/mypage/ReviewHistory';
 import WithdrawPage from './page/user/mypage/WithdrawPage';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-
+import MovieLikeChart from './page/admin/like/MovieLikeChart';
+import GoodsLikeChart from './page/admin/like/GoodsLikeChart';
 
 
 
@@ -168,7 +170,10 @@ function App() {
 					<Route path="manager-list" element={<ManagerList />} />
 					<Route path="blacklist" element={<BlackList />} />
 					<Route path="gender" element={<Gender />} />
+					<Route path="movie-like" element={<MovieLikeChart />} />
+					<Route path="goods-like" element={<GoodsLikeChart />} />
 					<Route path="mdlists" element={<MdList />} />
+					<Route path='mdsales' element={<MdSales />} />
 					<Route path="inquiry" element={<InquiryReply />} />
 					<Route path="inquiry/:no" element={<InquiryReplyView />} />
 					<Route path="announce" element={<AnnounceList />} />

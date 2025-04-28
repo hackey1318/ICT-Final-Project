@@ -13,6 +13,7 @@ export default function MovieRoom() {
     const { no, movieNo } = useParams();
     const location = useLocation();
     const { movie } = location.state || {};
+    const { theater } = location.state || {};
     const [isJoined, setIsJoined] = useState(false);
     const [participantCount, setParticipantCount] = useState(0);
     const [joinedUsers, setJoinedUsers] = useState([]);
@@ -82,18 +83,18 @@ export default function MovieRoom() {
         setIsJoined(false);
     };
 
-    if (!movie) return <div>로딩 중...</div>;
+    if (!movie && !theater) return <div>로딩 중...</div>;
 
     return (
         <div className="container my-4">
-            <h2 className="mb-4">{movie.movieName}</h2>
+            <h2 className="mb-4">{movie ? movie.movieName : theater.movieName}</h2>
 
             <div className="mb-3">
-                <strong>작성자:</strong> {movie.userName} | <strong>작성일:</strong> {movie.createdAt?.split("T")[0]}
+                <strong>작성자:</strong> {movie? movie.userName : theater.userName} | <strong>작성일:</strong> {movie? movie.createdAt?.split("T")[0] : theater.createdAt?.split("T")[0]}
             </div>
 
             <div className="mb-2">
-                <span className="badge bg-secondary p-2">모집 시간: {movie.meetingDate?.replace("T", " ").slice(0, 16)}</span>
+                <span className="badge bg-secondary p-2">모집 시간: {movie? movie.meetingDate?.replace("T", " ").slice(0, 16) : theater.meetingDate?.replace("T", " ").slice(0, 16)}</span>
             </div>
 
             <div className="mb-2" style={{ position: "relative", display: "inline-block" }}>
@@ -102,7 +103,7 @@ export default function MovieRoom() {
                     className="badge bg-warning text-dark p-2"
                     onClick={fetchJoinedUsers}
                 >
-                    총 인원: {participantCount} / {movie.maxMemberCount}
+                    총 인원: {participantCount} / {movie? movie.maxMemberCount : theater.maxMemberCount}
                 </span>
 
                 {showJoinedModal && (
@@ -115,11 +116,11 @@ export default function MovieRoom() {
             </div>
 
             <div className="mb-4" style={{ background: "#f8f9fa", padding: "15px", borderRadius: "8px" }}>
-                <strong>{movie.content}</strong>
+                <strong>{movie? movie.content : theater.content}</strong>
             </div>
 
             <div className="mb-4">
-                {myUserNo !== movie.userNo && (
+                {myUserNo !== (movie? movie.userNo : theater.userNo) && (
                     isJoined ? (
                         <input type="button" value="참여 취소" onClick={handleCancel} />
                     ) : (
