@@ -275,4 +275,10 @@ public class CineMateServiceImpl implements CineMateService {
 
         return new ArrayList<>(memberMap.values());
     }
+
+    @Override
+    public Integer getCineMateMemberCount(Integer cineMateNo) {
+
+        return Math.toIntExact(cineMateMemberRepository.countByCineMateNoAndStatusActive(cineMateNo));
+    }
 }

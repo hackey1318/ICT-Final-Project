@@ -5,7 +5,9 @@ import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.fileSystem.domain.ImageInfo;
 import com.ict.finalProject.fileSystem.repository.ImageInfoRepository;
 import com.ict.finalProject.orders.repository.OrderItemRepository;
+import com.ict.finalProject.orders.repository.OrdersRepository;
 import com.ict.finalProject.orders.repository.domain.OrderItem;
+import com.ict.finalProject.orders.repository.domain.Orders;
 import com.ict.finalProject.orders.service.OrderItemService;
 import com.ict.finalProject.orders.service.dto.OrderItemDto;
 import jakarta.transaction.Transactional;
@@ -19,17 +21,26 @@ import java.util.List;
 public class OrderItemServiceImpl implements OrderItemService {
     private final OrderItemRepository orderItemRepository;
     private final ImageInfoRepository imageInfoRepository;
+    private final OrdersRepository ordersRepository;
+
 
     @Override
+    @Transactional
     public void insertOrderItem(OrderItem orderItem) {
-        OrderItem entity = new OrderItem();
-        entity.setId(orderItem.getId());
-        entity.setOrderNo(orderItem.getOrderNo());
-        entity.setGoodsNo(orderItem.getGoodsNo());
-        entity.setName(orderItem.getName());
-        entity.setPrice(orderItem.getPrice());
-        entity.setQuantity(orderItem.getQuantity());
-        orderItemRepository.save(entity);
+// ② Orders 엔티티 조회
+        Orders order = ordersRepository.findById(orderItem.getOrderNo())
+                .orElseThrow(() -> new RuntimeException("Order not found: " + orderItem.getOrderNo()));
+
+        // ③ OrderItem 엔티티에 연관관계 세팅
+        OrderItem item = new OrderItem();
+        // item.setId(orderItem.getId());      // 보통 ID는 DB가 생성하므로 DTO에 없으면 생략
+        item.setOrder(order);
+        item.setGoodsNo(orderItem.getGoodsNo());
+        item.setName(orderItem.getName());
+        item.setPrice(orderItem.getPrice());
+        item.setQuantity(orderItem.getQuantity());
+        order.getItems().add(item);
+        ordersRepository.save(order);
     }
 
     @Override

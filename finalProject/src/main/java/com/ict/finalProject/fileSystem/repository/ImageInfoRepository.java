@@ -46,4 +46,13 @@ public interface ImageInfoRepository extends JpaRepository<ImageInfo, Integer> {
             @Param("status") StatusInfo status
     );
 
+    @Modifying
+    @Query("UPDATE ImageInfo i SET i.status = :status " +
+           "WHERE i.boardNo = :boardNo AND i.type = :type")
+    void updateStatusToDelete(
+        @Param("boardNo") Integer boardNo,
+        @Param("type") ImageWriteType type,
+        @Param("status") StatusInfo status
+    );
+
 }

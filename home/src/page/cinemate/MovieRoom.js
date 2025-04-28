@@ -14,13 +14,26 @@ export default function MovieRoom() {
     const location = useLocation();
     const { movie } = location.state || {};
     const [isJoined, setIsJoined] = useState(false);
+    const [participantCount, setParticipantCount] = useState(0);
     const [joinedUsers, setJoinedUsers] = useState([]);
     const [showJoinedModal, setShowJoinedModal] = useState(false);
     const badgeRef = useRef(null);
 
     useEffect(() => {
+        fetctParticipantCount();
         fetchMovieRoomJoinStatus();
-    }, [no]);
+    }, [no, isJoined]);
+
+    const fetctParticipantCount = async () => {
+        const res = await axios.get(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}/members/count`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        setParticipantCount(res.data)
+
+    }
 
     const fetchMovieRoomJoinStatus = async () => {
         const res = await axios.get(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}`, {
@@ -89,7 +102,7 @@ export default function MovieRoom() {
                     className="badge bg-warning text-dark p-2"
                     onClick={fetchJoinedUsers}
                 >
-                    총 인원: {movie.currentMemberCount} / {movie.maxMemberCount}
+                    총 인원: {participantCount} / {movie.maxMemberCount}
                 </span>
 
                 {showJoinedModal && (
