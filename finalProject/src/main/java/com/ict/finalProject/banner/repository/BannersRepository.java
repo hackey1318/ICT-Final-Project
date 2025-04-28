@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,4 +24,7 @@ public interface BannersRepository extends JpaRepository<Banners, Integer> {
     List<Banners> getActiveBannerList(@Param("typeList")List<BannerType> typeList, @Param("status") StatusInfo statusInfo);
 
     Optional<Banners> findByNo(int no);
+
+    @Query("SELECT b FROM Banners AS b WHERE status IN (:statusList)")
+    List<Banners> getBannerListByStatus(@Param("statusList") List<StatusInfo> statusInfoList);
 }

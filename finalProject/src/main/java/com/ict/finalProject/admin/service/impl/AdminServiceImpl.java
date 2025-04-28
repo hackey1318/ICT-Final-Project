@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -55,18 +57,14 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Page<UserResponse> getMemberList(Pageable pageable, String memberId, String memberNickname, String memberEmail) {
-        Page<Users> usersPage;
-
-        if (memberId != null && !memberId.isEmpty()) {
-            usersPage = adminRepository.findByIdContainingIgnoreCase(memberId, pageable);
-        } else if (memberNickname != null && !memberNickname.isEmpty()) {
-            usersPage = adminRepository.findByNicknameContaining(memberNickname, pageable);
-        } else if (memberEmail != null && !memberEmail.isEmpty()) {
-            usersPage = adminRepository.findByEmailContaining(memberEmail, pageable);
-        } else {
-            usersPage = adminRepository.findAll(pageable);
-        }
+    public Page<UserResponse> getMemberList(Pageable pageable, String memberId, String memberNickname, String memberEmail, List<UserRole> roleList) {
+        Page<Users> usersPage = adminRepository.searchUsers(
+                memberId != null && !memberId.isEmpty() ? memberId : null,
+                memberNickname != null && !memberNickname.isEmpty() ? memberNickname : null,
+                memberEmail != null && !memberEmail.isEmpty() ? memberEmail : null,
+                roleList,  // 여기서 roles는 반드시 전달되어야 함
+                pageable
+        );
 
         return usersPage.map(user -> UserResponse.builder()
                 .no(user.getNo())
@@ -78,38 +76,6 @@ public class AdminServiceImpl implements AdminService {
                 .role(user.getRole().name())
                 .phone(user.getPhone())
                 .build());
-    }
-
-    @Override
-    public Page<UserResponse> getManagerList(
-            Pageable pageable,
-            String memberId,
-            String memberNickname,
-            String memberEmail
-    ) {
-        Page<Users> usersPage;
-
-        if (memberId != null && !memberId.isBlank()) {
-            usersPage = adminRepository.findByIdContainingIgnoreCase(memberId, pageable);
-        } else if (memberNickname != null && !memberNickname.isBlank()) {
-            usersPage = adminRepository.findByNicknameContaining(memberNickname, pageable);
-        } else if (memberEmail != null && !memberEmail.isBlank()) {
-            usersPage = adminRepository.findByEmailContaining(memberEmail, pageable);
-        } else {
-            usersPage = adminRepository.findAll(pageable);
-        }
-
-        return usersPage.map(user -> UserResponse.builder()
-                .no(user.getNo())
-                .id(user.getId())
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .gender(user.getGender().name())
-                .status(user.getStatus().name())
-                .role(user.getRole().name())
-                .phone(user.getPhone())
-                .build()
-        );
     }
 
     //관리자 비활성화

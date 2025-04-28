@@ -1,4 +1,4 @@
-package com.ict.finalProject.testCode;
+package com.ict.finalProject.scheduler;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
