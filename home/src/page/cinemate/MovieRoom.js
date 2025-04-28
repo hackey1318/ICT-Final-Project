@@ -1,33 +1,70 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import JoinedUsersBadgeModal from "./JoinedUsersModal";
+import ChatBox from "./ChatBox"; // 채팅 컴포넌트를 분리해서 가져옵니다.
+import '../../css/cinemate/MovieRoom.css';
 
 const accessToken = sessionStorage.getItem("accessToken");
+const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+const myUserNo = userInfo?.userNo;
 
 export default function MovieRoom() {
-
     const { no, movieNo } = useParams();
     const location = useLocation();
     const { movie } = location.state || {};
     const [isJoined, setIsJoined] = useState(false);
+    const [participantCount, setParticipantCount] = useState(0);
+    const [joinedUsers, setJoinedUsers] = useState([]);
+    const [showJoinedModal, setShowJoinedModal] = useState(false);
+    const badgeRef = useRef(null);
 
     useEffect(() => {
+        fetctParticipantCount();
         fetchMovieRoomJoinStatus();
-    }, []);
+    }, [no, isJoined]);
 
-    const fetchMovieRoomJoinStatus  = async () => {
-        const res = await axios.get(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}`,{
-            headers : {
+    const fetctParticipantCount = async () => {
+        const res = await axios.get(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}/members/count`, {
+            headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
             }
         });
-        setIsJoined(res.data.result); // API에서 참여 여부도 함께 내려준다고 가정
+        setParticipantCount(res.data)
+
+    }
+
+    const fetchMovieRoomJoinStatus = async () => {
+        const res = await axios.get(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        setIsJoined(res.data.result);
     };
+
+    const fetchJoinedUsers = async () => {
+        try {
+            const res = await axios.get(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}/members`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+
+            setJoinedUsers(res.data);
+            setShowJoinedModal(true);
+        } catch (error) {
+            console.error("참여자 목록 불러오기 실패:", error);
+        }
+    };
+
+    const handleCloseJoinedModal = () => setShowJoinedModal(false);
 
     const handleJoin = async () => {
         await axios.post(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}`, {}, {
-            headers : {
+            headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
             }
@@ -37,7 +74,7 @@ export default function MovieRoom() {
 
     const handleCancel = async () => {
         await axios.delete(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}`, {
-            headers : {
+            headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
             }
@@ -59,10 +96,22 @@ export default function MovieRoom() {
                 <span className="badge bg-secondary p-2">모집 시간: {movie.meetingDate?.replace("T", " ").slice(0, 16)}</span>
             </div>
 
-            <div className="mb-2">
-                <span className="badge bg-warning text-dark p-2">
-                    총 인원: {movie.currentMemberCount} / {movie.maxMemberCount}
+            <div className="mb-2" style={{ position: "relative", display: "inline-block" }}>
+                <span
+                    ref={badgeRef}
+                    className="badge bg-warning text-dark p-2"
+                    onClick={fetchJoinedUsers}
+                >
+                    총 인원: {participantCount} / {movie.maxMemberCount}
                 </span>
+
+                {showJoinedModal && (
+                    <JoinedUsersBadgeModal
+                        show={true}
+                        onClose={handleCloseJoinedModal}
+                        users={joinedUsers}
+                    />
+                )}
             </div>
 
             <div className="mb-4" style={{ background: "#f8f9fa", padding: "15px", borderRadius: "8px" }}>
@@ -70,20 +119,16 @@ export default function MovieRoom() {
             </div>
 
             <div className="mb-4">
-                {isJoined ? (
-                    <input type="button" value="참여 취소" onClick={handleCancel} />
-                ) : (
-                    <input type="button" value="참여하기" onClick={handleJoin} />
+                {myUserNo !== movie.userNo && (
+                    isJoined ? (
+                        <input type="button" value="참여 취소" onClick={handleCancel} />
+                    ) : (
+                        <input type="button" value="참여하기" onClick={handleJoin} />
+                    )
                 )}
             </div>
 
-            {isJoined && (
-                <div className="chat-box p-3 border rounded" style={{ minHeight: "200px", backgroundColor: "#fff" }}>
-                    <h5>소통 채팅창</h5>
-                    {/* 채팅 메시지 목록 + 입력창 구현 */}
-                    <div className="chat-log mt-3">[채팅 메시지 목록]</div>
-                </div>
-            )}
+            {isJoined && <ChatBox movieNo={movieNo} roomNo={no} />}
         </div>
     );
 }

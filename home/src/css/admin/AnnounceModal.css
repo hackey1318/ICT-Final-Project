@@ -122,12 +122,13 @@ textarea.form-control {
     background-color: #e2e2e2;
 }
 
-.btn-primary {
+.my-custom-btn {
     background-color: #007bff;
-    border: none;
+    border: 1px solid #007bff;
     color: white;
 }
 
-.btn-primary:hover {
+.my-custom-btn:hover {
     background-color: #0056b3;
+    color: white;
 }

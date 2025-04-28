@@ -129,7 +129,7 @@ function MdList() {
           <tbody>
             {mdList.map((item, idx) => (
               <tr key={idx} className="md_item">
-                <td>{item.id}</td>
+                <td>{page * size + idx + 1}</td>
                 <td><span className="md_text-ellipsis-name" title={item.name}>{item.name}</span></td>
                 <td><span className="md_text-ellipsis-moviename" title={item.movieName}>{item.movieName}</span></td>
                 <td>{item.type}</td>

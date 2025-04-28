@@ -7,6 +7,7 @@ import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.movie.service.TheatersService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
+import com.ict.finalProject.orders.controller.request.OrderNumberRequest;
 import com.ict.finalProject.orders.controller.response.OrderListResponse;
 import com.ict.finalProject.orders.repository.domain.OrderItem;
 import com.ict.finalProject.orders.repository.domain.Orders;
@@ -24,6 +25,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -48,6 +50,7 @@ public class OrderController {
     }
 
     @PostMapping("/save")
+    @Transactional
     public String savePaymentInfo(@RequestBody String jsonBody, HttpServletRequest request) {
         final String token = request.getHeader("Authorization");
         String userId = null;
@@ -84,7 +87,8 @@ public class OrderController {
 
                 // id기반으로 상품테이블 DB조회, 상품명과 가격 일치하는지 확인
                 Goods dbGoods = mdShopService.getMd(id).get();
-//                int dbGoods_Stocks = mdShopService.getMdQuantity(id);
+                int dbGoods_Stocks = 0;
+
 
 //                if (dbGoods.getName().equals(name) &&
 //                        dbGoods.getPrice() == price &&
@@ -121,13 +125,11 @@ public class OrderController {
                     orders.setOrderNumber(orderNumber);
                     orders.setStatus(OrdersStatus.PENDING);
                     orders.setTotalPrice((int)requestTotalPrice);
-                    ordersService.insertOrders(orders);
+                    Orders saved = ordersService.insertOrders(orders);
 
-                    // 주문 상품 저장
-                    OrderItem orderItem = new OrderItem();
 
-                    int orderNo = ordersService.getOrders(orderNumber).getId();
-                    orderItem.setOrderNo(orderNo); // 주문PK
+                    int orderNo = saved.getId();
+
 
                     for (Object itemObj : goods) {
                         JSONObject item = (JSONObject) itemObj;
@@ -136,6 +138,8 @@ public class OrderController {
                         int goodsPrice = ((Long) item.get("goodsPrice")).intValue(); // 굿즈 가격
                         int goodsQuantity = ((Long) item.get("quantity")).intValue(); // 굿즈 수량
 
+                        OrderItem orderItem = new OrderItem();
+                        orderItem.setOrderNo(orderNo);
                         orderItem.setGoodsNo(goodsNo);
                         orderItem.setName(goodsName);
                         orderItem.setPrice(goodsPrice);
@@ -212,19 +216,22 @@ public class OrderController {
         List<List<OrderItemDto>> orderItemDtoLists = new ArrayList<>();
         List<String> paymentKeyList = new ArrayList<>();
         for (OrdersDto ordersDto : ordersDtoList) {
-            List<OrderItemDto> orderItemDtoList = orderItemService.getOrderItems(ordersDto.getId());
-            orderItemDtoLists.add(orderItemDtoList);
             int orderNo = ordersDto.getId();
-            String paymentKey = "";
+            List<OrderItemDto> orderItemDtoList = orderItemService.getOrderItems(orderNo);
+            orderItemDtoLists.add(orderItemDtoList);
+            String paymentKey = "undefined";
             if (ordersDto.getStatus().equals(OrdersStatus.PAID)) {
-                paymentKey = paymentsService.getPaymentsDtoByOrderNo(orderNo).getPaymentKey();
-                paymentKeyList.add(paymentKey);
-            } else {
-                paymentKey = "undefined";
-                paymentKeyList.add(paymentKey);
+                try {
+                    paymentKey = paymentsService
+                            .getPaymentsDtoByOrderNo(orderNo)
+                            .getPaymentKey();
+                } catch (Exception ex) {
+                    log.warn("No payment record for orderNo={}", orderNo);
+                    // paymentKey remains "undefined"
+                }
             }
+            paymentKeyList.add(paymentKey);
         }
-
         Collections.reverse(ordersDtoList);
         Collections.reverse(orderItemDtoLists);
         Collections.reverse(paymentKeyList);
@@ -241,5 +248,15 @@ public class OrderController {
         ordersService.cancelOrders(orderNo);
 
         return ResponseEntity.ok("취소되었습니다.");
+    }
+
+    @PostMapping("/fail")
+    public ResponseEntity<Void> failOrder(@RequestBody OrderNumberRequest orderNumberRequest) throws Exception {
+        String orderNumber = orderNumberRequest.getOrderNumber();
+        OrdersDto ordersDto = ordersService.getOrdersDtoByOrderNumber(orderNumber);
+        int orderNo = ordersDto.getId();
+        ordersService.failOrders(orderNo);
+
+        return ResponseEntity.ok().build();
     }
 }
