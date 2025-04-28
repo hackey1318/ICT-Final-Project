@@ -132,4 +132,9 @@ public class UserServiceImpl implements UserService {
     public boolean existsByPhone(String phone) {
         return usersRepository.findByPhone(phone).isPresent();
     }
+
+    @Override
+    public Users getUser(int userNo) {
+        return usersRepository.findById(userNo).get();
+    }
 }
