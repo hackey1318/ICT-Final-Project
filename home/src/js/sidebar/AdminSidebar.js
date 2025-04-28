@@ -76,7 +76,7 @@ function AdminSidebar({ activeMenu }) {
                 <div className='admin-user'>
                     <div className='admin-role'>{role === 'ADMIN' ? '관리자' : '매니저'}</div>
                     <div className='admin-nickname'>{nickname}님, 환영합니다.</div>
-                    
+
                 </div>
                 <div className='admin-logout' onClick={handleLogout} style={{ cursor: 'pointer' }}>
                     <img src={logouticon} alt="로그아웃" />
@@ -135,8 +135,8 @@ function AdminSidebar({ activeMenu }) {
                         {adminOpenMenus[1] && (
                             <ul className="admin-sub-menu">
                                 <li><Link to="/manager/home/mdlists" className={`admin-nav-link ${activeMenu === "mdlists" ? "active" : ""}`}>상품 목록 조회</Link></li>
-                                <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active" : ""}`}>상품 구매 정보 조회</Link></li>
-                                <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active" : ""}`}>상품별 매출 조회</Link></li>
+                                {/* <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active" : ""}`}>상품 구매 정보 조회</Link></li> */}
+                                <li><Link to="/manager/home/mdsales" className={`admin-nav-link ${activeMenu === "" ? "active" : ""}`}>상품 매출 조회</Link></li>
                                 <li><Link to="/manager/home/goods-like" className={`admin-nav-link ${activeMenu === "goods-like" ? "active" : ""}`}>상품별 찜</Link></li>
                             </ul>
                         )}

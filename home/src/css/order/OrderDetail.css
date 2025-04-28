@@ -1,7 +1,7 @@
 .order_container {
     display: flex;
     flex-direction: column;
-    margin-left: 25%;
+    margin-left: 15%;
     margin-bottom: 50px;
 }
 
@@ -20,7 +20,7 @@
 }
 
 .order_info_table {
-    width:60%;
+    width:65%;
     min-width: 340px;
     border-top: 3px solid rgb(77, 77, 77);
     margin-top: 10px;

@@ -1,0 +1,98 @@
+.mdSales_wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-left: 20px;
+    background-color: rgb(254, 254, 254);
+
+}
+
+.mdSales_container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 99%;
+}
+
+.mdSales_container > div {
+    border: 1px solid #ddd;
+    height: 350px;
+    /* overflow-y: scroll; */
+    min-width: 500px;
+}
+
+.mdSales_byGoodsName {
+
+}
+
+.mdSales_byGoodsType {
+}
+
+.mdSales_byGender {
+}
+
+.mdSales_byDate {
+}
+
+.mdSales_title {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.mdSales_category {
+    float: left;
+    width: 50%;
+
+}
+
+.mdSales_buttons {
+    display: flex;
+    gap: 5px;
+    justify-content: right;
+    width: 50%;
+    margin-right: 20px;
+}
+
+.mdSales_buttons > button {
+    width: 25px;
+    height: 25px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    background-color: white;
+}
+
+.mdSales_button_table {
+    background-image: url("./../../img/table.png");
+}
+
+.mdSales_button_chart {
+    background-image: url("./../../img/horizontalChart.png");
+}
+
+.mdSales_content {
+    margin-top: 10px;
+    margin-left: 20px;
+    overflow-y: scroll;
+    height: 280px;
+}
+
+.mdSales_chart {
+    /* overflow-y: scroll; */
+}
+
+.mdSales_content > div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mdSales_content > div > div {
+    flex: 1;
+}
+
+.mdSales_element {
+    border-top: 1px solid #ddd;
+}
