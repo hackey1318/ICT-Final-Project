@@ -1,9 +1,11 @@
 package com.ict.finalProject.user.controller;
 
 import com.ict.finalProject.common.config.AuthCheck;
+import com.ict.finalProject.common.exception.custom.NotFoundException;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.oauth.service.UserService;
 import com.ict.finalProject.user.controller.response.LikeResponse;
+import com.ict.finalProject.user.controller.response.LikeStatisticsResponse;
 import com.ict.finalProject.user.repository.domain.constant.LikeType;
 import com.ict.finalProject.user.service.LikesService;
 import com.ict.finalProject.user.service.dto.LikeItemDto;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -54,5 +58,18 @@ public class LikeController {
         Integer userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER)).getNo();
 
         return likesService.updateLikeItem(no, userNo);
+    }
+
+    @GetMapping("/statistics/{type}")
+    public List<LikeStatisticsResponse> likeStatistics(@PathVariable(value = "type") String type) {
+
+        LikeType likeType = LikeType.valueOf(type.toUpperCase());
+        switch (likeType) {
+            case MOVIE, GOODS -> {
+                return likesService.getLikeStatistics(likeType);
+            }
+            default -> {throw new IllegalArgumentException("요청하신 타입을 찾을 수 없습니다.");
+            }
+        }
     }
 }

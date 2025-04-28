@@ -36,7 +36,7 @@ const GoodsInfo = ({ goods }) => {
                 if (response.data.stockResult) {
                     if (act === "Purchase") {
                         alert("구매를 위해 장바구니 페이지로 이동합니다.");
-                        window.location.href = "/cart";
+                        window.location.href = "/myPage/cart";
                     } else if (act === "Add") {
                         setRedirectModalOpen(true);
                     }
@@ -127,7 +127,7 @@ const GoodsInfo = ({ goods }) => {
                             <div style={{textAlign: 'center', marginTop: '10px'}}>상품이 추가되었습니다.</div>
                             <div className="goodsInfoModal_bg"></div>
                             <div className="goodsInfoModal_button_container">
-                                <button onClick={() => window.location.href = "/cart"}>장바구니</button>
+                                <button onClick={() => window.location.href = "/myPage/cart"}>장바구니</button>
                                 <button onClick={() => setRedirectModalOpen(false)}>쇼핑하기</button>
                             </div>
                         </div>
