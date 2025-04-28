@@ -3,8 +3,10 @@ package com.ict.finalProject.mdShop.service;
 import com.ict.finalProject.mdShop.controller.request.MdshopRequest;
 import com.ict.finalProject.mdShop.controller.response.MdshopResponse;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
+import com.ict.finalProject.mdShop.repository.domain.GoodsStocks;
 import com.ict.finalProject.mdShop.service.dto.MdShopDto;
 import com.ict.finalProject.mdShop.service.dto.MovieNameDto;
+import com.ict.finalProject.orders.service.dto.OrderItemDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,4 +30,8 @@ public interface MdShopService {
     void deleteMd(int id);
 
     Optional<Goods> getMd(int id);
+
+    void updateGoodsQuantity(List<OrderItemDto> orderItemDtoList);
+
+    List<GoodsStocks> getGoodsStocks(List<Integer> goodsNoList);
 }

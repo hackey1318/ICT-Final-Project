@@ -1,7 +1,5 @@
 import './../../css/payment/PaymentResult.css';
 import { useSearchParams } from "react-router-dom";
-const accessToken = sessionStorage.getItem("accessToken");
-
 
 function PaymentResult() {
 
@@ -11,11 +9,11 @@ function PaymentResult() {
     const paymentKey = searchParams.get("paymentKey");
 
     const showOrderDetail = () => {
-        window.location.href = `/order/detail?orderNumber=${orderNumber}`;
+        window.location.href = `/mypage/order/detail?orderNumber=${orderNumber}`;
     }
 
     const continueShopping = () => {
-
+        window.location.href = "/mdshop";
     }
 
     return (
