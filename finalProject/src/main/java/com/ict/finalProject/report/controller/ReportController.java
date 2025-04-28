@@ -122,5 +122,16 @@ public class ReportController {
         reportService.processReport(no, false);
         return ResponseEntity.ok().build();
     }
+
+    //신고남발자 비활성화
+    @PutMapping("/deactiveBadReporter/{reporterNo}")
+    public ResponseEntity<SuccessOfFailResponse> deactiveBadReporter(@PathVariable int reporterNo) {
+        try {
+            reportService.deactiveBadReporter(reporterNo);
+            return ResponseEntity.ok(new SuccessOfFailResponse(true, "유저가 비활성화되었습니다."));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new SuccessOfFailResponse(false, "유저 비활성화 실패"));
+        }
+    }
 }
 
