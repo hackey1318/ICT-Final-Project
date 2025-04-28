@@ -27,7 +27,7 @@ function ReviewListPage({ movieNo, currentUserNo }) {
   };
 
   useEffect(() => {
-    getReviews(movieNo).then(res => setReviews(res.data));
+    getReviews(movieNo).then(res => setReviews(res.data, console.log("ssssss"+res.data))) 
   }, [movieNo]);
 
   const handleDelete = no => setReviews(prev => {

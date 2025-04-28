@@ -6,7 +6,7 @@ import com.ict.finalProject.oauth.feign.KakaoResourceApi;
 import com.ict.finalProject.oauth.service.KakaoUserInfoDto;
 import com.ict.finalProject.oauth.service.Oauth2Service;
 import com.ict.finalProject.oauth.service.dto.KakaoResourceDto;
-import com.ict.finalProject.testCode.KakaoTokenDto;
+import com.ict.finalProject.oauth.service.dto.KakaoTokenDto;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

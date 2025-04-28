@@ -10,17 +10,19 @@ const apiClient = axios.create({
     },
 });
 
+apiClient.interceptors.request.use((config) => {
+    const accessToken = sessionStorage.getItem("accessToken");
+    if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+}, (error) => Promise.reject(error));
+
 //인터셉터
 apiClient.interceptors.request.use((config) => {
     const accessToken = sessionStorage.getItem("accessToken");
-    console.log('Interceptor - Token:', accessToken); 
-    console.log('Interceptor - Config before adding token:', config.headers); 
-
     if(accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
-        console.log('Interceptor - Added Authorization Header:', config.headers.Authorization);
-    }  else {
-        console.log('Interceptor - No access token found.'); // ★ 디버깅 로그 추가
     }
     return config;
 }, (error) => {

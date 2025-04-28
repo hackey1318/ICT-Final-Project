@@ -3,32 +3,30 @@ import '../../css/cart/Cart.css';
 import checkMark from '../../img/checkMark.png';
 import axios from 'axios';
 import TossPayment from "./../payment/TossPayment";
-import CartApi, { deleteGoodsList, getGoodsList, getTheaterList } from "./CartApi";
-
-const accessToken = sessionStorage.getItem("accessToken");
+import { deleteGoodsList, getGoodsList, getTheaterList } from "./CartApi";
 
 function Cart() {
     const [goods, setGoods] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
-    const [orderName, setOrderName] = useState();
-    const [orderNumber, setOrderNumber] = useState();
+    const [orderName, setOrderName] = useState('');
+    const [orderNumber, setOrderNumber] = useState('');
     const [loading, setLoading] = useState(true);
-    const [paymentModalOpen, setPaymentModalOpen] = useState();
+    const [paymentModalOpen, setPaymentModalOpen] = useState(false);
     const [theaterSuggestion, setTheaterSuggestion] = useState(false);
     const [theaterData, setTheaterData] = useState([]);
     const [filteredTheaters, setFilteredTheaters] = useState([]);
+    const [theaterName, setTheaterName] = useState('');
     const theaterRef = useRef();
     const goodsRef = useRef(goods);
 
     useEffect(() => {
         const handleBeforeUnload = (e) => {
             if (window.location.pathname === "/cart") {
-                cartQuantityUpdate(); // 동기 API 또는 navigator.sendBeacon
+                cartQuantityUpdate();
             }
         };
 
         window.addEventListener("beforeunload", handleBeforeUnload);
-
         return () => {
             cartQuantityUpdate();
             window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -36,48 +34,39 @@ function Cart() {
     }, []);
 
     const cartQuantityUpdate = () => {
-        axios.post("http://localhost:9988/cart/updateQuantity",
-            {
-                goodsNos: goodsRef.current.map(element => element.goodsNo),
-                goodsQuantities: goodsRef.current.map(element => element.quantity),
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
+        const accessToken = sessionStorage.getItem("accessToken");
+        axios.post("http://localhost:9988/cart/updateQuantity", {
+            goodsNos: goodsRef.current.map(element => element.goodsNo),
+            goodsQuantities: goodsRef.current.map(element => element.quantity),
+        }, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
             }
-        );
+        });
     }
 
     useEffect(() => {
-        // 로그인 확인
+        const accessToken = sessionStorage.getItem("accessToken");
         if (!accessToken) {
+            sessionStorage.setItem("redirectAfterLoginPath", window.location.href);
             window.location.href = "/login";
-            return null;
+            return;
         }
-        setLoading(false);
 
-        // 영화관 데이터 가져오기
-        getTheaterList()
-            .then((response) => {
-                setTheaterData(prev => [...prev, ...response.data]);
-                setFilteredTheaters(prev => [...prev, ...response.data]);
-            })
-            .catch((error) => {
-                console.error("API 호출 중 오류 발생:", error);
-            });
+        Promise.all([getTheaterList(), getGoodsList()])
+            .then(([theaterResponse, goodsResponse]) => {
+                setTheaterData(theaterResponse.data);
+                setFilteredTheaters(theaterResponse.data);
 
-        // 장바구니 데이터 가져오기
-        getGoodsList()
-            .then((response) => {
-                const updateGoods = response.data.map(item => ({
+                const updateGoods = goodsResponse.data.map(item => ({
                     ...item,
                     quantity: item.quantity,
-                    selected: true
+                    selected: item.quantity !== 0
                 }));
                 setGoods(updateGoods);
             })
-            .catch();
+            .catch(error => console.error("초기 데이터 호출 오류:", error))
+            .finally(() => setLoading(false));
     }, []);
 
     useEffect(() => {
@@ -87,39 +76,35 @@ function Cart() {
     }, [goods]);
 
     const selectGoods = (e) => {
-        const index = e.target.getAttribute("goodsIndex");
+        const index = e.target.getAttribute("goodsindex");
         setGoods(prev =>
             prev.map((item, idx) =>
-                idx === parseInt(index) ? { ...item, selected: !item.selected } : item
+                idx === parseInt(index) ? { ...item, selected: item.quantity !== 0 ? !item.selected : item.selected } : item
             )
         );
     }
 
     const updateTotalPrice = () => {
-        let totalPrice = 0;
-
+        let total = 0;
         goods.forEach((item) => {
             if (item.selected) {
-                totalPrice += item.goodsPrice * item.quantity;
+                total += item.goodsPrice * item.quantity;
             }
         });
-
-        setTotalPrice(totalPrice);
+        setTotalPrice(total);
     }
 
     const updateCheckBox = () => {
+        const elements = document.getElementsByClassName("select_goods");
         goods.forEach((item, index) => {
-            const selectElement = document.getElementsByClassName("select_goods")[index];
-            if (item.selected) {
-                selectElement.style.backgroundImage = `url(${checkMark})`;
-            } else {
-                selectElement.style.backgroundImage = "";
+            if (elements[index]) {
+                elements[index].style.backgroundImage = item.selected && item.quantity !== 0 ? `url(${checkMark})` : "";
             }
         });
     }
 
     const subQuantity = (e) => {
-        const index = e.target.getAttribute("goodsIndex");
+        const index = e.target.getAttribute("goodsindex");
         setGoods(prev =>
             prev.map((item, idx) =>
                 idx === parseInt(index) && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
@@ -128,7 +113,7 @@ function Cart() {
     }
 
     const addQuantity = (e) => {
-        const index = e.target.getAttribute("goodsIndex");
+        const index = e.target.getAttribute("goodsindex");
         if (goods[index].goodsQuantity > goods[index].quantity) {
             setGoods(prev =>
                 prev.map((item, idx) =>
@@ -138,62 +123,72 @@ function Cart() {
         } else {
             alert("재고가 부족합니다.");
         }
-
     }
 
     const selectAll = () => {
         setGoods(prev =>
-            prev.map((item) => ({ ...item, selected: true }))
+            prev.map(item => ({ ...item, selected: item.quantity !== 0 }))
         );
-        document.querySelectorAll(".select_goods").forEach((item) => {
-            item.style.backgroundImage = `url(${checkMark})`;
-        });
     }
 
     const deleteSelected = () => {
-        deleteGoodsList(goods.filter(item => item.selected))
-            .then(response => {
-                const updatedGoods = goods.filter(item => !item.selected);
-                setGoods(updatedGoods);
-            });
-
-    }
-
-    const order = () => {
         const selectedGoods = goods.filter(item => item.selected);
         if (selectedGoods.length === 0) {
             alert("선택된 상품이 없습니다.");
             return;
         }
 
-        if (!theaterData.includes(theaterRef.current.value)) {
+        deleteGoodsList(selectedGoods)
+            .then(() => {
+                const updatedGoods = goods.filter(item => !item.selected);
+                setGoods(updatedGoods);
+            });
+    }
+
+    const deleteGoods = (e) => {
+        const targetIndex = parseInt(e.target.getAttribute("index"), 10);
+        if (window.confirm("상품을 삭제하시겠습니까?")) {
+            const deleteItem = goods.filter((_, index) => index === targetIndex);
+            deleteGoodsList(deleteItem)
+                .then(() => {
+                    const updatedGoods = goods.filter((_, index) => index !== targetIndex);
+                    setGoods(updatedGoods);
+                });
+        }
+    }
+
+    const order = () => {
+        const accessToken = sessionStorage.getItem("accessToken");
+        const selectedGoods = goods.filter(item => item.selected);
+
+        if (selectedGoods.length === 0) {
+            alert("선택된 상품이 없습니다.");
+            return;
+        }
+
+        if (!theaterData.includes(theaterName)) {
             alert("올바른 영화관을 선택해주세요.");
             return;
         }
 
         cartQuantityUpdate();
 
-        setOrderName(selectedGoods.length === 1
+        const generatedOrderName = selectedGoods.length === 1
             ? selectedGoods[0].goodsName
-            : `${selectedGoods[0].goodsName} 외 ${selectedGoods.length - 1}건`);
+            : `${selectedGoods[0].goodsName} 외 ${selectedGoods.length - 1}건`;
 
-        const length = 25;
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let randomChars = "";
-        for (let i = 0; i < length; i++) {
-            const randomIndex = Math.floor(Math.random() * length);
-            randomChars += chars[randomIndex];
-        }
-        setOrderNumber(randomChars);
+        const generatedOrderNumber = [...Array(25)].map(() => "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"[Math.floor(Math.random() * 36)]).join("");
 
-        const userInfoStr = sessionStorage.getItem("userInfo");
-        const userInfo = JSON.parse(userInfoStr);
-        // axios로 주문 정보 서버에 저장
+        setOrderName(generatedOrderName);
+        setOrderNumber(generatedOrderNumber);
+
+        const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+
         axios.post("http://localhost:9988/order/save", {
-            orderNumber: randomChars,
+            orderNumber: generatedOrderNumber,
             totalPrice: totalPrice,
             userNo: userInfo.userNo,
-            theaterName: theaterRef.current.value,
+            theaterName: theaterName,
             goods: selectedGoods
         }, {
             headers: {
@@ -202,28 +197,52 @@ function Cart() {
             }
         })
             .then((response) => {
-                if (response.data === "success") {
-                    setPaymentModalOpen(true);
-                } else {
+                setPaymentModalOpen(true);
+                if (response.data !== "success") {
                     setOrderNumber(response.data);
-                    setPaymentModalOpen(true);
                 }
             })
-            .catch((error) => {
+            .catch(() => {
                 alert("상품 정보 오류");
             });
     }
 
-    const searchTheater = (e) => {
-        const filtered = theaterData.filter((theater) =>
-            theater.includes(e.target.value));
+    const searchTheater = () => {
+        const keyword = theaterName.toLowerCase();  // 소문자로 변환하여 필터링
+        const filtered = theaterData.filter(theater =>
+            theater.toLowerCase().includes(keyword)  // 입력된 키워드를 포함하는 영화관만 필터링
+        );
         setFilteredTheaters(filtered);
-    }
+    };
 
-    const selectTheater = (e) => {
-        theaterRef.current.value = e.target.innerText;
-    }
-    
+    const handleBlur = () => {
+        // onBlur가 실행될 때 딜레이를 주어서 목록에서 항목을 클릭한 경우에 목록이 바로 닫히지 않도록 설정
+        setTimeout(() => setTheaterSuggestion(false), 100);
+    };
+
+    const handleFocus = () => {
+        // Focus 시 리스트를 다시 열도록
+        setTheaterSuggestion(true);
+        searchTheater();
+    };
+
+    const handleChange = (e) => {
+        setTheaterName(e.target.value);  // 입력 값 업데이트
+    };
+
+    useEffect(() => {
+        if (theaterName.trim() !== "") {
+            searchTheater();
+        } else {
+            setFilteredTheaters([]); // 검색어가 비었을 때 결과를 비워둡니다.
+        }
+    }, [theaterName]);  // theaterName 값이 변경될 때마다 필터링
+
+    const selectTheater = (name) => {
+        setTheaterName(name);  // 선택한 영화관 이름을 상태로 저장
+        setTheaterSuggestion(false); // 제안 목록을 선택한 후 바로 닫기
+    };
+
     if (loading) {
         return null;
     }
@@ -232,43 +251,59 @@ function Cart() {
         <div className="cart_container">
             <div className="cart_list">
                 <button id="back_button" onClick={() => window.history.back()}></button>
-                <b id="cart_text">장바구니</b>
+                <p>
+                    <b id="cart_text">장바구니</b>
+                </p>
                 <div className="table_container">
                     <div className="table_head">
                         <div className="check_image_container"><div id="check_image"></div></div>
                         <div className="goods_info">상품 정보</div>
                         <div className="goods_quantity">수량</div>
                         <div className="goods_price">가격</div>
+                        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                     </div>
                     <div className="goods_container">
                         {goods.length > 0 ? goods.map((element, index) => (
-                            <div className="goods" key={element.goodsId}>
+                            <div className="goods" key={element.goodsNo}>
                                 <div className="check_image_container">
-                                    <div className="select_goods" onClick={selectGoods} goodsIndex={index} style={{ backgroundImage: `url(${checkMark})` }}></div>
+                                    <div
+                                        className="select_goods"
+                                        onClick={selectGoods}
+                                        goodsindex={index}
+                                        style={{ backgroundImage: element.selected && element.quantity !== 0 ? `url(${checkMark})` : "" }}
+                                    ></div>
                                 </div>
                                 <div className="goods_info" onClick={() => window.location.href = `/mdshop/${element.goodsNo}`}>
-                                <img src={`http://192.168.1.252:9988/file-system/download/${element.imageIdList[0]}`}/>
+                                    <img src={`http://192.168.1.252:9988/file-system/download/${element.imageIdList[0]}`} alt="상품" />
                                     <span>{element.goodsName}</span>
+                                    {element.goodsQuantity === 0 && <span style={{ color: 'red' }}>&nbsp;품절된 상품입니다.</span>}
                                 </div>
                                 <div className="goods_quantity">
-                                    <button onClick={subQuantity} goodsIndex={index}>◀</button>
-                                    {element.quantity}
-                                    <button onClick={addQuantity} goodsIndex={index}>▶</button>
+                                    <button onClick={subQuantity} goodsindex={index}>◀</button>
+                                    {element.goodsQuantity === 0 ? 0 : element.quantity}
+                                    <button onClick={addQuantity} goodsindex={index}>▶</button>
                                 </div>
                                 <div className="goods_price">
-                                    {element.goodsPrice}원
+                                    {element.goodsPrice.toLocaleString()}원
+                                </div>
+                                <div className="goods_delete_button">
+                                    <div onClick={deleteGoods} index={index}>×</div>
                                 </div>
                             </div>
-                        )) : <div>장바구니가 비어있습니다.</div>}
-                        <div className="button_container">
-                            <div>
-                                <button onClick={selectAll}>전체 선택</button>
-                                <button onClick={deleteSelected}>선택 삭제</button>
+                        )) : (
+                            <div id="empty_cart_container">
+                                <div id="empty_cart_img"></div>
+                                <div id="empty_cart_desc">장바구니가 비어있습니다.</div>
                             </div>
+                        )}
+                        <div className="button_container">
+                            <button onClick={selectAll}>전체 선택</button>
+                            <button onClick={deleteSelected}>선택 삭제</button>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div className="order_info_container">
                 <p>결제 정보</p>
                 <hr />
@@ -289,36 +324,43 @@ function Cart() {
                     <hr />
                     <div style={{ position: 'relative' }}>
                         <div className="order_info_goods_label">수령 장소</div>
-                        <div className="order_info_goods_quantity"><input type="text" id="theaterList" ref={theaterRef} placeholder="영화관 찾기" onChange={searchTheater} onFocus={() => setTheaterSuggestion(true)} onBlur={() => setTimeout(() => setTheaterSuggestion(false), 100)} /></div>
-                        {theaterSuggestion &&
+                        <div className="order_info_goods_quantity">
+                            <input
+                                type="text"
+                                id="theaterList"
+                                // ref={theaterRef}
+                                placeholder="영화관 찾기"
+                                onChange={handleChange}  // onChange를 `handleChange`로 설정
+                                value={theaterName}
+                                onFocus={handleFocus}  // Focus 시 리스트 갱신
+                                onBlur={handleBlur}  // Blur 시 리스트 닫기
+                            />
+                        </div>
+                        {theaterSuggestion && (
                             <div id="theaterSuggestion">
-                                {filteredTheaters.length != 0 ? filteredTheaters.map((element, idx) => (
-                                    <div key={idx} onClick={selectTheater}>{element}</div>
+                                {filteredTheaters.length !== 0 ? filteredTheaters.map((name, idx) => (
+                                    <div key={idx} onMouseDown={() => selectTheater(name)} style={{ cursor: 'pointer' }}>{name}</div>
                                 )) : <div>결과가 없습니다.</div>}
-
                             </div>
-                        }
+                        )}
                     </div>
                     <button id="orderButton" onClick={order}>주문하기</button>
                 </div>
             </div>
 
-            <div>
-                {
-                    (paymentModalOpen) &&
-                    <div>
-                        <div className="modal_overlay"></div>
-                        <div className="paymentModal_container">
-                            <button onClick={() => setPaymentModalOpen(false)}>X</button>
-                            <TossPayment
-                                totalPrice={totalPrice}
-                                orderName={orderName}
-                                orderNumber={orderNumber}
-                            />
-                        </div>
+            {paymentModalOpen && (
+                <div>
+                    <div className="modal_overlay"></div>
+                    <div className="paymentModal_container">
+                        <button onClick={() => setPaymentModalOpen(false)}>X</button>
+                        <TossPayment
+                            totalPrice={totalPrice}
+                            orderName={orderName}
+                            orderNumber={orderNumber}
+                        />
                     </div>
-                }
-            </div>
+                </div>
+            )}
         </div>
     );
 }

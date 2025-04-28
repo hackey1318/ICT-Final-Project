@@ -18,7 +18,7 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+    @Column(name = "order_no", insertable = false, updatable = false)
     private int orderNo; // 주문PK
 
     @Column(nullable = false)
@@ -32,4 +32,9 @@ public class OrderItem {
 
     @Column(nullable = false)
     private int quantity; // erd에는 count인데 통일위해 quantity로 작성
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_no", nullable = false)
+    private Orders order;
+
 }
