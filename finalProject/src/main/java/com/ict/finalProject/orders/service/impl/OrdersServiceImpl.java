@@ -98,6 +98,13 @@ public class OrdersServiceImpl implements OrdersService {
         ordersRepository.save(entity);
     }
 
+    @Override
+    public List<OrdersDto> getTotalOrders() {
+        List<Orders> ordersList = ordersRepository.findAll();
+        List<OrdersDto> ordersDtoList = ordersList.stream().map(OrdersDto::new).collect(Collectors.toList());
+        return ordersDtoList;
+    }
+
     private String convertStatusToText(OrdersStatus status) {
         switch (status) {
             case PAID: return "결제 완료";
