@@ -29,7 +29,7 @@ import CurrentMovie from './page/movie/CurrentMovie';
 import UpcomingMovie from './page/movie/UpcomingMovie';
 import MdList from './page/md/MdList';
 import Admin from './page/admin/Admin';
-import DashBoard from './page/dashboard/UserDau';
+import DashBoard from './page/dashboard/Dashboard';
 import Cart from './js/cart/Cart';
 import OrderList from './js/order/OrderList';
 import OrderDetail from './js/order/OrderDetail';

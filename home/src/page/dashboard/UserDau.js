@@ -2,20 +2,7 @@ import '../../css/dashboard/user.css';
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+import UserDauChart from '../../js/dashboard/UserDauChart';
 
 function UserDau() {
     const [allDauList, setAllDauList] = useState([]);
@@ -81,38 +68,6 @@ function UserDau() {
         ));
     };
 
-    // 차트 설정
-    const options = {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            title: {
-                display: true,
-                text: `${chartTitle} 활동인원수`,
-            },
-        },
-        scales: {
-            y: {
-                suggestedMin: 0,
-            },
-        },
-    };
-
-    const labels = chartDauList.map(item => item.dateTime);
-    const data = {
-        labels,
-        datasets: [
-            {
-                label: '활동인원수',
-                data: chartDauList.map(item => item.count),
-                borderColor: 'rgb(75, 192, 192)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            },
-        ],
-    };
-
     return (
         <div className='memberlist-wrap'>
             <h3 className='userdau-title'>Admin Page - User's {dataType}</h3>
@@ -174,10 +129,10 @@ function UserDau() {
                     </div>
                 </div>
 
+                {/* 차트 부분 */}
                 <div className="userdau-right">
                     <div className="userdau-chart">
-                        <Line options={options} data={data} />
-                        <div className="userdat-chart-totaluser">총인원수 : {totalCount}명</div>
+                        <UserDauChart chartTitle={chartTitle} chartDauList={chartDauList} totalCount={totalCount} chartStyle={{width:"100%", height:"600px"}}/>
                     </div>
                 </div>
             </div>
