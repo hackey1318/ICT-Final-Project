@@ -3,7 +3,7 @@ import axios from "axios"
 const accessToken = sessionStorage.getItem("accessToken")
 export const searchTheaters = async (keyword, page, size) => {
     try {
-        const res = await axios.get("http://localhost:9988/theaters/search", {
+        const res = await axios.get("/theaters/search", {
             params: { keyword, page, size }, headers: {
                 Authorization: `Bearer ${accessToken}`,
             },

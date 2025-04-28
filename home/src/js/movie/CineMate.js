@@ -9,7 +9,7 @@ const ensureFullDateTime = (dtStr) => {
 
 export const generateCineMate = async (movieNo, theaterNo, dateTime, maxMemberCount, content) => {
     try {
-        const res = await axios.post("http://localhost:9988/cinemate", {
+        const res = await axios.post("/cinemate", {
             movieNo: movieNo,
             theaterNo: theaterNo,
             maxMemberCount: maxMemberCount,

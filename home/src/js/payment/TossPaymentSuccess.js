@@ -17,7 +17,7 @@ function SuccessPage() {
 
     async function confirm() {
       const accessToken = sessionStorage.getItem("accessToken");
-      const response = await fetch("http://localhost:9988/payment/confirm", {
+      const response = await fetch("/payment/confirm", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,7 +32,7 @@ function SuccessPage() {
         // 결제 실패 비즈니스 로직을 구현하세요.
         navigate(`/fail?message=${json.message}&code=${json.code}`);
         // PEDNING인 주문 FAILED로 변경
-        const failOrderResponse = await axios.post("http://localhost:9988/order/fail", 
+        const failOrderResponse = await axios.post("/order/fail", 
           {
             orderNumber: json.orderId
           },
@@ -50,7 +50,7 @@ function SuccessPage() {
       // 결제 성공 비즈니스 로직을 구현하세요.
 
       // PENDING인 장바구니 상품들 PAID로 변경
-      const paidGoodsResponse = await axios.post("http://localhost:9988/cart/paidGoods",
+      const paidGoodsResponse = await axios.post("/cart/paidGoods",
         {
           orderNumber: json.orderId
         },
@@ -67,7 +67,7 @@ function SuccessPage() {
       }
 
       // 상품 수량 업데이트
-      const updateItemQuantityResponse = await axios.post("http://localhost:9988/md-shop/updateItemQuantity",
+      const updateItemQuantityResponse = await axios.post("/md-shop/updateItemQuantity",
         {
           orderNumber: json.orderId
         },

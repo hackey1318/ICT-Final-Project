@@ -10,7 +10,7 @@ export default function AnnounceDetail() {
     const [loading, setLoading] = useState(true);
     const [showEditModal, setShowEditModal] = useState(false); // 수정 모달 상태
     const accessToken = sessionStorage.getItem("accessToken");
-    const BASE_URL = 'http://localhost:9988';
+    const BASE_URL = '';
 
     const fetchAnnounce = async () => {
         try {
@@ -31,7 +31,7 @@ export default function AnnounceDetail() {
         const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
         if (confirmDelete) {
             try {
-                await axios.delete(`http://localhost:9988/announce/${no}`, {
+                await axios.delete(`/announce/${no}`, {
                     headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
                 });
                 alert("공지사항이 삭제되었습니다.");

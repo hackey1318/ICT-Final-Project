@@ -22,7 +22,7 @@ function UserDau() {
     const fetchUserData = async (type) => {
         try {
             const urlType = type === 'DAU' ? 'getDauList' : 'getMauList';
-            const response = await axios.get(`http://localhost:9988/dashboard/${urlType}`);
+            const response = await axios.get(`/dashboard/${urlType}`);
 
             const dataList = response.data.activeUsers || [];
             const reverseList = [...dataList].reverse();

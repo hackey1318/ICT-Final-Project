@@ -23,7 +23,7 @@ export default function BannerList() {
     });
 
     const accessToken = sessionStorage.getItem("accessToken");
-    const BASE_URL = "http://localhost:9988";
+    const BASE_URL = "";
     const navigate = useNavigate();
 
     const fetchBanners = async (page = 0, type = "MOVIE", keyword = "") => {

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 // 이미지 기본 URL (API 서버 주소)
-const BASE_URL = 'http://localhost:9988/file-system/download/';
+const BASE_URL = '/file-system/download/';
 
 // 개별 상품 아이템 컴포넌트
 const GoodsItem = ({ item }) => (
@@ -37,7 +37,7 @@ function SectionNewGoods() {
 		const fetchGoods = async () => {
 			const size = getPageSizeByWindowWidth();
 			try {
-				const res = await axios.get(`http://localhost:9988/md-shop/lists?page=0&size=${size}`);
+				const res = await axios.get(`/md-shop/lists?page=0&size=${size}`);
 				setGoodsList(res.data.content); // Page<MdShopDto>의 content
 			} catch (err) {
 				console.error('굿즈 목록 조회 실패:', err);

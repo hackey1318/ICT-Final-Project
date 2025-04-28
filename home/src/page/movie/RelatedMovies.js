@@ -24,7 +24,7 @@ export default function RelatedMovies({ movieNo }) {
               <SwiperSlide key={movie.id}>
                 <div className="movie-card">
                   <img 
-                    src={`http://localhost:9988/file-system/download/${movie.imageUrls[0]}`} 
+                    src={`/file-system/download/${movie.imageUrls[0]}`} 
                     alt={movie.name} 
                     className="movie-image" 
                   />

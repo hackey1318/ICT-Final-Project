@@ -25,7 +25,7 @@ function MdList() {
 
   const getMdList = () => {
     axios
-      .get("http://localhost:9988/md-shop/lists", {
+      .get("/md-shop/lists", {
         params: {
           page,
           size,
@@ -56,7 +56,7 @@ function MdList() {
   const handleDelete = async (id) => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     try {
-      await axios.delete(`http://localhost:9988/md-shop/items/${id}`, {
+      await axios.delete(`/md-shop/items/${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

@@ -17,7 +17,7 @@ export const useLoginForm = () => {
         setLoginError(null);
 
         try {
-            const response = await fetch('http://localhost:9988/oauth/kakao/login', { // 백엔드 주소 확인
+            const response = await fetch('/oauth/kakao/login', { // 백엔드 주소 확인
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -9,7 +9,7 @@ function Gender(){
     const [data, setData] = useState({})
 
     useEffect(()=>{
-        axios.get("http://localhost:9988/manager/home/gender-ratio", {
+        axios.get("/manager/home/gender-ratio", {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`

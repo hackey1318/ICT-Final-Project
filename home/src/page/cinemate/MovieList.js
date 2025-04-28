@@ -35,7 +35,7 @@ function MovieList(){
         const currentPageSize = getPageSize(window.innerWidth);
 
         //영화정보 가져오기
-        axios.get(`http://localhost:9988/cinemate/movies?page=${page}`, {
+        axios.get(`/cinemate/movies?page=${page}`, {
             params: {
                 page: page,
                 size: currentPageSize,

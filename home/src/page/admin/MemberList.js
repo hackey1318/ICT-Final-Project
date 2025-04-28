@@ -28,7 +28,7 @@ function MemberList(){
     },[page]);
 
     const getUserList = () => {
-        axios.get(`http://localhost:9988/manager/home/member-list/user?page=${page}&size=10`, {
+        axios.get(`/manager/home/member-list/user?page=${page}&size=10`, {
             params:{
                 page,
                 sort: "createdAt,asc",

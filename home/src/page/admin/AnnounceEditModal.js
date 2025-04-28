@@ -8,7 +8,7 @@ export default function AnnounceEditModal({ show, onClose, announceData, onSave 
     const [expiredAt, setExpiredAt] = useState(announceData.expiredAt || "");
     const [loading, setLoading] = useState(false);
     const accessToken = sessionStorage.getItem("accessToken");
-    const BASE_URL = "http://localhost:9988";
+    const BASE_URL = "";
 
     const handleSave = async () => {
         setLoading(true);

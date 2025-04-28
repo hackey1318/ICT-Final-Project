@@ -21,7 +21,7 @@ function BlackList() {
       sort: "no,desc",
       ...(searchValue.trim() && { [searchType]: searchValue.trim() })
     };
-    axios.get(`http://localhost:9988/manager/home/blacklist`, {
+    axios.get(`/manager/home/blacklist`, {
       params,
       headers: {
         "Content-Type": "application/json",
@@ -61,7 +61,7 @@ function BlackList() {
     if (value === "active") {
       if (!window.confirm(`사용자 ${userNo}번을 활성화하시겠습니까?`)) return;
       axios.post(
-        `http://localhost:9988/manager/home/blacklist-active/${userNo}`,
+        `/manager/home/blacklist-active/${userNo}`,
         {},
         {
           headers: {

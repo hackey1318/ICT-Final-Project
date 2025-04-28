@@ -36,7 +36,7 @@ function Cart() {
 
     const cartQuantityUpdate = () => {
         const accessToken = sessionStorage.getItem("accessToken");
-        axios.post("http://localhost:9988/cart/updateQuantity", {
+        axios.post("/cart/updateQuantity", {
             goodsNos: goodsRef.current.map(element => element.goodsNo),
             goodsQuantities: goodsRef.current.map(element => element.quantity),
         }, {
@@ -205,7 +205,7 @@ function Cart() {
 
         const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
 
-        axios.post("http://localhost:9988/order/save", {
+        axios.post("/order/save", {
             orderNumber: generatedOrderNumber,
             totalPrice: totalPrice,
             userNo: userInfo.userNo,
@@ -295,7 +295,7 @@ function Cart() {
                                     ></div>
                                 </div>
                                 <div className="goods_info" onClick={() => window.location.href = `/mdshop/${element.goodsNo}`}>
-                                    <img src={`http://192.168.1.252:9988/file-system/download/${element.imageIdList[0]}`} alt="상품" />
+                                    <img src={`/file-system/download/${element.imageIdList[0]}`} alt="상품" />
                                     <span>{element.goodsName}</span>
                                     {element.goodsQuantity === 0 && <span style={{ color: 'red' }}>&nbsp;품절된 상품입니다.</span>}
                                 </div>

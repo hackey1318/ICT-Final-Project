@@ -7,7 +7,7 @@ import LikeType from "../../js/common/LikeType"
 import RecruitMovieModal from "./RecruitMovieModal"
 import RelatedMovie from './RelatedMovie';
 
-const BASE_URL = 'http://192.168.1.252:9988/file-system/download/';
+const BASE_URL = '/file-system/download/';
 const accessToken = sessionStorage.getItem("accessToken") // 세션 스토리지에서 accessToken을 가져옵니다.
 
 function MovieDetail() {
@@ -33,7 +33,7 @@ function MovieDetail() {
 		const fetchLikeStatus = async () => {
 			try {
 				if (sessionStorage.getItem("accessToken") !== null) {
-					const response = await axios.get(`http://192.168.1.252:9988/likes/${LikeType.MOVIE}?no=${id}`);
+					const response = await axios.get(`/likes/${LikeType.MOVIE}?no=${id}`);
 					const likeData = response.data;
 
 					// 예: 좋아요 상태가 ACTIVE인지 여부에 따라 아이콘을 채우거나 비우기
@@ -54,7 +54,7 @@ function MovieDetail() {
 			try {
 				setLoading(true) // 로딩 시작
 				setError(null) // 이전 에러 상태 초기화
-				const backendApiUrl = `http://192.168.1.252:9988/movies/detail/${id}` // '/detail' 추가!
+				const backendApiUrl = `/movies/detail/${id}` // '/detail' 추가!
 
 				// fetch API를 사용하여 백엔드에 GET 요청을 보냅니다.
 				const response = await fetch(backendApiUrl)
@@ -89,7 +89,7 @@ function MovieDetail() {
 		const fetchMovieGoods = async () => {
 
 			try {
-				const movieGoodsList = await axios.get(`http://localhost:9988/md-shop/movies/${id}`)
+				const movieGoodsList = await axios.get(`/md-shop/movies/${id}`)
 				setRelatedGoods(movieGoodsList.data) // 관련 상품 목록을 상태에 저장합니다.;
 			} catch (error) {
 				console.error("Error fetching related goods:", error);
@@ -99,7 +99,7 @@ function MovieDetail() {
 		const fetchRelateMovie = async () => {
 
 			try {
-				const movieList = await axios.get(`http://localhost:9988/movies/relate-movie?no=${id}`)
+				const movieList = await axios.get(`/movies/relate-movie?no=${id}`)
 				setRelatedMovies(movieList.data.content);
 			} catch (error) {
 				console.error("Error fetching related goods:", error);
@@ -141,7 +141,7 @@ function MovieDetail() {
 
 	const toggleLike = async () => {
 		try {
-			const res = await axios.patch(`http://192.168.1.252:9988/likes/${likeId}`);
+			const res = await axios.patch(`/likes/${likeId}`);
 			const likeData = res.data;
 			// 예: 좋아요 상태가 ACTIVE인지 여부에 따라 아이콘을 채우거나 비우기
 			if (likeData.status === "ACTIVE") {

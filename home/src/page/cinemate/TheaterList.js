@@ -24,7 +24,7 @@ function TheaterList(){
     useEffect(()=>{
         const currentPageSize = getPageSize(window.innerWidth);
 
-        axios.get(`http://localhost:9988/cinemate/theaters?page=${page}`,{
+        axios.get(`/cinemate/theaters?page=${page}`,{
             params: {
                 page: page,
                 size: currentPageSize,

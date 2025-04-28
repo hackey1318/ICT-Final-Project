@@ -71,7 +71,7 @@ const GoodsInfo = ({ goods }) => {
                                     >
                                         <img
                                             ref={imageRef}
-                                            src={`http://localhost:9988/file-system/download/${imgUrl}`}
+                                            src={`/file-system/download/${imgUrl}`}
                                             alt={`굿즈 이미지 ${index + 1}`}
                                             className="main-image"
                                             onError={(e) => {

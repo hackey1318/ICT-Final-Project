@@ -13,7 +13,7 @@ export default function RelatedMovie({ movieId }) {
 
     useEffect(() => {
         if (!movieId) return;
-        axios.get(`http://localhost:9988/movies/relate-movie?no=${movieId}`)
+        axios.get(`/movies/relate-movie?no=${movieId}`)
             .then(res => setRelatedMovies(res.data.content))
             .catch(err => console.error(err));
     }, [movieId]);

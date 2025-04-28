@@ -24,7 +24,7 @@ function ManagerList() {
         if (searchValue.trim()) {
             params[searchType] = searchValue.trim();
         }
-        axios.get(`http://localhost:9988/manager/home/member-list/admin`, {
+        axios.get(`/manager/home/member-list/admin`, {
             params,
             headers: {
                 "Content-Type": "application/json",
@@ -63,7 +63,7 @@ function ManagerList() {
         const value = e.target.value;
         if (value === "delete") {
             if (!window.confirm(`MANAGER ${userNo}번을 삭제하시겠습니까?`)) return;
-            axios.post(`http://localhost:9988/manager/home/manager-delete/${userNo}`, {}, {
+            axios.post(`/manager/home/manager-delete/${userNo}`, {}, {
                 headers: { Authorization: `Bearer ${accessToken}` }
             })
                 .then(() => getManagerList(page))

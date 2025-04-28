@@ -39,7 +39,7 @@ const GoodsDetail = () => {
 
 	const fetchReviews = async () => {
 		try {
-			const { data } = await axios.get(`http://192.168.1.252:9988/goods/${goodsNo}/reviews`);
+			const { data } = await axios.get(`/goods/${goodsNo}/reviews`);
 			setReviews(data);
 		} catch (err) {
 			console.error('리뷰 목록 조회 오류', err);
@@ -50,7 +50,7 @@ const GoodsDetail = () => {
 		const fetchData = async () => {
 			try {
 				const goodsInfo = await axios.get(
-					`http://192.168.1.252:9988/md-shop/lists/${goodsNo}`
+					`/md-shop/lists/${goodsNo}`
 				);
 				setProduct(goodsInfo.data);
 				setMovieId(goodsInfo.data.movieNo);
@@ -65,7 +65,7 @@ const GoodsDetail = () => {
 			try {
 				if (accessToken) {
 					const response = await axios.get(
-						`http://192.168.1.252:9988/likes/${LikeType.GOODS}?no=${goodsNo}`,
+						`/likes/${LikeType.GOODS}?no=${goodsNo}`,
 						{ headers: { Authorization: `Bearer ${accessToken}` } }
 					);
 					const likeData = response.data;
@@ -87,7 +87,7 @@ const GoodsDetail = () => {
 	const toggleLike = async () => {
 		try {
 			const res = await axios.patch(
-				`http://192.168.1.252:9988/likes/${likeId}`,
+				`/likes/${likeId}`,
 				{},
 				{ headers: { Authorization: `Bearer ${accessToken}` } }
 			);

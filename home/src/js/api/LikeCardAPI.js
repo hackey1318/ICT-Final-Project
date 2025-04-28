@@ -10,7 +10,7 @@ export const unlikeItem = async (itemId) => {
     }
 
     try {
-        await axios.patch(`http://localhost:9988/likes/${itemId}`, {}, {
+        await axios.patch(`/likes/${itemId}`, {}, {
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
             },

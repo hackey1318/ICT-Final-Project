@@ -33,7 +33,7 @@ function TheaterListDetail(){
     }
 
     useEffect(()=>{
-        axios.get(`http://localhost:9988/cinemate/theaterDetail/${theaterNo}`)
+        axios.get(`/cinemate/theaterDetail/${theaterNo}`)
         .then((response)=>{
             console.log("시네메이트 영화관 정보", response.data);
             setTheaters(response.data);
@@ -67,7 +67,7 @@ function TheaterListDetail(){
 
     const toggleLike = async () => {
 		try {
-			const res = await axios.patch(`http://192.168.1.252:9988/likes/${likeId}`);
+			const res = await axios.patch(`/likes/${likeId}`);
 			const likeData = res.data;
 			// 예: 좋아요 상태가 ACTIVE인지 여부에 따라 아이콘을 채우거나 비우기
 			if (likeData.status === "ACTIVE") {

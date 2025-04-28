@@ -12,7 +12,7 @@ export default function ChatBox({ movieNo, roomNo }) {
 
     const fetchChats = async () => {
         try {
-            const response = await axios.get(`http://localhost:9988/cinemate/chat-room/${roomNo}`, {
+            const response = await axios.get(`/cinemate/chat-room/${roomNo}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${accessToken}`
@@ -27,7 +27,7 @@ export default function ChatBox({ movieNo, roomNo }) {
     const handleSendMessage = async () => {
         if (newMessage.trim()) {
             try {
-                await axios.post(`http://localhost:9988/cinemate/chat-room/${roomNo}`, { message: newMessage }, {
+                await axios.post(`/cinemate/chat-room/${roomNo}`, { message: newMessage }, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`
                     },

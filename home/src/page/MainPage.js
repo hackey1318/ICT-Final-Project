@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 // --- 설정 ---
 // 실제 백엔드 서버 주소 및 API 경로로 변경해야 합니다.
-const BACKEND_BASE_URL = 'http://localhost:9988'; // 예: 실제 백엔드 주소
+const BACKEND_BASE_URL = ''; // 예: 실제 백엔드 주소
 const BANNER_API_ENDPOINT = `${BACKEND_BASE_URL}/banner/ALL`; // 배너 조회 API 엔드포인트
 const IMAGE_DOWNLOAD_BASE_URL = `${BACKEND_BASE_URL}/file-system/download/`; // 이미지 다운로드 API 기본 경로
 

@@ -8,7 +8,7 @@ import InquiryComment from '../../js/inquiry/InquiryComment';
 
 function InquiryView() {
     const {no} = useParams();
-    const IMAGE_BASE_URL = 'http://192.168.1.252:9988/file-system/showImage/';
+    const IMAGE_BASE_URL = '/file-system/showImage/';
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImageIdx, setSelectedImageIdx] = useState(0);
 

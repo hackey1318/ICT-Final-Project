@@ -26,7 +26,7 @@ export default function MovieRoom() {
     }, [no, isJoined]);
 
     const fetctParticipantCount = async () => {
-        const res = await axios.get(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}/members/count`, {
+        const res = await axios.get(`/cinemate/movies/${movieNo}/room/${no}/members/count`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
@@ -37,7 +37,7 @@ export default function MovieRoom() {
     }
 
     const fetchMovieRoomJoinStatus = async () => {
-        const res = await axios.get(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}`, {
+        const res = await axios.get(`/cinemate/movies/${movieNo}/room/${no}`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
@@ -48,7 +48,7 @@ export default function MovieRoom() {
 
     const fetchJoinedUsers = async () => {
         try {
-            const res = await axios.get(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}/members`, {
+            const res = await axios.get(`/cinemate/movies/${movieNo}/room/${no}/members`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -64,7 +64,7 @@ export default function MovieRoom() {
     const handleCloseJoinedModal = () => setShowJoinedModal(false);
 
     const handleJoin = async () => {
-        await axios.post(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}`, {}, {
+        await axios.post(`/cinemate/movies/${movieNo}/room/${no}`, {}, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`
@@ -74,7 +74,7 @@ export default function MovieRoom() {
     };
 
     const handleCancel = async () => {
-        await axios.delete(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}`, {
+        await axios.delete(`/cinemate/movies/${movieNo}/room/${no}`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${accessToken}`

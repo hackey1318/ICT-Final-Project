@@ -5,7 +5,7 @@ import right from '../../img/arrowR.jpg';
 import close from '../../img/close.jpg';
 import { useCallback, useEffect, useState } from 'react';
 
-const IMAGE_BASE_URL = 'http://192.168.1.252:9988/file-system/showImage/';
+const IMAGE_BASE_URL = '/file-system/showImage/';
 
 function InquiryImageModal({ images, initialIndex, onClose }) {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);

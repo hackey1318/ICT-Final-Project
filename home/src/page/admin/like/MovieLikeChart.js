@@ -10,7 +10,7 @@ function MovieLikeChart() {
     useEffect(() => {
         const fetchMovieLikes = async () => {
             try {
-                const response = await axios.get('http://192.168.1.252:9988/likes/statistics/movie',{
+                const response = await axios.get('/likes/statistics/movie',{
                     headers: { Authorization: `Bearer ${accessToken}` }
                 });  // 서버에서 데이터 받아오기
                 const likeStatisticsList = response.data;

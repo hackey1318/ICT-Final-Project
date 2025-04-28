@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const API_BASE_URL = "http://localhost:9988";
+const API_BASE_URL = "";
 
 export const useGeneralRegisterForm = (role = 'user') => {
   const navigate = useNavigate();
@@ -78,15 +78,15 @@ export const useGeneralRegisterForm = (role = 'user') => {
         const p3 = name === 'phone3' ? value : data.phone3;
               if (!p1 && !p2 && !p3) {
                   error = '연락처를 입력해주세요.';
-               }
-                // 2) 각 부분별 형식 검증
-                else if (!/^0\d{1,2}$/.test(p1)) {
-                  error = '연락처 첫 부분은 010 혹은 지역번호(02, 031 등)여야 합니다.';
-                } else if (!/^\d{3,4}$/.test(p2)) {
-                  error = '연락처 중간 부분은 3~4자리 숫자여야 합니다.';
-                } else if (!/^\d{4}$/.test(p3)) {
-                  error = '연락처 마지막 부분은 4자리 숫자여야 합니다.';
-                }
+              }
+              // 2) 각 부분별 형식 검증
+              else if (!/^0\d{1,2}$/.test(p1)) {
+                error = '연락처 첫 부분은 010 혹은 지역번호(02, 031 등)여야 합니다.';
+              } else if (!/^\d{3,4}$/.test(p2)) {
+                error = '연락처 중간 부분은 3~4자리 숫자여야 합니다.';
+              } else if (!/^\d{4}$/.test(p3)) {
+                error = '연락처 마지막 부분은 4자리 숫자여야 합니다.';
+              }
         return { phone: error };
       }
       default:

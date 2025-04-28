@@ -40,7 +40,7 @@ function MdSales() {
 
     useEffect(() => {
         const accessToken = sessionStorage.getItem("accessToken");
-        axios.post("http://localhost:9988/md-shop/totalList",
+        axios.post("/md-shop/totalList",
             {
 
             },

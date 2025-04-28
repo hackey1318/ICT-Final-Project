@@ -70,7 +70,7 @@ function PwdReset(){
         }
 
         //비동기로 백엔드 요청
-        axios.post(`http://localhost:9988/user/changePwd?userNo=${no}`,{
+        axios.post(`/user/changePwd?userNo=${no}`,{
             password: resetPwd.pwd,
             no: no
         })

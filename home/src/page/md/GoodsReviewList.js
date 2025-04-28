@@ -42,7 +42,7 @@ export default function GoodsReviewList({
 
 	const fetchReviews = async () => {
 		try {
-			const { data } = await axios.get(`http://192.168.1.252:9988/goods/${goodsId}/reviews`);
+			const { data } = await axios.get(`/goods/${goodsId}/reviews`);
 			console.log("리뷰 데이터 상세:", {
 				전체_데이터: data,
 				첫번째_리뷰_상세: data[0],
@@ -70,7 +70,7 @@ export default function GoodsReviewList({
 		}
 
 		try {
-			await axios.delete(`http://192.168.1.252:9988/goods/${goodsId}/reviews/${reviewId}`);
+			await axios.delete(`/goods/${goodsId}/reviews/${reviewId}`);
 			alert('리뷰가 삭제되었습니다.');
 			fetchReviews(); // 리뷰 목록 새로고침
 		} catch (err) {

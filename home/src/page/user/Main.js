@@ -13,7 +13,7 @@ import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
 
-const BASE_URL = "http://localhost:9988/file-system/download/"
+const BASE_URL = "/file-system/download/"
 
 function Main() {
 
@@ -26,7 +26,7 @@ function Main() {
 
   function readBannerList() {
 
-    axios.get("http://localhost:9988/banner/MOVIE")
+    axios.get("/banner/MOVIE")
       .then((response) => {
         const data = response.data
         console.log("배너 리스트:", data)

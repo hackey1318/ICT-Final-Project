@@ -22,7 +22,7 @@ export default function BannerFormModal({ show, onClose, onSuccess, mode = "crea
     const [originalFileName, setOriginalFileName] = useState("");
 
     const accessToken = sessionStorage.getItem("accessToken");
-    const BASE_URL = "http://localhost:9988";
+    const BASE_URL = "";
 
     useEffect(() => {
         const fetchOriginalFileName = async (fileId) => {

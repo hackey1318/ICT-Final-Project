@@ -29,7 +29,7 @@ const LikedItemsPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:9988/likes`, {
+                const response = await axios.get(`/likes`, {
                     params: { type: activeTab, page, size },
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,

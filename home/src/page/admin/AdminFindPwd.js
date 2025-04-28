@@ -45,7 +45,7 @@ function AdminFindPwd(){
         }
 
         //비동기로 백엔드 요청
-        axios.post("http://localhost:9988/user/findPwdOk",{
+        axios.post("/user/findPwdOk",{
             id: pwdFindForm.id,
             email: pwdFindForm.email
         })

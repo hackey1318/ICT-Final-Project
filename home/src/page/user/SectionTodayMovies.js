@@ -66,7 +66,7 @@ function SectionTodayMovies() {
 	// ✅ 영화 목록 불러오는 함수
 	const fetchMovies = (limit) => {
 		setIsLoading(true);
-		axios.get(`http://localhost:9988/movies/recommendation?count=${limit}`)
+		axios.get(`/movies/recommendation?count=${limit}`)
 			.then(response => {
 				const movies = response.data;
 				setGridMovies(movies);

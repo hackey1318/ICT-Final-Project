@@ -15,7 +15,7 @@ function OrderList() {
             return null;
         }
 
-        const response = await fetch("http://localhost:9988/order/list", {
+        const response = await fetch("/order/list", {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${accessToken}`
@@ -46,7 +46,7 @@ function OrderList() {
         }
         const accessToken = sessionStorage.getItem("accessToken");
         const fetchCancelOrder = async () => {
-            const paymentResponse = await fetch("http://localhost:9988/payment/cancel", {
+            const paymentResponse = await fetch("/payment/cancel", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -64,7 +64,7 @@ function OrderList() {
             const transactionKey = paymentData.lastTransactionKey;
             console.log("결제 취소 결과:", paymentData);
 
-            const orderResponse = await fetch("http://localhost:9988/order/cancel", {
+            const orderResponse = await fetch("/order/cancel", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -145,7 +145,7 @@ function OrderList() {
                                     return (
                                         <div className="orderList_content" style={{ display: 'flex', flexDirection: 'row' }} onClick={() => window.location.href = `/mdshop/${item.goodsNo}`}>
                                             <div className="orderList_content_goods_img">
-                                                <img src={`http://192.168.1.252:9988/file-system/download/${item.imageIdList[0]}`} />
+                                                <img src={`/file-system/download/${item.imageIdList[0]}`} />
                                             </div>
                                             <div className="orderList_content_goods_detail">
                                                 <span className="goods_name"><b>{item.name}</b></span>

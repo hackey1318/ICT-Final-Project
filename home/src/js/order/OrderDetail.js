@@ -18,7 +18,7 @@ function OrderDetail() {
     useEffect(() => {
         const accessToken = sessionStorage.getItem("accessToken");
 
-        axios.post("http://localhost:9988/order/detail", JSON.stringify({
+        axios.post("/order/detail", JSON.stringify({
             orderNumber: orderId
         }), {
             headers: {
@@ -60,7 +60,7 @@ function OrderDetail() {
                         {goodsData.map((element, index) => (
                             <div key={index} onClick={() => window.location.href = `/mdshop/${goodsData[index].goodsNo}`}>
                                 <div className="order_info_content_goods_img">
-                                    <img src={`http://192.168.1.252:9988/file-system/download/${element.imageIdList[0]}`}/>
+                                    <img src={`/file-system/download/${element.imageIdList[0]}`}/>
                                 </div>
                                 <div className="order_info_content_goods_detail">
                                     <span className="goods_name"><b>{element.name}</b></span>

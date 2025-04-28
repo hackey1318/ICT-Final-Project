@@ -7,7 +7,7 @@ export default function AnnounceCreateModal({ show, onClose, onSuccess }) {
     const [content, setContent] = useState('');
     const [expiredAt, setExpiredAt] = useState('');
     const accessToken = sessionStorage.getItem('accessToken');
-    const BASE_URL = 'http://localhost:9988';
+    const BASE_URL = '';
 
     useEffect(() => {
         if (show) {

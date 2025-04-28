@@ -47,7 +47,7 @@ function UpcomingMovie() { // 컴포넌트 이름 변경: UpcomingMovie
             try {
                 console.log(`페이지 가져오는 중: ${page}, 크기: ${currentPageSize}, 타입: ${movieType}`); // 디버그 로그
                 // API 엔드포인트 변경: /movies/PREPARATION
-                const response = await axios.get(`http://localhost:9988/movies/${movieType}`, {
+                const response = await axios.get(`/movies/${movieType}`, {
                     params: {
                         page: page,
                         size: currentPageSize,

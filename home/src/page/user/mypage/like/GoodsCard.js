@@ -18,7 +18,7 @@ const GoodsCard = ({ item, onRefresh }) => {
                 <div className="like-card-heart" onClick={handleClick}>
                     <Heart color="red" fill="red" />
                 </div>
-                <img src={`http://localhost:9988/file-system/download/${item.imageIdList?.[0]}`} alt={item.name} />
+                <img src={`/file-system/download/${item.imageIdList?.[0]}`} alt={item.name} />
                 <div className="like-card-title">{item.name}</div>
                 <p>{item.price.toLocaleString()} 원</p>
             </div>

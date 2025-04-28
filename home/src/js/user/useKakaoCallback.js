@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // --- 환경 변수 또는 설정 파일에서 API 기본 URL 가져오기 (권장) ---
-const API_BASE_URL = "http://localhost:9988"; // 실제 환경에 맞게 수정
+const API_BASE_URL = ""; // 실제 환경에 맞게 수정
 
 export const useKakaoCallback = () => {
     const navigate = useNavigate();

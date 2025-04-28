@@ -33,7 +33,7 @@ function MdRegisterModal({ closeModal, refreshList, editTarget }) {
 	const fetchMovieList = async (search) => {
 		try {
 			const response = await axios.get(
-				`http://localhost:9988/movies/titles?movieSearch=${encodeURIComponent(search)}`,
+				`/movies/titles?movieSearch=${encodeURIComponent(search)}`,
 				{
 					headers: {
 						Authorization: `Bearer ${accessToken}`,
@@ -127,7 +127,7 @@ function MdRegisterModal({ closeModal, refreshList, editTarget }) {
 			const formData = new FormData()
 			newImages.forEach((file) => formData.append("files", file))
 			try {
-				const res = await axios.post("http://localhost:9988/file-system/upload", formData, {
+				const res = await axios.post("/file-system/upload", formData, {
 					headers: {
 						"Content-Type": "multipart/form-data",
 						Authorization: `Bearer ${accessToken}`,
@@ -149,7 +149,7 @@ function MdRegisterModal({ closeModal, refreshList, editTarget }) {
 
 		try {
 			if (editTarget) {
-				await axios.put(`http://localhost:9988/md-shop/items?id=${editTarget.id}`, payload, {
+				await axios.put(`/md-shop/items?id=${editTarget.id}`, payload, {
 					headers: {
 						"Content-Type": "application/json",
 						Authorization: `Bearer ${accessToken}`,
@@ -157,7 +157,7 @@ function MdRegisterModal({ closeModal, refreshList, editTarget }) {
 				})
 				alert("수정 완료!")
 			} else {
-				await axios.post("http://localhost:9988/md-shop/items", payload, {
+				await axios.post("/md-shop/items", payload, {
 					headers: {
 						"Content-Type": "application/json",
 						Authorization: `Bearer ${accessToken}`,
@@ -325,7 +325,7 @@ function MdRegisterModal({ closeModal, refreshList, editTarget }) {
 								{existingImageUrls.map((src, index) => (
 									<div key={`existing-${index}`} className="image-preview-box">
 										<img
-											src={`http://192.168.1.252:9988/file-system/download/${src}`}
+											src={`/file-system/download/${src}`}
 											alt={`기존-${index}`}
 											onClick={() => handleRemoveExistingImage(index)}
 										/>
