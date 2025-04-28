@@ -98,3 +98,14 @@ export const createReport = async (reportData) => {
         throw new Error(error.response?.data?.message || 'Failed to fetch reporter reports');
     }
   };
+
+  //신고남발자 비활성화
+  export const deactiveBadReporter = async (reporterNo) => {
+    try {
+      const response = await apiClient.put(`/report/deactiveBadReporter/${reporterNo}`);
+      return response.data;
+    } catch(error) {
+      throw new Error(error.response?.data?.message || '유저 상태 변경 실패');
+    }
+  };
+  

@@ -40,4 +40,29 @@ public class BlacklistEmailServiceImpl {
             throw new RuntimeException("이메일 발송 실패: " + e.getMessage());
         }
     }
+
+    //신고남발자 비활성화
+    public void sendBadReporterEmail(String toEmail) {
+        try {
+            MimeMessage message = emailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(fromEmail);
+            helper.setTo(toEmail);
+            helper.setSubject("[안내] 불합리한 신고로 인한 계정 비활성화");
+
+            String content = "안녕하세요,\n\n" +
+                    "불합리한 신고로 인해 귀하의 계정이 비활성화되었음을 알려드립니다.\n" +
+                    "이 결정에 대해 궁금한 사항이 있으시면 고객센터로 문의해주시기 바랍니다.\n\n" +
+                    "감사합니다.";
+
+            helper.setText(content, false);
+
+            emailSender.send(message);
+            log.info("불합리한 신고로 인한 계정 비활성화 안내 이메일 발송 완료: {}", toEmail);
+        } catch (Exception e) {
+            log.error("이메일 발송 실패: {}", e.getMessage());
+            throw new RuntimeException("이메일 발송 실패: " + e.getMessage());
+        }
+    }
 }
