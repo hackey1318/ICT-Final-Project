@@ -64,7 +64,7 @@ export default function AnnounceEditModal({ show, onClose, announceData, onSave 
                                 />
                             </div>
                             <div className="modal-footer">
-                                <button className="btn btn-primary" onClick={handleSave} disabled={loading}>
+                                <button className="btn my-custom-btn" onClick={handleSave} disabled={loading}>
                                     {loading ? "저장 중..." : "저장"}
                                 </button>
                                 <button className="btn btn-secondary" onClick={onClose}>취소</button>

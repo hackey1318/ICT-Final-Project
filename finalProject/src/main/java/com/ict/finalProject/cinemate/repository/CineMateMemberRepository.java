@@ -23,4 +23,7 @@ public interface CineMateMemberRepository extends JpaRepository<CineMateMembers,
 
     @Query("SELECT new com.ict.finalProject.cinemate.controller.response.CineMateMemberResponse(u.no AS userNo, u.nickname AS nickName, u.profileImageUrl AS profile) FROM CineMateMembers AS cm LEFT JOIN Users AS u ON cm.userNo = u.no AND u.status='ACTIVE' WHERE cm.cineMateNo = :cineMateNo AND cm.status = 'ACTIVE'")
     List<CineMateMemberResponse> getCineMateMemberInfo(@Param("cineMateNo") Integer cineMateNo);
+
+    @Query("select m.userNo from CineMateMembers m where m.cineMateNo = :cineMateNo and m.status = :status")
+    List<Integer> findUserNosByCineMateNoAndStatus(@Param("cineMateNo") Integer cineMateNo, @Param("status") StatusInfo statusInfo);
 }

@@ -198,4 +198,24 @@ public class GoodsReviewServiceImpl implements GoodsReviewService {
         reviewRepo.delete(review);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<GoodsReviewResponse> getReviewsByUser(Long userNo) {
+        return reviewRepo.findByUserNo(userNo)
+                .stream()
+                .map(entity -> {
+                    // 엔티티 → DTO
+                    GoodsReviewResponse dto = modelMapper.map(entity, GoodsReviewResponse.class);
+                    // 관련 이미지 IDs 설정
+                    List<String> imageIds = imageInfoRepo.findImageIdsByBoardNoAndTypeAndStatus(
+                            entity.getId().intValue(),
+                            ImageWriteType.GOODSREVIEW,
+                            StatusInfo.ACTIVE
+                    );
+                    dto.setImageIds(imageIds);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
 }

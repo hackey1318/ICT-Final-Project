@@ -21,6 +21,13 @@ function ReviewWritePage() {
 
   const navigate = useNavigate();
 
+  const handleOverlayClick = (e) => {
+    // overlay 자신을 클릭했을 때만 닫히도록
+    if (e.target === e.currentTarget) {
+      navigate(-1);
+    }
+  };
+
   const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
@@ -62,6 +69,10 @@ function ReviewWritePage() {
   };
 
   const handleSubmit = () => {
+    if (!title.trim() || !content.trim()) {
+      alert("제목과 내용을 모두 입력해주세요.");
+      return;
+    }
     const payload = {
       movieNo,
       userNo: currentUserNo,
@@ -79,15 +90,15 @@ function ReviewWritePage() {
 
   return (
     <div className="review-write-page">
-      <div className="modal-overlay">
-        <div className="modal-content">
+      <div className="modal-overlay" onClick={handleOverlayClick}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <h2 className="write-title">리뷰 작성</h2>
 
           {/* 이미지 업로드 + 미리보기 */}
           <div className="image-upload-wrapper">
             {previews.map((src, idx) => (
               <div key={idx} className="image-wrapper">
-                <img src={src} alt={`미리보기${idx}`} className="preview-img" />
+                <img src={src} alt={`미리보기${idx}`} className="preview-write-img" />
                 <button
                   type="button"
                   className="remove-btn"
