@@ -16,6 +16,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("manager/home")
@@ -34,23 +37,21 @@ public class AdminController {
                 .build();
     }
 
-    @GetMapping("/member-list")
-    public Page<UserResponse> getMemberList(@PageableDefault(size = 10)Pageable pageable,
+    @GetMapping("/member-list/{group}")
+    public Page<UserResponse> getMemberList(@PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable,
                                             @RequestParam(required = false) String memberId,
                                             @RequestParam(required = false) String memberNickname,
-                                            @RequestParam(required = false) String memberEmail){
-        return adminService.getMemberList(pageable, memberId, memberNickname, memberEmail);
+                                            @RequestParam(required = false) String memberEmail,
+                                            @PathVariable(value = "group") String group) {
+        List<UserRole> roleList;
+        switch (group.toLowerCase()) {
+            case "user" -> roleList = List.of(UserRole.USER);
+            case "admin" -> roleList = List.of(UserRole.MANAGER, UserRole.ADMIN);
+            default -> throw new IllegalArgumentException("잘못된 그룹입니다. (user 또는 admin만 허용)");
+        }
+        return adminService.getMemberList(pageable, memberId, memberNickname, memberEmail, roleList);
     }
 
-    @GetMapping("/manager-list")
-    public Page<UserResponse> getManagerList(
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false) String memberId,
-            @RequestParam(required = false) String memberNickname,
-            @RequestParam(required = false) String memberEmail
-    ) {
-        return adminService.getManagerList(pageable, memberId, memberNickname, memberEmail);
-    }
     //관리자 비활성화
     @PostMapping("/manager-delete/{userNo}")
     public ResponseEntity<String> deleteManager(@PathVariable Integer userNo){
