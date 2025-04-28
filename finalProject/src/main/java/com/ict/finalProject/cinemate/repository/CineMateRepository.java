@@ -2,6 +2,7 @@ package com.ict.finalProject.cinemate.repository;
 
 import com.ict.finalProject.cinemate.controller.response.CineMateResponse;
 import com.ict.finalProject.cinemate.repository.domain.CineMates;
+import com.ict.finalProject.domain.constant.StatusInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -51,4 +52,7 @@ public interface CineMateRepository extends JpaRepository<CineMates, Integer> {
             nativeQuery = true
     )
     List<Object[]> getTheaterDetail(@Param("theaterNo") Integer theaterNo);
+
+    @Query("SELECT c FROM CineMates AS c WHERE c.status = :status")
+    List<CineMates> getCineMateByStatus(@Param("status") StatusInfo statusInfo);
 }

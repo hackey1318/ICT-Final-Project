@@ -21,17 +21,17 @@ function MemberList(){
         e.preventDefault();      // 페이지 리로드 막고
         setPage(0);
         getUserList();           // 검색 실행
-      };
+    };
 
     useEffect(()=>{
         getUserList();
     },[page]);
 
     const getUserList = () => {
-        axios.get(`http://localhost:9988/manager/home/member-list?page=${page}&size=10`, {
+        axios.get(`http://localhost:9988/manager/home/member-list/user?page=${page}&size=10`, {
             params:{
                 page,
-                sort: "createdAt,desc",
+                sort: "createdAt,asc",
                 [searchType]: searchValue.trim() === "" ? null : searchValue
             },
             headers: {
@@ -111,10 +111,11 @@ function MemberList(){
                     </thead>
                         <tbody>
                     {
-                        userList.map((item)=>{
+                        userList.map((item, index)=>{
+                            const number = page * 10 + index + 1; // ✅ 번호 계산 (page=0부터 시작이라 +1)
                             return(
                                 <tr key={item.no} className="memberlist-item">
-                                    <td>{item.no}</td>
+                                    <td>{number}</td>
                                     <td>{item.id}</td>
                                     <td>{item.nickname}</td>
                                     <td>{item.email}</td>
