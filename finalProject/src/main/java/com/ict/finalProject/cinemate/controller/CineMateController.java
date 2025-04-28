@@ -82,4 +82,16 @@ public class CineMateController {
         return cineMateService.getCineMateMemberCount(no);
     }
 
+
+    //시네메이트 영화관 목록
+    @GetMapping("/theaters")
+    public Page<CineMateResponse> getCineMateTheaters(Pageable pageable){
+        return cineMateService.getCineMateTheaters(pageable);
+    }
+
+    //시네메이트 영화관 상세
+    @GetMapping("/theaterDetail/{theaterNo}")
+    public List<CineMateResponse> getMovieDatail(@PathVariable Integer theaterNo){
+        return cineMateService.getTheaterDetail(theaterNo);
+    }
 }
