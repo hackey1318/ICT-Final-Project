@@ -26,7 +26,9 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int no;  //신고 번호
 
-    private int userNo;  //유저번호(신고자)
+    private int reporterNo;  //신고자번호
+
+    private int targetNo;  //피신고자번호
 
     private int staffNo;  //담당자번호
 
@@ -45,17 +47,12 @@ public class Report {
 
     @Column(nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
-    private Proceed proceed;  //처리 진행 상황
-
-    @Column(nullable = false, length = 15)
-    @Enumerated(EnumType.STRING)
-    private StatusInfo status;  //신고글 상태
+    private ReportStatus status;  //처리 진행 상황
 
     @CreatedDate
     @Column(nullable = false)
-    private LocalDateTime createdAt;  //문의생성일
+    private LocalDateTime createdAt;  //신고생성일
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;  //문의수정일
+    @Column(nullable = true)
+    private LocalDateTime resolvedAt;  //신고처리일
 }

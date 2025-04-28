@@ -57,41 +57,13 @@ public class CartsController {
         Map<String, Object> result = new HashMap<>();
 
         if (mdShopService.getGoodsInfo(goodsId).getCount() < 1) {
-            result.put("isRedirect", false);
-            result.put("message", "재고가 없는 상품입니다.");
+            result.put("stockResult", false);
             return ResponseEntity.ok(result);
         }
 
-        if (cartsService.checkCartGoodsExist(userNo, goodsId)) {
-            if (act.equals("Purchase")) {
-                result.put("isRedirect", true);
-                result.put("message", "이미 추가된 상품입니다. 장바구니 페이지로 이동합니다.");
-                return ResponseEntity.ok(result);
-            } else if (act.equals("Add")) {
-                result.put("isRedirect", false);
-                result.put("message", "이미 장바구니에 추가된 상품입니다.");
-                return ResponseEntity.ok(result);
-            } else {
-                result.put("isRedirect", false);
-                result.put("message", "Unknown Act");
-                return ResponseEntity.ok(result);
-            }
-        } else {
-            cartsService.insertCartGoods(userNo, goodsId, goodsQuantity);
-            if (act.equals("Purchase")) {
-                result.put("isRedirect", true);
-                result.put("message", "상품이 추가되었습니다. 장바구니 페이지로 이동합니다.");
-                return ResponseEntity.ok(result);
-            } else if (act.equals("Add")) {
-                result.put("isRedirect", false);
-                result.put("message", "장바구니에 상품이 추가되었습니다.");
-                return ResponseEntity.ok(result);
-            } else {
-                result.put("isRedirect", false);
-                result.put("message", "Unknown Act");
-                return ResponseEntity.ok(result);
-            }
-        }
+        cartsService.insertCartGoods(userNo, goodsId, goodsQuantity);
+        result.put("stockResult", true);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/goods")

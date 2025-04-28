@@ -41,11 +41,20 @@ const MypageSidebar = () => {
                         </li>
                         <li>
                             <Link
-                                to="/mypage/orders"
+                                to="/mypage/order/list"
                                 className={`menu-item-link ${activeMenu === "구매내역" ? "active" : ""}`}
                                 onClick={() => handleMenuClick("구매내역")}
                             >
-                                <span className="bullet">•</span>구매 내역 조회
+                                <span className="bullet">•</span>주문 내역 조회
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to="/mypage/cart"
+                                className={`menu-item-link ${activeMenu === "장바구니" ? "active" : ""}`}
+                                onClick={() => handleMenuClick("장바구니")}
+                            >
+                                <span className="bullet">•</span>장바구니
                             </Link>
                         </li>
                         <li>

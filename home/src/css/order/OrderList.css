@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 25px;
+    /* margin-top: 25px; */
 }
 
 #back_button {
@@ -11,8 +11,8 @@
     background: url('./../../img/leftArrow.png');
     background-size: cover;
     border: none;
-    margin-top: 50px;
-    margin-right: auto;
+    /* margin-top: 50px; */
+    /* margin-right: auto; */
 }
 
 .orderList_head {
@@ -83,7 +83,15 @@
     padding-top: 10px;
 }
 
+.orderList_content {
+    padding: 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
 .orderList_content:hover {
+    background-color: #cfcfcf; /* 살짝 밝은 배경 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* 살짝 그림자 */
     cursor: pointer;
 }
 

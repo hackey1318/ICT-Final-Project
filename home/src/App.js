@@ -40,6 +40,7 @@ import Gender from './page/admin/Gender';
 import InquiryReply from './page/admin/InquiryReply';
 import InquiryReplyView from './page/admin/InquiryReplyView';
 import GoodsDetail from './page/md/GoodsDetail';
+import GoodsReviewSection from './page/md/GoodsReviewSection';
 import MdShop from './page/md/MdShop';
 import RelatedMovie from './page/movie/RelatedMovie';
 import BlackList from './page/admin/BlackList';
@@ -50,7 +51,8 @@ import AnnounceDetail from './page/admin/AnnounceDetail';
 import ManagerRegister from './page/admin/ManagerRegisterForm';
 import AdminFindId from './page/admin/AdminFindId';
 import AdminFindPwd from './page/admin/AdminFindPwd';
-import Report from './page/admin/Report';
+import ReportPage from './page/report/ReportPage';
+import ReportDetail from './page/report/ReportDetail';
 import BannerList from './page/admin/banner/BannerList';
 import MypageSidebar from './js/sidebar/MyPageSidebar';
 import LikedItemsPage from './page/user/mypage/LikedItemsPage';
@@ -58,6 +60,7 @@ import MovieTheater from './page/cinemate/MovieTheater';
 import MovieList from './page/cinemate/MovieList';
 import MovieListDetail from './page/cinemate/MovieListDetail';
 import MovieRoom from './page/cinemate/MovieRoom';
+import AdminPwdReset from './page/admin/AdminPwdReset';
 import MdSales from './page/md/MdSales';
 
 
@@ -113,18 +116,21 @@ function App() {
 				<Route path='movies/upcoming' element={<UpcomingMovie />} />
 				<Route path='/inquiry' element={<InquiryPage />} />
 				<Route path='/inquiryView/:no' element={<InquiryView />} />
-				<Route path='cart' element={<Cart />} />
-				<Route path='order/list' element={<OrderList />} />
-				<Route path='order/detail' element={<OrderDetail />} />
+
 				<Route path='order/error' element={<OrderError />} />
 				<Route path='mdshop' element={<MdShop />} />
-				<Route path="mdshop/:goodsNo" element={<GoodsDetail />} />
+				<Route path='mdshop/:goodsNo' element={<GoodsDetail />}>
+					<Route path='reviews' element={<GoodsReviewSection />} />
+				</Route>
 				<Route path="/related-movie/:movieId" element={<RelatedMovie />} />
 				<Route path="/announcements" element={<UserAnnounce />} />
 				<Route path="/announcements/:id" element={<UserAnnounceDetail />} />
 				<Route path="mypage" element={<MypageSidebar />} >
 					<Route index element={<LikedItemsPage />} />
 					<Route path="likes" element={<LikedItemsPage />} />
+					<Route path='order/list' element={<OrderList />} />
+					<Route path='order/detail' element={<OrderDetail />} />
+					<Route path='cart' element={<Cart />} />
 				</Route>
 
 				{/* 시네메이트 */}
@@ -141,7 +147,7 @@ function App() {
 				<Route index element={<ManagerLogin />} />
 				<Route path="find-id" element={<AdminFindId />} />
 				<Route path="find-pwd" element={<AdminFindPwd />} />
-				<Route path="pwdReset" element={<PwdReset />} />
+				<Route path="adminPwdReset" element={<AdminPwdReset />} />
 				<Route path="register" element={<ManagerRegister />} />
 
 				{/* 로그인 이후 관리자 레이아웃 (사이드바 포함) */}
@@ -158,7 +164,8 @@ function App() {
 					<Route path="inquiry/:no" element={<InquiryReplyView />} />
 					<Route path="announce" element={<AnnounceList />} />
 					<Route path="announce/:no" element={<AnnounceDetail />} />
-					<Route path="report" element={<Report />} />
+					<Route path="reportPage" element={<ReportPage />} />
+					<Route path="report/:no" element={<ReportDetail />} />
 					<Route path='banner' element={<BannerList />} />
 				</Route>
 			</Route>

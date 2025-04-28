@@ -9,7 +9,7 @@ function PaymentResult() {
     const paymentKey = searchParams.get("paymentKey");
 
     const showOrderDetail = () => {
-        window.location.href = `/order/detail?orderNumber=${orderNumber}`;
+        window.location.href = `/mypage/order/detail?orderNumber=${orderNumber}`;
     }
 
     const continueShopping = () => {
