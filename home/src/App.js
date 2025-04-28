@@ -42,6 +42,7 @@ import InquiryReplyView from './page/admin/InquiryReplyView';
 import GoodsDetail from './page/md/GoodsDetail';
 import GoodsReviewSection from './page/md/GoodsReviewSection';
 import MdShop from './page/md/MdShop';
+import MdSales from './page/md/MdSales';
 import RelatedMovie from './page/movie/RelatedMovie';
 import BlackList from './page/admin/BlackList';
 import UserAnnounce from './page/user/UserAnnounce';
@@ -61,8 +62,8 @@ import MovieList from './page/cinemate/MovieList';
 import MovieListDetail from './page/cinemate/MovieListDetail';
 import MovieRoom from './page/cinemate/MovieRoom';
 import AdminPwdReset from './page/admin/AdminPwdReset';
-import MdSales from './page/md/MdSales';
-
+import TheaterList from './page/cinemate/TheaterList';
+import TheaterListDetail from './page/cinemate/TheaterListDetail';
 
 function App() {
 
@@ -137,9 +138,11 @@ function App() {
 				<Route path="cinemate" element={<MovieTheater />} >
 					<Route index element={<MovieList />} />
 					<Route path="movies" element={<MovieList />} />
+					<Route path="theaters" element={<TheaterList />} />
 				</Route>
 				<Route path="/cinemate/movies/:movieNo" element={<MovieListDetail />} />
 				<Route path="/cinemate/movies/:movieNo/room/:no" element={<MovieRoom />} />
+			    <Route path="/cinemate/theaters/:theaterNo" element={<TheaterListDetail />} />
 			</Route>
 
 			{/* 로그인 & 비로그인 페이지 (사이드바 없음) */}
