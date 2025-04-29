@@ -3,13 +3,37 @@ import React, { useState, useEffect } from 'react';
 import apiClient from '../../../js/public/axiosConfig';
 import '../../../css/review/ReviewCardStyle1.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import Button from '../../../js/common/Buttons';
+import { useRef } from 'react';
 
 export default function ReviewHistory() {
   const [filterType, setFilterType] = useState('movie');
   const [movieReviews, setMovieReviews] = useState([]);
   const [goodsReviews, setGoodsReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  // 최소 카드 너비(px) – CSS의 minmax(200px, 1fr) 와 맞춰줍니다.
+  const MIN_CARD_WIDTH = 300;
+
+  // 레이아웃이 렌더된 후, grid 컨테이너 너비 측정용 ref
+  const gridRef = useRef(null);
+  const [cardsPerRow, setCardsPerRow] = useState(1);
+
+  // 1) 한 줄당 카드 개수 계산 (윈도우 리사이즈 시에도 재계산)
+  useEffect(() => {
+    const calcColumns = () => {
+      const width = gridRef.current?.clientWidth || window.innerWidth;
+      // 여백(gap) 고려해서 실제 사용 가능한 너비를 구해야 하지만, 간단히 계산
+      const cols = Math.floor(width / MIN_CARD_WIDTH) || 1;
+      setCardsPerRow(cols);
+    };
+    calcColumns();
+    window.addEventListener('resize', calcColumns);
+    return () => window.removeEventListener('resize', calcColumns);
+  }, []);
+
+  // 2) 동적으로 페이지당 아이템 개수 지정 (두 줄)
+  const itemsPerPage = cardsPerRow * 2;
+
   const currentUserNo = JSON.parse(sessionStorage.getItem('userInfo'))?.userNo;
 
   useEffect(() => {
@@ -59,22 +83,59 @@ export default function ReviewHistory() {
     setCurrentPage(page);
   };
 
+  const maxPerRow = 6; // 한 줄에 보여줄 카드 개수
+  const columns = Math.min(displayed.length, maxPerRow); // 한 줄에 보여줄 카드 개수
+ 
   return (
-    <div>
+    <div className='review-history-container">'>
+      <h2 className="page-title">내 후기</h2>
       {/* 탭 */}
-      <div className="tabs">
-        <button
-          className={filterType === 'movie' ? 'active' : ''}
-          onClick={() => { setFilterType('movie'); setCurrentPage(1); }}
-        >내 영화 후기</button>
-        <button
-          className={filterType === 'goods' ? 'active' : ''}
-          onClick={() => { setFilterType('goods'); setCurrentPage(1); }}
-        >내 굿즈 후기</button>
+      <div className="tab-pagination-container">
+        <div className="tab-buttons">
+          <button
+            className={filterType === 'movie' ? 'active' : ''}
+            onClick={() => { setFilterType('movie'); setCurrentPage(1); }}
+          >내 영화 후기</button>
+          <button
+            className={filterType === 'goods' ? 'active' : ''}
+            onClick={() => { setFilterType('goods'); setCurrentPage(1); }}
+          >내 굿즈 후기</button>
+        </div>
+
+        {/* 페이지네이션 */}
+        {totalPages > 1 && (
+          <div className="pagination">
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={currentPage === 1 ? 'disabled' : ''}
+            >
+              이전
+            </button>
+            <span className="page-info">
+              {currentPage} / {totalPages}
+            </span>
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={currentPage === totalPages ? 'disabled' : ''}
+            >
+              다음
+            </button>
+          </div>
+        )}
       </div>
 
       {/* 카드 그리드 */}
-      <div className="MypageReview_card-grid">
+      <div className="MypageReview_card-grid"
+          ref={gridRef}
+          style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(auto-fit, minmax(${MIN_CARD_WIDTH}px, 1fr))`,
+          gap: '16px',
+          justifyContent: 'center'
+         }}
+      >
         {displayed.map((rev) => (
           <div
             key={filterType === 'movie' ? rev.no : rev.id}
@@ -103,30 +164,9 @@ export default function ReviewHistory() {
           </div>
         ))}
         {allReviews.length === 0 && (
-          <p>작성된 {filterType === 'movie' ? '영화' : '굿즈'} 후기가 없습니다.</p>
+          <p style={{width:'200%',fontSize:'2rem', fontWeight:'bold'}}>작성된 {filterType === 'movie' ? '영화' : '굿즈'} 후기가 없습니다.</p>
         )}
       </div>
-
-      {/* 페이지네이션 */}
-      {totalPages > 1 && (
-        <div className="pagination">
-          <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
-            이전
-          </button>
-          {[...Array(totalPages)].map((_, idx) => (
-            <button
-              key={idx + 1}
-              className={currentPage === idx + 1 ? 'active' : ''}
-              onClick={() => goToPage(idx + 1)}
-            >
-              {idx + 1}
-            </button>
-          ))}
-          <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
-            다음
-          </button>
-        </div>
-      )}
     </div>
   );
 }
