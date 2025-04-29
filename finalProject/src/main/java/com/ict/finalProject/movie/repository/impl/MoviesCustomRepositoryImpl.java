@@ -23,51 +23,46 @@ public class MoviesCustomRepositoryImpl implements MoviesCustomRepository {
 
     @Override
     public List<Movies> findPopularMoviesByGenres(Integer userNo, List<String> genres, int count) {
-        String baseQuery = """
-            SELECT m.*
-            FROM movies m
-            WHERE (
-        """;
-
+        // 장르 조건 생성
         String genreCondition = genres.stream()
                 .map(g -> "m.genre LIKE '%" + g + "%'")
                 .collect(Collectors.joining(" OR "));
 
-        String restQuery = userNo == null ?
-                """
-                )
-                ORDER BY (
-                    SELECT COUNT(*)
-                    FROM likes l
-                    WHERE l.target_no = m.no
-                    AND l.type = 'MOVIE'
-                    AND l.status = 'ACTIVE'
-                ) DESC
-                LIMIT :limit
-                """ :
-                """
-                )
-                AND m.no NOT IN (
-                    SELECT l.target_no
-                    FROM likes l
-                    WHERE l.user_no = :userNo
-                    AND l.type = 'MOVIE'
-                    AND l.status = 'ACTIVE'
-                )
-                AND m.open_status IN ('ACTIVE', 'PENDING')  -- 영화 상태가 ACTIVE 또는 PENDING인 경우만 조회
-                ORDER BY (
-                    SELECT COUNT(*)
-                    FROM likes l
-                    WHERE l.target_no = m.no
-                    AND l.type = 'MOVIE'
-                    AND l.status = 'ACTIVE'
-                ) DESC
-                LIMIT :limit
-                """;
+        // 기본 SELECT 쿼리
+        StringBuilder queryBuilder = new StringBuilder("""
+        SELECT m.*
+        FROM movies m
+        LEFT JOIN (
+            SELECT target_no, COUNT(*) AS like_count
+            FROM likes
+            WHERE type = 'MOVIE' AND status = 'ACTIVE'
+            GROUP BY target_no
+        ) l ON m.no = l.target_no
+        WHERE (
+    """);
 
-        String finalQuery = baseQuery + genreCondition + restQuery;
+        queryBuilder.append(genreCondition).append(")");
 
-        Query query = em.createNativeQuery(finalQuery, Movies.class);
+        // 사용자 번호가 존재하면 추가 조건 (찜한 영화 제외, 오픈 상태 필터링)
+        if (userNo != null) {
+            queryBuilder.append("""
+            AND m.no NOT IN (
+                SELECT target_no
+                FROM likes
+                WHERE user_no = :userNo AND type = 'MOVIE' AND status = 'ACTIVE'
+            )
+            AND m.open_status IN ('ACTIVE', 'PENDING')
+        """);
+        }
+
+        // 정렬 및 제한
+        queryBuilder.append("""
+        ORDER BY COALESCE(l.like_count, 0) DESC
+        LIMIT :limit
+    """);
+
+        // 쿼리 실행
+        Query query = em.createNativeQuery(queryBuilder.toString(), Movies.class);
         if (userNo != null) {
             query.setParameter("userNo", userNo);
         }
