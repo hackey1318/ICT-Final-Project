@@ -70,7 +70,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import MovieLikeChart from './page/admin/like/MovieLikeChart';
 import GoodsLikeChart from './page/admin/like/GoodsLikeChart';
 import UserEditPage from './page/user/mypage/UserEditPage';
-
+import InquiryHistory from './page/user/mypage/InquiryHistory';
 
 
 
@@ -144,6 +144,7 @@ function App() {
 					<Route path="reviews" element={<ReviewHistory />} />
 					<Route path="/mypage/withdraw" element={<WithdrawPage />} />
 					<Route path="edit" element={<UserEditPage />} />
+					<Route path="inquiries" element={<InquiryHistory />} />
 				</Route>
 
 				{/* 시네메이트 */}
