@@ -296,6 +296,10 @@ public class CineMateServiceImpl implements CineMateService {
                 .currentMemberCount(Math.toIntExact(cineMateMemberRepository.countByCineMateNoAndStatusActive((Integer) result[6])))
                 .maxMemberCount((Integer) result[7])
                 .userName((String) result[8])
+                .movieNo((Integer) result[9])
+                .no((Integer) result[10])
+                .createdAt((result[11] != null ? ((Timestamp) result[11]).toLocalDateTime() : null))
+                .content((String) result[12])
                 .build();
         });
     }
