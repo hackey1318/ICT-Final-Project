@@ -127,7 +127,7 @@ function ReviewListPage({ movieNo, currentUserNo }) {
      )}
       </div>
       <div className="review-cards">
-        {paged.map(r => (
+        {paged.map(r  => (
           <div
             key={r.no}
             className="review-card"
