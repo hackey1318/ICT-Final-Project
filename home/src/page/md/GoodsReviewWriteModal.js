@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from '../../js/public/axiosConfig';
 import StarRating from './StarRating'; 
 import './../../css/md/GoodsReviewSection.css';
 import apiClient from '../../js/public/axiosConfig';
@@ -260,7 +259,7 @@ import apiClient from '../../js/public/axiosConfig';
               {formData.imageIds.map((id, idx) => (
                 <div key={`${id}-${idx}`} className="image-preview-item">
                   <img
-                    src={`${baseURL}/file-system/download/${id}`}
+                    src={`/file-system/download/${id}`}
                     alt="preview"
                     className="preview-img"
                   />
