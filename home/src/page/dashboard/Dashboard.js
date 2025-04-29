@@ -4,6 +4,7 @@ import GenderChart from "../../js/dashboard/GenderChart";
 import UserDauChart from "../../js/dashboard/UserDauChart";
 import '../../css/dashboard/dashboard.css';
 import LikeChart from "../../js/common/LikeChart";
+import SalesChart from "../../js/dashboard/SalesChart";
 
 function Dashboard() {
     const accessToken = sessionStorage.getItem("accessToken");
@@ -13,7 +14,7 @@ function Dashboard() {
     const [totalCount, setTotalCount] = useState(0); //DAU 총인원
     const [movieLikeData, setMovieLikeData] = useState({ labels: [], data: [] });
     const [goodsLikeData, setGoodsLikeData] = useState({ labels: [], data: [] });
-    
+    const [salesData, setSalesData] = useState([]); // 매출 데이터
 
     useEffect(() => {
         axios.get("http://localhost:9988/manager/home/gender-ratio", {
@@ -27,9 +28,19 @@ function Dashboard() {
             setTotalCount(response.data.totalCount);
         });
 
+        axios.post("http://localhost:9988/md-shop/totalList", {},
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+            .then(response => {
+                setSalesData(response.data);
+            });
+
         const fetchMovieLikes = async () => {
             try {
-                const response = await axios.get('http://192.168.1.252:9988/likes/statistics/movie',{
+                const response = await axios.get('http://192.168.1.252:9988/likes/statistics/movie', {
                     headers: { Authorization: `Bearer ${accessToken}` }
                 });  // 서버에서 데이터 받아오기
                 const likeStatisticsList = response.data;
@@ -70,18 +81,29 @@ function Dashboard() {
         fetchMovieLikes();
     }, []);
 
+    useEffect(() => {
+        console.log(salesData);
+    }, [salesData])
+
     return (
         <div className="dashboard-container">
             <div className="row" style={{ height: "50%" }}>
-                <div className="col-md-6 mb-3 d-flex flex-column " style={{ height: "100%" }}>
-                    <div className="p-2" style={{ flex: 1 }}>
-                        <a href="" className="dashboard-link"><h5>상품별 판매액 {'>'}</h5></a>
+                <div className="col-md-6 mb-3 d-flex flex-column " style={{ height: "350px" }}>
+                    <div className="p-2" style={{ flex: 1, overflowY: "auto"}}>
+                        <div style={{ position: "sticky", top: -10, backgroundColor: "white", zIndex: 10 }}>
+                            <a href="" className="dashboard-link">
+                                <h5>상품별 판매액 {'>'}</h5>
+                            </a>
+                        </div>
+                        <div>
+                            <SalesChart salesData={salesData} chartId="salesChart"/>
+                        </div>
                     </div>
                 </div>
                 <div className="col-md-6 mb-3 d-flex flex-column" style={{ height: "100%" }}>
                     <div className="p-2" style={{ flex: 1 }}>
                         <a href="" className="dashboard-link"><h5>상품별 좋아요 {'>'}</h5></a>
-                        <LikeChart labels={goodsLikeData.labels} data={goodsLikeData.data} chartId="goodsLikeChart" style={{ height: "300px" }}/>
+                        <LikeChart labels={goodsLikeData.labels} data={goodsLikeData.data} chartId="goodsLikeChart" style={{ height: "300px" }} />
                     </div>
                 </div>
             </div>
@@ -90,7 +112,7 @@ function Dashboard() {
                 <div className="col-md-4 mb-3 d-flex flex-column" style={{ height: "100%" }}>
                     <div className="p-2" style={{ flex: 1 }}>
                         <a href="" className="dashboard-link"><h5>영화 장르별 좋아요 {'>'}</h5></a>
-                        <LikeChart labels={movieLikeData.labels} data={movieLikeData.data} chartId="movieLikeChart"  style={{ height: "300px" }}/>
+                        <LikeChart labels={movieLikeData.labels} data={movieLikeData.data} chartId="movieLikeChart" style={{ height: "300px" }} />
                     </div>
                 </div>
                 <div className="col-md-4 mb-3 d-flex flex-column" style={{ height: "100%" }}>
