@@ -33,4 +33,6 @@ public interface CineMateService {
 
     //시네메이트 영화관 상세
     List<CineMateResponse> getTheaterDetail(Integer theaterNo);
+
+    Page<CineMateResponse> getMyCineMate(Integer userNo, Pageable pageable);
 }

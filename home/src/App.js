@@ -66,10 +66,12 @@ import AdminPwdReset from './page/admin/AdminPwdReset';
 import TheaterList from './page/cinemate/TheaterList';
 import TheaterListDetail from './page/cinemate/TheaterListDetail';
 import ReviewHistory from './page/user/mypage/ReviewHistory';
+import MyCinemates from './page/user/mypage/MyCinemates';
 import WithdrawPage from './page/user/mypage/WithdrawPage';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import MovieLikeChart from './page/admin/like/MovieLikeChart';
 import GoodsLikeChart from './page/admin/like/GoodsLikeChart';
+import UserEditPage from './page/user/mypage/UserEditPage';
 import InquiryHistory from './page/user/mypage/InquiryHistory';
 
 
@@ -143,7 +145,9 @@ function App() {
 					<Route path='cart' element={<Cart />} />
 					<Route path="reviews" element={<ReviewHistory />} />
 					<Route path="/mypage/withdraw" element={<WithdrawPage />} />
+					<Route path="edit" element={<UserEditPage />} />
 					<Route path="inquiries" element={<InquiryHistory />} />
+					<Route path="cinemates" element={<MyCinemates />} />
 				</Route>
 
 				{/* 시네메이트 */}
