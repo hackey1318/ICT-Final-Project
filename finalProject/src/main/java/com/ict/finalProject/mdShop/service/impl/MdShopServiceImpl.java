@@ -262,4 +262,10 @@ public class MdShopServiceImpl implements MdShopService {
 
         return goodsStocksList;
     }
+
+    @Override
+    public GoodsStocks getGoodsStock(Integer goodsNo) {
+        GoodsStocks goodsStocks = goodsStockRepository.findByGoodsNo(goodsNo).get();
+        return goodsStocks;
+    }
 }
