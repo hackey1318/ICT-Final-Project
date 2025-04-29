@@ -1,4 +1,4 @@
-import apiClient from "./apiClient"; // apiClient 가져오기
+import apiClient from "../public/axiosConfig"; // apiClient 가져오기
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 

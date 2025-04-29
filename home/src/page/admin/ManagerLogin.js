@@ -3,7 +3,7 @@ import "../../css/admin/admin.css"; // CSS 파일 임포트 (실제 경로로 �
 import logo from "../../img/cinetogether.png"; // 로고 이미지 임포트 (실제 경로로 수정 필요)
 import useLoginForm from "../../js/user/useLoginForm";
 import { Alert, Spinner } from "react-bootstrap";
-import apiClient from "../../apiClient"; // apiClient 임포트
+import apiClient from '../../js/public/axiosConfig.js'; // apiClient 임포트
 
 export default function ManagerLogin() {
     const [userId, setUserId] = useState("");
