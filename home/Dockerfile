@@ -1,20 +1,15 @@
 # Node.js 이미지 사용
-FROM node:16 as build
+FROM node:16
 
+# 애플리케이션 소스 코드 복사
 WORKDIR /app
 COPY . /app
 
+# 의존성 설치
 RUN npm install
-RUN npm run build
 
-# nginx 이미지 사용
-FROM nginx:alpine
+# 빌드
+RUN npm run build || { echo 'Build failed'; tail -f /dev/null; }
 
-# 빌드된 파일을 nginx 서버에 복사
-COPY --from=build /app/build /usr/share/nginx/html
-
-# nginx 설정 파일 복사
-COPY ./nginx.conf /etc/nginx/nginx.conf
-
-# nginx 실행
-CMD ["nginx", "-g", "daemon off;"]
+# React 앱을 실행
+CMD ["npm", "start"]
