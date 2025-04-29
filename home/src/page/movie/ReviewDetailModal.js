@@ -38,7 +38,11 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
   };
 
   const handleDelete = () => {
-    deleteReview(review.movieNo, review.no).then(() => {
+    const ok = window.confirm("리뷰를 삭제하시겠습니까?");
+    if (!ok) return;
+
+    deleteReview(review.movieNo, review.no)
+    .then(() => {
       onDelete(review.no);
       onClose();
     });
@@ -179,10 +183,7 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
                 <h3 className="review-title">
                   {review.title || review.content.substring(0, 20)}
                 </h3>
-              </div>
-              <p className="review-text">{review.content}</p>
-
-              {review.userNo === currentUserNo && (
+                {review.userNo === currentUserNo && (
                 <div className="modal-action-buttons">
                   <button className="modal-edit" onClick={handleEdit}>
                     수정
@@ -192,6 +193,8 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
                   </button>
                 </div>
               )}
+              </div>
+              <p className="review-text">{review.content}</p>
 
               {isReporting && (
                 <div className="modal-report-form">
