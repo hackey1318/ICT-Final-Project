@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AnnounceEditModal from "./AnnounceEditModal";
+import apiClient from "../../js/public/axiosConfig";
 
 export default function AnnounceDetail() {
     const { no } = useParams();
@@ -14,9 +15,7 @@ export default function AnnounceDetail() {
 
     const fetchAnnounce = async () => {
         try {
-            const res = await axios.get(`${BASE_URL}/announce/${no}`, {
-                headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
-            });
+            const res = await apiClient.get(`${BASE_URL}/announce/${no}`);
             setAnnounce(res.data);
         } catch (err) {
             console.error("공지사항을 불러오는 데 실패했습니다.", err);
@@ -31,9 +30,7 @@ export default function AnnounceDetail() {
         const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
         if (confirmDelete) {
             try {
-                await axios.delete(`/announce/${no}`, {
-                    headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
-                });
+                await apiClient.delete(`/announce/${no}`);
                 alert("공지사항이 삭제되었습니다.");
                 navigate("/manager/home/announce"); // 삭제 후 목록 페이지로 이동
             } catch (error) {

@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiClient from "./apiClient"; // apiClient 가져오기
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -16,78 +16,61 @@ function SuccessPage() {
     };
 
     async function confirm() {
-      const accessToken = sessionStorage.getItem("accessToken");
-      const response = await fetch("/payment/confirm", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`
-        },
-        body: JSON.stringify(requestData),
-      });
+      try {
+        // 결제 확인 요청
+        const response = await apiClient.post("/payment/confirm", requestData);
 
-      const json = await response.json();
+        if (response.status !== 200) {
+          // 결제 실패 비즈니스 로직을 구현하세요.
+          navigate(`/fail?message=${response.data.message}&code=${response.data.code}`);
+          // PEDNING인 주문 FAILED로 변경
+          await apiClient.post(
+            "/order/fail",
+            { orderNumber: response.data.orderId }
+          );
+          return;
+        }
 
-      if (!response.ok) {
-        // 결제 실패 비즈니스 로직을 구현하세요.
-        navigate(`/fail?message=${json.message}&code=${json.code}`);
-        // PEDNING인 주문 FAILED로 변경
-        const failOrderResponse = await axios.post("/order/fail", 
-          {
-            orderNumber: json.orderId
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
-          }
+        console.log(response.data);
+
+        // 결제 성공 비즈니스 로직을 구현하세요.
+
+        // PENDING인 장바구니 상품들 PAID로 변경
+        const paidGoodsResponse = await apiClient.post(
+          "/cart/paidGoods",
+          { orderNumber: response.data.orderId }
         );
-        return;
+
+        if (paidGoodsResponse.status !== 200) {
+          alert("paidGoodsResponse Error");
+          console.log(paidGoodsResponse);
+          return;
+        }
+
+        // 상품 수량 업데이트
+        const updateItemQuantityResponse = await apiClient.post(
+          "/md-shop/updateItemQuantity",
+          { orderNumber: response.data.orderId }
+        );
+
+        if (updateItemQuantityResponse.status !== 200) {
+          alert("updateItemQuantityResponse Error");
+          console.log(updateItemQuantityResponse);
+          return;
+        }
+
+        // 결과창으로 이동시키는 부분
+        window.location.href = `/payment/result?orderNumber=${response.data.orderId}&totalPrice=${response.data.totalAmount}&paymentKey=${response.data.paymentKey}`;
+      } catch (error) {
+        console.error("결제 확인 요청 실패:", error);
+        navigate(`/fail?message=${error.message}&code=${error.code}`);
       }
-
-      console.log(json);
-
-      // 결제 성공 비즈니스 로직을 구현하세요.
-
-      // PENDING인 장바구니 상품들 PAID로 변경
-      const paidGoodsResponse = await axios.post("/cart/paidGoods",
-        {
-          orderNumber: json.orderId
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        });
-
-      if (paidGoodsResponse.status !== 200) {
-        alert("paidGoodsResponse Error");
-        console.log(paidGoodsResponse)
-        return;
-      }
-
-      // 상품 수량 업데이트
-      const updateItemQuantityResponse = await axios.post("/md-shop/updateItemQuantity",
-        {
-          orderNumber: json.orderId
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        });
-
-      if (updateItemQuantityResponse.status !== 200) {
-        alert("updateItemQuantityResponse Error");
-        console.log(updateItemQuantityResponse);
-        return;
-      }
-
-      // 결과창으로 이동시키는 부분
-      window.location.href = `/payment/result?orderNumber=${json.orderId}&totalPrice=${json.totalAmount}&paymentKey=${json.paymentKey}`;
     }
+
     confirm();
   }, []);
+
+  return null; // 성공 페이지는 로딩만 하고 UI는 필요없으므로 null을 반환합니다.
 }
 
 export default SuccessPage;

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import './../../css/user/FindUser.css';
 import arrow from '../../img/arrow.png';
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 function FindPwd(){
     //입력한 아이디, 이메일을 보관할 변수
@@ -46,7 +47,7 @@ function FindPwd(){
         }
 
         //비동기로 백엔드 요청
-        axios.post("/user/findPwdOk",{
+        apiNoAccessClient.post("/user/findPwdOk",{
             id: pwdFindForm.id,
             email: pwdFindForm.email
         })

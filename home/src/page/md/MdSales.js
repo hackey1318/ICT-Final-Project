@@ -13,6 +13,7 @@ import {
     Tooltip,
     Legend
 } from 'chart.js';
+import apiClient from "../../js/public/axiosConfig";
 
 ChartJS.register(
     CategoryScale,
@@ -39,16 +40,10 @@ function MdSales() {
     const [resultByDateState, setResultByDateState] = useState("table");
 
     useEffect(() => {
-        const accessToken = sessionStorage.getItem("accessToken");
-        axios.post("/md-shop/totalList",
+        apiClient.post("/md-shop/totalList",
             {
 
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            })
+            },)
             .then(response => {
                 setSalesList(response.data);
             });

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './../../css/user/TodayMovies.css';
 import axios from 'axios';
+import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
 
 // ⭐ MovieGridItem 수정: onClickItem prop 받도록 추가
 const MovieGridItem = ({ movie, onClickItem }) => (
@@ -66,7 +67,7 @@ function SectionTodayMovies() {
 	// ✅ 영화 목록 불러오는 함수
 	const fetchMovies = (limit) => {
 		setIsLoading(true);
-		axios.get(`/movies/recommendation?count=${limit}`)
+		apiNoAccessClient.get(`/movies/recommendation?count=${limit}`)
 			.then(response => {
 				const movies = response.data;
 				setGridMovies(movies);

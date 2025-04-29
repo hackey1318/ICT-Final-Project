@@ -8,6 +8,8 @@ import LikeType from "../../js/common/LikeType";
 import { Heart, Share } from "lucide-react";
 import GoodsReviewList from "./GoodsReviewList";
 import GoodsReviewWriteModal from "./GoodsReviewWriteModal";
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
+import apiClient from "../../js/public/axiosConfig";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -39,7 +41,7 @@ const GoodsDetail = () => {
 
 	const fetchReviews = async () => {
 		try {
-			const { data } = await axios.get(`/goods/${goodsNo}/reviews`);
+			const { data } = await apiNoAccessClient.get(`/goods/${goodsNo}/reviews`);
 			setReviews(data);
 		} catch (err) {
 			console.error('리뷰 목록 조회 오류', err);
@@ -49,7 +51,7 @@ const GoodsDetail = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const goodsInfo = await axios.get(
+				const goodsInfo = await apiNoAccessClient.get(
 					`/md-shop/lists/${goodsNo}`
 				);
 				setProduct(goodsInfo.data);
@@ -64,9 +66,8 @@ const GoodsDetail = () => {
 		const fetchLikeStatus = async () => {
 			try {
 				if (accessToken) {
-					const response = await axios.get(
+					const response = await apiClient.get(
 						`/likes/${LikeType.GOODS}?no=${goodsNo}`,
-						{ headers: { Authorization: `Bearer ${accessToken}` } }
 					);
 					const likeData = response.data;
 					setLikeId(likeData.no);
@@ -86,10 +87,9 @@ const GoodsDetail = () => {
 
 	const toggleLike = async () => {
 		try {
-			const res = await axios.patch(
+			const res = await apiClient.patch(
 				`/likes/${likeId}`,
 				{},
-				{ headers: { Authorization: `Bearer ${accessToken}` } }
 			);
 			const likeData = res.data;
 			setLiked(likeData.status === "ACTIVE");

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 function MovieList(){
     //영화 목록, 현재 페이지, 총 페이지 수를 담을 변수
@@ -35,7 +36,7 @@ function MovieList(){
         const currentPageSize = getPageSize(window.innerWidth);
 
         //영화정보 가져오기
-        axios.get(`/cinemate/movies?page=${page}`, {
+        apiNoAccessClient.get(`/cinemate/movies?page=${page}`, {
             params: {
                 page: page,
                 size: currentPageSize,

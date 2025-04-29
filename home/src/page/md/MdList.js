@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import MdRegisterModal from "./MdRegisterModal";
 import "../../css/md/MdList.css";
 import Button from '../../js/common/Buttons.js';
+import apiClient from "../../js/public/axiosConfig.js";
 
 function MdList() {
   const [mdList, setMdList] = useState([]);
@@ -56,7 +57,7 @@ function MdList() {
   const handleDelete = async (id) => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     try {
-      await axios.delete(`/md-shop/items/${id}`, {
+      await apiClient.delete(`/md-shop/items/${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

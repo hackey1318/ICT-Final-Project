@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import arrow from '../../img/arrow.png';
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 function AdminFindPwd(){
     //입력한 아이디, 이메일을 보관할 변수
@@ -45,7 +46,7 @@ function AdminFindPwd(){
         }
 
         //비동기로 백엔드 요청
-        axios.post("/user/findPwdOk",{
+        apiNoAccessClient.post("/user/findPwdOk",{
             id: pwdFindForm.id,
             email: pwdFindForm.email
         })

@@ -3,6 +3,8 @@ import { ArrowLeft, ArrowRight, Heart, Share2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
+import apiClient from "../../js/public/axiosConfig";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -23,7 +25,7 @@ function MovieListDetail() {
 	const [likeId, setLikeId] = useState(null); // 좋아요 ID (DB에서 받은 값)
 
 	useEffect(() => {
-		axios.get(`/cinemate/movieDetail/${movieNo}`)
+		apiNoAccessClient.get(`/cinemate/movieDetail/${movieNo}`)
 			.then((response) => {
 				console.log("시네메이트 영화 정보로 들어옴", response.data);
 				console.log("0번째", response.data[0]);
@@ -58,7 +60,7 @@ function MovieListDetail() {
 
 	const toggleLike = async () => {
 		try {
-			const res = await axios.patch(`/likes/${likeId}`);
+			const res = await apiClient.patch(`/likes/${likeId}`);
 			const likeData = res.data;
 			// 예: 좋아요 상태가 ACTIVE인지 여부에 따라 아이콘을 채우거나 비우기
 			if (likeData.status === "ACTIVE") {

@@ -2,6 +2,7 @@ import { useState } from "react";
 import '../../css/user/FindUser.css';
 import axios from "axios";
 import arrow from '../../img/arrow.png';
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 function FindId(){
     //입력한 닉네임, 이메일을 보관할 변수
@@ -51,7 +52,7 @@ function FindId(){
         }
 
         //비동기로 백엔드 요청
-        axios.post("/user/findIdOk",{
+        apiNoAccessClient.post("/user/findIdOk",{
             nickname: idFindForm.nickname,
             email: idFindForm.email
         })
@@ -80,7 +81,7 @@ function FindId(){
 
     //전체 아이디 이메일로 받기 버튼 클릭시 동작함(마스킹 해제된 아이디 이메일로 발송)
     function unmaskId(){
-        axios.post("/user/unmask-id",{
+        apiNoAccessClient.post("/user/unmask-id",{
             nickname: idFindForm.nickname,
             email: idFindForm.email
         })

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import '../../css/cart/Cart.css';
 import checkMark from '../../img/checkMark.png';
-import axios from 'axios';
 import TossPayment from "./../payment/TossPayment";
 import { deleteGoodsList, getGoodsList, getTheaterList } from "./CartApi";
+import apiClient from '../public/axiosConfig';
 
 function Cart() {
     const [goods, setGoods] = useState([]);
@@ -35,14 +35,9 @@ function Cart() {
     }, []);
 
     const cartQuantityUpdate = () => {
-        const accessToken = sessionStorage.getItem("accessToken");
-        axios.post("/cart/updateQuantity", {
+        apiClient.post("/cart/updateQuantity", {
             goodsNos: goodsRef.current.map(element => element.goodsNo),
             goodsQuantities: goodsRef.current.map(element => element.quantity),
-        }, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
         });
     }
 
@@ -205,17 +200,12 @@ function Cart() {
 
         const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
 
-        axios.post("/order/save", {
+        apiClient.post("/order/save", {
             orderNumber: generatedOrderNumber,
             totalPrice: totalPrice,
             userNo: userInfo.userNo,
             theaterName: theaterName,
             goods: selectedGoods
-        }, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
-            }
         })
             .then((response) => {
                 setPaymentModalOpen(true);

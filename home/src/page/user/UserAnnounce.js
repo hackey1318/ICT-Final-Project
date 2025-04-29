@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 const BASE_URL = ''; // Spring 서버 주소
 const accessToken = sessionStorage.getItem("accessToken");
@@ -23,7 +24,7 @@ export default function UserAnnounce() {
                         },
                     }
                     : {};
-                const res = await axios.get(`${BASE_URL}/announce`, {
+                const res = await apiNoAccessClient.get(`${BASE_URL}/announce`, {
                     params: { page: currentPage, size: 10 } // 페이지네이션
                 }, config);
                 setAnnouncements(Array.isArray(res.data.content) ? res.data.content : []);

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import BannerFormModal from "./BannerFormModal"; // 모달 컴포넌트
 import BannerDetailModal from "./BannerDetailModal"; // 배너 상세 모달 컴포넌트
 import Button from "../../../js/common/Buttons";
+import apiNoAccessClient from "../../../js/public/axiosConfigNoAccess";
 
 export default function BannerList() {
     const [banners, setBanners] = useState([]);
@@ -29,7 +30,7 @@ export default function BannerList() {
     const fetchBanners = async (page = 0, type = "MOVIE", keyword = "") => {
         setLoading(true);
         try {
-            const res = await axios.get(`${BASE_URL}/banner-manage/${type}`, {
+            const res = await apiNoAccessClient.get(`${BASE_URL}/banner-manage/${type}`, {
                 headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
                 params: {
                     page,

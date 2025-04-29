@@ -8,6 +8,8 @@ import 'swiper/css/pagination';
 import './../../css/md/GoodsReviewSection.css';
 import './../../css/md/GoodsReportModal.css';
 import { createReport } from "../../js/api/reportApi";
+import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
+import apiClient from '../../js/public/axiosConfig';
 
 const currentUserNo = JSON.parse(sessionStorage.getItem('userInfo'))?.userNo;
 
@@ -22,7 +24,6 @@ export default function GoodsReviewList({
 	const [showReportModal, setShowReportModal] = useState(false); // 신고 모달 상태 관리
 	const [reportData, setReportData] = useState({ category: '', content: '' }); // 신고 데이터 관리
 	const [currentReviewId, setCurrentReviewId] = useState(null); // 현재 리뷰 ID 관리
-	const API = axios.defaults.baseURL;
 
 	useEffect(() => {
 		fetchReviews(); // goodsId나 refreshKey가 바뀔 때마다 리뷰를 다시 불러옴
@@ -42,7 +43,7 @@ export default function GoodsReviewList({
 
 	const fetchReviews = async () => {
 		try {
-			const { data } = await axios.get(`/goods/${goodsId}/reviews`);
+			const { data } = await apiNoAccessClient.get(`/goods/${goodsId}/reviews`);
 			console.log("리뷰 데이터 상세:", {
 				전체_데이터: data,
 				첫번째_리뷰_상세: data[0],
@@ -51,7 +52,7 @@ export default function GoodsReviewList({
 
 			const reviewsWithUrls = data.map(r => ({
 				...r,
-				imageUrls: r.imageIds.map(id => `${API}/file-system/download/${id}`)
+				imageUrls: r.imageIds.map(id => `/file-system/download/${id}`)
 			}));
 
 			setReviews(reviewsWithUrls);
@@ -70,7 +71,7 @@ export default function GoodsReviewList({
 		}
 
 		try {
-			await axios.delete(`/goods/${goodsId}/reviews/${reviewId}`);
+			await apiClient.delete(`/goods/${goodsId}/reviews/${reviewId}`);
 			alert('리뷰가 삭제되었습니다.');
 			fetchReviews(); // 리뷰 목록 새로고침
 		} catch (err) {

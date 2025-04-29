@@ -3,6 +3,7 @@ import axios from "axios";
 import BannerList from "./BannerList";
 import BannerFormModal from "./BannerFormModal";
 import BannerDetailModal from "./BannerDetailModal";
+import apiClient from "../../../js/public/axiosConfig";
 
 const BannerAdminPage = () => {
     const [banners, setBanners] = useState([]);
@@ -21,7 +22,7 @@ const BannerAdminPage = () => {
 
     const fetchBanners = async () => {
         try {
-            const res = await axios.get(`/banner/${type}`, {
+            const res = await apiClient.get(`/banner/${type}`, {
                 params: { page, size, sort: "createdAt,desc" },
             });
             setBanners(res.data.content);
@@ -34,7 +35,7 @@ const BannerAdminPage = () => {
     const handleDelete = async (no) => {
         if (!window.confirm("정말 삭제하시겠습니까?")) return;
         try {
-            await axios.delete(`/banner/${no}`);
+            await apiClient.delete(`/banner/${no}`);
             fetchBanners();
         } catch (err) {
             console.error(err);

@@ -2,6 +2,8 @@ import axios from "axios";
 import { ArrowLeft, Heart, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
+import apiClient from "../../js/public/axiosConfig";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -33,7 +35,7 @@ function TheaterListDetail(){
     }
 
     useEffect(()=>{
-        axios.get(`/cinemate/theaterDetail/${theaterNo}`)
+        apiNoAccessClient.get(`/cinemate/theaterDetail/${theaterNo}`)
         .then((response)=>{
             console.log("시네메이트 영화관 정보", response.data);
             setTheaters(response.data);
@@ -67,7 +69,7 @@ function TheaterListDetail(){
 
     const toggleLike = async () => {
 		try {
-			const res = await axios.patch(`/likes/${likeId}`);
+			const res = await apiClient.patch(`/likes/${likeId}`);
 			const likeData = res.data;
 			// 예: 좋아요 상태가 ACTIVE인지 여부에 따라 아이콘을 채우거나 비우기
 			if (likeData.status === "ACTIVE") {

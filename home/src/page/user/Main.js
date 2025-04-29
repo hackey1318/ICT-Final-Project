@@ -12,6 +12,7 @@ import "swiper/css/pagination"
 import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess"
 
 const BASE_URL = "/file-system/download/"
 
@@ -26,7 +27,7 @@ function Main() {
 
   function readBannerList() {
 
-    axios.get("/banner/MOVIE")
+    apiNoAccessClient.get("/banner/MOVIE")
       .then((response) => {
         const data = response.data
         console.log("배너 리스트:", data)

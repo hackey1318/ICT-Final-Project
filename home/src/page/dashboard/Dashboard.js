@@ -4,6 +4,7 @@ import GenderChart from "../../js/dashboard/GenderChart";
 import UserDauChart from "../../js/dashboard/UserDauChart";
 import '../../css/dashboard/dashboard.css';
 import LikeChart from "../../js/common/LikeChart";
+import apiClient from "../../js/public/axiosConfig";
 
 function Dashboard() {
     const accessToken = sessionStorage.getItem("accessToken");
@@ -16,22 +17,16 @@ function Dashboard() {
     
 
     useEffect(() => {
-        axios.get("/manager/home/gender-ratio", {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        }).then(response => setGenderData(response.data));
+        apiClient.get("/manager/home/gender-ratio",).then(response => setGenderData(response.data));
 
-        axios.get("/dashboard/getDauList", { //dau리스트가 보이게 함
-            headers: { Authorization: `Bearer ${accessToken}` }
-        }).then(response => {
+        apiClient.get("/dashboard/getDauList", ).then(response => {
             setChartDauList(response.data.activeUsers);
             setTotalCount(response.data.totalCount);
         });
 
         const fetchMovieLikes = async () => {
             try {
-                const response = await axios.get('/likes/statistics/movie',{
-                    headers: { Authorization: `Bearer ${accessToken}` }
-                });  // 서버에서 데이터 받아오기
+                const response = await apiClient.get('/likes/statistics/movie',);  // 서버에서 데이터 받아오기
                 const likeStatisticsList = response.data;
 
                 // 라벨과 데이터를 분리하여 상태에 설정
@@ -49,9 +44,7 @@ function Dashboard() {
         const fetchGoodsLikes = async () => {
 
             try {
-                const response = await axios.get('/likes/statistics/goods', {
-                    headers: { Authorization: `Bearer ${accessToken}` }
-                });  // 서버에서 데이터 받아오기
+                const response = await apiClient.get('/likes/statistics/goods',);  // 서버에서 데이터 받아오기
                 const likeStatisticsList = response.data;
 
                 // 라벨과 데이터를 분리하여 상태에 설정

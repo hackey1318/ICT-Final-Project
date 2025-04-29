@@ -1,22 +1,18 @@
 import { useState } from "react";
-import axios from "axios";
 import '../../css/admin/AnnounceModal.css';
+import apiClient from "../../js/public/axiosConfig";
 
 export default function AnnounceEditModal({ show, onClose, announceData, onSave }) {
     const [title, setTitle] = useState(announceData.title);
     const [content, setContent] = useState(announceData.content);
     const [expiredAt, setExpiredAt] = useState(announceData.expiredAt || "");
     const [loading, setLoading] = useState(false);
-    const accessToken = sessionStorage.getItem("accessToken");
-    const BASE_URL = "";
 
     const handleSave = async () => {
         setLoading(true);
         try {
             const updatedAnnounce = { title, content, expiredAt: expiredAt ? new Date(expiredAt).toISOString() : null };
-            await axios.patch(`${BASE_URL}/announce/${announceData.id}`, updatedAnnounce, {
-                headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {}
-            });
+            await apiClient.patch(`/announce/${announceData.id}`, updatedAnnounce,);
             alert("공지사항이 수정되었습니다.");
             onSave(); // 수정 후 부모 컴포넌트에서 새로 고침
             onClose(); // 모달 닫기

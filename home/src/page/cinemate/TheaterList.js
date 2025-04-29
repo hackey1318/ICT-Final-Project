@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import screen from '../../img/screen.jpg';
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 function TheaterList(){
     //영화관 목록 담을 변수
@@ -24,7 +25,7 @@ function TheaterList(){
     useEffect(()=>{
         const currentPageSize = getPageSize(window.innerWidth);
 
-        axios.get(`/cinemate/theaters?page=${page}`,{
+        apiNoAccessClient.get(`/cinemate/theaters?page=${page}`,{
             params: {
                 page: page,
                 size: currentPageSize,

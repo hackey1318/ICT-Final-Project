@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import MoviePagination from "../../js/public/Pagination"; // 경로가 올바른지 확인하세요
 import errorImageSrc from '../../img/loaderror.jpg';
 import axios from "axios";
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 function UpcomingMovie() { // 컴포넌트 이름 변경: UpcomingMovie
     // 영화 목록, 현재 페이지, 총 페이지 수를 위한 상태
@@ -47,7 +48,7 @@ function UpcomingMovie() { // 컴포넌트 이름 변경: UpcomingMovie
             try {
                 console.log(`페이지 가져오는 중: ${page}, 크기: ${currentPageSize}, 타입: ${movieType}`); // 디버그 로그
                 // API 엔드포인트 변경: /movies/PREPARATION
-                const response = await axios.get(`/movies/${movieType}`, {
+                const response = await apiNoAccessClient.get(`/movies/${movieType}`, {
                     params: {
                         page: page,
                         size: currentPageSize,

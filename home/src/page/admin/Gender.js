@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import GenderChart from "../../js/dashboard/GenderChart";
+import apiClient from "../../js/public/axiosConfig";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -9,12 +10,7 @@ function Gender(){
     const [data, setData] = useState({})
 
     useEffect(()=>{
-        axios.get("/manager/home/gender-ratio", {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
-            }
-        })
+        apiClient.get("/manager/home/gender-ratio",)
         .then((response)=>{
             console.log(response.data);
             setData(response.data);

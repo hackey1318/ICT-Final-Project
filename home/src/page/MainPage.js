@@ -69,7 +69,7 @@ function MainPage() {
                     // 각 배너 이미지의 완전한 URL 생성 (ID가 있을 경우)
                     const imageUrl = banner.fileId
                         ? `${IMAGE_DOWNLOAD_BASE_URL}${banner.fileId}`
-                        : ''; // fileId가 없으면 빈 문자열
+                        : '/path/to/fallback-image.jpg'; // fileId가 없으면 기본 이미지로 대체
 
                     // 배너 클릭 시 이동할 링크 URL 결정 (예시 로직)
                     let linkUrl = '#'; // 기본값: 링크 없음 또는 현재 페이지

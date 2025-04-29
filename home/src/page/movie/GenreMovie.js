@@ -3,6 +3,7 @@ import GenreFilter from "../../js/movie/Genre-filter"
 import MoviePagination from "../../js/public/Pagination";
 import axios from "axios";
 import TypeFilter from "../../js/movie/MovieType";
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 function GenreMovie() {
 
@@ -39,7 +40,7 @@ function GenreMovie() {
         // 장르 선택 시 API 호출
         const fetchMovies = async () => {
             try {
-                const response = await axios.get('/movies', {
+                const response = await apiNoAccessClient.get('/movies', {
                     params: {
                         genre: genre.name,
                         type: type,

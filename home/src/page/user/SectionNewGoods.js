@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './../../css/user/SectionNewGoods.css'; // 이 컴포넌트 전용 CSS 파일
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
 
 // 이미지 기본 URL (API 서버 주소)
 const BASE_URL = '/file-system/download/';
@@ -37,7 +38,7 @@ function SectionNewGoods() {
 		const fetchGoods = async () => {
 			const size = getPageSizeByWindowWidth();
 			try {
-				const res = await axios.get(`/md-shop/lists?page=0&size=${size}`);
+				const res = await apiNoAccessClient.get(`/md-shop/lists?page=0&size=${size}`);
 				setGoodsList(res.data.content); // Page<MdShopDto>의 content
 			} catch (err) {
 				console.error('굿즈 목록 조회 실패:', err);

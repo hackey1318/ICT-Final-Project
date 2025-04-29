@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import apiNoAccessClient from './../public/axiosConfigNoAccess';
 
 // --- 환경 변수 또는 설정 파일에서 API 기본 URL 가져오기 (권장) ---
 const API_BASE_URL = ""; // 실제 환경에 맞게 수정
@@ -165,7 +166,7 @@ export const useKakaoCallback = () => {
         setIdCheckMessage('아이디 중복 확인 중...');
         setApiError('');
         try {
-            await axios.get(`${API_BASE_URL}/oauth/kakao/api/users/check-id/${formData.id}`);
+            await apiNoAccessClient.get(`${API_BASE_URL}/oauth/kakao/api/users/check-id/${formData.id}`);
             setIdCheckStatus('available');
             setIdCheckMessage('사용 가능한 아이디입니다.');
             lastCheckedId.current = formData.id;
@@ -198,7 +199,7 @@ export const useKakaoCallback = () => {
         setPhoneCheckStatus('checking');
         setPhoneCheckMessage('중복 확인 중...');
         try {
-            await axios.get(`${API_BASE_URL}/oauth/kakao/check-phone/${rawPhone}`);
+            await apiNoAccessClient.get(`${API_BASE_URL}/oauth/kakao/check-phone/${rawPhone}`);
             setPhoneCheckStatus('available');
             setPhoneCheckMessage('사용 가능한 휴대폰 번호입니다.');
         } catch {
@@ -222,7 +223,7 @@ export const useKakaoCallback = () => {
 
         try {
             // 새 API 엔드포인트 사용, Authorization 헤더 제거
-            const response = await axios.post(`${API_BASE_URL}/file-system/upload/register-image`, uploadFormData, {
+            const response = await apiNoAccessClient.post(`${API_BASE_URL}/file-system/upload/register-image`, uploadFormData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -307,7 +308,7 @@ export const useKakaoCallback = () => {
         const code = urlParams.get("code");
 
         if (!user && initialLoading && code) {
-             axios.get(`${API_BASE_URL}/oauth/kakao/login?code=${code}`)
+            apiNoAccessClient.get(`${API_BASE_URL}/oauth/kakao/login?code=${code}`)
                 .then(response => {
                     if (response.data.existUser === true) {
                         sessionStorage.setItem("accessToken", response.data.token);
@@ -402,7 +403,7 @@ export const useKakaoCallback = () => {
 
             console.log("회원가입 요청 데이터:", registerRequest);
 
-            const response = await axios.post(`${API_BASE_URL}/oauth/kakao/register/kakao`, registerRequest);
+            const response = await apiNoAccessClient.post(`${API_BASE_URL}/oauth/kakao/register/kakao`, registerRequest);
 
             if (response.status === 200 && response.data?.result === true) {
                 setSuccess("회원가입이 완료되었습니다. 잠시 후 로그인 페이지로 이동합니다.");

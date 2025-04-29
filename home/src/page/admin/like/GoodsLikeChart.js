@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import LikeChart from '../../../js/common/LikeChart';
 import axios from 'axios';
 import '../../../css/admin/GoodsMovieLikeChart.css';
+import apiClient from '../../../js/public/axiosConfig';
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -13,7 +14,7 @@ function GoodsLikeChart() {
         const fetchGoodsLikes = async () => {
 
             try {
-                const response = await axios.get('/likes/statistics/goods', {
+                const response = await apiClient.get('/likes/statistics/goods', {
                     headers: { Authorization: `Bearer ${accessToken}` }
                 });  // 서버에서 데이터 받아오기
                 const likeStatisticsList = response.data;

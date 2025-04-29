@@ -3,9 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../../js/public/axiosConfig';
 import { getReviews, updateReview } from '../../js/api/reviewApi';
 import './../../css/movie/ReviewWritePage.css';
+import apiClient from '../../js/public/axiosConfig';
 
 function ReviewEditPage() {
-  const baseUrl = axios.defaults.baseURL;
   // 라우트에서 :id 로 선언된 파라미터를 movieNo로 사용
   const { id: movieNo, reviewNo } = useParams();
   const movieNoNum = Number(movieNo);
@@ -33,11 +33,11 @@ function ReviewEditPage() {
         setContent(rv.content);
         setImageIds(rv.imageIds || []);
         setPreviews((rv.imageIds || []).map(id =>
-          `${baseUrl}/file-system/showPreview/${id}`
+          `/file-system/showPreview/${id}`
         ));
       })
       .catch(err => console.error('리뷰 불러오기 실패:', err));
-  }, [movieNoNum, reviewId, baseUrl]);
+  }, [movieNoNum, reviewId]);
 
   // 2) 새 파일 선택 시 업로드 및 preview/imageIds 업데이트
   const handleFileChange = async e => {
@@ -48,14 +48,14 @@ function ReviewEditPage() {
     files.forEach(f => form.append('files', f));
 
     try {
-      const res = await axios.post('/file-system/upload', form, {
+      const res = await apiClient.post('/file-system/upload', form, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       const ids = res.data.map(item => item.imageId);
       setImageIds(prev => [...prev, ...ids]);
       setPreviews(prev => [
         ...prev,
-        ...ids.map(id => `${baseUrl}/file-system/showPreview/${id}`)
+        ...ids.map(id => `/file-system/showPreview/${id}`)
       ]);
     } catch (err) {
       console.error('이미지 업로드 실패:', err);
@@ -66,7 +66,7 @@ function ReviewEditPage() {
   const handleRemoveImage = async idx => {
     const idToRemove = imageIds[idx];
     try {
-      await axios.patch(
+      await apiClient.patch(
         `/file-system/delete-image/${idToRemove}`,
         null,
         { params: { type: 'MOVIEREVIEW' } }

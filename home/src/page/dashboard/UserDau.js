@@ -3,6 +3,7 @@ import '../../css/dashboard/user.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import UserDauChart from '../../js/dashboard/UserDauChart';
+import apiClient from '../../js/public/axiosConfig';
 
 function UserDau() {
     const [allDauList, setAllDauList] = useState([]);
@@ -22,7 +23,7 @@ function UserDau() {
     const fetchUserData = async (type) => {
         try {
             const urlType = type === 'DAU' ? 'getDauList' : 'getMauList';
-            const response = await axios.get(`/dashboard/${urlType}`);
+            const response = await apiClient.get(`/dashboard/${urlType}`);
 
             const dataList = response.data.activeUsers || [];
             const reverseList = [...dataList].reverse();

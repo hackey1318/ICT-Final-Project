@@ -6,6 +6,7 @@ import { Autoplay } from 'swiper/modules';
 
 import 'swiper/css';
 import 'swiper/css/autoplay';
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 export default function RelatedMovie({ movieId }) {
     const [relatedMovies, setRelatedMovies] = useState([]);
@@ -13,7 +14,7 @@ export default function RelatedMovie({ movieId }) {
 
     useEffect(() => {
         if (!movieId) return;
-        axios.get(`/movies/relate-movie?no=${movieId}`)
+        apiNoAccessClient.get(`/movies/relate-movie?no=${movieId}`)
             .then(res => setRelatedMovies(res.data.content))
             .catch(err => console.error(err));
     }, [movieId]);

@@ -4,6 +4,7 @@ import { useLocation, useParams } from "react-router-dom";
 import JoinedUsersBadgeModal from "./JoinedUsersModal";
 import ChatBox from "./ChatBox"; // 채팅 컴포넌트를 분리해서 가져옵니다.
 import '../../css/cinemate/MovieRoom.css';
+import apiClient from "../../js/public/axiosConfig";
 
 const accessToken = sessionStorage.getItem("accessToken");
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
@@ -26,33 +27,19 @@ export default function MovieRoom() {
     }, [no, isJoined]);
 
     const fetctParticipantCount = async () => {
-        const res = await axios.get(`/cinemate/movies/${movieNo}/room/${no}/members/count`, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
+        const res = await apiClient.get(`/cinemate/movies/${movieNo}/room/${no}/members/count`,);
         setParticipantCount(res.data)
 
     }
 
     const fetchMovieRoomJoinStatus = async () => {
-        const res = await axios.get(`/cinemate/movies/${movieNo}/room/${no}`, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
+        const res = await apiClient.get(`/cinemate/movies/${movieNo}/room/${no}`, );
         setIsJoined(res.data.result);
     };
 
     const fetchJoinedUsers = async () => {
         try {
-            const res = await axios.get(`/cinemate/movies/${movieNo}/room/${no}/members`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
+            const res = await apiClient.get(`/cinemate/movies/${movieNo}/room/${no}/members`, );
 
             setJoinedUsers(res.data);
             setShowJoinedModal(true);
@@ -64,22 +51,12 @@ export default function MovieRoom() {
     const handleCloseJoinedModal = () => setShowJoinedModal(false);
 
     const handleJoin = async () => {
-        await axios.post(`/cinemate/movies/${movieNo}/room/${no}`, {}, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
+        await apiClient.post(`/cinemate/movies/${movieNo}/room/${no}`, {}, );
         setIsJoined(true);
     };
 
     const handleCancel = async () => {
-        await axios.delete(`/cinemate/movies/${movieNo}/room/${no}`, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
+        await apiClient.delete(`/cinemate/movies/${movieNo}/room/${no}`, );
         setIsJoined(false);
     };
 

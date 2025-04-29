@@ -3,9 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../../js/public/axiosConfig';
 import { postReview } from '../../js/api/reviewApi';
 import './../../css/movie/ReviewWritePage.css';
+import apiClient from '../../js/public/axiosConfig';
 
 function ReviewWritePage() {
-    const baseUrl = axios.defaults.baseURL;
 
   const { id } = useParams();
   const movieNo = Number(id);
@@ -36,7 +36,7 @@ function ReviewWritePage() {
     files.forEach((f) => form.append('files', f));
 
     try {
-      const res = await axios.post('/file-system/upload', form, {
+      const res = await apiClient.post('/file-system/upload', form, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -45,7 +45,7 @@ function ReviewWritePage() {
       setImageIds((prev) => [...prev, ...ids]);
       setPreviews((prev) => [
         ...prev,
-        ...ids.map((id) => `${baseUrl}/file-system/showPreview/${id}`)
+        ...ids.map((id) => `/file-system/showPreview/${id}`)
       ]);
     } catch (err) {
       console.error('이미지 업로드 실패:', err);
@@ -56,7 +56,7 @@ function ReviewWritePage() {
     const imageIdToRemove = imageIds[idx];
   
     try {
-        await axios.patch(`/file-system/delete-image/${imageIdToRemove}`, null, {
+        await apiClient.patch(`/file-system/delete-image/${imageIdToRemove}`, null, {
             params: { type: 'MOVIEREVIEW' }
           });
     } catch (err) {

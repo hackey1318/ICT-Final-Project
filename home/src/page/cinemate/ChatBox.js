@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import apiClient from "../../js/public/axiosConfig";
 
 export default function ChatBox({ movieNo, roomNo }) {
     const accessToken = sessionStorage.getItem("accessToken");
@@ -12,12 +13,7 @@ export default function ChatBox({ movieNo, roomNo }) {
 
     const fetchChats = async () => {
         try {
-            const response = await axios.get(`/cinemate/chat-room/${roomNo}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
+            const response = await apiClient.get(`/cinemate/chat-room/${roomNo}`, );
             setChats(response.data);
         } catch (error) {
             console.error('채팅 목록 불러오기 실패:', error);
@@ -27,11 +23,7 @@ export default function ChatBox({ movieNo, roomNo }) {
     const handleSendMessage = async () => {
         if (newMessage.trim()) {
             try {
-                await axios.post(`/cinemate/chat-room/${roomNo}`, { message: newMessage }, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    },
-                });
+                await apiClient.post(`/cinemate/chat-room/${roomNo}`, { message: newMessage },);
                 fetchChats(); // 메시지 전송 후 채팅 목록 다시 불러오기
                 setNewMessage('');
             } catch (error) {

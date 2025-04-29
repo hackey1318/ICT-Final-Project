@@ -1,55 +1,30 @@
-import axios from 'axios';
-import Cart from './Cart';
+import apiClient from './../public/axiosConfig';
 
 export const addGoodsToCart = (id, quantity, act) => {
-    const accessToken = sessionStorage.getItem("accessToken");
-    return axios.get("/cart/addGoods", {
+    return apiClient.get("/cart/addGoods", {
         params: {
             goodsId: id,
             goodsQuantity: quantity,
             act: act
-        },
-        headers: {
-            Authorization: `Bearer ${accessToken}`
         }
     });
 };
 
 export const getTheaterList = () => {
-    const accessToken = sessionStorage.getItem("accessToken");
-    return axios.post("/order/theaterList", {}, {
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`
-        }
-    });
+    return apiClient.post("/order/theaterList", {});
 };
 
 export const getGoodsList = () => {
-    const accessToken = sessionStorage.getItem("accessToken");
-    return axios.get("/cart/goods", {
-        headers: {
-            Authorization: `Bearer ${accessToken}`
-        }
-    })
+    return apiClient.get("/cart/goods")
 }
 
 export const deleteGoodsList = (e) => {
-    const accessToken = sessionStorage.getItem("accessToken");
     const goodsNoArray = e.map(item => item.goodsNo);
-    return axios.post("/cart/deleteGoods",
-        goodsNoArray,
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        }
+    return apiClient.post("/cart/deleteGoods",
+        goodsNoArray
     )
 }
 
 export const updateCartQuantity = (data) => {
-    const accessToken = sessionStorage.getItem("accessToken");
-    return axios.post("/cart/updateQuantity", data, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-    });
+    return apiClient.post("/cart/updateQuantity", data, );
 };

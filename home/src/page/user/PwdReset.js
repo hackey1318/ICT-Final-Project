@@ -3,6 +3,7 @@ import './../../css/user/FindUser.css';
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import arrow from '../../img/arrow.png';
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 function PwdReset(){
     //입력한 비밀번호를 보관할 변수
@@ -19,7 +20,7 @@ function PwdReset(){
 
     useEffect(()=>{
         if(token && no) 
-        axios.get(`http://127.0.0.1:9988/user/pwdReset?token=${token}&userNo=${no}`)
+        apiNoAccessClient.get(`/user/pwdReset?token=${token}&userNo=${no}`)
         .then(response=>{
             console.log(response.data);
 
@@ -70,7 +71,7 @@ function PwdReset(){
         }
 
         //비동기로 백엔드 요청
-        axios.post(`/user/changePwd?userNo=${no}`,{
+        apiNoAccessClient.post(`/user/changePwd?userNo=${no}`,{
             password: resetPwd.pwd,
             no: no
         })

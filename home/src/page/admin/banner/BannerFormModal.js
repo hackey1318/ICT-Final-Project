@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import "../../../css/admin/BannerFormModal.css";
+import apiNoAccessClient from "../../../js/public/axiosConfigNoAccess";
+import apiClient from "../../../js/public/axiosConfig";
 
 export default function BannerFormModal({ show, onClose, onSuccess, mode = "create", bannerData = null }) {
     const [selectedItem, setSelectedItem] = useState(null); // 선택된 영화나 굿즈 객체 저장
@@ -29,7 +31,7 @@ export default function BannerFormModal({ show, onClose, onSuccess, mode = "crea
             if (!fileId) return;
 
             try {
-                const response = await axios.get(`${BASE_URL}/file-system/download/${fileId}`, {
+                const response = await apiNoAccessClient.get(`${BASE_URL}/file-system/download/${fileId}`, {
                     responseType: "blob", // 파일 다운로드 받을 땐 blob
                 });
 
@@ -98,9 +100,8 @@ export default function BannerFormModal({ show, onClose, onSuccess, mode = "crea
                     name: debouncedSearchTerm,
                 };
 
-                const { data } = await axios.get(`${BASE_URL}/movies/search`, {
+                const { data } = await apiClient.get(`${BASE_URL}/movies/search`, {
                     params,
-                    headers: { Authorization: `Bearer ${accessToken}` },
                 });
 
                 if (data.content.length === 0) {
@@ -154,12 +155,7 @@ export default function BannerFormModal({ show, onClose, onSuccess, mode = "crea
                     formData.append("files", file); // 서버에서는 files로 받음
                 });
 
-                const { data } = await axios.post(`${BASE_URL}/file-system/upload`, formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
+                const { data } = await apiNoAccessClient.post(`${BASE_URL}/file-system/upload`, formData,);
 
                 uploadedImageId = data[0]?.imageId;
                 if (!uploadedImageId) throw new Error("imageId가 없습니다.");
@@ -189,19 +185,9 @@ export default function BannerFormModal({ show, onClose, onSuccess, mode = "crea
             let response;
 
             if (mode === "create") {
-                response = await axios.post(`${BASE_URL}/banner-manage`, payload, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        "Content-Type": "application/json",
-                    },
-                });
+                response = await apiClient.post(`${BASE_URL}/banner-manage`, payload, );
             } else {
-                response = await axios.patch(`${BASE_URL}/banner-manage/${bannerData.no}`, payload, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        "Content-Type": "application/json",
-                    },
-                });
+                response = await apiClient.patch(`${BASE_URL}/banner-manage/${bannerData.no}`, payload,);
             }
 
             if (response.data?.result === true) {
@@ -232,11 +218,7 @@ export default function BannerFormModal({ show, onClose, onSuccess, mode = "crea
         if (!confirmed) return;
 
         try {
-            await axios.delete(`${BASE_URL}/banner-manage/${bannerData.no}`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
+            await apiClient.delete(`${BASE_URL}/banner-manage/${bannerData.no}`,);
             alert("배너가 삭제되었습니다!");
             onSuccess?.();
             handleFormModalClose();

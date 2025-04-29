@@ -5,6 +5,7 @@ import MovieCard from "./like/MovieCard";
 import GoodsCard from "./like/GoodsCard";
 import UserCard from "./like/UserCard";
 import "../../../css/user/mypage/LikedItemsPage.css";
+import apiClient from "../../../js/public/axiosConfig";
 
 const LikedItemsPage = () => {
     const [activeTab, setActiveTab] = useState("movie");
@@ -29,11 +30,8 @@ const LikedItemsPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`/likes`, {
+                const response = await apiClient.get(`/likes`, {
                     params: { type: activeTab, page, size },
-                    headers: {
-                        Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-                    },
                 });
                 setLikedItems(response.data.content);
                 setTotalPages(response.data.totalPages);

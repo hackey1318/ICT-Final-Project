@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import LikeChart from "../../../js/common/LikeChart";
 import axios from "axios";
+import apiClient from "../../../js/public/axiosConfig";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -10,9 +11,7 @@ function MovieLikeChart() {
     useEffect(() => {
         const fetchMovieLikes = async () => {
             try {
-                const response = await axios.get('/likes/statistics/movie',{
-                    headers: { Authorization: `Bearer ${accessToken}` }
-                });  // 서버에서 데이터 받아오기
+                const response = await apiClient.get('/likes/statistics/movie',);  // 서버에서 데이터 받아오기
                 const likeStatisticsList = response.data;
 
                 // 라벨과 데이터를 분리하여 상태에 설정

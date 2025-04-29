@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../../css/admin/AnnounceModal.css';
+import apiClient from '../../js/public/axiosConfig';
 
 export default function AnnounceCreateModal({ show, onClose, onSuccess }) {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [expiredAt, setExpiredAt] = useState('');
-    const accessToken = sessionStorage.getItem('accessToken');
-    const BASE_URL = '';
 
     useEffect(() => {
         if (show) {
@@ -24,16 +23,11 @@ export default function AnnounceCreateModal({ show, onClose, onSuccess }) {
         }
 
         try {
-            await axios.post(`${BASE_URL}/announce`, {
+            await apiClient.post(`/announce`, {
                 title,
                 content,
                 expiredAt: expiredAt ? new Date(expiredAt).toISOString() : null,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                },
-            });
+            },);
 
             alert('공지사항이 등록되었습니다!');
             onSuccess?.();

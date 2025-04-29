@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
-const API_BASE_URL = "";
+import apiClient from '../public/axiosConfig';
+import apiNoAccessClient from '../public/axiosConfigNoAccess';
 
 export const useGeneralRegisterForm = (role = 'user') => {
   const navigate = useNavigate();
@@ -11,8 +11,8 @@ export const useGeneralRegisterForm = (role = 'user') => {
 
   //회원가입 버튼 클릭시, role이 user인지 manager인지에 따라 axios 주소값 변경
   const registerEndpoint = isManager
-    ? `${API_BASE_URL}/manager/home/register`
-    : `${API_BASE_URL}/oauth/kakao/register/local`;
+    ? `/manager/home/register`
+    : `/oauth/kakao/register/local`;
 
   // ── 폼 데이터 상태 ──
   const [formData, setFormData] = useState({
@@ -131,7 +131,7 @@ export const useGeneralRegisterForm = (role = 'user') => {
     }
     setIdCheckLoading(true);
     try {
-      await axios.get(`${API_BASE_URL}/oauth/kakao/api/users/check-id/${formData.id}`);
+      await apiClient.get(`/oauth/kakao/api/users/check-id/${formData.id}`);
       setIdCheckStatus('available');
       setIdCheckMessage('사용 가능한 아이디입니다.');
     } catch {
@@ -151,7 +151,7 @@ export const useGeneralRegisterForm = (role = 'user') => {
       const reader = new FileReader(); reader.onloadend = () => setPreviewImageUrl(reader.result);
       reader.readAsDataURL(file);
       const form = new FormData(); form.append('files', file);
-      const resp = await axios.post(`${API_BASE_URL}/file-system/upload/register-image`, form, { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: false });
+      const resp = await apiNoAccessClient.post(`/file-system/upload/register-image`, form, { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: false });
       setUploadedImageId(resp.data[0]?.imageId ?? null);
     } catch {
       setUploadError('이미지 업로드에 실패했습니다.');
@@ -163,7 +163,7 @@ export const useGeneralRegisterForm = (role = 'user') => {
     const raw = formData.phone1 + formData.phone2 + formData.phone3;
     setPhoneCheckLoading(true);
     try {
-      await axios.get(`${API_BASE_URL}/oauth/kakao/check-phone/${raw}`);
+      await apiClient.get(`/oauth/kakao/check-phone/${raw}`);
       setPhoneCheckStatus('available');
       setPhoneCheckMessage('사용 가능한 휴대폰 번호입니다.');
     } catch {
@@ -211,7 +211,7 @@ export const useGeneralRegisterForm = (role = 'user') => {
     };
     try {
       //registerEndpoint는 role이 user, manager에 따라 다름름
-      await axios.post(registerEndpoint, payload);
+      await apiNoAccessClient.post(registerEndpoint, payload);
       setSuccess(true); 
 
       if(role === 'user'){

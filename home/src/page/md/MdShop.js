@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import MoviePagination from "../../js/public/Pagination"; // 경로가 올바른지 확인하세요
 import axios from "axios";
 import { Link } from "react-router-dom";
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 
 export default function MdShop() {
@@ -28,7 +29,7 @@ export default function MdShop() {
             const currentPageSize = getPageSize(window.innerWidth);
 
             try {
-                const response = await axios.get(`/md-shop/lists`, {
+                const response = await apiNoAccessClient.get(`/md-shop/lists`, {
                     params: {
                         page: page,
                         size: currentPageSize,

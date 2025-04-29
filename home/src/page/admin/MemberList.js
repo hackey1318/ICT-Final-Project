@@ -3,6 +3,7 @@ import '../../css/dashboard/user.css';
 import Button from '../../js/common/Buttons.js';
 
 import { useEffect, useState } from "react";
+import apiClient from '../../js/public/axiosConfig.js';
 const accessToken = sessionStorage.getItem("accessToken");
 
 function MemberList(){
@@ -28,16 +29,12 @@ function MemberList(){
     },[page]);
 
     const getUserList = () => {
-        axios.get(`/manager/home/member-list/user?page=${page}&size=10`, {
+        apiClient.get(`/manager/home/member-list/user?page=${page}&size=10`, {
             params:{
                 page,
                 sort: "createdAt,asc",
                 [searchType]: searchValue.trim() === "" ? null : searchValue
             },
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
-            }
         })
         .then((response)=>{
             console.log("response.data", response.data);

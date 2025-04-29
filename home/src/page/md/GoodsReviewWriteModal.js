@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from '../../js/public/axiosConfig';
 import StarRating from './StarRating'; 
 import './../../css/md/GoodsReviewSection.css';
+import apiClient from '../../js/public/axiosConfig';
 
 
  export default function GoodsReviewWriteModal({
@@ -26,8 +27,6 @@ import './../../css/md/GoodsReviewSection.css';
   const [orders, setOrders] = useState([]);
   const [reviewedOrderNos, setReviewedOrderNos] = useState(new Set());
   const fileInputRef = useRef();
-  const baseURL = axios.defaults.baseURL;
-
 
   useEffect(() => {
     if (!isOpen) return;
@@ -47,8 +46,8 @@ import './../../css/md/GoodsReviewSection.css';
     (async () => {
       try {
         const [listRes, doneRes] = await Promise.all([
-          axios.get(`/goods/${goodsId}/orders-for-review`, { params: { userNo } }),
-          axios.get(`/goods/${goodsId}/orders-reviewed`,     { params: { userNo } })
+          apiClient.get(`/goods/${goodsId}/orders-for-review`, { params: { userNo } }),
+          apiClient.get(`/goods/${goodsId}/orders-reviewed`,     { params: { userNo } })
         ]);
         const { ordersDtoList, orderItemDtoList } = listRes.data;
         const reviewedOrderNos = new Set(doneRes.data);
@@ -102,7 +101,7 @@ import './../../css/md/GoodsReviewSection.css';
       for (let file of files) {
         const data = new FormData();
         data.append('files', file);
-        const res = await axios.post('/file-system/upload', data, {
+        const res = await apiClient.post('/file-system/upload', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
         // 서버가 [{ imageId, … }, …] 형태로 배열을 반환하므로 전체를 순회합니다.
@@ -128,7 +127,7 @@ import './../../css/md/GoodsReviewSection.css';
   const handleRemoveImage = async id => {
     try {
       // 1) 서버에 DELETE 요청 (PENDING → DELETE)
-      await axios.patch(
+      await apiClient.patch(
         `/file-system/delete-image/${id}`,
         null,
         { params: { type: 'GOODSREVIEW' } }
@@ -153,13 +152,13 @@ import './../../css/md/GoodsReviewSection.css';
     try {
             if (isEditing) {
                 // 수정 모드 → PUT /goods/{goodsId}/reviews/{reviewId}
-                await axios.put(
+                await apiClient.put(
                   `/goods/${goodsId}/reviews/${formData.id}`,
                   { ...formData, userNo }
                 );
               } else {
                 // 작성 모드 → POST /goods/{goodsId}/reviews
-                await axios.post(
+                await apiClient.post(
                   `/goods/${goodsId}/reviews`,
                   { ...formData, userNo }
                 );

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './../../css/order/OrderList.css';
+import apiClient from '../public/axiosConfig';
 
 function OrderList() {
     const [orderList, setOrderList] = useState([]);
@@ -15,25 +16,21 @@ function OrderList() {
             return null;
         }
 
-        const response = await fetch("/order/list", {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        }
-        );
+        try {
 
-        if (!response.ok) {
-            console.log("요청 실패:", response.status);
-            return;
-        }
+        
+        const { data } = await apiClient.get("/order/list");
 
-        const data = await response.json();
+
+
         setOrderList(data.ordersDtoList);
         setOrderItemList(data.orderItemDtoList)
         setPaymentKeyList(data.paymentKeyList);
         console.log(data);
-
+        } catch (error) {
+            console.log("요청 실패:", error);
+            return;
+        }
     }
 
     useEffect(() => {
@@ -46,31 +43,21 @@ function OrderList() {
         }
         const accessToken = sessionStorage.getItem("accessToken");
         const fetchCancelOrder = async () => {
-            const paymentResponse = await fetch("/payment/cancel", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`
-                },
-                body: JSON.stringify({ paymentKey })
-            });
+            const paymentResponse = await apiClient.post("/payment/cancel", { paymentKey });
 
             if (!paymentResponse.ok) {
                 console.log("요청 실패:", paymentResponse.status);
                 return;
             }
 
-            const paymentData = await paymentResponse.json();
+            const paymentData = paymentResponse.data;
             const transactionKey = paymentData.lastTransactionKey;
             console.log("결제 취소 결과:", paymentData);
 
-            const orderResponse = await fetch("/order/cancel", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`
-                },
-                body: JSON.stringify({ paymentKey, orderNo, transactionKey })
+            const orderResponse = await apiClient.post("/order/cancel", {
+                paymentKey,
+                orderNo,
+                transactionKey
             });
 
             if (!orderResponse.ok) {

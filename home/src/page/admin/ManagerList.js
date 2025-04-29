@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Button from '../../js/common/Buttons.js';
 import '../../css/dashboard/AdminList.css';
+import apiClient from "../../js/public/axiosConfig.js";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -24,12 +25,8 @@ function ManagerList() {
         if (searchValue.trim()) {
             params[searchType] = searchValue.trim();
         }
-        axios.get(`/manager/home/member-list/admin`, {
+        apiClient.get(`/manager/home/member-list/admin`, {
             params,
-            headers: {
-                "Content-Type": "application/json",
-                ...(accessToken && { Authorization: `Bearer ${accessToken}` })
-            }
         })
             .then(response => {
                 const data = response.data;
@@ -63,9 +60,7 @@ function ManagerList() {
         const value = e.target.value;
         if (value === "delete") {
             if (!window.confirm(`MANAGER ${userNo}번을 삭제하시겠습니까?`)) return;
-            axios.post(`/manager/home/manager-delete/${userNo}`, {}, {
-                headers: { Authorization: `Bearer ${accessToken}` }
-            })
+            apiClient.post(`/manager/home/manager-delete/${userNo}`, {},)
                 .then(() => getManagerList(page))
                 .catch(err => console.error(err));
         }

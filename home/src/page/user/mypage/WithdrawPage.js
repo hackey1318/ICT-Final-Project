@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../../js/public/axiosConfig';
+import apiNoAccessClient from '../../../js/public/axiosConfigNoAccess';
 
 export default function WithdrawPage() {
   const [step, setStep] = useState('confirm');
@@ -18,7 +19,7 @@ export default function WithdrawPage() {
     setError('');
 
     try {
-      await axios.post('/user/withdraw', { password });
+      await apiNoAccessClient.post('/user/withdraw', { password });
       // 1) sessionStorage에서 토큰 삭제
       sessionStorage.removeItem('accessToken');
       sessionStorage.removeItem('userInfo');

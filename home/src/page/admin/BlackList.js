@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Button from '../../js/common/Buttons.js';
+import apiClient from "../../js/public/axiosConfig.js";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -21,12 +22,8 @@ function BlackList() {
       sort: "no,desc",
       ...(searchValue.trim() && { [searchType]: searchValue.trim() })
     };
-    axios.get(`/manager/home/blacklist`, {
+    apiClient.get(`/manager/home/blacklist`, {
       params,
-      headers: {
-        "Content-Type": "application/json",
-        ...(accessToken && { Authorization: `Bearer ${accessToken}` })
-      }
     })
     .then(response => {
       const { content, totalPages } = response.data;
@@ -60,15 +57,9 @@ function BlackList() {
     const value = e.target.value;
     if (value === "active") {
       if (!window.confirm(`사용자 ${userNo}번을 활성화하시겠습니까?`)) return;
-      axios.post(
+      apiClient.post(
         `/manager/home/blacklist-active/${userNo}`,
         {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            ...(accessToken && { Authorization: `Bearer ${accessToken}` })
-          }
-        }
       )
       .then(() => getBlackList(page))
       .catch(err => console.error("상태 변경 실패:", err));

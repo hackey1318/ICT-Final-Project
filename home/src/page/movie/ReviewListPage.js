@@ -16,7 +16,6 @@ function ReviewListPage({ movieNo, currentUserNo }) {
   const pageSize = 10;
   const navigate = useNavigate();
   const accessToken = sessionStorage.getItem("accessToken");
-  const baseUrl = axios.defaults.baseURL;
   const storedName = sessionStorage.getItem('movieName');
   const storedDesc = sessionStorage.getItem('movieDescription');
   const storedPoster = sessionStorage.getItem('reviewPageMoviePoster');
@@ -135,7 +134,7 @@ function ReviewListPage({ movieNo, currentUserNo }) {
           >
             {r.imageIds && r.imageIds.length > 0 ? (
               <img
-                src={`${baseUrl}/file-system/showPreview/${r.imageIds[0]}`}
+                src={`/file-system/showPreview/${r.imageIds[0]}`}
                 alt="review"
                 className="review-card-image"
               />

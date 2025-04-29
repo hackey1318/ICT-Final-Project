@@ -1,7 +1,7 @@
 import './../../css/order/OrderDetail.css';
-import axios from "axios";
 import { useEffect, useState } from 'react';
 import { useSearchParams } from "react-router-dom";
+import apiClient from './../public/axiosConfig';
 
 function OrderDetail() {
 
@@ -16,16 +16,10 @@ function OrderDetail() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const accessToken = sessionStorage.getItem("accessToken");
 
-        axios.post("/order/detail", JSON.stringify({
+        apiClient.post("/order/detail", JSON.stringify({
             orderNumber: orderId
-        }), {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
-            }
-        })
+        }))
             .then((response) => {
                 setOrderData(response.data.orders);
                 setGoodsData(response.data.goods);

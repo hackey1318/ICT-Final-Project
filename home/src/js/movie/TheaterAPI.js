@@ -1,12 +1,10 @@
-import axios from "axios"
 
-const accessToken = sessionStorage.getItem("accessToken")
+import apiClient from './../public/axiosConfig';
+
 export const searchTheaters = async (keyword, page, size) => {
     try {
-        const res = await axios.get("/theaters/search", {
-            params: { keyword, page, size }, headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
+        const res = await apiClient.get("/theaters/search", {
+            params: { keyword, page, size }
         });
         return res.data; // Page 객체 반환 (content, totalPages 포함)
     } catch (error) {

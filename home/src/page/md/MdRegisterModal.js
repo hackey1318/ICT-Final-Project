@@ -3,6 +3,7 @@ import axios from "axios"
 import "../../css/md/MdList.css"
 import { debounce } from "lodash"
 import GoodsDescription from './GoodsDescription';
+import apiClient from "../../js/public/axiosConfig";
 
 function MdRegisterModal({ closeModal, refreshList, editTarget }) {
 	const accessToken = sessionStorage.getItem("accessToken")
@@ -32,13 +33,8 @@ function MdRegisterModal({ closeModal, refreshList, editTarget }) {
 
 	const fetchMovieList = async (search) => {
 		try {
-			const response = await axios.get(
+			const response = await apiClient.get(
 				`/movies/titles?movieSearch=${encodeURIComponent(search)}`,
-				{
-					headers: {
-						Authorization: `Bearer ${accessToken}`,
-					},
-				},
 			)
 			setMovieList(response.data)
 			setHighlightedIndex(0)
@@ -127,7 +123,7 @@ function MdRegisterModal({ closeModal, refreshList, editTarget }) {
 			const formData = new FormData()
 			newImages.forEach((file) => formData.append("files", file))
 			try {
-				const res = await axios.post("/file-system/upload", formData, {
+				const res = await apiClient.post("/file-system/upload", formData, {
 					headers: {
 						"Content-Type": "multipart/form-data",
 						Authorization: `Bearer ${accessToken}`,
@@ -149,20 +145,10 @@ function MdRegisterModal({ closeModal, refreshList, editTarget }) {
 
 		try {
 			if (editTarget) {
-				await axios.put(`/md-shop/items?id=${editTarget.id}`, payload, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${accessToken}`,
-					},
-				})
+				await apiClient.put(`/md-shop/items?id=${editTarget.id}`, payload, )
 				alert("수정 완료!")
 			} else {
-				await axios.post("/md-shop/items", payload, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${accessToken}`,
-					},
-				})
+				await apiClient.post("/md-shop/items", payload, )
 				alert("등록 완료!")
 			}
 

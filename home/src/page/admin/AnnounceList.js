@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AnnounceCreateModal from "./AnnounceCreatedModal";
 import Button from "../../js/common/Buttons";
+import apiNoAccessClient from './../../js/public/axiosConfigNoAccess';
 
 export default function AnnounceList() {
     const [announces, setAnnounces] = useState([]);
@@ -18,13 +19,12 @@ export default function AnnounceList() {
     });
 
     const accessToken = sessionStorage.getItem("accessToken");
-    const BASE_URL = '';
     const navigate = useNavigate();
 
     const fetchAnnounces = async (page = 0, type = "ALL", keyword = "") => {
         setLoading(true);
         try {
-            const res = await axios.get(`${BASE_URL}/announce`, {
+            const res = await apiNoAccessClient.get(`/announce`, {
                 headers: accessToken
                     ? { Authorization: `Bearer ${accessToken}` }
                     : {},
