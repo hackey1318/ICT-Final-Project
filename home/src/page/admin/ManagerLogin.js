@@ -23,7 +23,7 @@ export default function ManagerLogin() {
                 password: password,
             });
 
-            const accessToken = response.headers['accessToken']; // accessToken은 headers에서 가져오기
+            const accessToken = response.headers['accesstoken']; // accessToken은 headers에서 가져오기
             const responseBody = response.data; // 응답 본문 (JSON 형식으로 반환됨)
 
             if (!response.status === 200) {

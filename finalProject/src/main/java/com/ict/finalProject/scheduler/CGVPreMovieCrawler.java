@@ -5,6 +5,7 @@ import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.constant.movie.MovieStatus;
 import com.ict.finalProject.movie.repository.domain.MovieStillCuts;
 import com.ict.finalProject.movie.repository.domain.Movies;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -60,7 +61,7 @@ public class CGVPreMovieCrawler {
                 .build();
     }
 
-//    @PostConstruct
+    @PostConstruct
     @Scheduled(cron = "0 10 0 * * *")
     public void crawlingPreMovie() {
         String url = "http://www.cgv.co.kr/movies/pre-movies.aspx";
