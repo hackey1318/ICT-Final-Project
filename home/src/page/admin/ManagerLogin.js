@@ -26,7 +26,7 @@ export default function ManagerLogin() {
             const accessToken = response.headers['accessToken']; // accessToken은 headers에서 가져오기
             const responseBody = response.data; // 응답 본문 (JSON 형식으로 반환됨)
 
-            if (!response.ok) {
+            if (!response.status === 200) {
                 throw new Error(responseBody.message || `로그인 실패: ${response.status}`);
             }
 
