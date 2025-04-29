@@ -13,8 +13,8 @@ import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.user.controller.response.LikeResponse;
 import com.ict.finalProject.user.controller.response.LikeStatisticsResponse;
-import com.ict.finalProject.user.repository.domain.Likes;
 import com.ict.finalProject.user.repository.LikesRepository;
+import com.ict.finalProject.user.repository.domain.Likes;
 import com.ict.finalProject.user.repository.domain.constant.LikeType;
 import com.ict.finalProject.user.service.LikesService;
 import com.ict.finalProject.user.service.dto.LikeItemDto;
@@ -149,31 +149,28 @@ public class LikesServiceImpl implements LikesService {
         // 영화일 경우와 굿즈일 경우를 구분하여 처리
         Map<String, Integer> likeMap = new HashMap<>();
 
-        for (Integer likeNo : likeList) {
+        // 영화인 경우 (예: targetNo가 영화일 경우)
+        if (LikeType.MOVIE.equals(type)) {
 
-            // 영화인 경우 (예: targetNo가 영화일 경우)
-            if (LikeType.MOVIE.equals(type)) {
-
-                List<Movies> movieList = moviesRepository.findAllById(likeList);
-                for (Movies movie : movieList) {
-                    String genreInfo = movie.getGenre();
-                    if (!"정보 없음".equals(genreInfo)) { // "정보 없음"은 제외
-                        String[] genres = genreInfo.split(",");
-                        for (String genre : genres) {
-                            genre = genre.trim(); // 각 장르 앞뒤 공백 제거
-                            likeMap.put(genre, likeMap.getOrDefault(genre, 0) + 1); // 각 장르별로 카운트 증가
-                        }
+            List<Movies> movieList = moviesRepository.findAllById(likeList);
+            for (Movies movie : movieList) {
+                String genreInfo = movie.getGenre();
+                if (!"정보 없음".equals(genreInfo)) { // "정보 없음"은 제외
+                    String[] genres = genreInfo.split(",");
+                    for (String genre : genres) {
+                        genre = genre.trim(); // 각 장르 앞뒤 공백 제거
+                        likeMap.put(genre, likeMap.getOrDefault(genre, 0) + 1); // 각 장르별로 카운트 증가
                     }
                 }
             }
-            // 굿즈인 경우 (예: targetNo가 굿즈일 경우)
-            else if (LikeType.GOODS.equals(type)) {
+        }
+        // 굿즈인 경우 (예: targetNo가 굿즈일 경우)
+        else if (LikeType.GOODS.equals(type)) {
 
-                List<Goods> goodsList = mdShopRepository.findByIdIn(likeList);
-                for (Goods goods : goodsList) {
-                    // 좋아요 수 카운트 증가
-                    likeMap.put(goods.getName(), likeMap.getOrDefault(goods.getName(), 0) + 1);
-                }
+            List<Goods> goodsList = mdShopRepository.findByIdIn(likeList);
+            for (Goods goods : goodsList) {
+                // 좋아요 수 카운트 증가
+                likeMap.put(goods.getName(), likeMap.getOrDefault(goods.getName(), 0) + 1);
             }
         }
         List<Map.Entry<String, Integer>> sortedEntries = new ArrayList<>(likeMap.entrySet());
