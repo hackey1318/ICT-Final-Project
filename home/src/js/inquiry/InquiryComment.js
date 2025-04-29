@@ -128,7 +128,7 @@ function InquiryComment() {
             }
         </div>
         <br/>
-            <div style={{width: '90%', margin: '0 auto'}}>
+            <div style={{width: '100%', margin: '0 auto'}}>
                 <label htmlFor="comment">내용 :</label>
                 <textarea className="form-control" 
                         rows="5" 

@@ -5,7 +5,7 @@ import right from '../../img/arrowR.jpg';
 import close from '../../img/close.jpg';
 import { useCallback, useEffect, useState } from 'react';
 
-const IMAGE_BASE_URL = 'http://192.168.1.252:9988/file-system/showImage/';
+const IMAGE_BASE_URL = 'http://localhost:9988/file-system/showImage/';
 
 function InquiryImageModal({ images, initialIndex, onClose }) {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
@@ -52,7 +52,7 @@ function InquiryImageModal({ images, initialIndex, onClose }) {
     // };
 
     return (
-        <div className="modal-overlay">
+        <div className="inquiry-modal-overlay">
             <img src={close} id="modal-close" onClick={onClose}/>
             <div style={{textAlign: 'center', display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{width: '10%', height: '580px', lineHeight: '600px'}}>
