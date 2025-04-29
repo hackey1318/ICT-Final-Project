@@ -65,6 +65,7 @@ import AdminPwdReset from './page/admin/AdminPwdReset';
 import TheaterList from './page/cinemate/TheaterList';
 import TheaterListDetail from './page/cinemate/TheaterListDetail';
 import ReviewHistory from './page/user/mypage/ReviewHistory';
+import MyCinemates from './page/user/mypage/MyCinemates';
 import WithdrawPage from './page/user/mypage/WithdrawPage';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import MovieLikeChart from './page/admin/like/MovieLikeChart';
@@ -143,6 +144,7 @@ function App() {
 					<Route path="reviews" element={<ReviewHistory />} />
 					<Route path="/mypage/withdraw" element={<WithdrawPage />} />
 					<Route path="inquiries" element={<InquiryHistory />} />
+					<Route path="cinemates" element={<MyCinemates />} />
 				</Route>
 
 				{/* 시네메이트 */}
