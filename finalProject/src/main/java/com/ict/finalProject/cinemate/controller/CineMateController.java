@@ -94,4 +94,9 @@ public class CineMateController {
     public List<CineMateResponse> getMovieDatail(@PathVariable Integer theaterNo){
         return cineMateService.getTheaterDetail(theaterNo);
     }
+
+    @GetMapping("/{userNo}/myCineMate")
+    public Page<CineMateResponse> getMyCineMate(@PathVariable Integer userNo, Pageable pageable){
+        return cineMateService.getMyCineMate(userNo, pageable);
+    }
 }
