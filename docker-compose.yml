@@ -21,8 +21,6 @@ services:
       - "3000:3000"  # FE 서버 포트
     networks:
       - app-network
-    environment:
-      - REACT_APP_API_URL=http://nginx:80  # Nginx 서버로 프록시
     restart: unless-stopped
 
   mysql-db:
