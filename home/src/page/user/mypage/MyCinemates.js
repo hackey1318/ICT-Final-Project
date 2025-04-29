@@ -43,6 +43,7 @@ function MyCinemates(){
                 userName: cinemate.userName,
                 createdAt: cinemate.createdAt,
                 meetingDate: cinemate.meetingDate,
+                currentMemberCount: cinemate.currentMemberCount, //이거 추가함
                 maxMemberCount: cinemate.maxMemberCount,
                 content: cinemate.content,
                 userNo: cinemate.userNo
@@ -95,7 +96,7 @@ function MyCinemates(){
                                 )
                             })):(
                                 <tr>
-                                    <td>시네메이트 내역이 없습니다.</td>
+                                    <td colSpan="9" style={{ textAlign: 'center' }}>시네메이트 내역이 없습니다.</td>
                                 </tr>
                             )
                         }

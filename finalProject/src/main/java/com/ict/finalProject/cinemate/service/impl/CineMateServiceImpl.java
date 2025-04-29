@@ -300,6 +300,7 @@ public class CineMateServiceImpl implements CineMateService {
                 .no((Integer) result[10])
                 .createdAt((result[11] != null ? ((Timestamp) result[11]).toLocalDateTime() : null))
                 .content((String) result[12])
+                .userNo((Integer) result[13])
                 .build();
         });
     }
