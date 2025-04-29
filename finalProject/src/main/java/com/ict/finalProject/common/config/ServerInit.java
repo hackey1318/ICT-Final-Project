@@ -1,6 +1,7 @@
 package com.ict.finalProject.common.config;
 
 
+import com.ict.finalProject.domain.constant.JoinType;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.domain.constant.UserGender;
 import com.ict.finalProject.domain.constant.UserRole;
@@ -33,6 +34,8 @@ public class ServerInit {
                             .nickname(adminId)
                             .knickname(adminId)
                             .email("admin@test.com")
+                            .phone("01050384231")
+                            .joinType(JoinType.LOCAL)
                             .role(UserRole.ADMIN)
                             .gender(UserGender.MALE)
                             .status(StatusInfo.ACTIVE).build());
