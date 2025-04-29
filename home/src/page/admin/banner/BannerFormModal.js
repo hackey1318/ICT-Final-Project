@@ -155,7 +155,11 @@ export default function BannerFormModal({ show, onClose, onSuccess, mode = "crea
                     formData.append("files", file); // 서버에서는 files로 받음
                 });
 
-                const { data } = await apiNoAccessClient.post(`${BASE_URL}/file-system/upload`, formData,);
+                const { data } = await apiNoAccessClient.post(`${BASE_URL}/file-system/upload`, formData,{
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
 
                 uploadedImageId = data[0]?.imageId;
                 if (!uploadedImageId) throw new Error("imageId가 없습니다.");

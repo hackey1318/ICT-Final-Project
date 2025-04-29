@@ -23,12 +23,6 @@ public class MoviesCustomRepositoryImpl implements MoviesCustomRepository {
 
     @Override
     public List<Movies> findPopularMoviesByGenres(Integer userNo, List<String> genres, int count) {
-        // 장르 조건 생성
-        String genreCondition = genres.stream()
-                .map(g -> "m.genre LIKE :genre" + g)  // :genre1, :genre2 형태로 파라미터 바인딩
-                .collect(Collectors.joining(" OR "));
-
-        // 기본 SELECT 쿼리
         StringBuilder queryBuilder = new StringBuilder("""
         SELECT m.*
         FROM movies m
@@ -38,15 +32,21 @@ public class MoviesCustomRepositoryImpl implements MoviesCustomRepository {
             WHERE type = 'MOVIE' AND status = 'ACTIVE'
             GROUP BY target_no
         ) l ON m.no = l.target_no
-        WHERE (
     """);
 
-        queryBuilder.append(genreCondition).append(")");
+        // 장르 조건이 있을 때만 WHERE 절 추가
+        if (genres != null && !genres.isEmpty()) {
+            String genreCondition = genres.stream()
+                    .map(g -> "m.genre LIKE '%" + g + "%'")
+                    .collect(Collectors.joining(" OR "));
+            queryBuilder.append(" WHERE (").append(genreCondition).append(")");
+        }
 
-        // 사용자 번호가 존재하면 추가 조건 (찜한 영화 제외, 오픈 상태 필터링)
+        // 사용자 번호 조건 추가
         if (userNo != null) {
+            queryBuilder.append(genres != null && !genres.isEmpty() ? " AND" : " WHERE");
             queryBuilder.append("""
-            AND m.no NOT IN (
+            m.no NOT IN (
                 SELECT target_no
                 FROM likes
                 WHERE user_no = :userNo AND type = 'MOVIE' AND status = 'ACTIVE'
@@ -66,16 +66,11 @@ public class MoviesCustomRepositoryImpl implements MoviesCustomRepository {
         if (userNo != null) {
             query.setParameter("userNo", userNo);
         }
-
-        // 장르 파라미터 바인딩
-        for (int i = 0; i < genres.size(); i++) {
-            query.setParameter("genre" + i, "%" + genres.get(i) + "%");
-        }
-
         query.setParameter("limit", count);
 
         return query.getResultList();
     }
+
 
     public Page<Movies> findRelateGenreMovieList(String[] genreList, Pageable pageable) {
 

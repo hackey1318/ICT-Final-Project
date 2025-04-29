@@ -126,7 +126,6 @@ function MdRegisterModal({ closeModal, refreshList, editTarget }) {
 				const res = await apiClient.post("/file-system/upload", formData, {
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${accessToken}`,
 					},
 				})
 				imageIdList = res.data.map((img) => img.imageId)

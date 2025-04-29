@@ -105,7 +105,6 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
 
         const fileUpload = await apiClient.post("/file-system/upload", formData, {
             headers: {
-                Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'multipart/form-data'
             }
         })
