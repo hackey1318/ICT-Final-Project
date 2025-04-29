@@ -112,7 +112,7 @@ function SalesChart({ salesData }) {
     };
 
     return (
-        <div style={{ width: '100%', height: `${Object.keys(paidSalesByGoods).length * 50}px` }}>
+        <div style={{ width: '100%', height: `${Object.keys(paidSalesByGoods).length * 50}px`, minHeight: "300px" }}>
             <Bar options={chartOptions} data={chartData} />
         </div>)
 
