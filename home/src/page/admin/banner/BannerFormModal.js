@@ -322,7 +322,7 @@ export default function BannerFormModal({ show, onClose, onSuccess, mode = "crea
                         <input
                             type="date"
                             className="form-control mb-3"
-                            value={startDate}
+                            value={startDate?.slice(0, 10) || ''}
                             onChange={(e) => setStartDate(e.target.value + 'T00:00:00')}
                             />
 
@@ -330,7 +330,7 @@ export default function BannerFormModal({ show, onClose, onSuccess, mode = "crea
                         <input
                             type="date"
                             className="form-control mb-3"
-                            value={endDate}
+                            value={endDate?.slice(0, 10) || ''}
                             onChange={(e) => setEndDate(e.target.value + 'T00:00:00')}
                         />
 

@@ -10,6 +10,8 @@ services:
       - SPRING_PROFILES_ACTIVE=prod  # 프로덕션 프로파일 활성화 (선택사항)
     networks:
       - app-network
+    volumes:
+      - ../server-upload:/upload
     depends_on:
       - mysql-db
     restart: unless-stopped
@@ -31,6 +33,8 @@ services:
       MYSQL_DATABASE: shopping   # 사용할 DB 이름
     ports:
       - "3306:3306"  # MySQL 포트
+    volumes:
+      - ../mysql-data:/var/lib/mysql
     networks:
       - app-network
     restart: unless-stopped
