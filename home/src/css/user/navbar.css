@@ -1,298 +1,215 @@
-/* 네비게이션 바 기본 스타일 */
-.navbars {
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* ── 네임스페이스: navbar- 접두사 필수 ────────────────────── */
+.navbar {
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     position: relative;
     z-index: 1000;
-}
-
-.navbar-containers {
+  }
+  
+  .navbar-container {
+    margin: 0 auto;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    /* 좌우 정렬을 위한 설정 */
-    padding: 0 20px;
-    height: 100px;
-    /* max-width: 1200px; */
-    /* margin: 0 auto; */
-}
-
-/* 좌측 섹션 (로고 + 네비게이션 메뉴) */
-.navbar-lefts {
-    display: flex;
-    align-items: center;
-}
-
-/* 로고 스타일 */
-.navbar-logo {
-    display: flex;
-    align-items: center;
-    margin-right: 30px;
-    /* 로고와 메뉴 사이 간격 */
-}
-
-.navbar-logo img {
+    padding: 0 16px;
     height: 80px;
-}
-
-.logo-text {
-    font-size: 1.5rem;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-}
-
-.logo-highlight {
-    color: #0066cc;
-}
-
-/* 네비게이션 메뉴 스타일 */
-.navbar-menus {
-    display: flex;
-}
-
-.navbar-navs {
-    display: flex;
-    flex-direction: row;
-    /* 명시적으로 가로 방향 지정 */
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.nav-items {
-    position: relative;
-    margin-right: 10px;
-    /* 메뉴 항목 간 간격 추가 */
-}
-
-.nav-links {
-    display: block;
-    padding: 0 15px;
-    line-height: 70px;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s;
-    white-space: nowrap;
-    font-size: 1.3rem;
-    font-weight: bold;
-    /* 텍스트 줄바꿈 방지 */
-}
-
-.nav-links:hover {
-    color: #0066cc;
-}
-
-/* 드롭다운 메뉴 스타일 */
-.dropdown-arrow {
-    font-size: 15px;
-    margin-left: 5px;
-}
-
-.dropdown-container {
-    position: fixed;
-    z-index: 2000; /* 높은 z-index 값 */
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    min-width: 180px;
-    border-radius: 4px;
-    padding: 12px 0;
-}
-
-.dropdown-container li {
-    list-style: none;
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-.dropdown-container a {
-    display: block;
-    padding: 8px 15px;
-    color: #333;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.dropdown-container a:hover {
-    background-color: #f5f5f5;
-}
-
-/* 사용자 섹션 스타일 - 우측 정렬 */
-.navbar-user {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    /* 우측 정렬을 위해 auto 마진 적용 */
-}
-
-.user-profile {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.welcome-text {
-    font-size: 0.9rem;
-    color: #555;
-}
-
-.username {
-    font-weight: 600;
-    color: #333;
-}
-
-.profile-circle {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: #f0f0f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.profile-circle img {
+    overflow: visible;
     width: 100%;
+  }
+  
+  .navbar-logo img {
     height: 100%;
-    object-fit: cover;
-}
-
-/* 로그인/회원가입 버튼 스타일 */
-.auth-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.btn {
-    padding: 8px 15px;
-    border-radius: 4px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.3s;
-}
-
-.btn-login {
-    color: #0066cc;
-    border: 1px solid #0066cc;
-    background-color: transparent;
-}
-
-.btn-login:hover {
-    background-color: rgba(0, 102, 204, 0.1);
-}
-
-.btn-register {
-    color: #fff;
-    background-color: #0066cc;
-    border: 1px solid #0066cc;
-}
-
-.btn-register:hover {
-    background-color: #0055aa;
-}
-
-/* 모바일 토글 버튼 */
-.navbar-toggle {
+  }
+  
+  /* 버거 아이콘 (모바일) */
+  .navbar-burger {
     display: none;
     flex-direction: column;
     justify-content: space-between;
-    width: 30px;
-    height: 21px;
+    width: 30px; height: 30px;
+    background: none; border: none;
     cursor: pointer;
-}
-
-.toggle-icon {
-    width: 100%;
-    height: 3px;
-    background-color: #333;
-    transition: all 0.3s;
-}
-
-/* 테스트 버튼 스타일 */
-.test-buttons {
+  }
+  .navbar-burger span {
+    display: block; height: 3px; background: #333;
+  }
+  
+  /* 네비 리스트 */
+  .navbar-list {
     display: flex;
-    justify-content: center;
-    padding: 10px;
-    background-color: #f5f5f5;
-}
-
-.test-btn {
-    padding: 5px 10px;
-    margin: 0 5px;
-    border: none;
+    list-style: none;
+    margin: 0; padding: 0;
+    flex: 1;
+  }
+  .navbar-list--open {
+    max-height: 400px; /* 모바일 전용 */
+  }
+  
+  .navbar-item {
+    position: relative;
+  }
+  .navbar-link {
+    display: block;
+    padding: 0 30px;
+    line-height: 80px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color .2s;
+  }
+  .navbar-link:hover,
+  .navbar-link.active {
+    color: #0066cc;
+  }
+  
+  /* 드롭다운 화살표 */
+  .navbar-dropdown-arrow {
+    margin-left: 4px;
+    transition: transform .2s;
+  }
+  .navbar-dropdown-arrow.up {
+    transform: rotate(180deg);
+  }
+  
+  /* 드롭다운 메뉴 */
+  .navbar-dropdown {
+    position: absolute;
+    top: 100%; left: 0;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    min-width: 160px;
+    z-index: 2000;
+    animation: navbar-fadeIn .2s ease-out;
+  }
+  @keyframes navbar-fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .navbar-dropdown li {
+    list-style: none;
+  }
+  .navbar-dropdown li a {
+    display: block;
+    padding: 8px 16px;
+    color: #333;
+    text-decoration: none;
+    transition: background .2s;
+  }
+  .navbar-dropdown li a:hover {
+    background: #f5f5f5;
+  }
+  
+  /* 유저 영역 */
+  .navbar-user-area {
+    margin-left: auto;
+  }
+  .navbar-profile,
+  .navbar-auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .navbar-welcome {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  .navbar-btn {
+    padding: 6px 12px;
+    border: 1px solid #0066cc;
+    color: #0066cc;
+    background: transparent;
+    text-decoration: none;
     border-radius: 4px;
     cursor: pointer;
-}
-
-.test-btn.login {
-    background-color: #0066cc;
-    color: white;
-}
-
-.test-btn.logout {
-    background-color: #666;
-    color: white;
-}
-
-/* 반응형 스타일 */
-@media (max-width: 991px) {
-    .navbar-toggle {
-        display: flex;
-        margin-left: auto;
-        /* 토글 버튼을 우측으로 밀기 */
-        margin-right: 15px;
-        /* 토글 버튼과 사용자 섹션 사이 간격 */
+  }
+  .navbar-btn--primary {
+    background: #0066cc;
+    color: #fff;
+  }
+  
+  /* ── 반응형 ─────────────────────────────────────────────── */
+  @media (max-width: 990px) {
+    .navbar-burger {
+      display: flex;
+      margin-left: auto;
     }
-
-    .navbar-lefts {
-        flex: 1;
-        /* 좌측 섹션이 가능한 공간 차지 */
+  
+    .navbar-list {
+      position: absolute;
+      top: 80px; left: 0; right: 0;
+      flex-direction: column;
+      background: #fff;
+      border-top: 1px solid #eee;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .3s ease;
     }
-
-    .navbar-menus {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        width: 100%;
-        background-color: white;
-        padding: 10px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
+    .navbar-list--open {
+      max-height: 400px;
     }
-
-    .navbar-menus.active {
-        display: flex;
+  
+    .navbar-link {
+      line-height: 48px;
+      padding: 0 16px;
+      border-bottom: 1px solid #eee;
     }
-
-    .navbar-navs {
-        flex-direction: column;
-        /* 모바일에서 세로 방향으로 변경 */
+  
+    .navbar-dropdown {
+      position: static;
+      box-shadow: none;
+      background: #f9f9f9;
+      border-radius: 0;
+      animation: none;
     }
-
-    .nav-items {
-        margin-right: 0;
-        /* 모바일에서 오른쪽 마진 제거 */
-        margin-bottom: 5px;
-        /* 모바일에서 아래 마진 추가 */
+  
+    .navbar-dropdown li a {
+      padding-left: 32px;
     }
-
-    .nav-links {
-        line-height: 40px;
-        padding: 5px 0;
-    }
-
-    .dropdown-container {
-        position: static;
-        box-shadow: none;
-        padding-left: 20px;
-        margin-top: 5px;
-        margin-bottom: 10px;
-    }
-
-    .dropdown-container a {
-        padding: 5px 0;
-    }
-}
+  }
+  /* ── 컨테이너: 좌우 그룹 분리 ───────────────────────── */
+.navbar-container {
+    display: flex;
+    justify-content: space-between; /* 왼쪽 그룹 ↔ 오른쪽 그룹 */
+    align-items: center;
+    padding: 0 16px;
+    height: 80px;
+  }
+  
+  /* ── 왼쪽 그룹 내부 ─────────────────────────────────── */
+  .navbar-lefts {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* 로고·버거·메뉴 사이 간격 */
+  }
+  
+  /* nav-list가 flex:1 있으면 제거하세요! */
+  .navbar-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    /* flex: none; */
+  }
+  
+  /* ── 오른쪽 그룹 ─────────────────────────────────── */
+  .navbar-user-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  /* (필요 시) 프로필 내부 순서 조정 */
+  .navbar-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* flex-direction: row-reverse;  // 버튼 순서 뒤집을 때만 */
+  }
+  
+  /* 로그인/회원가입 버튼 */
+  .navbar-auth {
+    display: flex;
+    gap: 8px;
+  }

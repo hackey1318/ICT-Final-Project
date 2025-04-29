@@ -1,209 +1,127 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import "../../css/user/navbar.css" // CSS 파일 임포트 (실제 경로로 수정 필요)
-
-// 로고 이미지 임포트 (실제 경로로 수정 필요)
+import "../../css/user/navbar.css"
 import logo from "../../img/cinetogether.png"
 import NotificationSystem from "./notification/NotificationSystem"
 
-function Navbar() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [userInfo, setUserInfo] = useState(null);
-    const [isNavOpen, setIsNavOpen] = useState(false)
-    const [showDropdown, setShowDropdown] = useState(false)
-    const [showCustomerDropdown, setShowCustomerDropdown] = useState(false)
-    const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
-    const [dropdownCustomerPosition, setDropdownCustomerPosition] = useState({ top: 0, left: 0 })
-    const movieMenuRef = useRef(null)
-    const customerServiceMenuRef = useRef(null)
+export default function Navbar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userInfo, setUserInfo] = useState(null)
+  const [isMobile, setIsMobile] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [active, setActive] = useState(null) // "movies" | "customer" | null
 
-    // 컴포넌트 마운트 시 로그인 상태 확인
-    useEffect(() => {
-        const token = sessionStorage.getItem("accessToken")
-        if (token) {
-            setIsLoggedIn(true)
-            const storedUser = sessionStorage.getItem("userInfo");
-            if (storedUser) {
-                try {
-                    setUserInfo(JSON.parse(storedUser));
-                } catch (e) {
-                    console.error("유저 정보 파싱 오류", e);
-                }
-            }
-        }
-    }, [])
-
-    // 네비게이션 토글 함수
-    const toggleNav = () => {
-        setIsNavOpen(!isNavOpen)
+  useEffect(() => {
+    const token = sessionStorage.getItem("accessToken")
+    if (token) {
+      setIsLoggedIn(true)
+      try {
+        setUserInfo(JSON.parse(sessionStorage.getItem("userInfo")))
+      } catch {}
     }
+    const onResize = () => setIsMobile(window.innerWidth <= 990)
+    onResize()
+    window.addEventListener("resize", onResize)
+    return () => window.removeEventListener("resize", onResize)
+  }, [])
 
-    // 드롭다운 토글 함수
-    const handleCustomerMouseEnter = () => {
-        if (customerServiceMenuRef.current) {
-            const rect = customerServiceMenuRef.current.getBoundingClientRect()
-            setDropdownCustomerPosition({
-                top: rect.bottom,
-                left: rect.left,
-            })
-        }
-        setShowCustomerDropdown(true)
+  const toggleMenu = () => {
+    if (isMobile) {
+      setMenuOpen(v => !v)
+      if (menuOpen) setActive(null)
     }
+  }
+  const openDropdown = name => !isMobile && setActive(name)
+  const closeDropdown = () => !isMobile && setActive(null)
+  const clickDropdown = name =>
+    isMobile && setActive(a => (a === name ? null : name))
 
-    const handleCustomerMouseLeave = () => {
-        setShowCustomerDropdown(false)
-    }
+  const logout = () => {
+    sessionStorage.clear()
+    setIsLoggedIn(false)
+    setUserInfo(null)
+  }
 
-    // 드롭다운 토글 함수
-    const handleMouseEnter = () => {
-        if (movieMenuRef.current) {
-            const rect = movieMenuRef.current.getBoundingClientRect()
-            setDropdownPosition({
-                top: rect.bottom,
-                left: rect.left,
-            })
-        }
-        setShowDropdown(true)
-    }
-
-    const handleMouseLeave = () => {
-        setShowDropdown(false)
-    }
-
-    const handleLogout = () => {
-        sessionStorage.removeItem("accessToken")
-        sessionStorage.removeItem("userInfo")
-        setIsLoggedIn(false)
-        setUserInfo(null)
-    }
-
-    // 모바일 화면인지 확인
-    const isMobile = () => {
-        return window.innerWidth <= 991
-    }
-
-    return (
-        <nav className="navbars">
-            <div className="navbar-containers">
-                {/* 좌측 섹션 (로고 + 네비게이션 메뉴) */}
-                <div className="navbar-lefts">
-                    {/* 로고 */}
-                    <div className="navbar-logo">
-                        <Link to="/">
-                            <img src={logo || "/placeholder.svg?height=40&width=150"} alt="CINETOGETHER" />
-                            {!logo && (
-                                <span className="logo-text">
-                                    CINE<span className="logo-highlight">TOGETHER</span>
-                                </span>
-                            )}
-                        </Link>
-                    </div>
-
-                    {/* 모바일 토글 버튼 */}
-                    <div className="navbar-toggle" onClick={toggleNav}>
-                        <span className="toggle-icon"></span>
-                        <span className="toggle-icon"></span>
-                        <span className="toggle-icon"></span>
-                    </div>
-
-                    {/* 네비게이션 메뉴 */}
-                    <div className={`navbar-menus ${isNavOpen ? "active" : ""}`}>
-                        <ul className="navbar-navs">
-                            <li className="nav-items" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                                <div className="nav-links" ref={movieMenuRef}>
-                                    영화찾기 <i className="dropdown-arrow">▼</i>
-                                </div>
-                            </li>
-                            <li className="nav-items">
-                                <Link to="/mdshop" className="nav-links">
-                                    MD Shop
-                                </Link>
-                            </li>
-                            <li className="nav-items">
-                                <Link to="/cinemate" className="nav-links">
-                                    시네메이트
-                                </Link>
-                            </li>
-                            <li className="nav-items" onMouseEnter={handleCustomerMouseEnter} onMouseLeave={handleCustomerMouseLeave}>
-                                <div className="nav-links" ref={customerServiceMenuRef}>
-                                    고객센터 <i className="dropdown-arrow">▼</i>
-                                </div>
-                            </li>
-                            {isLoggedIn && (
-                                <>
-                                    <li className="nav-items">
-                                        <Link to="/mypage" className="nav-links">
-                                            마이페이지
-                                        </Link>
-                                    </li>
-                                </>
-                            )}
-                        </ul>
-                    </div>
-                </div>
-                {/* 사용자 섹션 */}
-                <div className="navbar-user">
-                    {isLoggedIn && userInfo ? (
-                        <div className="user-profile">
-                            {
-                                userInfo.role === "USER" && (
-                                    <NotificationSystem />
-                                )
-                            }
-                            <div className="welcome-text">
-                                환영합니다 <span className="username">{userInfo.nickname}</span> 님
-                            </div>
-                            <div className="profile-circle">
-                                <img
-                                    src={userInfo.profileImageUrl || "https://via.placeholder.com/35"}
-                                    alt="프로필 이미지"
-                                />
-                            </div>
-                            <button onClick={handleLogout} className="test-btn logout">
-                                로그아웃
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="auth-buttons">
-                            <Link to="/login" className="btn btn-login">
-                                로그인
-                            </Link>
-                            <Link to="/register" className="btn btn-register">
-                                회원가입
-                            </Link>
-                        </div>
-                    )}
-                </div>
-
-                {
-                    showDropdown && (
-                        <ul className="dropdown-container" style={isMobile() ? {} : { position: "fixed", top: `${dropdownPosition.top}px`, left: `${dropdownPosition.left}px`, }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                            <li>
-                                <Link to="/movies/current">현재 상영작</Link>
-                            </li>
-                            <li>
-                                <Link to="/movies/upcoming">상영 예정작</Link>
-                            </li>
-                            <li>
-                                <Link to="/movies">장르별 영화</Link>
-                            </li>
-                        </ul>
-                    )}
-                {
-                    showCustomerDropdown && (
-                        <ul className="dropdown-container" style={isMobile() ? {} : { position: "fixed", top: `${dropdownCustomerPosition.top}px`, left: `${dropdownCustomerPosition.left}px`, }} onMouseEnter={handleCustomerMouseEnter} onMouseLeave={handleCustomerMouseLeave}>
-                            <li>
-                                <Link to="/inquiry">1:1 문의</Link>
-                            </li>
-                            <li>
-                                <Link to="/announcements">공지사항</Link>
-                            </li>
-                        </ul>
-                    )}
+  return (
+    <nav className="navbar">
+      <div className="navbar-container">
+        {/* 왼쪽 그룹 */}
+        <div className="navbar-lefts">
+          <Link to="/" className="navbar-logo">
+            <img src={logo} alt="CINETOGETHER"/>
+          </Link>
+          <button className="navbar-burger" onClick={toggleMenu}>
+            <span/><span/><span/>
+          </button>
+          <ul className={`navbar-list ${menuOpen ? "navbar-list--open" : ""}`}>
+            <li
+              className="navbar-item"
+              onMouseEnter={() => openDropdown("movies")}
+              onMouseLeave={closeDropdown}
+              onClick={() => clickDropdown("movies")}
+            >
+              <div className={`navbar-link ${active==="movies"?"active":""}`}>
+                영화찾기
+                <i className={`navbar-dropdown-arrow ${active==="movies"?"up":""}`}>▼</i>
+              </div>
+              {active==="movies" && (
+                <ul className="navbar-dropdown">
+                  <li><Link to="/movies/current">현재 상영작</Link></li>
+                  <li><Link to="/movies/upcoming">상영 예정작</Link></li>
+                  <li><Link to="/movies">장르별 영화</Link></li>
+                </ul>
+              )}
+            </li>
+            <li className="navbar-item">
+              <Link to="/mdshop" className="navbar-link">MD Shop</Link>
+            </li>
+            <li className="navbar-item">
+              <Link to="/cinemate" className="navbar-link">시네메이트</Link>
+            </li>
+            <li
+              className="navbar-item"
+              onMouseEnter={() => openDropdown("customer")}
+              onMouseLeave={closeDropdown}
+              onClick={() => clickDropdown("customer")}
+            >
+              <div className={`navbar-link ${active==="customer"?"active":""}`}>
+                고객센터
+                <i className={`navbar-dropdown-arrow ${active==="customer"?"up":""}`}>▼</i>
+              </div>
+              {active==="customer" && (
+                <ul className="navbar-dropdown">
+                  <li><Link to="/inquiry">1:1 문의</Link></li>
+                  <li><Link to="/announcements">공지사항</Link></li>
+                </ul>
+              )}
+            </li>
+            {isLoggedIn && (
+              <li className="navbar-item">
+                <Link to="/mypage" className="navbar-link">마이페이지</Link>
+              </li>
+            )}
+          </ul>
+        </div>
+        {/* 오른쪽 그룹 */}
+        <div className="navbar-user-area">
+          {isLoggedIn ? (
+            <div className="navbar-profile">
+              {userInfo.role==="USER" && <NotificationSystem/>}
+              <span className="navbar-welcome">
+                환영합니다 <strong>{userInfo.nickname}</strong> 님
+              </span>
+              <button className="navbar-btn" onClick={logout}>로그아웃</button>
             </div>
-
-        </nav>
-    )
+          ) : (
+            <div className="navbar-auth">
+              <Link to="/login" className="navbar-btn">로그인</Link>
+              <Link to="/register" className="navbar-btn navbar-btn--primary">
+                회원가입
+              </Link>
+            </div>
+          )}
+        </div>
+      </div>
+    </nav>
+  )
 }
-
-export default Navbar

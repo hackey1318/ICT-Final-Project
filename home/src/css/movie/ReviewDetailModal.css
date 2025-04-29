@@ -121,7 +121,7 @@
 .review-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 12px;
 }
 
@@ -166,9 +166,10 @@
 
 .modal-action-buttons {
   display: flex;
-  gap: 8px;
+  gap: 15px;
   margin-top: auto;
   padding-top: 16px;
+  width: 30%;
 }
 
 .modal-delete {
@@ -261,8 +262,12 @@
 /* 수정 버튼 스타일 */
 .modal-action-buttons {
   display: flex;
-  gap: 8px;
-  margin-top: 16px;
+  flex-direction: column; /* ← 세로 스택 */
+  gap: 8px;               /* 버튼 사이 간격 */
+  margin-top: auto;
+  padding-top: 16px;
+  align-items: flex-start; /* 필요에 따라 flex-end 로 우측 정렬 */
+  position: relative;      /* 절대위치 제거 대비 */
 }
 
 .modal-edit {
