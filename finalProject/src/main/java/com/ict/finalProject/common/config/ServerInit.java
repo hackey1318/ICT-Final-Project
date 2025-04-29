@@ -34,6 +34,7 @@ public class ServerInit {
                             .nickname(adminId)
                             .knickname(adminId)
                             .email("admin@test.com")
+                            .phone("01050384231")
                             .joinType(JoinType.LOCAL)
                             .role(UserRole.ADMIN)
                             .gender(UserGender.MALE)
