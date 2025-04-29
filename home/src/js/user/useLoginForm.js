@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위해 import
-import apiClient from "./apiClient"; // apiClient import
+import apiClient from '../../js/public/axiosConfig'; // apiClient import
 
 const KAKAO_CLIENT_ID = "83d1dc7f3cbc27e375262210a7b0bdeb"; // 카카오 REST API 키
 const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI || "http://localhost:3000/kakao/callback"; // 프론트엔드 콜백 URL

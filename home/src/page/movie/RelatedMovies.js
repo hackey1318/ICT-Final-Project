@@ -4,7 +4,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Link } from "react-router-dom";
-import apiClient from "../../js/public/apiClient"; // apiClient import
+import apiClient from '../../js/public/axiosConfig'; // apiClient import
 
 export default function RelatedMovies({ movieNo }) {
 	const [relatedMovies, setRelatedMovies] = useState([]);

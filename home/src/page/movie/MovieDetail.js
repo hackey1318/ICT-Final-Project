@@ -1,4 +1,4 @@
-import apiClient from "../../js/public/apiClient"; // apiClient import
+import apiClient from '../../js/public/axiosConfig'; // apiClient import
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Share2, Heart } from "lucide-react";
