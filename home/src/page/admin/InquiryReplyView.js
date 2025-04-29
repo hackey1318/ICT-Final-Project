@@ -5,10 +5,9 @@ import InquiryImageModal from "../../js/inquiry/InquiryImageModal";
 import InquiryComment from "../../js/inquiry/InquiryComment";
 import apiClient from "../../js/public/axiosConfig";
 
-
 function InquiryReplyView() {
     const {no} = useParams();
-    const IMAGE_BASE_URL = 'http://192.168.1.252:9988/file-system/showImage/';
+    const IMAGE_BASE_URL = 'http://localhost:9988/file-system/showImage/';
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImageIdx, setSelectedImageIdx] = useState(0);
     const [isUpdateStatus, setIsUpdateStatus] = useState(false);
