@@ -30,7 +30,6 @@ public class ActiveUsersServiceImpl implements ActiveUsersService {
                 .userNo((users != null ? users.getNo() : 0))
                 .ip(ip)
                 .activity(activity).build());
-
     }
 
     //일별 활동인원수

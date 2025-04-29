@@ -4,6 +4,8 @@ import com.ict.finalProject.common.config.JwtTokenProvider;
 import com.ict.finalProject.common.exception.custom.UserAuthenticationException;
 import com.ict.finalProject.common.exception.custom.UserStatusException;
 import com.ict.finalProject.common.response.SuccessOfFailResponse;
+import com.ict.finalProject.dashboard.domain.constant.Activity;
+import com.ict.finalProject.dashboard.service.ActiveUsersService;
 import com.ict.finalProject.oauth.controller.request.KakaoRegisterRequest;
 import com.ict.finalProject.oauth.controller.request.LocalRegisterRequest;
 import com.ict.finalProject.oauth.controller.request.LoginRequest;
@@ -12,6 +14,7 @@ import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.KakaoUserInfoDto;
 import com.ict.finalProject.oauth.service.Oauth2Service;
 import com.ict.finalProject.oauth.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,6 +34,7 @@ public class OAuth2Controller {
     private final Oauth2Service oauth2Service;
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final ActiveUsersService activeUsersService;
 
     @GetMapping("/login")
     public ResponseEntity<?> kakaoLogin(@RequestParam("code") String code) {
@@ -88,11 +92,13 @@ public class OAuth2Controller {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest servletRequest) {
         try {
             Users loggedInUser = userService.getUser(request.getId());
             String accessToken = userService.login(request.getId(), request.getPassword());
 
+            // 여기서 active User를 잡는다.
+            activeUsersService.saveActivateLog(loggedInUser, getClientIp(servletRequest), Activity.LOGIN);
 
             return ResponseEntity.ok()
                     .header("accessToken", accessToken)
@@ -153,5 +159,19 @@ public class OAuth2Controller {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         return ResponseEntity.ok().build();
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 }
