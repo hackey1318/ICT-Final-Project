@@ -25,7 +25,7 @@ public class MoviesCustomRepositoryImpl implements MoviesCustomRepository {
     public List<Movies> findPopularMoviesByGenres(Integer userNo, List<String> genres, int count) {
         // 장르 조건 생성
         String genreCondition = genres.stream()
-                .map(g -> "m.genre LIKE '%" + g + "%'")
+                .map(g -> "m.genre LIKE :genre" + g)  // :genre1, :genre2 형태로 파라미터 바인딩
                 .collect(Collectors.joining(" OR "));
 
         // 기본 SELECT 쿼리
@@ -66,6 +66,12 @@ public class MoviesCustomRepositoryImpl implements MoviesCustomRepository {
         if (userNo != null) {
             query.setParameter("userNo", userNo);
         }
+
+        // 장르 파라미터 바인딩
+        for (int i = 0; i < genres.size(); i++) {
+            query.setParameter("genre" + i, "%" + genres.get(i) + "%");
+        }
+
         query.setParameter("limit", count);
 
         return query.getResultList();
