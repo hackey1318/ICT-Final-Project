@@ -42,8 +42,8 @@ tr {
 
 /* 문의작성 */
 .inquiry-container {
-    width: 80%;
-    min-width: 1090px;
+    width: 60%;
+    min-width: 1000px;
     margin: 20px auto;
 }
 
@@ -259,17 +259,21 @@ tr {
     cursor: pointer;
 }
 
-.pwd-modal {
-    width: 410px;
+/* 비밀번호 모달창 */
+.pwd-modal-content, .pwd-modal-dialog, .pwd-modal-header, .pwd-modal-body, .pwd-modal-footer {
+    padding: 0;
+    width: 450px;
 }
 
-.pwd-modal-content, .pwd-modal-dialog, .pwd-modal-header, .pwd-modal-body, .pwd-modal-footer {
-    width: 400px;
+@media (min-width: 576px) {
+    .modal-sm {
+        --bs-modal-width: 450px !important; 
+    }
 }
 
 /* 댓글영역 */
 .comment-container {
-    width: 95%;
+    width: 100%;
     margin: 15px auto 0;
 }
 
