@@ -5,6 +5,7 @@ import UserDauChart from "../../js/dashboard/UserDauChart";
 import '../../css/dashboard/dashboard.css';
 import LikeChart from "../../js/common/LikeChart";
 import apiClient from "../../js/public/axiosConfig";
+import SalesChart from "../../js/dashboard/SalesChart";
 
 function Dashboard() {
     const accessToken = sessionStorage.getItem("accessToken");
@@ -14,7 +15,7 @@ function Dashboard() {
     const [totalCount, setTotalCount] = useState(0); //DAU 총인원
     const [movieLikeData, setMovieLikeData] = useState({ labels: [], data: [] });
     const [goodsLikeData, setGoodsLikeData] = useState({ labels: [], data: [] });
-    
+    const [salesData, setSalesData] = useState([]); // 매출 데이터
 
     useEffect(() => {
         apiClient.get("/manager/home/gender-ratio",).then(response => setGenderData(response.data));
@@ -23,6 +24,11 @@ function Dashboard() {
             setChartDauList(response.data.activeUsers);
             setTotalCount(response.data.totalCount);
         });
+
+        apiClient.post("/md-shop/totalList", {},)
+            .then(response => {
+                setSalesData(response.data);
+            });
 
         const fetchMovieLikes = async () => {
             try {
@@ -66,9 +72,16 @@ function Dashboard() {
     return (
         <div className="dashboard-container">
             <div className="row" style={{ height: "50%" }}>
-                <div className="col-md-6 mb-3 d-flex flex-column " style={{ height: "100%" }}>
-                    <div className="p-2" style={{ flex: 1 }}>
-                        <a href="" className="dashboard-link"><h5>상품별 판매액 {'>'}</h5></a>
+                <div className="col-md-6 mb-3 d-flex flex-column " style={{ height: "350px" }}>
+                    <div className="p-2" style={{ flex: 1, overflowY: "auto"}}>
+                        <div style={{ position: "sticky", top: -10, backgroundColor: "white", zIndex: 10 }}>
+                            <a href="" className="dashboard-link">
+                                <h5>상품별 판매액 {'>'}</h5>
+                            </a>
+                        </div>
+                        <div>
+                            <SalesChart salesData={salesData} chartId="salesChart"/>
+                        </div>
                     </div>
                 </div>
                 <div className="col-md-6 mb-3 d-flex flex-column" style={{ height: "100%" }}>

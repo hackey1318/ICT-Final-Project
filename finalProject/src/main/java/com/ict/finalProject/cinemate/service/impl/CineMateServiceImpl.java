@@ -279,4 +279,29 @@ public class CineMateServiceImpl implements CineMateService {
 
         return Math.toIntExact(cineMateMemberRepository.countByCineMateNoAndStatusActive(cineMateNo));
     }
+
+    //나의 시네메이트 목록
+    @Override
+    public Page<CineMateResponse> getMyCineMate(Integer userNo, Pageable pageable) {
+        Page<Object[]> results = cineMateRepository.getMyCineMate(userNo, pageable);
+
+        return results.map(result -> {
+            return CineMateResponse.builder()
+                .meetingDate(result[0] != null ? ((Timestamp) result[0]).toLocalDateTime() : null)
+                .theaterName((String) result[1])
+                .movieName((String) result[2])
+                .genre((String) result[3])
+                .director((String) result[4])
+                .openDate(result[5] != null ? ((Date) result[5]).toLocalDate() : null)
+                .currentMemberCount(Math.toIntExact(cineMateMemberRepository.countByCineMateNoAndStatusActive((Integer) result[6])))
+                .maxMemberCount((Integer) result[7])
+                .userName((String) result[8])
+                .movieNo((Integer) result[9])
+                .no((Integer) result[10])
+                .createdAt((result[11] != null ? ((Timestamp) result[11]).toLocalDateTime() : null))
+                .content((String) result[12])
+                .userNo((Integer) result[13])
+                .build();
+        });
+    }
 }
