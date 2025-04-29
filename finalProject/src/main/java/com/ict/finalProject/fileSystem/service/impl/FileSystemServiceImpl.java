@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +36,10 @@ public class FileSystemServiceImpl implements FileSystemService {
     @Override
     public List<FileUploadResponse> uploadFile(List<MultipartFile> files) throws IOException {
 
-        Path uploadPath = new ClassPathResource("static/img").getFile().toPath(); // 실제 서버 파일 시스템 경로
-        List<String> fileIdList = new ArrayList<>();
+        Path uploadPath = Paths.get("/app/static/img");
+        if (!uploadPath.toFile().exists()) {
+            uploadPath.toFile().mkdirs(); // 디렉토리 존재하지 않으면 생성
+        }        List<String> fileIdList = new ArrayList<>();
         List<Images> imageList = new ArrayList<>();
         List<ImageInfo> imageInfos = new ArrayList<>();
 
