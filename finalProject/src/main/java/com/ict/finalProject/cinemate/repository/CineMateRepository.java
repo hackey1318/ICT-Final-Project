@@ -55,4 +55,14 @@ public interface CineMateRepository extends JpaRepository<CineMates, Integer> {
 
     @Query("SELECT c FROM CineMates AS c WHERE c.status = :status")
     List<CineMates> getCineMateByStatus(@Param("status") StatusInfo statusInfo);
+
+    @Query(value = "SELECT c.meeting_date, t.name, m.name, m.genre, m.director, m.open_date, c.no, c.max_member_count, u.nickname, c.movie_no, c.no, c.created_at, c.content, c.user_no " +
+            "FROM cine_mates AS c " +
+            "LEFT JOIN movies m on c.movie_no = m.no " +
+            "LEFT JOIN theaters t on c.theater_no = t.no " +
+            "LEFT JOIN cine_mate_members cm on c.no = cm.cine_mate_no AND cm.status = 'ACTIVE' " +
+            "LEFT JOIN users u on u.no = c.user_no " +
+            "WHERE c.user_no= :userNo or cm.user_no= :userNo " +
+            "ORDER BY c.meeting_date", nativeQuery=true)
+    Page<Object[]> getMyCineMate(Integer userNo, Pageable pageable);
 }

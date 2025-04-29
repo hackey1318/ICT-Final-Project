@@ -137,4 +137,24 @@ public class UserServiceImpl implements UserService {
     public Users getUser(int userNo) {
         return usersRepository.findById(userNo).get();
     }
+
+    @Override
+    @Transactional
+    public Users updateProfile(
+            String username,
+            String email,
+            String nickname,
+            String knickname,
+            String phone,
+            String profileImageUrl
+    ) {
+        Users user = getUser(username);
+        user.setEmail(email);
+        user.setNickname(nickname);
+        user.setKnickname(knickname);
+        user.setPhone(phone);
+        user.setProfileImageUrl(profileImageUrl);
+        return usersRepository.save(user);
+    }
+
 }
