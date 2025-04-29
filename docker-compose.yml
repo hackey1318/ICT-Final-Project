@@ -12,6 +12,7 @@ services:
       - app-network
     depends_on:
       - mysql-db
+    restart: unless-stopped
 
   home:
     build:
@@ -22,6 +23,7 @@ services:
       - app-network
     environment:
       - REACT_APP_API_URL=http://nginx:80  # Nginx 서버로 프록시
+    restart: unless-stopped
 
   mysql-db:
     image: mysql:8
@@ -33,17 +35,20 @@ services:
       - "3306:3306"  # MySQL 포트
     networks:
       - app-network
+    restart: unless-stopped
 
   nginx:
     image: nginx:latest
     ports:
-      - "80:80"  # Nginx 포트
+      - "80:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf  # Nginx 설정 파일을 컨테이너에 연결
+      - ./nginx.conf:/etc/nginx/nginx.conf
     networks:
       - app-network
-    env_file:
-      - ./home/.env
+    depends_on:
+      - finalproject
+      - home
+    restart: unless-stopped
 
 networks:
   app-network:
