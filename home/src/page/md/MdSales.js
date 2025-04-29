@@ -490,11 +490,11 @@ function MdSales() {
     };
 
     const dateData = {
-        labels: resultByDate.map(item => item.date),
+        labels: resultByDate.slice().reverse().map(item => item.date),
         datasets: [
             {
                 label: '매출',
-                data: resultByDate.map(item => item.totalSale),
+                data: resultByDate.slice().reverse().map(item => item.totalSale),
                 backgroundColor: 'rgb(201, 201, 201)',
             }
         ],
