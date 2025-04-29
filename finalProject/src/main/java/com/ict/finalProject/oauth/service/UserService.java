@@ -23,4 +23,14 @@ public interface UserService {
     boolean existsByPhone(String phone);
 
     Users getUser(int userNo);
+
+    Users updateProfile(
+            String username,
+            String email,
+            String nickname,
+            String knickname,
+            String phone,
+            String profileImageUrl
+    );
+
 }

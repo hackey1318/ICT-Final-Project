@@ -69,6 +69,8 @@ import WithdrawPage from './page/user/mypage/WithdrawPage';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import MovieLikeChart from './page/admin/like/MovieLikeChart';
 import GoodsLikeChart from './page/admin/like/GoodsLikeChart';
+import UserEditPage from './page/user/mypage/UserEditPage';
+
 
 
 
@@ -141,6 +143,7 @@ function App() {
 					<Route path='cart' element={<Cart />} />
 					<Route path="reviews" element={<ReviewHistory />} />
 					<Route path="/mypage/withdraw" element={<WithdrawPage />} />
+					<Route path="edit" element={<UserEditPage />} />
 				</Route>
 
 				{/* 시네메이트 */}
