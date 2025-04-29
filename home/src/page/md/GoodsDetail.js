@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import GoodsInfo from "./GoodsInfo";
 import { useParams } from "react-router-dom"; // Outlet & Link import
 import arrow from '../../img/arrow.png';
@@ -36,6 +36,7 @@ const GoodsDetail = () => {
 	const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
 	const [editingReview, setEditingReview] = useState(null);
 	const [reviews, setReviews] = useState([]);
+	const reviewsRef = useRef(null);
 
 	const fetchReviews = async () => {
 		try {
@@ -45,6 +46,21 @@ const GoodsDetail = () => {
 			console.error('리뷰 목록 조회 오류', err);
 		}
 	};
+
+	 // 2) showReviews가 true가 될 때 스크롤
+	 useEffect(() => {
+		if (showReviews && reviewsRef.current) {
+		  // 리뷰 영역의 화면 절대 위치 계산
+		  const top =
+			reviewsRef.current.getBoundingClientRect().top + window.pageYOffset - 100;
+		  // 부드럽게 100px 오프셋된 위치로 스크롤
+		  window.scrollTo({
+			top,
+			behavior: "smooth",
+		  });
+		}
+	  }, [showReviews]);
+	 
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -143,50 +159,56 @@ const GoodsDetail = () => {
 
 				{product && <GoodsInfo goods={product} />}
 
+				{/* 리뷰 토글 버튼 */}
+				<div className="mt-4">
+					<h4 className="fw-bold mb-3 mt-5">Related Movie</h4>
+				</div>
+
 				{/* 제품 상세 정보 */}
-				<div className="row mt-5">
+				<div className="row mt-1">
 					<div className="col-3">
-						<h4 className="fw-bold mb-3 mt-5">Related Movie</h4>
 						{movieId && <RelatedMovie movieId={movieId} />}
 					</div>
 				</div>
+				
+			    <div className="d-flex align-items-center justify-content-between mt-4 mb-3">
+				    <h4 className="fw-bold mb-0">Goods Reviews</h4>
 
-				{/* 리뷰 토글 버튼 */}
-				<div className="mt-4">
-					<button
-						className="btn btn-primary"
-						onClick={() => setShowReviews(v => !v)}
-					>
-						{showReviews ? '리뷰 닫기' : '리뷰 보기'}
-					</button>
-				</div>
+				    <div className="review-buttons d-flex">
+				      <button
+				        className="btn btn-primary me-2"
+				        onClick={() => setShowReviews(v => !v)}
+				        style={{ width: '100px' }}
+				      >
+				        {showReviews ? '리뷰 닫기' : '리뷰 보기'}
+				      </button>
 
-				{/* 리뷰 리스트 렌더링 */}
-				{showReviews && (
-					<>
-						<div className="mt-3">
-							<div className="review-buttons">
-								<button
-									className="btn btn-outline-secondary mt-2"
-									onClick={() => {
-										setEditingReview(null);
+				      <button
+				        className="btn btn-outline-secondary"
+				        onClick={() => {
+				          setEditingReview(null);
+				          setWriteModalOpen(true);
+				        }}
+				      >
+				        리뷰 작성
+				      </button>
+				    </div>
+				  </div>
+					{/* 리뷰 리스트 렌더링 */}
+					{showReviews && (
+						<>
+							<div ref={reviewsRef} className="mt-3">
+								
+								<GoodsReviewList
+									goodsId={goodsNo}
+									refreshKey={reviewRefreshKey}
+									onReviewsLoad={setReviews}
+									onSelectReview={(review) => {
+										setEditingReview(review);
 										setWriteModalOpen(true);
 									}}
-								>
-									리뷰 작성
-								</button>
+								/>
 							</div>
-							<GoodsReviewList
-								goodsId={goodsNo}
-								refreshKey={reviewRefreshKey}
-								onReviewsLoad={setReviews}
-								onSelectReview={(review) => {
-									setEditingReview(review);
-									setWriteModalOpen(true);
-								}}
-							/>
-						</div>
-
 						<GoodsReviewWriteModal
 							goodsId={goodsNo}
 							userNo={userNo}
