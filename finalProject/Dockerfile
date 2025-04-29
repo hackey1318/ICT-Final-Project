@@ -22,4 +22,5 @@ COPY --from=builder /app/build /app/build
 # 실행 포트 노출
 EXPOSE 9988
 
-ENTRYPOINT ["java", "-jar", "./build/libs/app.jar"]
+# 정확한 JAR 파일명으로 수정
+ENTRYPOINT ["java", "-jar", "./build/libs/finalProject-0.0.1-SNAPSHOT.jar"]
