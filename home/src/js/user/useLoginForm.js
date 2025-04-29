@@ -23,7 +23,8 @@ export const useLoginForm = () => {
                 password: password
             });
 
-            const { accessToken, userNo, nickname, profileImageUrl, role } = response.data;
+            const accessToken = response.headers['accesstoken']; // accessToken은 headers에서 가져오기
+            const { userNo, nickname, profileImageUrl, role } = response.data;
 
             if (!accessToken) {
                 throw new Error("로그인 실패: Access token 없음.");
