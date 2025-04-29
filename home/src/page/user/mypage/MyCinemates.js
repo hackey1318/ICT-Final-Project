@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 import apiClient from "../../../js/public/axiosConfig";
 import Pagination from "../../../js/public/Pagination";
 import '../../../css/cinemate/myCinemates.css';
+import { useNavigate } from "react-router-dom";
+
+const accessToken = sessionStorage.getItem("accessToken");
 
 function MyCinemates(){
+    const navigation = useNavigate();
+
     const userNo = JSON.parse(sessionStorage.getItem('userInfo'))?.userNo;
     
     const [cinemates, setCinemates] = useState([]);
@@ -29,6 +34,28 @@ function MyCinemates(){
         setCurrentPage(newPage);
     };
 
+    const handleCinemateClick = (cinemate) => {
+		if (accessToken !== null) {
+
+            const movie = {
+                movieNo: cinemate.movieNo,
+                movieName: cinemate.movieName,
+                userName: cinemate.userName,
+                createdAt: cinemate.createdAt,
+                meetingDate: cinemate.meetingDate,
+                currentMemberCount: cinemate.currentMemberCount, //이거 추가함
+                maxMemberCount: cinemate.maxMemberCount,
+                content: cinemate.content,
+                userNo: cinemate.userNo
+            };
+
+			navigation(`/cinemate/movies/${cinemate.movieNo}/room/${cinemate.no}`, { state: { movie } });
+		} else {
+			alert("로그인이 필요합니다.");
+            navigation("/login");
+		}
+	}
+
     return(
         <div className="container">
             <h3>시네메이트 내역 조회</h3>
@@ -38,8 +65,8 @@ function MyCinemates(){
                         <tr className="td-container">
                             <th>번호</th>
                             <th>만나는 날</th>
-                            <th>영화관이름</th>
-                            <th>영화이름</th>
+                            <th>영화관 이름</th>
+                            <th>영화 이름</th>
                             <th>장르</th>
                             <th>감독</th>
                             <th>개봉일</th>
@@ -58,8 +85,8 @@ function MyCinemates(){
                                             {cinemate.meetingDate?.split("T")[0]}{" "}
                                             {cinemate.meetingDate?.split("T")[1]?.slice(0, 5)}
                                         </td>
-                                        <td>{cinemate.theaterName}</td>
-                                        <td>{cinemate.movieName}</td>
+                                        <td><div onClick={()=>handleCinemateClick(cinemate)} style={{ cursor: "pointer" }}>{cinemate.theaterName}</div></td>
+                                        <td><div onClick={()=>handleCinemateClick(cinemate)} style={{ cursor: "pointer" }}>{cinemate.movieName}</div></td>
                                         <td>{cinemate.genre}</td>
                                         <td>{cinemate.director}</td>
                                         <td>{cinemate.openDate}</td>
@@ -69,7 +96,7 @@ function MyCinemates(){
                                 )
                             })):(
                                 <tr>
-                                    <td>시네메이트 내역이 없습니다.</td>
+                                    <td colSpan="9" style={{ textAlign: 'center' }}>시네메이트 내역이 없습니다.</td>
                                 </tr>
                             )
                         }
