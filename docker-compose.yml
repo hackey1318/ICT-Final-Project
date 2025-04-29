@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  final-project:
+  finalproject:
     build:
       context: ./finalProject  # Spring Boot 서버 경로
     ports:
