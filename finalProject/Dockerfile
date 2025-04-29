@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-jdk-slim AS builder
 
 WORKDIR /app
 
@@ -11,7 +11,15 @@ RUN chmod +x ./gradlew
 # 빌드 (JAR 생성)
 RUN ./gradlew bootJar --no-daemon
 
-# 정적 리소스 포함한 모든 소스가 복사되어 있으므로 경로 접근 가능
+# 2단계: 실행용 경량 이미지
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+# 빌드된 전체 build 디렉토리 복사 (빌드 후 결과물 포함)
+COPY --from=builder /app/build /app/build
+
+# 실행 포트 노출
 EXPOSE 9988
 
 ENTRYPOINT ["java", "-jar", "./build/libs/app.jar"]
