@@ -135,7 +135,7 @@ function AdminSidebar({ activeMenu }) {
                         {adminOpenMenus[1] && (
                             <ul className="admin-sub-menu">
                                 <li><Link to="/manager/home/mdlists" className={`admin-nav-link ${activeMenu === "mdlists" ? "active" : ""}`}>상품 목록 조회</Link></li>
-                                {/* <li><Link to="" className={`admin-nav-link ${activeMenu === "" ? "active" : ""}`}>상품 구매 정보 조회</Link></li> */}
+                                <li><Link to="/manager/home/ordermanage" className={`admin-nav-link ${activeMenu === "" ? "active" : ""}`}>상품 주문 정보 조회</Link></li>
                                 <li><Link to="/manager/home/mdsales" className={`admin-nav-link ${activeMenu === "" ? "active" : ""}`}>상품 매출 조회</Link></li>
                                 <li><Link to="/manager/home/goods-like" className={`admin-nav-link ${activeMenu === "goods-like" ? "active" : ""}`}>상품별 찜</Link></li>
                             </ul>
