@@ -52,7 +52,7 @@ function InquiryImageModal({ images, initialIndex, onClose }) {
     // };
 
     return (
-        <div className="modal-overlay">
+        <div className="inquiry-modal-overlay">
             <img src={close} id="modal-close" onClick={onClose}/>
             <div style={{textAlign: 'center', display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{width: '10%', height: '580px', lineHeight: '600px'}}>

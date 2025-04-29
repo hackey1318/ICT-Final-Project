@@ -12,7 +12,7 @@ function Dashboard() {
     const [chartDauList, setChartDauList] = useState([]); //DAU 데이터
     const [totalCount, setTotalCount] = useState(0); //DAU 총인원
     const [movieLikeData, setMovieLikeData] = useState({ labels: [], data: [] });
-        const [goodsLikeData, setGoodsLikeData] = useState({ labels: [], data: [] });
+    const [goodsLikeData, setGoodsLikeData] = useState({ labels: [], data: [] });
     
 
     useEffect(() => {
@@ -81,7 +81,7 @@ function Dashboard() {
                 <div className="col-md-6 mb-3 d-flex flex-column" style={{ height: "100%" }}>
                     <div className="p-2" style={{ flex: 1 }}>
                         <a href="" className="dashboard-link"><h5>상품별 좋아요 {'>'}</h5></a>
-                        <LikeChart labels={goodsLikeData.labels} data={goodsLikeData.data} chartId="goodsLikeChart"/>
+                        <LikeChart labels={goodsLikeData.labels} data={goodsLikeData.data} chartId="goodsLikeChart" style={{ height: "300px" }}/>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@ function Dashboard() {
                 <div className="col-md-4 mb-3 d-flex flex-column" style={{ height: "100%" }}>
                     <div className="p-2" style={{ flex: 1 }}>
                         <a href="" className="dashboard-link"><h5>영화 장르별 좋아요 {'>'}</h5></a>
-                        <LikeChart labels={movieLikeData.labels} data={movieLikeData.data} chartId="movieLikeChart"/>
+                        <LikeChart labels={movieLikeData.labels} data={movieLikeData.data} chartId="movieLikeChart"  style={{ height: "300px" }}/>
                     </div>
                 </div>
                 <div className="col-md-4 mb-3 d-flex flex-column" style={{ height: "100%" }}>

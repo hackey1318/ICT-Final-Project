@@ -5,7 +5,6 @@ import InquiryImageModal from "../../js/inquiry/InquiryImageModal";
 import InquiryComment from "../../js/inquiry/InquiryComment";
 import apiClient from "../../js/public/axiosConfig";
 
-
 function InquiryReplyView() {
     const {no} = useParams();
     const IMAGE_BASE_URL = '/file-system/showImage/';

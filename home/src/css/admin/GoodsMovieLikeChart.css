@@ -1,0 +1,33 @@
+.goods-movie-like-chart-wrapper {
+    display: flex;
+    flex-direction: column;
+    /* 부모에서 높이를 받도록 100% 설정 */
+    height: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  
+  .goods-movie-like-chart-wrapper > h2 {
+    margin: 0 0 12px;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  /* 차트를 담는 영역을 flex:1 로 남은 높이를 모두 차지하게 */
+  .goods-movie-like-chart-container {
+    flex: 1;
+    position: relative;
+    width: 100%;
+    /* 만약 최소 높이를 보장하고 싶다면 추가하세요 */
+    /* min-height: 300px; */
+    max-height: 600px;
+  }
+  
+  /* canvas 를 절대 위치로 채워서 부모 높이를 100%로 채우게 */
+  .goods-movie-like-chart-container canvas {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+  }

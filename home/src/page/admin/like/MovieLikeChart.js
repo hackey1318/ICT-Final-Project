@@ -31,13 +31,16 @@ function MovieLikeChart() {
     }, []);
 
     return (
-        <div>
+        <div className='goods-movie-like-chart-wrapper'>
             <h2>영화 좋아요 차트</h2>
-            <LikeChart
-                labels={movieLikeData.labels} 
-                data={movieLikeData.data} 
-                chartId="movieLikeChart"
-            />
+            <div className='goods-movie-like-chart-container'>
+                <LikeChart
+                    labels={movieLikeData.labels} 
+                    data={movieLikeData.data} 
+                    chartId="movieLikeChart"
+                    style={{ height: '600px' }}
+                />
+            </div>
         </div>
     );
 }
