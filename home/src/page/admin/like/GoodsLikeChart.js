@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import LikeChart from '../../../js/common/LikeChart';
 import axios from 'axios';
+import '../../../css/admin/GoodsMovieLikeChart.css';
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -33,13 +34,16 @@ function GoodsLikeChart() {
     }, []);
 
     return (
-        <div>
+        <div className='goods-movie-like-chart-wrapper'>
             <h2>굿즈 좋아요 차트</h2>
-            <LikeChart
-                labels={goodsLikeData.labels} 
-                data={goodsLikeData.data} 
-                chartId="goodsLikeChart"
-            />
+            <div className='goods-movie-like-chart-container'>
+                <LikeChart
+                    labels={goodsLikeData.labels} 
+                    data={goodsLikeData.data} 
+                    chartId="goodsLikeChart"
+                    style={{ height: '600px' }}
+                />
+            </div>
         </div>
     );
 }
