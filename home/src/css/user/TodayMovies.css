@@ -191,18 +191,16 @@
   /* 하단 추천 영화 */
   .FeaturedMovie_container {
     position: relative; /* ⭐ 자식 absolute 요소의 기준점 */
-    max-width: 90%;
+    max-width: 98%;
     display: flex;
     gap: 30px; /* 이미지와 내용 간격 */
     padding: 20px;
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     border-radius: 8px;
     background-color: #fdfdfd;
     /* margin: 0 auto; */
   }
 
-  
-  
   .FeaturedMovie_poster-container {
     flex-shrink: 0; /* 내용이 길어져도 줄어들지 않음 */
     width: 200px; /* 포스터 너비 고정 (조정 가능) */
@@ -264,4 +262,46 @@
   
   .TodayMovies_info_detail:hover {
     color: #333; /* 호버 시 색상 진하게 */
+  }
+
+.TodayMovies_controls-wrapper {
+	position: relative; /* 기준 위치 제공 */
+	display: inline-block;
+}
+
+.TodayMovies_modalContent {
+	position: absolute;
+	top: 0; /* 버튼과 같은 y축 */
+	left: 105%; /* 버튼 오른쪽에 띄움 */
+	min-width: 800px;            /* 최소 너비를 더 크게 설정 */
+	max-width: 1000px;            /* 너무 커지지 않도록 최대값 제한 */
+	padding: 20px;
+	background: white;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	border-radius: 12px;
+	z-index: 10;
+
+	transform: translateX(20px);
+	animation: slideInRight 0.3s forwards ease-out;
+}
+
+@keyframes slideInRight {
+	from {
+		opacity: 0;
+		transform: translateX(60px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(20px);
+	}
+}
+  
+  .TodayMovies_modalClose {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
   }
