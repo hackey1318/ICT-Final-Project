@@ -5,33 +5,23 @@ import { Navigation, Pagination as SwiperPagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import './../../css/md/GoodsReviewSection.css';
-import './../../css/md/GoodsReportModal.css';
+import './../../css/md/GoodsReviewSection.css';  // namespaced CSS including modal styles
 import { createReport } from '../../js/api/reportApi';
 
 const currentUserNo = JSON.parse(sessionStorage.getItem('userInfo'))?.userNo;
 
-export default function GoodsReviewList({
-  goodsId,
-  refreshKey,
-  onReviewsLoad,
-  onSelectReview
-}) {
+export default function GoodsReviewList({ goodsId, refreshKey, onReviewsLoad, onSelectReview }) {
   const [reviews, setReviews] = useState([]);
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportData, setReportData] = useState({ category: '', content: '' });
   const [currentReviewId, setCurrentReviewId] = useState(null);
+  const [currentReview, setCurrentReview] = useState(null);
 
-  // 페이지네이션 상태 (5개씩)
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(reviews.length / itemsPerPage);
-
   const API = axios.defaults.baseURL;
 
-  useEffect(() => {
-    fetchReviews();
-  }, [goodsId, refreshKey]);
+  useEffect(() => { fetchReviews(); }, [goodsId, refreshKey]);
 
   useEffect(() => {
     document.body.style.overflow = showReportModal ? 'hidden' : 'auto';
@@ -53,49 +43,39 @@ export default function GoodsReviewList({
     }
   };
 
-  const handleDeleteReview = async (id) => {
+  const totalPages = Math.ceil(reviews.length / itemsPerPage);
+  const paginated = reviews.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handleDeleteReview = async id => {
     if (!window.confirm('정말 삭제하시겠습니까?')) return;
-    try {
-      await axios.delete(`/goods/${goodsId}/reviews/${id}`);
-      fetchReviews();
-    } catch (err) {
-      console.error(err);
-      alert('삭제 실패');
-    }
+    try { await axios.delete(`/goods/${goodsId}/reviews/${id}`); fetchReviews(); }
+    catch (err) { console.error(err); alert('삭제 실패'); }
   };
 
-  const handleOpenReport = (id) => {
+  const handleOpenReport = id => {
     setCurrentReviewId(id);
+    setCurrentReview(reviews.find(r => r.id === id));
+    setReportData({ category: '', content: '' });
     setShowReportModal(true);
   };
 
-  const handleReportChange = (e) => {
+  const handleReportChange = e => {
     const { name, value } = e.target;
-    if (name === 'category' && value !== 'ETC') {
-      setReportData(d => ({
-        ...d,
-        [name]: value,
-        content: getDefaultReportContent(value)
-      }));
-    } else if (name === 'category' && value === 'ETC') {
-      setReportData(d => ({ ...d, [name]: value, content: '' }));
-    } else {
-      setReportData(d => ({ ...d, [name]: value }));
-    }
+    setReportData(d => ({
+      ...d,
+      [name]: value,
+      content: name === 'category' && value !== 'ETC'
+        ? getDefaultReportContent(value)
+        : (name === 'category' ? '' : d.content)
+    }));
   };
 
   const handleReportSubmit = async () => {
     if (!reportData.category || !reportData.content) {
-      alert('내용을 모두 입력해주세요.');
-      return;
+      return alert('내용을 모두 입력해주세요.');
     }
     try {
-      await createReport({
-        boardNo: currentReviewId,
-        category: reportData.category,
-        content: reportData.content,
-        type: 'GOODSREVIEW'
-      });
+      await createReport({ boardNo: currentReviewId, category: reportData.category, content: reportData.content, type: 'GOODSREVIEW' });
       setShowReportModal(false);
       alert('신고 완료');
     } catch (err) {
@@ -104,7 +84,7 @@ export default function GoodsReviewList({
     }
   };
 
-  const getDefaultReportContent = (cat) => {
+  const getDefaultReportContent = cat => {
     switch (cat) {
       case 'ABUSE': return '욕설이 포함되어 있습니다.';
       case 'CHEAT': return '사기성 내용입니다.';
@@ -115,22 +95,13 @@ export default function GoodsReviewList({
     }
   };
 
-  const paginated = reviews.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
   return (
     <>
       <div className="GoodsReviewList_review-header-top">
-        <h2>Goods Reviews</h2>
         <div className="GoodsReviewList_page-controls">
-          <button
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-          >이전</button>
+          <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>이전</button>
           <span>{currentPage} / {totalPages || 1}</span>
-          <button
-            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages || totalPages === 0}
-          >다음</button>
+          <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>다음</button>
         </div>
       </div>
 
@@ -138,36 +109,61 @@ export default function GoodsReviewList({
         {paginated.map(r => (
           <div key={r.id} className="GoodsReviewList_review-card">
             {r.imageUrls.length > 0 && (
-              <Swiper
-                modules={[Navigation, SwiperPagination]}
-                navigation
-                pagination={{ clickable: true }}
-                className="GoodsReviewList_card-swiper"
-              >
-                {r.imageUrls.map((url, i) => (
-                  <SwiperSlide key={i}>
-                    <img src={url} alt="" className="GoodsReviewList_card-img" />
-                  </SwiperSlide>
-                ))}
+              <Swiper modules={[Navigation, SwiperPagination]} navigation pagination={{ clickable: true }} className="GoodsReviewList_card-swiper">
+                {r.imageUrls.map((url, i) => <SwiperSlide key={i}><img src={url} alt="" className="GoodsReviewList_card-img"/></SwiperSlide>)}
               </Swiper>
             )}
             <div className="GoodsReviewList_card-body">
               <h4 className="GoodsReviewList_card-title">{r.title} ({r.rating}점)</h4>
-              <p className="GoodsReviewList_card-text">{r.content.length > 60 ? r.content.slice(0,60)+'…' : r.content}</p>
+              <p className="GoodsReviewList_card-text">{r.content.length > 60 ? r.content.slice(0, 60) + '…' : r.content}</p>
             </div>
             <div className="GoodsReviewList_card-actions">
               {currentUserNo === r.userNo && <button className="GoodsReviewList_btn-edit" onClick={() => onSelectReview(r)}>수정</button>}
               {currentUserNo === r.userNo && <button className="GoodsReviewList_btn-delete" onClick={() => handleDeleteReview(r.id)}>삭제</button>}
-              <button className="GoodsReviewList_btn-menu" onClick={() => handleOpenReport(r.id)}>⋮</button>
+              {currentUserNo && <button className="GoodsReviewList_btn-menu" onClick={() => handleOpenReport(r.id)}>⋮</button>}
             </div>
           </div>
         ))}
       </div>
 
       {showReportModal && (
-        <div className="GoodsReviewList_modal GoodsReviewList_goods-review-modal">
-          <div className="GoodsReviewList_report-modal-content">
-            {/* modal content remains same, ensure class names are prefixed similarly */}
+        <div className="GoodsReviewList_modal-overlay">
+          <div className="GoodsReviewList_modal-content">
+            <h4>리뷰 신고</h4>
+            <div className="GoodsReviewList_review-details">
+              <p><strong>제목:</strong> {currentReview?.title}</p>
+              <p><strong>내용:</strong></p>
+              <div className="GoodsReviewList_review-content">{currentReview?.content}</div>
+            </div>
+
+            <div className="form-row">
+              <div>
+                <label>사유:</label>
+                <select name="category" value={reportData.category} onChange={handleReportChange}>
+                  <option value="">선택</option>
+                  <option value="ABUSE">욕설</option>
+                  <option value="CHEAT">사기</option>
+                  <option value="ILLEGALAD">불법광고</option>
+                  <option value="PORNOGRAPHY">음란물</option>
+                  <option value="BADSPORT">비매너</option>
+                  <option value="ETC">기타</option>
+                </select>
+              </div>
+              <div>
+                <label>내용:</label>
+                <textarea
+                  name="content"
+                  value={reportData.category === 'ETC' ? reportData.content : getDefaultReportContent(reportData.category)}
+                  onChange={handleReportChange}
+                  disabled={reportData.category !== 'ETC'}
+                />
+              </div>
+            </div>
+
+            <div className="GoodsReviewList_modal-actions">
+              <button className="btn btn-secondary" onClick={() => setShowReportModal(false)}>취소</button>
+              <button className="btn btn-danger" onClick={handleReportSubmit}>신고하기</button>
+            </div>
           </div>
         </div>
       )}

@@ -173,8 +173,6 @@ export default function GoodsReviewWriteModal({
             })}
           </ul>
 
-          <button className="GoodsReviewWriteModal_btn-review" onClick={handleOpenReport}>신고하기</button>
-
           {formData.orderNo && (
             <form className="GoodsReviewWriteModal_review-form" onSubmit={handleSubmit}>
               <StarRating rating={formData.rating} onChange={r=>setFormData(f=>({...f,rating:r}))} />

@@ -86,7 +86,7 @@ public class GoodsReviewController {
     }
 
     // 기존 리뷰 조회/작성 메서드 유지
-    @AuthRequired({UserRole.USER, UserRole.ADMIN, UserRole.MANAGER})
+
     @GetMapping("/{goodsId}/reviews")
     public ResponseEntity<List<GoodsReviewResponse>> getReviews(@PathVariable long goodsId) {
         return ResponseEntity.ok(reviewService.getReviewsByGoodsId(goodsId));
