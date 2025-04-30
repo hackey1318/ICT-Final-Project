@@ -78,7 +78,7 @@ const GoodsDetail = () => {
 
 		const fetchLikeStatus = async () => {
 			try {
-				if (accessToken) {
+				if (sessionStorage.getItem('accessToken')) {
 					const response = await apiClient.get(
 						`/likes/${LikeType.GOODS}?no=${goodsNo}`,
 					);
