@@ -200,6 +200,7 @@ public class CineMateServiceImpl implements CineMateService {
                     )
                     .no((Integer) result[13])
                     .movieNo((Integer) result[14])
+                    .userNo((Integer) result[9])
                     .build();
 
             responseList.add(response);
