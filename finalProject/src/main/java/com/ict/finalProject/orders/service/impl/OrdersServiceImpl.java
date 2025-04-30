@@ -2,6 +2,8 @@ package com.ict.finalProject.orders.service.impl;
 
 import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.oauth.repository.UsersRepository;
+import com.ict.finalProject.oauth.repository.domain.Users;
+import com.ict.finalProject.orders.controller.response.OrderManageResponse;
 import com.ict.finalProject.orders.repository.OrdersRepository;
 import com.ict.finalProject.orders.repository.domain.Orders;
 import com.ict.finalProject.orders.service.OrdersService;
@@ -10,8 +12,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.query.Order;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,6 +98,33 @@ public class OrdersServiceImpl implements OrdersService {
         List<Orders> ordersList = ordersRepository.findAll();
         List<OrdersDto> ordersDtoList = ordersList.stream().map(OrdersDto::new).collect(Collectors.toList());
         return ordersDtoList;
+    }
+
+    @Override
+    public Page<OrderManageResponse> getOrderManageResponse(Pageable pageable, OrdersStatus status) {
+        List<OrdersStatus> ordersStatusList = null;
+        if(status == null)
+            ordersStatusList = List.of(OrdersStatus.PAID, OrdersStatus.CANCELLED);
+        else if(status == OrdersStatus.CANCELLED)
+            ordersStatusList = List.of(OrdersStatus.CANCELLED);
+        else if(status == OrdersStatus.PAID)
+            ordersStatusList = List.of(OrdersStatus.PAID);
+        Page<Orders> ordersPage = ordersRepository.findByStatusIn(ordersStatusList, pageable);
+
+        Page<OrderManageResponse> orderManageResponsePage = ordersPage.map(orders -> {
+            Users users = userRepository.findById(orders.getUserNo()).orElseThrow(() -> new RuntimeException("사용자가 없습니다."));
+            List<String> orderItemNameList = orders.getItems().stream().map(item -> item.getName()).collect(Collectors.toList());
+            return OrderManageResponse.builder()
+                    .userNickname(users.getNickname())
+                    .orderItemNameList(orderItemNameList)
+                    .createdAt(orders.getCreatedAt())
+                    .updatedAt(orders.getUpdatedAt())
+                    .ordersStatus(orders.getStatus())
+                    .orderNumber(orders.getOrderNumber())
+                    .build();
+        });
+
+        return orderManageResponsePage;
     }
 
     private String convertStatusToText(OrdersStatus status) {
