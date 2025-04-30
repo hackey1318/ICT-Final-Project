@@ -1,86 +1,94 @@
-.goods-review-section {
-    padding: 1rem;
-    background: #f9f9f9;
-    border-radius: 0.5rem;
-  }
-  
-  .goods-review-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .review-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .review-form input[type="number"] {
-    width: 4rem;
-  }
-  
-  .review-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .review-item {
-    background: #fff;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  }
-  
-  .review-item h3 {
-    margin: 0 0 0.5rem;
-    font-size: 1.125rem;
-  }
-  
-  .review-item p {
-    margin: 0 0 0.5rem;
-    line-height: 1.4;
-  }
-  
-  .review-item small {
-    color: #666;
-    font-size: 0.875rem;
-  }
-  
+/* ============================
+   Namespaced CSS for GoodsReviewList & GoodsReviewWriteModal
+============================ */
 
-  .modal-overlay {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5); display: flex;
-    justify-content: center; align-items: center;
-  }
-  .modal-content {
-    height: auto;
-    background: #fff; padding: 1rem; border-radius: 0.5rem;
-    width: 90%; max-width: 500px; position: relative;
-  }
-  .modal-close {
-    position: absolute; top: 0.5rem; right: 0.5rem;
-    background: transparent; border: none; font-size: 1.5rem;
-    cursor: pointer;
-  }
-  .review-swiper {
-    width: 100%; height: 200px; margin-bottom: 1rem;
-  }
-  .review-image {
-    object-fit: cover; width: 100%; height: 100%;
-  }
-  .btn-review {
-    margin-bottom: 1rem; padding: 0.5rem 1rem;
-  }
-
-
-  /* 이미지 업로드 버튼 영역 */
-.image-upload-section {
+/* GoodsReviewList */
+.GoodsReviewList_goods-review-section {
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 0.5rem;
+}
+.GoodsReviewList_goods-review-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+.GoodsReviewList_review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.GoodsReviewList_review-form input[type="number"] {
+  width: 4rem;
+}
+.GoodsReviewList_review-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.GoodsReviewList_review-item {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.GoodsReviewList_review-item h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+}
+.GoodsReviewList_review-item p {
+  margin: 0 0 0.5rem;
+  line-height: 1.4;
+}
+.GoodsReviewList_review-item small {
+  color: #666;
+  font-size: 0.875rem;
+}
+.GoodsReviewList_modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.GoodsReviewList_modal-content {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+.GoodsReviewList_modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.GoodsReviewList_review-swiper {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 1rem;
+}
+.GoodsReviewList_review-image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+.GoodsReviewList_btn-review {
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+}
+.GoodsReviewList_image-upload-section {
   margin: 0.75rem 0;
 }
-.btn-add-image {
+.GoodsReviewList_btn-add-image {
   padding: 0.5rem 1rem;
   background-color: white;
   color: gray;
@@ -88,17 +96,13 @@
   border-radius: 0.25rem;
   cursor: pointer;
 }
-
-/* 이미지 미리보기 컨테이너 */
-.image-preview-container {
+.GoodsReviewList_image-preview-container {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
   margin-bottom: 1rem;
 }
-
-/* 개별 미리보기 박스 */
-.image-preview-item {
+.GoodsReviewList_image-preview-item {
   position: relative;
   width: 80px;
   height: 80px;
@@ -106,16 +110,11 @@
   border-radius: 0.25rem;
   overflow: hidden;
 }
-
-/* 썸네일 이미지 */
-.preview-img {
+.GoodsReviewList_preview-img {
   width: 100%;
-  /* height: 100%; */
   object-fit: cover;
 }
-
-/* 삭제 버튼 */
-.btn-remove-image {
+.GoodsReviewList_btn-remove-image {
   position: absolute;
   top: 2px;
   right: 2px;
@@ -130,60 +129,275 @@
   line-height: 20px;
   text-align: center;
 }
-
-/* 모달 하단 버튼들 레이아웃 & 스타일 */
-.modal-actions {
+.GoodsReviewList_modal-actions {
   display: flex;
-  gap: 0.75rem; /* 버튼 사이 간격 */
+  gap: 0.75rem;
 }
-
-.modal-actions button {
+.GoodsReviewList_modal-actions button {
   padding: 0.5rem 1rem;
-  background: #4a90e2;       /* + 이미지 추가 스타일과 동일 */
+  background: #4a90e2;
   color: #fff;
   border: none;
   border-radius: 0.25rem;
   cursor: pointer;
 }
-
-.modal-actions button:disabled {
+.GoodsReviewList_modal-actions button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
-
-.review-buttons {
+.GoodsReviewList_review-buttons {
   display: flex;
   gap: 10px;
   margin-bottom: 1rem;
 }
-
-.review-buttons button {
+.GoodsReviewList_review-buttons button {
   padding: 0.5rem 1rem;
 }
-
-.review-header {
+.GoodsReviewList_review-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
 }
-
-.review-actions {
+.GoodsReviewList_review-actions {
   display: flex;
   gap: 0.5rem;
 }
-
-.review-header h3 {
+.GoodsReviewList_review-header h3 {
   margin: 0;
 }
-
-.btn-outline-danger {
+.GoodsReviewList_btn-outline-danger {
   color: #dc3545;
   border-color: #dc3545;
 }
-
-.btn-outline-danger:hover {
+.GoodsReviewList_btn-outline-danger:hover {
   color: #fff;
   background-color: #dc3545;
   border-color: #dc3545;
+}
+.GoodsReviewList_review-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.GoodsReviewList_review-header-top h2 {
+  margin: 0;
+}
+.GoodsReviewList_page-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.GoodsReviewList_page-controls button {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #4a90e2;
+  background: #4a90e2;
+  color: white;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+.GoodsReviewList_page-controls button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.GoodsReviewList_page-controls span {
+  font-size: 0.9rem;
+}
+.GoodsReviewList_goods-review-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.GoodsReviewList_review-card {
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.GoodsReviewList_card-swiper {
+  width: 100%;
+  height: 120px;
+}
+.GoodsReviewList_card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.GoodsReviewList_card-body {
+  padding: 0.75rem;
+  flex: 1;
+}
+.GoodsReviewList_card-title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+.GoodsReviewList_card-text {
+  font-size: 0.875rem;
+  color: #555;
+}
+.GoodsReviewList_card-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}
+.GoodsReviewList_btn-edit {
+  flex: 1;
+  background: #007bff;
+  border: 1px solid #007bff;
+  color: #fff;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+.GoodsReviewList_btn-edit:hover {
+  opacity: 0.9;
+}
+.GoodsReviewList_btn-delete {
+  flex: 1;
+  background: #dc3545;
+  border: 1px solid #dc3545;
+  color: #fff;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+.GoodsReviewList_btn-delete:hover {
+  opacity: 0.9;
+}
+.GoodsReviewList_btn-menu {
+  width: 2rem;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: #666;
+  cursor: pointer;
+}
+
+/* GoodsReviewWriteModal */
+.GoodsReviewWriteModal_modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.GoodsReviewWriteModal_modal-content {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  width: 90%;
+  max-width: 600px;
+  position: relative;
+}
+.GoodsReviewWriteModal_modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.GoodsReviewWriteModal_order-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.GoodsReviewWriteModal_order-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+.GoodsReviewWriteModal_order-item.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.GoodsReviewWriteModal_order-item.selected {
+  border-color: #4a90e2;
+  background: #f0f8ff;
+}
+.GoodsReviewWriteModal_item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 1.5rem;
+}
+.GoodsReviewWriteModal_review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.GoodsReviewWriteModal_image-upload-section {
+  margin: 0.75rem 0;
+}
+.GoodsReviewWriteModal_btn-add-image {
+  padding: 0.5rem 1rem;
+  background-color: white;
+  color: gray;
+  border: 1px solid #4a90e2;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+.GoodsReviewWriteModal_image-preview-container {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.GoodsReviewWriteModal_image-preview-item {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+.GoodsReviewWriteModal_preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.GoodsReviewWriteModal_btn-remove-image {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+}
+.GoodsReviewWriteModal_modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.GoodsReviewWriteModal_modal-actions button {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+.GoodsReviewWriteModal_modal-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
