@@ -61,7 +61,7 @@ public class CGVPreMovieCrawler {
                 .build();
     }
 
-    @PostConstruct
+//    @PostConstruct
     @Scheduled(cron = "0 10 0 * * *")
     public void crawlingPreMovie() {
         String url = "http://www.cgv.co.kr/movies/pre-movies.aspx";
