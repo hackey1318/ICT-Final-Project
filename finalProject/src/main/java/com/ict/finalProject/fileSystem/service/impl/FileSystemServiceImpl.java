@@ -36,12 +36,12 @@ public class FileSystemServiceImpl implements FileSystemService {
     @Override
     public List<FileUploadResponse> uploadFile(List<MultipartFile> files) throws IOException {
 
-        Path uploadPath = Paths.get("/app/static/img");
+        Path uploadPath = Paths.get("/upload");
         if (!uploadPath.toFile().exists()) {
             uploadPath.toFile().mkdirs(); // 디렉토리 존재하지 않으면 생성
-        }        List<String> fileIdList = new ArrayList<>();
+        }
+        List<String> fileIdList = new ArrayList<>();
         List<Images> imageList = new ArrayList<>();
-        List<ImageInfo> imageInfos = new ArrayList<>();
 
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
