@@ -12,16 +12,20 @@ const BASE_URL = `${apiNoAccessClient.defaults.baseURL}/file-system/download/`;
 const accessToken = sessionStorage.getItem("accessToken");
 
 function MovieDetail() {
-	const { id } = useParams();
-	const [movie, setMovie] = useState(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	// URL 경로에서 영화 ID를 가져옵니다 (예: /movies/10 -> id는 "10")
+	const { id } = useParams()
+	// 영화 상세 정보를 저장할 상태
+	const [movie, setMovie] = useState(null)
+	// 데이터 로딩 상태
+	const [loading, setLoading] = useState(true)
+	// 에러 정보를 저장할 상태
+	const [error, setError] = useState(null)
 
-	const [liked, setLiked] = useState(false);
-	const [likeId, setLikeId] = useState(null);
-	const [relatedGoods, setRelatedGoods] = useState([]);
-	const [relatedMovies, setRelatedMovies] = useState([]);
-	const [showRecruitModal, setShowRecruitModal] = useState(false);
+	const [liked, setLiked] = useState(false); // 현재 좋아요 여부
+	const [likeId, setLikeId] = useState(null); // 좋아요 ID (DB에서 받은 값)
+	const [relatedGoods, setRelatedGoods] = useState([]); // 관련 상품 목록
+	const [relatedMovies, setRelatedMovies] = useState([]); // 관련 영화 목록
+	const [showRecruitModal, setShowRecruitModal] = useState(false)
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	useEffect(() => {
@@ -138,7 +142,13 @@ function MovieDetail() {
 					</div>
 					<div className="movie_detail_actions col-2 d-flex justify-content-end">
 						<div onClick={toggleLike} style={{ cursor: 'pointer' }}>
-							<Heart className="movie_detail_icon" color={liked ? 'red' : 'black'} fill={liked ? 'red' : 'none'} />
+							{isLoggedIn && (
+								<Heart
+									className="movie_detail_icon"
+									color={liked ? 'red' : 'black'}
+									fill={liked ? 'red' : 'none'}
+								/>
+							)}
 							<Share2 className="movie_detail_icon ms-2" onClick={handleCopyUrl} />
 						</div>
 					</div>

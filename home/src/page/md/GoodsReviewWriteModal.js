@@ -161,7 +161,9 @@ export default function GoodsReviewWriteModal({
         <div className="GoodsReviewWriteModal_modal-content">
           <button className="GoodsReviewWriteModal_modal-close" onClick={onClose}>×</button>
           <h2>{isEditing ? '리뷰 수정' : '리뷰 작성'}</h2>
-
+          {orders.length === 0 ? (
+            <p className='GoodsReviewWriteModal_no-orders'>주문 내역이 없습니다.</p>
+          ) : (
           <ul className="GoodsReviewWriteModal_order-list">
             {orders.map(o => {
               const disabled = !isEditing && reviewedOrderNos.has(o.id);
@@ -174,7 +176,7 @@ export default function GoodsReviewWriteModal({
               );
             })}
           </ul>
-
+          )}
           {formData.orderNo && (
             <form className="GoodsReviewWriteModal_review-form" onSubmit={handleSubmit}>
               <StarRating rating={formData.rating} onChange={r=>setFormData(f=>({...f,rating:r}))} />
