@@ -23,6 +23,8 @@ const getUserNoFromToken = () => {
 const GoodsDetail = () => {
   const { goodsNo } = useParams();
   const userNo = getUserNoFromToken();
+  const token = sessionStorage.getItem("accessToken");
+  const isLoggedIn = Boolean(token);
   const [product, setProduct] = useState(null);
   const [movieId, setMovieId] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -169,6 +171,7 @@ const GoodsDetail = () => {
             >
               {showReviews ? '리뷰 닫기' : '리뷰 보기'}
             </button>
+            {isLoggedIn && (
             <button
               className="btn btn-outline-secondary"
               onClick={() => {
@@ -178,6 +181,7 @@ const GoodsDetail = () => {
             >
               리뷰 작성
             </button>
+            )}
           </div>
         </div>
 
