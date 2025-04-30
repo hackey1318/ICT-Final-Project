@@ -178,7 +178,7 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
                                     />
                                 )}
                                 {review.userNo === currentUserNo && (
-                                    <div className="modal-action-buttons">
+                                    <div className={`modal-action-buttons ${isReporting ? 'reporting-active' : ''}`}>
                                         <button className="modal-edit" onClick={handleEdit}>
                                             수정
                                         </button>

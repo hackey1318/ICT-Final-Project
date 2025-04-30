@@ -268,6 +268,10 @@
   width: 30%;
 }
 
+.modal-action-buttons.reporting-active {
+  align-items: center;
+}
+
 .modal-edit {
   position: relative;
   top: -70px;
