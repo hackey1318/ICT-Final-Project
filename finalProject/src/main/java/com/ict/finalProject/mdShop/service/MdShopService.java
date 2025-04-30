@@ -34,4 +34,6 @@ public interface MdShopService {
     void updateGoodsQuantity(List<OrderItemDto> orderItemDtoList);
 
     List<GoodsStocks> getGoodsStocks(List<Integer> goodsNoList);
+
+    GoodsStocks getGoodsStock(Integer goodsNo);
 }

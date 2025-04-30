@@ -42,6 +42,7 @@ import InquiryReplyView from './page/admin/InquiryReplyView';
 import GoodsDetail from './page/md/GoodsDetail';
 import GoodsReviewSection from './page/md/GoodsReviewSection';
 import MdShop from './page/md/MdShop';
+import OrderManage from './js/order/OrderManage';
 import MdSales from './page/md/MdSales';
 import RelatedMovie from './page/movie/RelatedMovie';
 import BlackList from './page/admin/BlackList';
@@ -179,6 +180,7 @@ function App() {
 					<Route path="movie-like" element={<MovieLikeChart />} />
 					<Route path="goods-like" element={<GoodsLikeChart />} />
 					<Route path="mdlists" element={<MdList />} />
+					<Route path="ordermanage" element={<OrderManage />} />
 					<Route path='mdsales' element={<MdSales />} />
 					<Route path="inquiry" element={<InquiryReply />} />
 					<Route path="inquiry/:no" element={<InquiryReplyView />} />
