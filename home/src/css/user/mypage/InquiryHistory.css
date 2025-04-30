@@ -24,3 +24,13 @@
     transition: all 0.500s;
     color: white;
 }
+
+.myNoInquiryMsg {
+    position: relative;
+    left: 0%;
+    width: 60%;
+    height: 50px;
+    line-height: 30px;
+    margin: 0 auto;
+    border-bottom: 1px solid #ddd;
+}

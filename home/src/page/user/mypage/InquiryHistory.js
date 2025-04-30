@@ -84,8 +84,8 @@ function InquiryHistory() {
                     </thead>
                     <tbody>
                         {
-                            Array.isArray(inquiryList) && inquiryList.length > 0 ? (
-                                inquiryList
+                            Array.isArray(inquiryList) && 
+                                inquiryList.filter(item => item.status === "ACTIVE" && item.userNo === userInfo.userNo).length > 0 ? (                                inquiryList
                                     .filter(item => item.status === "ACTIVE" && item.userNo === userInfo.userNo)
                                     .map((item) => {
                                         console.log(inquiryList)
@@ -104,7 +104,7 @@ function InquiryHistory() {
                                     })
                             ) : (
                                 <tr>
-                                    <td className='noInquiryMsg' colSpan="4">
+                                    <td className='myNoInquiryMsg' colSpan="4">
                                         문의 내역이 없습니다.
                                     </td>
                                 </tr>
