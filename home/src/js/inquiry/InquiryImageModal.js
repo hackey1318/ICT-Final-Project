@@ -4,8 +4,9 @@ import left from '../../img/arrowL.jpg';
 import right from '../../img/arrowR.jpg';
 import close from '../../img/close.jpg';
 import { useCallback, useEffect, useState } from 'react';
+import apiNoAccessClient from '../public/axiosConfigNoAccess';
 
-const IMAGE_BASE_URL = '/file-system/showImage/';
+const IMAGE_BASE_URL = `${apiNoAccessClient.defaults.baseURL}/file-system/showImage/`;
 
 function InquiryImageModal({ images, initialIndex, onClose }) {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);

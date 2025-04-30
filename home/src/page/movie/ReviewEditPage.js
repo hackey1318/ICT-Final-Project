@@ -4,6 +4,7 @@ import axios from '../../js/public/axiosConfig';
 import { getReviews, updateReview } from '../../js/api/reviewApi';
 import './../../css/movie/ReviewWritePage.css';
 import apiClient from '../../js/public/axiosConfig';
+import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
 
 function ReviewEditPage() {
   // 라우트에서 :id 로 선언된 파라미터를 movieNo로 사용
@@ -33,7 +34,7 @@ function ReviewEditPage() {
         setContent(rv.content);
         setImageIds(rv.imageIds || []);
         setPreviews((rv.imageIds || []).map(id =>
-          `/file-system/showPreview/${id}`
+          `${apiNoAccessClient.defaults.baseURL}/file-system/showPreview/${id}`
         ));
       })
       .catch(err => console.error('리뷰 불러오기 실패:', err));
@@ -55,7 +56,7 @@ function ReviewEditPage() {
       setImageIds(prev => [...prev, ...ids]);
       setPreviews(prev => [
         ...prev,
-        ...ids.map(id => `/file-system/showPreview/${id}`)
+        ...ids.map(id => `${apiNoAccessClient.defaults.baseURL}/file-system/showPreview/${id}`)
       ]);
     } catch (err) {
       console.error('이미지 업로드 실패:', err);

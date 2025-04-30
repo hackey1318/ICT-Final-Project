@@ -4,6 +4,7 @@ import axios from '../../js/public/axiosConfig';
 import { postReview } from '../../js/api/reviewApi';
 import './../../css/movie/ReviewWritePage.css';
 import apiClient from '../../js/public/axiosConfig';
+import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
 
 function ReviewWritePage() {
 
@@ -45,7 +46,7 @@ function ReviewWritePage() {
       setImageIds((prev) => [...prev, ...ids]);
       setPreviews((prev) => [
         ...prev,
-        ...ids.map((id) => `/file-system/showPreview/${id}`)
+        ...ids.map((id) => `${apiNoAccessClient.defaults.baseURL}/file-system/showPreview/${id}`)
       ]);
     } catch (err) {
       console.error('이미지 업로드 실패:', err);

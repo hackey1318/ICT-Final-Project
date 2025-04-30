@@ -8,6 +8,7 @@ import { ArrowLeft } from 'lucide-react';
 import '../../css/movie/ReviewListPage.css';
 import MoviePagination from '../../js/public/Pagination';
 import noreviewig from '../../img/logout.png';
+import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
 
 function ReviewListPage({ movieNo, currentUserNo }) {
   const [reviews, setReviews] = useState([]);
@@ -134,7 +135,7 @@ function ReviewListPage({ movieNo, currentUserNo }) {
           >
             {r.imageIds && r.imageIds.length > 0 ? (
               <img
-                src={`/file-system/showPreview/${r.imageIds[0]}`}
+                src={`${apiNoAccessClient.defaults.baseURL}/file-system/showPreview/${r.imageIds[0]}`}
                 alt="review"
                 className="review-card-image"
               />
