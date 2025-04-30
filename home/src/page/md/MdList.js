@@ -25,16 +25,13 @@ function MdList() {
   }, [page, sortField, sortDirection]);
 
   const getMdList = () => {
-    axios
+    apiClient
       .get("/md-shop/lists", {
         params: {
           page,
           size,
           sort: `${sortField},${sortDirection}`,
           [searchType]: searchValue.trim() === "" ? null : searchValue,
-        },
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((res) => {
