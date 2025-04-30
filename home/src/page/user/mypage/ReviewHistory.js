@@ -3,14 +3,16 @@ import React, { useState, useEffect } from 'react';
 import apiClient from '../../../js/public/axiosConfig';
 import '../../../css/review/ReviewCardStyle1.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import Button from '../../../js/common/Buttons';
 import { useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function ReviewHistory() {
   const [filterType, setFilterType] = useState('movie');
   const [movieReviews, setMovieReviews] = useState([]);
   const [goodsReviews, setGoodsReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const location = useLocation();
+  const navigate = useNavigate();
   // 최소 카드 너비(px) – CSS의 minmax(200px, 1fr) 와 맞춰줍니다.
   const MIN_CARD_WIDTH = 300;
 
@@ -61,6 +63,26 @@ export default function ReviewHistory() {
     currentPage * itemsPerPage
   );
 
+  useEffect(() => {
+    // location.state에서 값이 있다면 우선적으로 'goods'로 설정
+    if (location.state?.from === 'goods') {
+        setFilterType('goods');
+    } else {
+        // location.state가 없으면 sessionStorage에서 값을 가져옴
+        const savedFilterType = sessionStorage.getItem('filterType');
+        if (savedFilterType) {
+            setFilterType(savedFilterType);
+        } else {
+            setFilterType('movie'); // 기본값 'movie'
+        }
+    }
+}, [location.state]);
+
+useEffect(() => {
+  // filterType이 변경될 때마다 sessionStorage에 저장
+  sessionStorage.setItem('filterType', filterType);
+}, [filterType]);
+
   // 클릭 시 영화 상세 정보 API 호출 후 세션에 저장, 이후 리스트 페이지로 이동
   const handleClick = async (rev) => {
     if (filterType === 'movie') {
@@ -72,9 +94,9 @@ export default function ReviewHistory() {
       } catch (err) {
         console.error('영화 정보 불러오기 실패:', err);
       }
-      window.location.href = `/movies/${rev.movieNo}/reviews`;
+      navigate(`/movies/${rev.movieNo}/reviews`);
     } else {
-      window.location.href = `/mdshop/${rev.goodsId}`;
+      navigate(`/mdshop/${rev.goodsId}`, { state: { from: 'goods' } });
     }
   };
 

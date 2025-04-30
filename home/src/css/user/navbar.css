@@ -79,7 +79,7 @@
     background: #fff;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     border-radius: 4px;
-    min-width: 160px;
+    padding: 0;
     z-index: 2000;
     animation: navbar-fadeIn .2s ease-out;
   }
@@ -89,12 +89,16 @@
   }
   .navbar-dropdown li {
     list-style: none;
+    min-width: 170px;
+    text-align: center;
+    margin: 3px;
   }
   .navbar-dropdown li a {
     display: block;
     padding: 8px 16px;
     color: #333;
     text-decoration: none;
+    font-weight: bold;
     transition: background .2s;
   }
   .navbar-dropdown li a:hover {

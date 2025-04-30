@@ -1,6 +1,6 @@
 // src/page/movie/ReviewListPage.js
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ReviewDetailModal from './ReviewDetailModal';
 import { getReviews } from '../../js/api/reviewApi';
 import axios from '../../js/public/axiosConfig';
@@ -20,11 +20,15 @@ function ReviewListPage({ movieNo, currentUserNo }) {
   const storedName = sessionStorage.getItem('movieName');
   const storedDesc = sessionStorage.getItem('movieDescription');
   const storedPoster = sessionStorage.getItem('reviewPageMoviePoster');
-  
+  const location = useLocation();
+  const cameFromReviewHistory = location.state?.from === 'reviewHistory';
 
-  // 뒤로가기 핸들러: movieNo 페이지로 이동
   const handleBack = () => {
-    navigate(`/movies/${movieNo}`);
+    if(cameFromReviewHistory) {
+      navigate('/mypage/reviews');
+    } else {
+      navigate(-1);  
+    }
   };
 
   useEffect(() => {
