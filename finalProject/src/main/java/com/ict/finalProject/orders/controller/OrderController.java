@@ -3,12 +3,14 @@ package com.ict.finalProject.orders.controller;
 import com.ict.finalProject.common.config.JwtTokenProvider;
 import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
+import com.ict.finalProject.mdShop.repository.domain.GoodsStocks;
 import com.ict.finalProject.mdShop.service.MdShopService;
 import com.ict.finalProject.movie.service.TheatersService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
 import com.ict.finalProject.orders.controller.request.OrderNumberRequest;
 import com.ict.finalProject.orders.controller.response.OrderListResponse;
+import com.ict.finalProject.orders.controller.response.OrderManageResponse;
 import com.ict.finalProject.orders.repository.domain.OrderItem;
 import com.ict.finalProject.orders.repository.domain.Orders;
 import com.ict.finalProject.orders.service.OrderItemService;
@@ -23,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,6 +81,7 @@ public class OrderController {
             theaterNo = theatersService.getTheaterNo(theaterName);
             goods = (JSONArray) requestData.get("goods");
 
+
             for (Object itemObj : goods) {
                 JSONObject item = (JSONObject) itemObj;
                 int id = ((Long) item.get("goodsNo")).intValue();
@@ -87,17 +91,17 @@ public class OrderController {
 
                 // id기반으로 상품테이블 DB조회, 상품명과 가격 일치하는지 확인
                 Goods dbGoods = mdShopService.getMd(id).get();
-                int dbGoods_Stocks = 0;
+                int dbGoods_Stocks = mdShopService.getGoodsStock(dbGoods.getId()).getQuantity();
 
-
-//                if (dbGoods.getName().equals(name) &&
-//                        dbGoods.getPrice() == price &&
-//                        dbGoods_Stocks >= quantity) {
-                // 굿즈 스톡 조회 아직 안된대서 잠깐 주석처리
-                  if (dbGoods.getName().equals(name) &&
-                        dbGoods.getPrice() == price) {
+                if (dbGoods.getName().equals(name) &&
+                        dbGoods.getPrice() == price &&
+                        dbGoods_Stocks >= quantity &&
+                        dbGoods_Stocks != 0 &&
+                        quantity != 0)
+                {
                 } else {
                     isCorrectData = false;
+                    break;
                 }
             }
 
@@ -258,5 +262,19 @@ public class OrderController {
         ordersService.failOrders(orderNo);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/orderManage")
+    public ResponseEntity<Page<OrderManageResponse>> orderManage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String state)  {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "updatedAt"));
+        Page<OrderManageResponse> orderManageResponsePage = null;
+        if(state.isEmpty()) {
+            orderManageResponsePage = ordersService.getOrderManageResponse(pageable,null);
+        }
+        else orderManageResponsePage = ordersService.getOrderManageResponse(pageable,OrdersStatus.valueOf(state));
+        return ResponseEntity.ok(orderManageResponsePage);
     }
 }
