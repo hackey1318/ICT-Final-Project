@@ -406,7 +406,7 @@ function MdSales() {
     };
 
     const genderData = {
-        labels: resultByGoodsName.map(item => "[상품] " + item.goodsName),
+        labels: resultByGoodsName.map(item => item.goodsName),
         datasets: [
             {
                 label: '남성',
@@ -421,11 +421,11 @@ function MdSales() {
         ],
     };
 
-    resultByGoodsType.forEach(typeItem => {
-        genderData.labels.push("[종류] " + typeItem.goodsType);
-        genderData.datasets[0].data.push(typeItem.totalMaleCount);
-        genderData.datasets[1].data.push(typeItem.totalFemaleCount);
-    })
+    // resultByGoodsType.forEach(typeItem => {
+    //     genderData.labels.push("[종류] " + typeItem.goodsType);
+    //     genderData.datasets[0].data.push(typeItem.totalMaleCount);
+    //     genderData.datasets[1].data.push(typeItem.totalFemaleCount);
+    // })
 
 
     // date차트
@@ -514,7 +514,7 @@ function MdSales() {
                     </div>
                     <div className="mdSales_content">
                         {resultByGoodsNameState === "table" &&
-                            <div>
+                            <div className="mdSales_content_byName">
                                 <div><b>상품명</b></div>
                                 <div><b>판매량</b></div>
                                 <div><b>가격</b></div>
@@ -525,7 +525,7 @@ function MdSales() {
                         {resultByGoodsNameState === "table" &&
                             resultByGoodsName.map((element) => {
                                 return (
-                                    <div className="mdSales_element">
+                                    <div className="mdSales_content_byName">
                                         <div>{element.goodsName}</div>
                                         <div>{element.totalPaidQuantity}</div>
                                         <div>{element.price.toLocaleString()}원</div>
@@ -551,7 +551,7 @@ function MdSales() {
                     </div>
                     <div className="mdSales_content">
                         {resultByGoodsTypeState === "table" &&
-                            <div>
+                            <div className="mdSales_content_byType">
                                 <div><b>상품종류</b></div>
                                 <div><b>판매량</b></div>
                                 <div><b>매출</b></div>
@@ -561,7 +561,7 @@ function MdSales() {
                         {resultByGoodsTypeState === "table" &&
                             resultByGoodsType.map((element) => {
                                 return (
-                                    <div className="mdSales_element">
+                                    <div className="mdSales_content_byType">
                                         <div>{element.goodsType}</div>
                                         <div>{element.totalPaidQuantity}</div>
                                         <div>{element.totalSale.toLocaleString()}원</div>
@@ -586,22 +586,22 @@ function MdSales() {
                     </div>
                     <div className="mdSales_content">
                         {resultByGenderState === "table" &&
-                            <div>
-                                <div><b>상품/종류</b></div>
+                            <div className="mdSales_content_byGender">
+                                <div><b>상품명</b></div>
                                 <div><b>남성 구매량</b></div>
                                 <div><b>여성 구매량</b></div>
                             </div>}
                         {resultByGenderState === "table" &&
                             resultByGoodsName.map((element) => {
                                 return (
-                                    <div className="mdSales_element">
-                                        <div>[상품]{element.goodsName}</div>
+                                    <div className="mdSales_content_byGender">
+                                        <div>{element.goodsName}</div>
                                         <div>{element.totalMaleCount}</div>
                                         <div>{element.totalFemaleCount}</div>
                                     </div>
                                 )
                             })}
-                        {resultByGenderState === "table" &&
+                        {/* {resultByGenderState === "table" &&
                             resultByGoodsType.map((element) => {
                                 return (
                                     <div className="mdSales_element">
@@ -610,7 +610,7 @@ function MdSales() {
                                         <div>{element.totalFemaleCount}</div>
                                     </div>
                                 )
-                            })}
+                            })} */}
                         {resultByGenderState === "chart" &&
                             <div className="mdSales_chart">
                                 <Bar options={genderOptions} data={genderData} style={{ height: `${genderChartHeight}px` }} />
@@ -627,7 +627,7 @@ function MdSales() {
                     </div>
                     <div className="mdSales_content">
                         {resultByDateState === "table" &&
-                            <div>
+                            <div className="mdSales_content_byDate">
                                 <div><b>날짜</b></div>
                                 <div><b>매출량</b></div>
                                 <div><b>누적매출</b></div>
@@ -636,7 +636,7 @@ function MdSales() {
                         {resultByDateState === "table" &&
                             resultByDate.slice().reverse().map((element) => {
                                 return (
-                                    <div className="mdSales_element">
+                                    <div className="mdSales_content_byDate">
                                         <div>{element.date}</div>
                                         <div>{element.totalSale.toLocaleString()}원</div>
                                         <div>{element.accSales.toLocaleString()}원</div>
