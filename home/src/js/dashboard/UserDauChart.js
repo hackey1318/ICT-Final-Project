@@ -29,9 +29,8 @@ function UserDauChart({ chartTitle, chartDauList, totalCount, chartStyle  }){
         },
         scales: {
             y: {
-                suggestedMin: 0,
+                min: 0,
                 ticks: {
-                    min: 0,
                     stepSize: 1, //간격
                 }
             },
