@@ -1,13 +1,43 @@
-import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import "../../css/user/MyPageSidebar.css";
 
 const MypageSidebar = () => {
-    const [activeMenu, setActiveMenu] = useState("영화굿즈찜목록");
+    const [activeMenu, setActiveMenu] = useState("");
+    const location = useLocation();
 
     const handleMenuClick = (menuId) => {
         setActiveMenu(menuId);
     };
+
+    useEffect(() => {
+        const path = location.pathname;
+        if (path.includes("/mypage")) {
+            setActiveMenu("영화굿즈찜목록");
+        }
+    }, []);
+
+    useEffect(() => {
+        const path = location.pathname;
+
+        if (path.includes("/mypage/likes")) {
+            setActiveMenu("영화굿즈찜목록");
+        } else if (path.includes("/mypage/order/list")) {
+            setActiveMenu("구매내역");
+        } else if (path.includes("/mypage/cart")) {
+            setActiveMenu("장바구니");
+        } else if (path.includes("/mypage/cinemates")) {
+            setActiveMenu("시네메이트내역");
+        } else if (path.includes("/mypage/reviews")) {
+            setActiveMenu("후기내역");
+        } else if (path.includes("/mypage/inquiries")) {
+            setActiveMenu("문의내역");
+        } else if (path.includes("/mypage/edit")) {
+            setActiveMenu("회원정보수정");
+        } else if (path.includes("/mypage/withdraw")) {
+            setActiveMenu("회원탈퇴");
+        }
+    }, [location]);
 
     const profileImage = sessionStorage.getItem("userInfo");
     const userInfo = profileImage ? JSON.parse(profileImage) : null;
