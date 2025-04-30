@@ -17,7 +17,7 @@ export default function Navbar() {
       setIsLoggedIn(true)
       try {
         setUserInfo(JSON.parse(sessionStorage.getItem("userInfo")))
-      } catch {}
+      } catch { }
     }
     const onResize = () => setIsMobile(window.innerWidth <= 990)
     onResize()
@@ -48,10 +48,10 @@ export default function Navbar() {
         {/* 왼쪽 그룹 */}
         <div className="navbar-lefts">
           <Link to="/" className="navbar-logo">
-            <img src={logo} alt="CINETOGETHER"/>
+            <img src={logo} alt="CINETOGETHER" />
           </Link>
           <button className="navbar-burger" onClick={toggleMenu}>
-            <span/><span/><span/>
+            <span /><span /><span />
           </button>
           <ul className={`navbar-list ${menuOpen ? "navbar-list--open" : ""}`}>
             <li
@@ -60,11 +60,11 @@ export default function Navbar() {
               onMouseLeave={closeDropdown}
               onClick={() => clickDropdown("movies")}
             >
-              <div className={`navbar-link ${active==="movies"?"active":""}`}>
+              <div className={`navbar-link ${active === "movies" ? "active" : ""}`}>
                 영화찾기
-                <i className={`navbar-dropdown-arrow ${active==="movies"?"up":""}`}>▼</i>
+                <i className={`navbar-dropdown-arrow ${active === "movies" ? "up" : ""}`}>▼</i>
               </div>
-              {active==="movies" && (
+              {active === "movies" && (
                 <ul className="navbar-dropdown">
                   <li><Link to="/movies/current">현재 상영작</Link></li>
                   <li><Link to="/movies/upcoming">상영 예정작</Link></li>
@@ -84,11 +84,11 @@ export default function Navbar() {
               onMouseLeave={closeDropdown}
               onClick={() => clickDropdown("customer")}
             >
-              <div className={`navbar-link ${active==="customer"?"active":""}`}>
+              <div className={`navbar-link ${active === "customer" ? "active" : ""}`}>
                 고객센터
-                <i className={`navbar-dropdown-arrow ${active==="customer"?"up":""}`}>▼</i>
+                <i className={`navbar-dropdown-arrow ${active === "customer" ? "up" : ""}`}>▼</i>
               </div>
-              {active==="customer" && (
+              {active === "customer" && (
                 <ul className="navbar-dropdown">
                   <li><Link to="/inquiry">1:1 문의</Link></li>
                   <li><Link to="/announcements">공지사항</Link></li>
@@ -106,10 +106,16 @@ export default function Navbar() {
         <div className="navbar-user-area">
           {isLoggedIn ? (
             <div className="navbar-profile">
-              {userInfo.role==="USER" && <NotificationSystem/>}
+              {userInfo.role === "USER" && <NotificationSystem />}
               <span className="navbar-welcome">
                 환영합니다 <strong>{userInfo.nickname}</strong> 님
               </span>
+              <div className="profile-circle">
+                <img
+                  src={userInfo.profileImageUrl || "https://via.placeholder.com/35"}
+                  alt="프로필 이미지"
+                />
+              </div>
               <button className="navbar-btn" onClick={logout}>로그아웃</button>
             </div>
           ) : (
