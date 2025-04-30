@@ -42,11 +42,10 @@ function OrderList() {
         if (!window.confirm("주문을 취소하시겠습니까?")) {
             return;
         }
-        const accessToken = sessionStorage.getItem("accessToken");
         const fetchCancelOrder = async () => {
             const paymentResponse = await apiClient.post("/payment/cancel", { paymentKey });
 
-            if (!paymentResponse.ok) {
+            if (!paymentResponse.status !== 200) {
                 console.log("요청 실패:", paymentResponse.status);
                 return;
             }
@@ -61,7 +60,7 @@ function OrderList() {
                 transactionKey
             });
 
-            if (!orderResponse.ok) {
+            if (orderResponse.status !== 200) {
                 console.log("요청 실패:", orderResponse.status);
                 return;
             }

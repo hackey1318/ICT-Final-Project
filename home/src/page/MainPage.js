@@ -21,10 +21,10 @@ function MainPage() {
             setError(null); // 이전 에러 초기화
 
             try {
-                const response = await fetch(BANNER_API_ENDPOINT);
+                const response = await apiNoAccessClient.get(BANNER_API_ENDPOINT);
 
                 // HTTP 응답 상태 확인
-                if (!response.ok) {
+                if (response.status !== 200) {
                     throw new Error(`API 요청 실패: ${response.status} ${response.statusText}`);
                 }
 
