@@ -11,6 +11,7 @@ export default function UserEditPage() {
     phone: '',
     profileImageUrl: ''
   });
+  const [originalForm, setOriginalForm] = useState(null);
   const [preview, setPreview] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -18,20 +19,21 @@ export default function UserEditPage() {
   const [phoneCheckLoading, setPhoneCheckLoading] = useState(false);
   const [phoneCheckStatus, setPhoneCheckStatus] = useState('');
   const [phoneCheckMessage, setPhoneCheckMessage] = useState('');
-  const [originalPhone, setOriginalPhone] = useState('');
 
+  // 초기 데이터 로드 및 원본 저장
   useEffect(() => {
     axios.get('/user')
       .then(({ data }) => {
-        setForm({
+        const init = {
           id: data.id || '',
           email: data.email || '',
           nickname: data.nickname || '',
           phone: data.phone || '',
           profileImageUrl: data.profileImageUrl || ''
-        });
+        };
+        setForm(init);
+        setOriginalForm(init);
         setPreview(data.profileImageUrl || '');
-        setOriginalPhone(data.phone || '');
       })
       .catch(() => setError('프로필 정보를 불러오는 중 오류가 발생했습니다.'));
   }, []);
@@ -46,7 +48,8 @@ export default function UserEditPage() {
   };
 
   const handlePhoneCheck = async () => {
-    if (form.phone && form.phone === originalPhone) {
+    if (!originalForm) return;
+    if (form.phone === originalForm.phone) {
       setPhoneCheckStatus('same');
       setPhoneCheckMessage('기존과 동일한 번호입니다.');
       return;
@@ -114,6 +117,17 @@ export default function UserEditPage() {
     }
   };
 
+  // 변경 사항 감지
+  const hasChanges = originalForm ? (
+    form.email !== originalForm.email ||
+    form.nickname !== originalForm.nickname ||
+    form.profileImageUrl !== originalForm.profileImageUrl ||
+    form.phone !== originalForm.phone
+  ) : false;
+
+  // 제출 버튼 활성화 여부
+  const canSubmit = hasChanges && (!hasChanges || form.phone === originalForm.phone || phoneCheckStatus === 'available');
+
   return (
     <div className="user-edit-page">
       <h2>회원 정보 수정</h2>
@@ -174,7 +188,7 @@ export default function UserEditPage() {
         <input type="file" accept="image/*" onChange={handleFileChange} />
         {preview && <img src={preview} alt="프로필 미리보기" className="preview" />}
 
-        <button type="submit" disabled={loading || phoneCheckStatus !== 'available'} className="btn-submit">
+        <button type="submit" disabled={!canSubmit || loading} className="btn-submit">
           {loading ? '수정 중...' : '수정 완료'}
         </button>
       </form>
