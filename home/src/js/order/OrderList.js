@@ -45,7 +45,7 @@ function OrderList() {
         const fetchCancelOrder = async () => {
             const paymentResponse = await apiClient.post("/payment/cancel", { paymentKey });
 
-            if (!paymentResponse.status !== 200) {
+            if (paymentResponse.status !== 200) {
                 console.log("요청 실패:", paymentResponse.status);
                 return;
             }
