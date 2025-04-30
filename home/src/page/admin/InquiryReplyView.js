@@ -11,6 +11,7 @@ function InquiryReplyView() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImageIdx, setSelectedImageIdx] = useState(0);
     const [isUpdateStatus, setIsUpdateStatus] = useState(false);
+    const [writerUserNo, setWriterUserNo] = useState(null);
 
     let [inquiryVO, setInquiryVO] = useState({
         no: null,
@@ -40,12 +41,11 @@ function InquiryReplyView() {
     
     const mounted = useRef(false);
     useEffect(() => {
-        if(!mounted) { 
+        if (!mounted.current) {
             mounted.current = true;
-        } else { 
-            getInquiryView();
+            getInquiryView();  // 여기에 위치
         }
-    }, [no])
+    }, []);
 
     const getInquiryView = useCallback(() => {
         apiClient.get(`inquiry/getInquiryBy/${no}`)
@@ -68,6 +68,13 @@ function InquiryReplyView() {
             console.log(error);
         })
     }, [no]);
+
+    useEffect(() => {
+        if (inquiryVO.userNo) {
+            setWriterUserNo(inquiryVO.userNo);
+            console.log("Writer User No has been set:", inquiryVO.userNo);
+        }
+    }, [inquiryVO]);
 
     const handleStatusChange = (event) => {
         const newStatus = event.target.value;
@@ -197,7 +204,7 @@ function InquiryReplyView() {
                     </div>
                 </>
             }
-            <InquiryComment/>
+            <InquiryComment writerUserNo={writerUserNo}/>
         </div>
     );
 }

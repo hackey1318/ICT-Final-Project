@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import apiClient from "../public/axiosConfig";
 import '../../css/inquiry/inquiry.css';
 
-function InquiryComment() {
+function InquiryComment({writerUserNo}) {
     const [isLoading, setIsLoading] = useState(false);
     const [commentList, setCommentList] = useState([]);
     const [comment, setComment] = useState('');
@@ -11,7 +11,6 @@ function InquiryComment() {
     const commentsEndRef = useRef(null);  //스크롤
     const textareaRef = useRef(null);  //댓글 작성 후 다시 댓글창에 포커스
     const [loginUserNo, setLoginUserNo] = useState(null);
-    const userInfoString = sessionStorage.getItem("userInfo");
 
     const scrollToBottom = () => {
         const scrollContainer = commentsEndRef.current;
@@ -99,7 +98,7 @@ function InquiryComment() {
             console.log(error);
         })
     }
-
+    console.log("writerUserNo:", writerUserNo);
     return (
         <div className="comment-container">
             <h5>댓글 목록 :</h5><br/>                
@@ -129,25 +128,30 @@ function InquiryComment() {
             }
         </div>
         <br/>
-            <div style={{width: '100%', margin: '0 auto'}}>
-                <label htmlFor="comment">내용 :</label>
-                <textarea className="form-control" 
-                        rows="5" 
-                        id="comment" 
-                        name="text"
-                        value={comment}
-                        ref={textareaRef}
-                        onChange={(e) => {setComment(e.target.value);}}
-                />
-                <div style={{textAlign: 'right'}}>
-                    <button type="submit" 
-                            className="btn btn-outline-primary"
-                            onClick={writeComment}
-                    >
-                        작성하기
-                    </button>
+            {console.log("Debug - writerUserNo:", writerUserNo, "loginUserNo:", loginUserNo)}
+            {
+                loginUserNo !== null && writerUserNo !== null &&
+                parseInt(loginUserNo) === parseInt(writerUserNo) &&
+                <div style={{width: '100%', margin: '0 auto'}}>
+                    <label htmlFor="comment">내용 :</label>
+                    <textarea className="form-control" 
+                            rows="5" 
+                            id="comment" 
+                            name="text"
+                            value={comment}
+                            ref={textareaRef}
+                            onChange={(e) => {setComment(e.target.value);}}
+                    />
+                    <div style={{textAlign: 'right'}}>
+                        <button type="submit" 
+                                className="btn btn-outline-primary"
+                                onClick={writeComment}
+                        >
+                            작성하기
+                        </button>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     );
 }
