@@ -40,6 +40,7 @@ export default function Navbar() {
     sessionStorage.clear()
     setIsLoggedIn(false)
     setUserInfo(null)
+    window.location.href = "/"
   }
 
   return (
