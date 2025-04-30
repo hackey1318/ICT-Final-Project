@@ -18,7 +18,7 @@ function MyCinemates(){
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(()=>{
-        apiClient.get(`http://localhost:9988/cinemate/${userNo}/myCineMate?page=${currentPage}&size=${pageSize}`)
+        apiClient.get(`/cinemate/${userNo}/myCineMate?page=${currentPage}&size=${pageSize}`)
         .then((response)=>{
             console.log("시네메이트 목록", response.data);
 

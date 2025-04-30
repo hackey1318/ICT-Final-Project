@@ -1,6 +1,7 @@
 import { Heart } from 'lucide-react';
 import { unlikeItem } from '../../../../js/api/LikeCardAPI';
 import "../../../../css/user/mypage/LikedItemsPage.css";
+import apiNoAccessClient from '../../../../js/public/axiosConfigNoAccess';
 
 const GoodsCard = ({ item, onRefresh }) => {
     const handleClick = async () => {
@@ -18,7 +19,7 @@ const GoodsCard = ({ item, onRefresh }) => {
                 <div className="like-card-heart" onClick={handleClick}>
                     <Heart color="red" fill="red" />
                 </div>
-                <img src={`/file-system/download/${item.imageIdList?.[0]}`} alt={item.name} />
+                <img src={`${apiNoAccessClient.defaults.baseURL}/file-system/download/${item.imageIdList?.[0]}`} alt={item.name} />
                 <div className="like-card-title">{item.name}</div>
                 <p>{item.price.toLocaleString()} 원</p>
             </div>

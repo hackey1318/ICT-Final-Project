@@ -4,6 +4,7 @@ import checkMark from '../../img/checkMark.png';
 import TossPayment from "./../payment/TossPayment";
 import { deleteGoodsList, getGoodsList, getTheaterList } from "./CartApi";
 import apiClient from '../public/axiosConfig';
+import apiNoAccessClient from '../public/axiosConfigNoAccess';
 
 function Cart() {
     const [goods, setGoods] = useState([]);
@@ -285,7 +286,7 @@ function Cart() {
                                     ></div>
                                 </div>
                                 <div className="goods_info" onClick={() => window.location.href = `/mdshop/${element.goodsNo}`}>
-                                    <img src={`/file-system/download/${element.imageIdList[0]}`} alt="상품" />
+                                    <img src={`${apiNoAccessClient.defaults.baseURL}/file-system/download/${element.imageIdList[0]}`} alt="상품" />
                                     <span>{element.goodsName}</span>
                                     {element.goodsQuantity === 0 && <span style={{ color: 'red' }}>&nbsp;품절된 상품입니다.</span>}
                                 </div>

@@ -14,7 +14,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import apiNoAccessClient from "../../js/public/axiosConfigNoAccess"
 
-const BASE_URL = "/file-system/download/"
+const BASE_URL = `${apiNoAccessClient.defaults.baseURL}/file-system/download/`
 
 function Main() {
 

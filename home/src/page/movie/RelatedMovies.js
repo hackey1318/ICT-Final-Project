@@ -5,6 +5,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Link } from "react-router-dom";
 import apiClient from '../../js/public/axiosConfig'; // apiClient import
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 export default function RelatedMovies({ movieNo }) {
 	const [relatedMovies, setRelatedMovies] = useState([]);
@@ -24,7 +25,7 @@ export default function RelatedMovies({ movieNo }) {
 					<SwiperSlide key={movie.id}>
 						<div className="movie-card">
 							<img
-								src={`/file-system/download/${movie.imageUrls[0]}`}
+								src={`${apiNoAccessClient.defaults.baseURL}/file-system/download/${movie.imageUrls[0]}`}
 								alt={movie.name}
 								className="movie-image"
 							/>

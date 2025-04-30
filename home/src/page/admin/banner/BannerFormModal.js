@@ -24,7 +24,7 @@ export default function BannerFormModal({ show, onClose, onSuccess, mode = "crea
     const [originalFileName, setOriginalFileName] = useState("");
 
     const accessToken = sessionStorage.getItem("accessToken");
-    const BASE_URL = "";
+    const BASE_URL = `${apiNoAccessClient.defaults.baseURL}`;
 
     useEffect(() => {
         const fetchOriginalFileName = async (fileId) => {

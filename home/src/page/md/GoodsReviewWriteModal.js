@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import StarRating from './StarRating'; 
 import './../../css/md/GoodsReviewSection.css';
 import apiClient from '../../js/public/axiosConfig';
+import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
 
 
  export default function GoodsReviewWriteModal({
@@ -259,7 +260,7 @@ import apiClient from '../../js/public/axiosConfig';
               {formData.imageIds.map((id, idx) => (
                 <div key={`${id}-${idx}`} className="image-preview-item">
                   <img
-                    src={`/file-system/download/${id}`}
+                    src={`${apiNoAccessClient.defaults.baseURL}/file-system/download/${id}`}
                     alt="preview"
                     className="preview-img"
                   />

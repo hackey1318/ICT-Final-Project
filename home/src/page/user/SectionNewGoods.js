@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
 
 // 이미지 기본 URL (API 서버 주소)
-const BASE_URL = '/file-system/download/';
+const BASE_URL = `${apiNoAccessClient.defaults.baseURL}/file-system/download/`;
 
 // 개별 상품 아이템 컴포넌트
 const GoodsItem = ({ item }) => (

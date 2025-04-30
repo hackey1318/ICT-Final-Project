@@ -11,6 +11,7 @@ import Cart from "../../js/cart/Cart";
 import CartApi, { addGoodsToCart } from "../../js/cart/CartApi";
 
 import leftArrow from "./../../img/arrow.png";
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -71,7 +72,7 @@ const GoodsInfo = ({ goods }) => {
                                     >
                                         <img
                                             ref={imageRef}
-                                            src={`/file-system/download/${imgUrl}`}
+                                            src={`${apiNoAccessClient.defaults.baseURL}/file-system/download/${imgUrl}`}
                                             alt={`굿즈 이미지 ${index + 1}`}
                                             className="main-image"
                                             onError={(e) => {

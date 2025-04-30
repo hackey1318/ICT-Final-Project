@@ -52,7 +52,7 @@ export default function GoodsReviewList({
 
 			const reviewsWithUrls = data.map(r => ({
 				...r,
-				imageUrls: r.imageIds.map(id => `/file-system/download/${id}`)
+				imageUrls: r.imageIds.map(id => `${apiNoAccessClient.defaults.baseURL}/file-system/download/${id}`)
 			}));
 
 			setReviews(reviewsWithUrls);

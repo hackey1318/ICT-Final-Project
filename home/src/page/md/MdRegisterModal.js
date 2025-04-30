@@ -4,6 +4,7 @@ import "../../css/md/MdList.css"
 import { debounce } from "lodash"
 import GoodsDescription from './GoodsDescription';
 import apiClient from "../../js/public/axiosConfig";
+import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 function MdRegisterModal({ closeModal, refreshList, editTarget }) {
 	const accessToken = sessionStorage.getItem("accessToken")
@@ -310,7 +311,7 @@ function MdRegisterModal({ closeModal, refreshList, editTarget }) {
 								{existingImageUrls.map((src, index) => (
 									<div key={`existing-${index}`} className="image-preview-box">
 										<img
-											src={`/file-system/download/${src}`}
+											src={`${apiNoAccessClient.defaults.baseURL}/file-system/download/${src}`}
 											alt={`기존-${index}`}
 											onClick={() => handleRemoveExistingImage(index)}
 										/>

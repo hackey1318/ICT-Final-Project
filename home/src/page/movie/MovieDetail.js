@@ -6,8 +6,9 @@ import "./../../css/movie/MovieDetail.css";
 import LikeType from "../../js/common/LikeType";
 import RecruitMovieModal from "./RecruitMovieModal";
 import RelatedMovie from './RelatedMovie';
+import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
 
-const BASE_URL = '/file-system/download/';
+const BASE_URL = `${apiNoAccessClient.defaults.baseURL}/file-system/download/`;
 const accessToken = sessionStorage.getItem("accessToken");
 
 function MovieDetail() {

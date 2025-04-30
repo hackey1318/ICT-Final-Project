@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './../../css/order/OrderList.css';
 import apiClient from '../public/axiosConfig';
+import apiNoAccessClient from '../public/axiosConfigNoAccess';
 
 function OrderList() {
     const [orderList, setOrderList] = useState([]);
@@ -132,7 +133,7 @@ function OrderList() {
                                     return (
                                         <div className="orderList_content" style={{ display: 'flex', flexDirection: 'row' }} onClick={() => window.location.href = `/mdshop/${item.goodsNo}`}>
                                             <div className="orderList_content_goods_img">
-                                                <img src={`/file-system/download/${item.imageIdList[0]}`} />
+                                                <img src={`${apiNoAccessClient.defaults.baseURL}/file-system/download/${item.imageIdList[0]}`} />
                                             </div>
                                             <div className="orderList_content_goods_detail">
                                                 <span className="goods_name"><b>{item.name}</b></span>

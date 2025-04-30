@@ -2,6 +2,7 @@ import './../../css/order/OrderDetail.css';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from "react-router-dom";
 import apiClient from './../public/axiosConfig';
+import apiNoAccessClient from '../public/axiosConfigNoAccess';
 
 function OrderDetail() {
 
@@ -54,7 +55,7 @@ function OrderDetail() {
                         {goodsData.map((element, index) => (
                             <div key={index} onClick={() => window.location.href = `/mdshop/${goodsData[index].goodsNo}`}>
                                 <div className="order_info_content_goods_img">
-                                    <img src={`/file-system/download/${element.imageIdList[0]}`}/>
+                                    <img src={`${apiNoAccessClient.defaults.baseURL}/file-system/download/${element.imageIdList[0]}`}/>
                                 </div>
                                 <div className="order_info_content_goods_detail">
                                     <span className="goods_name"><b>{element.name}</b></span>

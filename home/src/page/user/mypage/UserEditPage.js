@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../../js/public/axiosConfig';
 import '../../../css/user/mypage/UserEditPage.css';
+import apiClient from '../../../js/public/axiosConfig';
+import apiNoAccessClient from '../../../js/public/axiosConfigNoAccess';
 
 export default function UserEditPage() {
   const [form, setForm] = useState({
@@ -76,11 +78,11 @@ export default function UserEditPage() {
     const fd = new FormData();
     fd.append('files', file);
     try {
-      const res = await axios.post('/file-system/upload', fd, {
+      const res = await apiClient.post('/file-system/upload', fd, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       const imageId = res.data[0].imageId;
-      const imageUrl = `${res.config.baseURL}/file-system/download/${imageId}`;
+      const imageUrl = `${apiNoAccessClient.defaults.baseURL}/file-system/download/${imageId}`;
       setForm(prev => ({ ...prev, profileImageUrl: imageUrl }));
     } catch {
       setError('프로필 이미지를 업로드하는 중 오류가 발생했습니다.');
