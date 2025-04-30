@@ -122,8 +122,6 @@ function InquiryReplyView() {
             <div style={{display:'flex', justifyContent: 'space-between'}}>
                 <h2>{inquiryVO.subject}</h2>
                 {
-                    
-                    
                         <div>
                             <label htmlFor="inquiryStatus" style={{ margin: '0 5px 5px 0' }}>상태:</label>
                             <select
@@ -141,7 +139,6 @@ function InquiryReplyView() {
                                 <option value="CLOSED">처리 완료</option>
                             </select>
                         </div>
-                    
                 }
             </div>
 

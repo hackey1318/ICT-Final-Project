@@ -80,25 +80,42 @@
     height: 280px;
 }
 
-.mdSales_chart {
-    /* overflow-y: scroll; */
-}
-
 .mdSales_content > div {
     display: flex;
     justify-content: space-between;
 }
 
-.mdSales_content > div > div {
-    flex: 1;
-}
-
-.mdSales_element {
+.mdSales_content > div {
     border-top: 1px solid #ddd;
 }
 
-.mdSales_element > div {
+.mdSales_content > div > div {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
+
+.mdSales_content_byName, .mdSales_content_byType, .mdSales_content_byGender, .mdSales_content_byDate {
+    display: flex;
+}
+
+.mdSales_content_byName > div:nth-child(1) { flex: 3; }
+.mdSales_content_byName > div:nth-child(2) { flex: 1; }
+.mdSales_content_byName > div:nth-child(3) { flex: 1.5; }
+.mdSales_content_byName > div:nth-child(4) { flex: 1.5; }
+.mdSales_content_byName > div:nth-child(5) { flex: 1; }
+.mdSales_content_byName > div:nth-child(6) { flex: 1; }
+
+.mdSales_content_byType > div:nth-child(1) { flex: 1; }
+.mdSales_content_byType > div:nth-child(2) { flex: 1; }
+.mdSales_content_byType > div:nth-child(3) { flex: 1.5; }
+.mdSales_content_byType > div:nth-child(4) { flex: 1; }
+.mdSales_content_byType > div:nth-child(5) { flex: 1; }
+
+.mdSales_content_byGender > div:nth-child(1) { flex: 1.5; }
+.mdSales_content_byGender > div:nth-child(2) { flex: 1; }
+.mdSales_content_byGender > div:nth-child(3) { flex: 1; }
+
+.mdSales_content_byDate > div:nth-child(1) { flex: 1; }
+.mdSales_content_byDate > div:nth-child(2) { flex: 1; }
+.mdSales_content_byDate > div:nth-child(3) { flex: 1; }

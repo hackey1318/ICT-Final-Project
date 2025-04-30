@@ -63,6 +63,7 @@ public class SecurityConfig {
                 mvc.pattern("/movies/**"),
                 mvc.pattern("/md-shop/lists/**"),
                 mvc.pattern("/md-shop/movies/**"),
+                mvc.pattern("/goods/{goodsId}/reviews"),
                 mvc.pattern("/file-system/upload/register-image"),
                 mvc.pattern("/swagger-ui/index.html"),
                 mvc.pattern("/dashboard/**"),

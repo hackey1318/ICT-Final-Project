@@ -81,7 +81,7 @@ function CurrentMovie() {
                 </div>
 
                 {/* 페이지네이션 (일반적인 배치를 위해 영화 목록 위로 이동) */}
-                <div className="d-flex justify-content-center mb-4"> {/* 페이지네이션 중앙 정렬 */}
+                <div className="d-flex justify-content-end mb-4"> {/* 페이지네이션 중앙 정렬 */}
                    { totalPages > 1 && ( // 페이지가 1개 이상일 때만 페이지네이션 표시
                      <MoviePagination
                         page={page}

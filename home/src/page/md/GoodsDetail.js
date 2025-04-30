@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import GoodsInfo from "./GoodsInfo";
-import { useParams } from "react-router-dom"; // Outlet & Link import
+import { useParams } from "react-router-dom";
 import arrow from '../../img/arrow.png';
 import RelatedMovie from "../movie/RelatedMovie";
 import LikeType from "../../js/common/LikeType";
@@ -11,34 +11,31 @@ import GoodsReviewWriteModal from "./GoodsReviewWriteModal";
 import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 import apiClient from "../../js/public/axiosConfig";
 
-const accessToken = sessionStorage.getItem("accessToken");
-
 const getUserNoFromToken = () => {
-	const token = sessionStorage.getItem('accessToken');
-	if (!token) return null;
-	try {
-		const [, payload] = token.split('.');
-		const { userNo } = JSON.parse(atob(payload));
-		return userNo;
-	} catch {
-		return null;
-	}
+  const token = sessionStorage.getItem('accessToken');
+  if (!token) return null;
+  try {
+    const [, payload] = token.split('.');
+    return JSON.parse(atob(payload)).userNo;
+  } catch {
+    return null;
+  }
 };
 
 const GoodsDetail = () => {
-	const { goodsNo } = useParams();
-	const userNo = getUserNoFromToken();
-	const [product, setProduct] = useState(null);
-	const [movieId, setMovieId] = useState(null);
-	const [loading, setLoading] = useState(true);
-	const [liked, setLiked] = useState(false);
-	const [likeId, setLikeId] = useState(null);
-	const [showReviews, setShowReviews] = useState(false);
-	const [writeModalOpen, setWriteModalOpen] = useState(false);
-	const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
-	const [editingReview, setEditingReview] = useState(null);
-	const [reviews, setReviews] = useState([]);
-	const reviewsRef = useRef(null);
+  const { goodsNo } = useParams();
+  const userNo = getUserNoFromToken();
+  const [product, setProduct] = useState(null);
+  const [movieId, setMovieId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [liked, setLiked] = useState(false);
+  const [likeId, setLikeId] = useState(null);
+  const [showReviews, setShowReviews] = useState(false);
+  const [writeModalOpen, setWriteModalOpen] = useState(false);
+  const [reviewRefreshKey, setReviewRefreshKey] = useState(0);
+  const [editingReview, setEditingReview] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const reviewsRef = useRef(null);
 
 	const fetchReviews = async () => {
 		try {
@@ -94,12 +91,10 @@ const GoodsDetail = () => {
 			}
 		};
 
-		fetchData();
-		fetchLikeStatus();
-		if (showReviews) {
-			fetchReviews();
-		}
-	}, [goodsNo, showReviews]);
+    fetchData();
+    fetchLikeStatus();
+    if (showReviews) fetchReviews();
+  }, [goodsNo, showReviews]);
 
 	const toggleLike = async () => {
 		try {
@@ -114,121 +109,119 @@ const GoodsDetail = () => {
 		}
 	};
 
-	const handleCopyUrl = () => {
-		navigator.clipboard
-			.writeText(window.location.href)
-			.then(() => alert('링크가 클립보드에 복사되었습니다!'))
-			.catch(err => console.error('클립보드 복사 실패:', err));
-	};
+  const handleCopyUrl = () => {
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => alert('링크가 클립보드에 복사되었습니다!'))
+      .catch(err => console.error('클립보드 복사 실패:', err));
+  };
 
-	if (loading) {
-		return (
-			<div className="container mt-5 text-center">
-				<div className="spinner-border" role="status">
-					<span className="visually-hidden">Loading...</span>
-				</div>
-			</div>
-		);
-	}
+  if (loading) {
+    return (
+      <div className="container mt-5 text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
-	return (
-		<>
-			<div className="container mt-4">
-				{/* 뒤로가기 및 액션 버튼 */}
-				<button onClick={() => window.history.back()} className="back-button">
-					<img
-						src={arrow}
-						alt="Back Arrow"
-						style={{ width: '20px', height: '20px', objectFit: 'contain' }}
-					/>
-				</button>
-				<div className="d-flex justify-content-between align-items-center mb-4">
-					<h2>상세 페이지</h2>
-					<div onClick={toggleLike} style={{ cursor: 'pointer' }}>
-						<Heart
-							className="movie_detail_icon"
-							color={liked ? 'red' : 'gray'}
-							fill={liked ? 'red' : 'none'}
-						/>
-						<Share
-							className="movie_detail_icon ms-2"
-							onClick={handleCopyUrl}
-						/>
-					</div>
-				</div>
+  return (
+    <>
+      <div className="container mt-4">
+        {/* 뒤로가기 및 액션 버튼 */}
+        <button onClick={() => window.history.back()} className="back-button">
+          <img
+            src={arrow}
+            alt="Back Arrow"
+            style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+          />
+        </button>
 
-				{product && <GoodsInfo goods={product} />}
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2>상세 페이지</h2>
+          <div style={{ cursor: 'pointer' }}>
+            <Heart
+              className="movie_detail_icon"
+              color={liked ? 'red' : 'gray'}
+              fill={liked ? 'red' : 'none'}
+              onClick={toggleLike}
+            />
+            <Share
+              className="movie_detail_icon ms-2"
+              onClick={handleCopyUrl}
+            />
+          </div>
+        </div>
 
-				{/* 리뷰 토글 버튼 */}
-				<div className="mt-4">
-					<h4 className="fw-bold mb-3 mt-5">Related Movie</h4>
-				</div>
+        {product && <GoodsInfo goods={product} />}
 
-				{/* 제품 상세 정보 */}
-				<div className="row mt-1">
-					<div className="col-3">
-						{movieId && <RelatedMovie movieId={movieId} />}
-					</div>
-				</div>
-				
-			    <div className="d-flex align-items-center justify-content-between mt-4 mb-3">
-				    <h4 className="fw-bold mb-0">Goods Reviews</h4>
+        <div className="mt-4">
+          <h4 className="fw-bold mb-3 mt-5">Related Movie</h4>
+        </div>
+        <div className="row mt-1">
+          <div className="col-3">
+            {movieId && <RelatedMovie movieId={movieId} />}
+          </div>
+        </div>
 
-				    <div className="review-buttons d-flex">
-				      <button
-				        className="btn btn-primary me-2"
-				        onClick={() => setShowReviews(v => !v)}
-				        style={{ width: '100px' }}
-				      >
-				        {showReviews ? '리뷰 닫기' : '리뷰 보기'}
-				      </button>
+        {/* 리뷰 섹션 헤더 */}
+        <div className="d-flex align-items-center justify-content-between mt-4 mb-3">
+          <h4 className="fw-bold mb-0">Goods Reviews</h4>
+          <div className="review-buttons d-flex">
+            <button
+              className="btn btn-primary me-2"
+              onClick={() => setShowReviews(v => !v)}
+              style={{ width: '100px' }}
+            >
+              {showReviews ? '리뷰 닫기' : '리뷰 보기'}
+            </button>
+            <button
+              className="btn btn-outline-secondary"
+              onClick={() => {
+                setEditingReview(null);
+                setWriteModalOpen(true);
+              }}
+            >
+              리뷰 작성
+            </button>
+          </div>
+        </div>
 
-				      <button
-				        className="btn btn-outline-secondary"
-				        onClick={() => {
-				          setEditingReview(null);
-				          setWriteModalOpen(true);
-				        }}
-				      >
-				        리뷰 작성
-				      </button>
-				    </div>
-				  </div>
-					{/* 리뷰 리스트 렌더링 */}
-					{showReviews && (
-						<>
-							<div ref={reviewsRef} className="mt-3">
-								
-								<GoodsReviewList
-									goodsId={goodsNo}
-									refreshKey={reviewRefreshKey}
-									onReviewsLoad={setReviews}
-									onSelectReview={(review) => {
-										setEditingReview(review);
-										setWriteModalOpen(true);
-									}}
-								/>
-							</div>
-						<GoodsReviewWriteModal
-							goodsId={goodsNo}
-							userNo={userNo}
-							review={editingReview}
-							isOpen={writeModalOpen}
-							onClose={() => {
-								setWriteModalOpen(false);
-								setEditingReview(null);
-							}}
-							onSubmitSuccess={() => {
-								setWriteModalOpen(false);
-								setEditingReview(null);
-								setReviewRefreshKey(k => k + 1);
-							}}
-						/>
-					</>
-				)}
-			</div>
-		</>
-	);
+        {/* 리뷰 리스트 (토글) */}
+        {showReviews && (
+          <div ref={reviewsRef} className="mt-3">
+            <GoodsReviewList
+              goodsId={goodsNo}
+              refreshKey={reviewRefreshKey}
+              onReviewsLoad={setReviews}
+              onSelectReview={review => {
+                setEditingReview(review);
+                setWriteModalOpen(true);
+              }}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* 리뷰 작성 모달 (항상 렌더, 열림 여부만 isOpen으로 제어) */}
+      <GoodsReviewWriteModal
+        goodsId={goodsNo}
+        userNo={userNo}
+        review={editingReview}
+        isOpen={writeModalOpen}
+        onClose={() => {
+          setWriteModalOpen(false);
+          setEditingReview(null);
+        }}
+        onSubmitSuccess={() => {
+          setWriteModalOpen(false);
+          setEditingReview(null);
+          setReviewRefreshKey(k => k + 1);
+        }}
+      />
+    </>
+  );
 };
 
 export default GoodsDetail;
