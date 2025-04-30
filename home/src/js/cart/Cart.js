@@ -61,7 +61,7 @@ function Cart() {
 
                 const updateGoods = goodsResponse.data.map(item => ({
                     ...item,
-                    quantity: item.quantity,
+                    quantity: item.goodsQuantity === 0 ? 0 : item.quantity,
                     selected: item.quantity !== 0
                 }));
                 setGoods(updateGoods);
@@ -75,6 +75,7 @@ function Cart() {
         updateCheckBox();
         updateButton();
         goodsRef.current = goods;
+        console.log(goodsRef);
     }, [goods]);
 
     const selectGoods = (e) => {
@@ -108,6 +109,10 @@ function Cart() {
     const updateButton = () => {
         let selectedAllChecked = true;
         goods.forEach((item) => {
+            if (item.quantity === 0) {
+                return;
+            }
+
             if (!item.selected) {
                 selectedAllChecked = false;
                 setIsAllSelected(selectedAllChecked);
@@ -218,10 +223,17 @@ function Cart() {
             }
         })
             .then((response) => {
-                setPaymentModalOpen(true);
-                if (response.data !== "success") {
+
+                if (response.data !== "success" && response.data !== "fail") { // 기존 주문번호 존재할 경우
                     setOrderNumber(response.data);
                 }
+
+                if (response.data === "fail") {
+                    alert("상품 정보 오류");
+                    return;
+                }
+
+                setPaymentModalOpen(true);
             })
             .catch(() => {
                 alert("상품 정보 오류");
