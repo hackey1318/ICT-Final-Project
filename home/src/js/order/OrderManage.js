@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./../../css/order/OrderManage.css";
+import apiClient from './../public/axiosConfig';
 
 function OrderManage() {
 
@@ -20,16 +21,12 @@ function OrderManage() {
     };
 
     const getOrderList = () => {
-        const accessToken = sessionStorage.getItem("accessToken");
-        axios.post("http://localhost:9988/order/orderManage", {}, {
+        apiClient.post("/order/orderManage", {}, {
             params: {
                 page: currentPage,
                 size: pageSize,
                 state: state
             },
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
         })
             .then(response => {
                 setTotalPages(response.data.totalPages);
