@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import apiClient from "../public/axiosConfig";
+import '../../css/inquiry/inquiry.css';
 
 function InquiryComment() {
     const [isLoading, setIsLoading] = useState(false);
