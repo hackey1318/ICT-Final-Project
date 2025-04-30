@@ -1,47 +1,51 @@
-import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import "../../css/user/navbar.css"
-import logo from "../../img/cinetogether.png"
-import NotificationSystem from "./notification/NotificationSystem"
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../../css/user/navbar.css";
+import logo from "../../img/cinetogether.png";
+import NotificationSystem from "./notification/NotificationSystem";
 
 export default function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [userInfo, setUserInfo] = useState(null)
-  const [isMobile, setIsMobile] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [active, setActive] = useState(null) // "movies" | "customer" | null
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState(null); // "movies" | "customer" | null
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = sessionStorage.getItem("accessToken")
+    const token = sessionStorage.getItem("accessToken");
     if (token) {
-      setIsLoggedIn(true)
+      setIsLoggedIn(true);
       try {
-        setUserInfo(JSON.parse(sessionStorage.getItem("userInfo")))
-      } catch { }
+        setUserInfo(JSON.parse(sessionStorage.getItem("userInfo")));
+      } catch {}
     }
-    const onResize = () => setIsMobile(window.innerWidth <= 990)
-    onResize()
-    window.addEventListener("resize", onResize)
-    return () => window.removeEventListener("resize", onResize)
-  }, [])
+    const onResize = () => setIsMobile(window.innerWidth <= 990);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const toggleMenu = () => {
     if (isMobile) {
-      setMenuOpen(v => !v)
-      if (menuOpen) setActive(null)
+      setMenuOpen(v => !v);
+      if (menuOpen) setActive(null);
     }
-  }
-  const openDropdown = name => !isMobile && setActive(name)
-  const closeDropdown = () => !isMobile && setActive(null)
+  };
+
+  const openDropdown = name => !isMobile && setActive(name);
+  const closeDropdown = () => !isMobile && setActive(null);
   const clickDropdown = name =>
-    isMobile && setActive(a => (a === name ? null : name))
+    isMobile && setActive(a => (a === name ? null : name));
 
   const logout = () => {
-    sessionStorage.clear()
-    setIsLoggedIn(false)
-    setUserInfo(null)
-    window.location.href = "/"
-  }
+    sessionStorage.clear();
+    setIsLoggedIn(false);
+    setUserInfo(null);
+    // Replace history entry so back button won't return to protected pages
+    navigate("/", { replace: true });
+  };
 
   return (
     <nav className="navbar">
@@ -122,13 +126,11 @@ export default function Navbar() {
           ) : (
             <div className="navbar-auth">
               <Link to="/login" className="navbar-btn">로그인</Link>
-              <Link to="/register" className="navbar-btn navbar-btn--primary">
-                회원가입
-              </Link>
+              <Link to="/register" className="navbar-btn navbar-btn--primary">회원가입</Link>
             </div>
           )}
         </div>
       </div>
     </nav>
-  )
+  );
 }

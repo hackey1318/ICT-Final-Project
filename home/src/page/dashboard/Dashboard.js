@@ -75,7 +75,7 @@ function Dashboard() {
                 <div className="col-md-6 mb-3 d-flex flex-column " style={{ height: "350px" }}>
                     <div className="p-2" style={{ flex: 1, overflowY: "auto"}}>
                         <div style={{ position: "sticky", top: -10, backgroundColor: "white", zIndex: 10 }}>
-                            <a href="" className="dashboard-link">
+                            <a href="home/mdsales" className="dashboard-link">
                                 <h5>상품별 판매액 {'>'}</h5>
                             </a>
                         </div>
@@ -86,8 +86,8 @@ function Dashboard() {
                 </div>
                 <div className="col-md-6 mb-3 d-flex flex-column" style={{ height: "100%" }}>
                     <div className="p-2" style={{ flex: 1 }}>
-                        <a href="" className="dashboard-link"><h5>상품별 좋아요 {'>'}</h5></a>
-                        <LikeChart labels={goodsLikeData.labels} data={goodsLikeData.data} chartId="goodsLikeChart" style={{ height: "300px" }}/>
+                        <a href="home/goods-like" className="dashboard-link"><h5>상품별 좋아요 {'>'}</h5></a>
+                        <LikeChart labels={goodsLikeData.labels} data={goodsLikeData.data} chartId="goodsLikeChart" style={{ height: "300px" }} />
                     </div>
                 </div>
             </div>
@@ -95,8 +95,8 @@ function Dashboard() {
             <div className="row" style={{ height: "50%" }}>
                 <div className="col-md-4 mb-3 d-flex flex-column" style={{ height: "100%" }}>
                     <div className="p-2" style={{ flex: 1 }}>
-                        <a href="" className="dashboard-link"><h5>영화 장르별 좋아요 {'>'}</h5></a>
-                        <LikeChart labels={movieLikeData.labels} data={movieLikeData.data} chartId="movieLikeChart"  style={{ height: "300px" }}/>
+                        <a href="home/movie-like" className="dashboard-link"><h5>영화 장르별 좋아요 {'>'}</h5></a>
+                        <LikeChart labels={movieLikeData.labels} data={movieLikeData.data} chartId="movieLikeChart" style={{ height: "300px" }} />
                     </div>
                 </div>
                 <div className="col-md-4 mb-3 d-flex flex-column" style={{ height: "100%" }}>

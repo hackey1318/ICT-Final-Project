@@ -111,7 +111,7 @@ function UserDau() {
                     </div>
 
                     {/* 페이징 */}
-                    <div className="paging-container">
+                    <div className="dau-paging-container">
                         {page > 0 && (
                             <button className="page-buttons" onClick={() => handlePageChange(page - 1)}>
                                 이전

@@ -2,6 +2,7 @@ package com.ict.finalProject.orders.controller;
 
 import com.ict.finalProject.common.config.JwtTokenProvider;
 import com.ict.finalProject.domain.constant.OrdersStatus;
+import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
 import com.ict.finalProject.mdShop.repository.domain.GoodsStocks;
 import com.ict.finalProject.mdShop.service.MdShopService;
@@ -172,9 +173,7 @@ public class OrderController {
             userId = jwtTokenProvider.getUserNameFromToken(jwtToken);
         }
 
-//        int userNo = userService.getUser(AuthCheck.getUserId(UserRole.USER, UserRole.ADMIN)).getNo();
         Users users = userService.getUser(userId);
-        System.out.println(users);
         if (users == null) {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("message", "일치하는 회원이 없습니다.");
@@ -184,10 +183,19 @@ public class OrderController {
         }
         try {
             OrdersDto ordersDto = ordersService.getOrdersDtoByOrderNumber(orderNumber);
+
+            if (ordersDto.getUserNo() != users.getNo() && users.getRole() != UserRole.ADMIN) {
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("message", "주문한 회원이 아닙니다.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonObj);
+            }
+
+            Users orderUsers = userService.getUser(ordersDto.getUserNo());
+
             List<OrderItemDto> orderItemDto = orderItemService.getOrderItems(ordersDto.getId());
             PaymentsDto paymentsDto = paymentsService.getPaymentsDtoByOrderNo(ordersDto.getId());
-            String nickName = users.getNickname();
-            String email = users.getEmail();
+            String nickName = orderUsers.getNickname();
+            String email = orderUsers.getEmail();
             String theater = theatersService.getTheaterName(ordersDto.getTheaterNo());
             JSONObject obj = new JSONObject();
             obj.put("orders", ordersDto);
@@ -196,7 +204,6 @@ public class OrderController {
             obj.put("nickName", nickName);
             obj.put("email", email);
             obj.put("theater", theater);
-
 
             return ResponseEntity.status(HttpStatus.OK).body(obj);
         } catch (Exception e) {

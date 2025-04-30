@@ -61,6 +61,12 @@
     height: 130px;
 }
 
+.orderManage_element {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .orderManage_element.paid {
     border-color: green;
     background-color: #f0fff0;

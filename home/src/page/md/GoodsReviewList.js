@@ -99,34 +99,48 @@ export default function GoodsReviewList({ goodsId, refreshKey, onReviewsLoad, on
 
   return (
     <>
-      <div className="GoodsReviewList_review-header-top">
-        <div className="GoodsReviewList_page-controls">
-          <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>이전</button>
-          <span>{currentPage} / {totalPages || 1}</span>
-          <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>다음</button>
+      {/* 리뷰가 없으면 메시지, 있으면 페이징 + 리스트 */}
+      {reviews.length === 0 ? (
+        <div className="GoodsReviewList_no-reviews" style={{ paddingBottom: '10%' }}>
+          등록된 리뷰가 없습니다.
         </div>
-      </div>
-
-      <div className="GoodsReviewList_goods-review-list">
-        {paginated.map(r => (
-          <div key={r.id} className="GoodsReviewList_review-card">
-            {r.imageUrls.length > 0 && (
-              <Swiper modules={[Navigation, SwiperPagination]} navigation pagination={{ clickable: true }} className="GoodsReviewList_card-swiper">
-                {r.imageUrls.map((url, i) => <SwiperSlide key={i}><img src={url} alt="" className="GoodsReviewList_card-img"/></SwiperSlide>)}
-              </Swiper>
-            )}
-            <div className="GoodsReviewList_card-body">
-              <h4 className="GoodsReviewList_card-title">{r.title} ({r.rating}점)</h4>
-              <p className="GoodsReviewList_card-text">{r.content.length > 60 ? r.content.slice(0, 60) + '…' : r.content}</p>
-            </div>
-            <div className="GoodsReviewList_card-actions">
-              {currentUserNo === r.userNo && <button className="GoodsReviewList_btn-edit" onClick={() => onSelectReview(r)}>수정</button>}
-              {currentUserNo === r.userNo && <button className="GoodsReviewList_btn-delete" onClick={() => handleDeleteReview(r.id)}>삭제</button>}
-              {currentUserNo && <button className="GoodsReviewList_btn-menu" onClick={() => handleOpenReport(r.id)}>⋮</button>}
+      ) : (
+        <>  
+          <div className="GoodsReviewList_review-header-top">
+            <div className="GoodsReviewList_page-controls">
+              <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>
+                이전
+              </button>
+              <span>{currentPage} / {totalPages}</span>
+              <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>
+                다음
+              </button>
             </div>
           </div>
-        ))}
-      </div>
+
+          {/* 리뷰 리스트에 하단 padding 10% 추가 */}
+          <div className="GoodsReviewList_goods-review-list" style={{ paddingBottom: '10%' }}>
+            {paginated.map(r => (
+              <div key={r.id} className="GoodsReviewList_review-card">
+                {r.imageUrls.length > 0 && (
+                  <Swiper modules={[Navigation, SwiperPagination]} navigation pagination={{ clickable: true }} className="GoodsReviewList_card-swiper">
+                    {r.imageUrls.map((url, i) => <SwiperSlide key={i}><img src={url} alt="" className="GoodsReviewList_card-img"/></SwiperSlide>)}
+                  </Swiper>
+                )}
+                <div className="GoodsReviewList_card-body">
+                  <h4 className="GoodsReviewList_card-title">{r.title} ({r.rating}점)</h4>
+                  <p className="GoodsReviewList_card-text">{r.content.length > 60 ? r.content.slice(0, 60) + '…' : r.content}</p>
+                </div>
+                <div className="GoodsReviewList_card-actions">
+                  {currentUserNo === r.userNo && <button className="GoodsReviewList_btn-edit" onClick={() => onSelectReview(r)}>수정</button>}
+                  {currentUserNo === r.userNo && <button className="GoodsReviewList_btn-delete" onClick={() => handleDeleteReview(r.id)}>삭제</button>}
+                  {currentUserNo && <button className="GoodsReviewList_btn-menu" onClick={() => handleOpenReport(r.id)}>⋮</button>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
       {showReportModal && (
         <div className="GoodsReviewList_modal-overlay">
