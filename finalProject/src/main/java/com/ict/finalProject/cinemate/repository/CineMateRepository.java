@@ -60,9 +60,12 @@ public interface CineMateRepository extends JpaRepository<CineMates, Integer> {
             "FROM cine_mates AS c " +
             "LEFT JOIN movies m on c.movie_no = m.no " +
             "LEFT JOIN theaters t on c.theater_no = t.no " +
-            "LEFT JOIN cine_mate_members cm on c.no = cm.cine_mate_no AND cm.status = 'ACTIVE' " +
             "LEFT JOIN users u on u.no = c.user_no " +
-            "WHERE c.user_no= :userNo or cm.user_no= :userNo " +
+            "WHERE c.no IN ( "+
+            "SELECT DISTINCT c2.no " +
+            "FROM cine_mates c2 " +
+            "LEFT JOIN cine_mate_members cm2 ON c2.no = cm2.cine_mate_no AND cm2.status = 'ACTIVE' " +
+            "WHERE c2.user_no = :userNo OR cm2.user_no = :userNo)" +
             "ORDER BY c.meeting_date", nativeQuery=true)
     Page<Object[]> getMyCineMate(Integer userNo, Pageable pageable);
 }
