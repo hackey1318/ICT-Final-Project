@@ -51,8 +51,19 @@ export default function MovieRoom() {
     const handleCloseJoinedModal = () => setShowJoinedModal(false);
 
     const handleJoin = async () => {
-        await apiClient.post(`/cinemate/movies/${movieNo}/room/${no}`, {}, );
-        setIsJoined(true);
+        //최대 인원수 체크
+        if(participantCount  >= (movie ? movie.maxMemberCount : theater.maxMemberCount)){
+            alert("최대 인원수 초과입니다.");
+            return;
+        }
+
+        try{
+            await apiClient.post(`/cinemate/movies/${movieNo}/room/${no}`, {}, );
+            setIsJoined(true);
+            fetctParticipantCount();
+        }catch(error){
+            alert("참여 중 오류 발생");
+        }
     };
 
     const handleCancel = async () => {
