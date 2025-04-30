@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./../../css/order/OrderManage.css";
+import { useNavigate } from 'react-router-dom';
 
 function OrderManage() {
 
@@ -51,6 +52,13 @@ function OrderManage() {
             });
     }
 
+    const navigate = useNavigate();
+
+    const navigateOrderDetail = (orderNumber) => {
+        // navigate로 이동
+        navigate(`/mypage/order/detail?orderNumber=${orderNumber}`);
+      };
+
     return (
         <div className="orderManage_wrapper">
             <div className="orderManage_container">
@@ -70,7 +78,7 @@ function OrderManage() {
                         }[order.ordersStatus] || "기타 상태";
 
                         return (
-                            <div className={`orderManage_element ${order.ordersStatus === 'PAID' ? 'paid' : order.ordersStatus === 'CANCELLED' ? 'cancelled' : ''}`}>
+                            <div className={`orderManage_element ${order.ordersStatus === 'PAID' ? 'paid' : order.ordersStatus === 'CANCELLED' ? 'cancelled' : ''}`} onClick={() => navigateOrderDetail(`${order.orderNumber}`)}>
                                 <div style={{ marginTop: '5px', marginLeft: '8px' }}>
                                     <b>닉네임</b>: {order.userNickName}
                                     <br />
