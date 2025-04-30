@@ -3,6 +3,8 @@ import axios from "axios";
 
 export default function ChatBox({ movieNo, roomNo }) {
     const accessToken = sessionStorage.getItem("accessToken");
+    const userInfo = JSON.parse(sessionStorage.getItem("userInfo") || "{}");
+    const myUserNo = userInfo.userNo;
     const [chats, setChats] = useState([]);
     const [newMessage, setNewMessage] = useState('');
 
@@ -49,17 +51,21 @@ export default function ChatBox({ movieNo, roomNo }) {
                 {chats.length === 0 ? (
                     <div className="text-muted">채팅이 없습니다.</div>
                 ) : (
-                    chats.map((msg, index) => (
-                        <div key={index} className="chat-message">
-                            <span className="sender">{msg.nickName}</span>
-                            <div className={`message ${msg.nickName === '내 이름' ? 'me' : ''}`}>
-                                {msg.message}
+                    chats.map((msg, index) => {
+                        
+                        const isMine = msg.senderNo === myUserNo;
+                        return (
+                            <div key={index} className={`chat-message d-flex ${isMine ? 'justify-content-end' : 'justify-content-start'}`}>
+                                <div className={`message-box ${isMine ? 'my-message' : 'other-message'}`}>
+                                    <span className="sender">{msg.nickName}</span>
+                                    <div className="message-text">{msg.message}</div>
+                                    <div className="timestamp">
+                                        {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </div>
+                                </div>
                             </div>
-                            <span className="timestamp">
-                                {new Date(msg.createdAt).toLocaleString()}
-                            </span>
-                        </div>
-                    ))
+                        );
+                    })
                 )}
             </div>
 

@@ -27,6 +27,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -143,49 +144,55 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     public List<LikeStatisticsResponse> getLikeStatistics(LikeType type) {
-
         List<Integer> likeList = likesRepository.findByTypeAndStatus(type, StatusInfo.ACTIVE);
 
-        // 영화일 경우와 굿즈일 경우를 구분하여 처리
         Map<String, Integer> likeMap = new HashMap<>();
 
-        // 영화인 경우 (예: targetNo가 영화일 경우)
         if (LikeType.MOVIE.equals(type)) {
-
             List<Movies> movieList = moviesRepository.findAllById(likeList);
             for (Movies movie : movieList) {
                 String genreInfo = movie.getGenre();
-                if (!"정보 없음".equals(genreInfo)) { // "정보 없음"은 제외
+                if (!"정보 없음".equals(genreInfo)) {
                     String[] genres = genreInfo.split(",");
                     for (String genre : genres) {
-                        genre = genre.trim(); // 각 장르 앞뒤 공백 제거
-                        likeMap.put(genre, likeMap.getOrDefault(genre, 0) + 1); // 각 장르별로 카운트 증가
+                        genre = genre.trim();
+                        likeMap.put(genre, likeMap.getOrDefault(genre, 0) + 1);
                     }
                 }
             }
-        }
-        // 굿즈인 경우 (예: targetNo가 굿즈일 경우)
-        else if (LikeType.GOODS.equals(type)) {
+        } else if (LikeType.GOODS.equals(type)) {
+
+            Map<Integer, Integer> likeCountMap = new HashMap<>();
+            for (Integer likeTarget : likeList) {
+                likeCountMap.put(likeTarget, likeCountMap.getOrDefault(likeTarget, 0) + 1);
+            }
 
             List<Goods> goodsList = mdShopRepository.findByIdIn(likeList);
+
+            // ID 기반으로 중복 방지한 후, name을 기준으로 결과 생성
+            Map<Integer, String> idNameMap = new HashMap<>();
             for (Goods goods : goodsList) {
-                // 좋아요 수 카운트 증가
-                likeMap.put(goods.getName(), likeMap.getOrDefault(goods.getName(), 0) + 1);
+                Integer id = goods.getId();
+                idNameMap.putIfAbsent(id, goods.getName());
+            }
+
+            // ID → name 변환
+            for (Map.Entry<Integer, Integer> entry : likeCountMap.entrySet()) {
+                String name = idNameMap.get(entry.getKey());
+                if (name != null) {
+                    likeMap.put(name, entry.getValue());
+                }
             }
         }
-        List<Map.Entry<String, Integer>> sortedEntries = new ArrayList<>(likeMap.entrySet());
-        sortedEntries.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue())); // 내림차순 정렬
 
-        // 상위 5개 항목만 추출
-        List<LikeStatisticsResponse> likeStatisticsResponses = new ArrayList<>();
-        int limit = Math.min(5, sortedEntries.size()); // 5개 이하일 경우에도 처리
-        for (int i = 0; i < limit; i++) {
-            Map.Entry<String, Integer> entry = sortedEntries.get(i);
-            likeStatisticsResponses.add(new LikeStatisticsResponse(entry.getKey(), entry.getValue()));  // CustomClass 객체 생성 후 리스트에 추가
-        }
-
-        return likeStatisticsResponses;
+        // 공통 로직: 정렬 + 상위 5개 추출
+        return likeMap.entrySet().stream()
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                .limit(5)
+                .map(e -> new LikeStatisticsResponse(e.getKey(), e.getValue()))
+                .collect(Collectors.toList());
     }
+
 
     private boolean checkLikeItem(LikeType type, Integer targetNo) {
         switch (type) {

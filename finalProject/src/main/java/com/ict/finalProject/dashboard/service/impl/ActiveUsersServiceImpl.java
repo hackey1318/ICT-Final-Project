@@ -12,6 +12,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,10 +28,29 @@ public class ActiveUsersServiceImpl implements ActiveUsersService {
     @Async
     public void saveActivateLog(Users users, String ip, Activity activity) {
 
+        int userNo = (users != null ? users.getNo() : 0);
+
+// 만약 로그인 활동이라면, 오늘 기록 여부 확인
+        if (Activity.LOGIN.equals(activity)) {
+            LocalDate today = LocalDate.now();
+            LocalDateTime startOfDay = today.atStartOfDay();
+            LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
+
+            boolean alreadyLogged = activeUsersRepository.existsByUserNoAndActivityAndCreatedAtBetween(
+                    userNo, Activity.LOGIN, startOfDay, endOfDay
+            );
+
+            if (alreadyLogged) {
+                return; // 이미 오늘 로그인 기록이 있으면 저장하지 않음
+            }
+        }
+
+        // 기록 저장
         activeUsersRepository.save(ActiveUsers.builder()
-                .userNo((users != null ? users.getNo() : 0))
-                .ip(ip)
-                .activity(activity).build());
+                        .userNo(userNo)
+                        .ip(ip)
+                        .activity(activity).build()
+        );
     }
 
     //일별 활동인원수

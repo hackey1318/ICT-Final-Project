@@ -126,6 +126,10 @@ export default function MovieRoom() {
                 )}
             </div>
 
+            <div className="mb-3">
+                <img src={movie.postImage} alt="Movie Poster" className="img-fluid" style={{ maxWidth: "300px", borderRadius: "8px" }} />
+            </div>
+
             <div className="mb-4" style={{ background: "#f8f9fa", padding: "15px", borderRadius: "8px" }}>
                 <strong>{movie? movie.content : theater.content}</strong>
             </div>
