@@ -1,5 +1,6 @@
 package com.ict.finalProject.report.service.impl;
 
+import com.ict.finalProject.common.exception.custom.NotFoundException;
 import com.ict.finalProject.domain.constant.ReportBoard;
 import com.ict.finalProject.domain.constant.ReportStatus;
 import com.ict.finalProject.domain.constant.StatusInfo;
@@ -10,7 +11,9 @@ import com.ict.finalProject.report.controller.response.ReporterResponse;
 import com.ict.finalProject.report.repository.ReportRepository;
 import com.ict.finalProject.report.repository.domain.Report;
 import com.ict.finalProject.report.service.ReportService;
+import com.ict.finalProject.review.repository.GoodsReviewRepository;
 import com.ict.finalProject.review.repository.MovieReviewRepository;
+import com.ict.finalProject.review.repository.domain.GoodsReview;
 import com.ict.finalProject.review.repository.domain.MovieReview;
 import com.ict.finalProject.user.repository.FindUserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -36,6 +39,7 @@ public class ReportServiceImpl implements ReportService {
     private final ReportRepository reportRepository;
     private final FindUserRepository findUserRepository;
     private final MovieReviewRepository movieReviewRepository;
+    private final GoodsReviewRepository goodsReviewRepository;
     private final BlacklistEmailServiceImpl emailService;
 
     //신고하기
@@ -174,12 +178,12 @@ public class ReportServiceImpl implements ReportService {
         try {
             Report report = reportRepository.findById(no)
                     .orElseThrow(() -> new IllegalArgumentException("신고를 찾을 수 없습니다."));
-            
+
             log.info("신고 처리 시작 - 신고번호: {}, 승인여부: {}", no, isAccepted);
 
             Users reportedUser = findUserRepository.findById(report.getTargetNo())
                     .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-            
+
             log.info("신고 대상 사용자 정보 - 사용자번호: {}, 현재상태: {}", reportedUser.getNo(), reportedUser.getStatus());
 
             LocalDateTime now = LocalDateTime.now();
@@ -252,20 +256,16 @@ public class ReportServiceImpl implements ReportService {
 
     private Integer findTargetUserId(ReportBoard type, int boardNo) {
         log.debug("신고 대상 사용자 ID 조회 시작: type={}, contentId={}", type, boardNo);
-        Optional<Integer> targetUserIdOpt = Optional.empty();
-
+        Integer targetNo = null;
         try {
             if (type == ReportBoard.MOVIEREVIEW) {
                 log.debug("ID {} 에 해당하는 영화 리뷰 작성자 ID 조회 시작", boardNo);
-                targetUserIdOpt = movieReviewRepository.findById(boardNo)
-                        .map(MovieReview::getUserNo);
-                if (!targetUserIdOpt.isPresent()) {
-                    log.warn("ID {}에 해당하는 영화 리뷰를 찾을 수 없습니다.", boardNo);
-                } else {
-                    log.debug("ID {} 영화 리뷰 작성자 ID 조회 성공: {}", boardNo, targetUserIdOpt.get());
-                }
+                MovieReview movieReview = movieReviewRepository.findById(boardNo).orElseThrow(() -> new NotFoundException("영화 리뷰를 찾을 수 없습니다."));
+                targetNo = movieReview.getUserNo();
             } else if (type == ReportBoard.GOODSREVIEW) {
-                log.warn("GOODSREVIEW 타입에 대한 findTargetUserId 로직 구현 필요!");
+                log.debug("ID {} 에 해당하는 굿즈 리뷰 작성자 ID 조회 시작", boardNo);
+                GoodsReview goodsReview = goodsReviewRepository.findById(Long.valueOf(boardNo)).orElseThrow(() -> new NotFoundException("굿즈 리뷰를 찾을 수 없습니다."));
+                targetNo = Math.toIntExact(goodsReview.getUserNo());
             } else if (type == ReportBoard.CINEMATE) {
                 log.warn("CINEMATE 타입에 대한 findTargetUserId 로직 구현 필요!");
             } else {
@@ -276,7 +276,7 @@ public class ReportServiceImpl implements ReportService {
             log.error("대상 사용자 ID 조회 중 오류 발생: type={}, id={}", type, boardNo, e);
             return null;
         }
-        return targetUserIdOpt.orElse(null);
+        return targetNo;
     }
 
     private ReportResponse mapToResponseDto(Report report) {

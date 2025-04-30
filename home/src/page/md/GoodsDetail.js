@@ -136,12 +136,14 @@ const GoodsDetail = () => {
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2>상세 페이지</h2>
           <div style={{ cursor: 'pointer' }}>
+          {isLoggedIn && (
             <Heart
               className="movie_detail_icon"
               color={liked ? 'red' : 'gray'}
               fill={liked ? 'red' : 'none'}
               onClick={toggleLike}
             />
+            )}
             <Share
               className="movie_detail_icon ms-2"
               onClick={handleCopyUrl}
