@@ -64,13 +64,24 @@ export default function MovieRoom() {
     const handleCloseJoinedModal = () => setShowJoinedModal(false);
 
     const handleJoin = async () => {
-        await axios.post(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}`, {}, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-        setIsJoined(true);
+        //최대 인원수 체크
+        if(participantCount  >= (movie ? movie.maxMemberCount : theater.maxMemberCount)){
+            alert("최대 인원수 초과입니다.");
+            return;
+        }
+
+        try{
+            await axios.post(`http://localhost:9988/cinemate/movies/${movieNo}/room/${no}`, {}, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            setIsJoined(true);
+            fetctParticipantCount();
+        }catch(error){
+            alert("참여 중 오류 발생");
+        }
     };
 
     const handleCancel = async () => {
