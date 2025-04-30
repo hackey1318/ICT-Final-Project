@@ -219,7 +219,7 @@ function InquiryPage() {
                 </div>
                 <div style={{textAlign: 'right', 
                              minWidth: '850px',
-                             marginTop: (inquiryList.length === 0 || !inquiryList.some(item => item.status === "ACTIVE")) ? '50px' : 0}}>
+                             marginTop: (inquiryList.length === 0 || !inquiryList.some(item => item.status === "ACTIVE")) ? '70px' : 0}}>
                     <button id="write" 
                         title='문의하기' 
                         onClick={handleWriteClick}
