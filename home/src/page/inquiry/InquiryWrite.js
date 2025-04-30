@@ -56,7 +56,7 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
         if (!subject) {
             alert("제목을 입력해주세요.");
             return;
-        } else if(!content) {
+        } else if(!content || content.trim() === '') {
             alert("내용을 입력해주세요.");
             return;
         }        
@@ -95,21 +95,21 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
         }
 
         let formData = new FormData();
-        if(addedImg.length == 0) {
-            window.alert("파일을 첨부해주세요.");
-            return;
-        }
-        addedImg.forEach((img) => {
-            formData.append("files", img);
-        })
+        if(addedImg.length > 0) {
+            addedImg.forEach((img) => {
+                formData.append("files", img);
+            })
 
-        const fileUpload = await apiClient.post("/file-system/upload", formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
+            const fileUpload = await apiClient.post("/file-system/upload", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
     
-        inquiryData.imageList = fileUpload.data.map(item => item.imageId);
+            inquiryData.imageList = fileUpload.data.map(item => item.imageId);
+        } else {
+            inquiryData.imageList = [];
+        }
 
         apiClient.post('/inquiry/inquiryWrite', inquiryData)
             .then(function (response) {

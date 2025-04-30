@@ -179,7 +179,7 @@ function InquiryView() {
                     </div>
                 </>
             }
-            <InquiryComment/>
+            <InquiryComment writerUserNo={inquiryVO.userNo}/>
         </div>
     )
 }
