@@ -8,7 +8,6 @@
   background-color: #f8f9fa;
 }
 
-
 .MypageReview_card1 {
   position: relative;
   background: #000;
@@ -25,7 +24,7 @@
 .MypageReview_card1 img {
   width: 100%;
   aspect-ratio: 16/9;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 /* Navigation icon using Bootstrap Icon */
