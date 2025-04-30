@@ -1,0 +1,72 @@
+.orderManage_wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.orderManage_container {
+    display: flex;
+    width: 75%;
+    flex-direction: column;
+}
+
+.orderManage_stateButtons {
+    margin-left: auto;
+    display: flex;
+    gap: 5px;
+}
+
+.orderManage_stateButtons > button {
+    border: 1px solid #ddd;
+}
+
+#allButton {
+    color: white;
+    background: linear-gradient(to right, #a0a0a0, #5f5f5f);
+}
+
+#paidButton {
+    background: linear-gradient(to right, green, rgb(103, 182, 88));
+    color: white;
+}
+
+#cancelledButton {
+    color: white;
+    background: linear-gradient(to right, #e53935, #b71c1c);
+}
+
+.orderManage_info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    height: 665px;
+    align-items: center;
+}
+
+.orderManage_pageButtons {
+    display: flex;
+    gap: 5px;
+    margin-top: 15px;
+}
+
+.orderManage_pageButtons > button {
+    width: 40px;
+    height: 40px;
+}
+
+.orderManage_element {
+    border: 1px solid #ddd;
+    width: 50vw;
+    min-width: 200px;
+    height: 130px;
+}
+
+.orderManage_element.paid {
+    border-color: green;
+    background-color: #f0fff0;
+  }
+  
+  .orderManage_element.cancelled {
+    border-color: red;
+    background-color: #fff0f0;
+  }

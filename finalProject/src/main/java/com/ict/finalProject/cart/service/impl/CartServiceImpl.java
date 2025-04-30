@@ -25,7 +25,13 @@ public class CartServiceImpl implements CartsService {
     @Override
     public void insertCartGoods(int userNo, int goodsNo, int goodsQuantity) {
         cartsReposity.findByUserNoAndGoodsNoAndStatus(userNo, goodsNo, OrdersStatus.PENDING).ifPresentOrElse(entity -> {
-            entity.setQuantity(entity.getQuantity() + goodsQuantity);
+            int stock = mdShopService.getGoodsStock(entity.getGoodsNo()).getQuantity();
+            if (entity.getQuantity() + goodsQuantity >= stock) {
+                entity.setQuantity(stock);
+            } else {
+                entity.setQuantity(entity.getQuantity() + goodsQuantity);
+            }
+
             cartsReposity.save(entity);
         }, () -> {
             Carts newCarts = new Carts();
