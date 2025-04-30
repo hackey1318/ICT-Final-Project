@@ -12,7 +12,7 @@ const MovieGridItem = ({ movie, onClickItem }) => (
 		<div className="TodayMovies_info">
 			<div className="TodayMovies_rating">
 				{movie.openStatus === 'PENDING'
-					? <div>상영 예정작<br/>{movie.openDate}</div>
+					? <div>상영 예정작<br />{movie.openDate}</div>
 					: `예매율 ★ ${!isNaN(parseFloat(movie.reservationRate))
 						? `${parseFloat(movie.reservationRate).toFixed(2)}%`
 						: 'N/A'}`
@@ -129,13 +129,26 @@ function SectionTodayMovies() {
 						<h2 className="TodayMovies_title">오늘의 영화!</h2>
 						<p className="TodayMovies_subtitle">회원님의 취향을 분석해,<br />추천 영화를 보여드립니다.</p>
 					</div>
-					<div className="TodayMovies_controls">
-						<button
-							className="TodayMovies_toggleButton"
-							onClick={handleToggleFeatured}
-						>
-							{isFeaturedVisible ? '추천 영화 접기 ^' : '추천 영화 보기 v'}
-						</button>
+					<div className="TodayMovies_controls-wrapper">
+						<div className="TodayMovies_controls">
+							<button
+								className="TodayMovies_toggleButton"
+								onClick={handleToggleFeatured}
+							>
+								{isFeaturedVisible ? '추천 영화 접기 <' : '추천 영화 보기 >'}
+							</button>
+							{isFeaturedVisible && featuredMovie && (
+								<div className="TodayMovies_modalOverlay" onClick={() => setIsFeaturedVisible(false)}>
+									<div
+										className="TodayMovies_modalContent"
+										onClick={(e) => e.stopPropagation()} // 모달 내부 클릭 시 닫기 방지
+									>
+										<button className="TodayMovies_modalClose" onClick={() => setIsFeaturedVisible(false)}>×</button>
+										<FeaturedMovie movie={featuredMovie} />
+									</div>
+								</div>
+							)}
+						</div>
 					</div>
 				</div>
 
@@ -149,11 +162,6 @@ function SectionTodayMovies() {
 					))}
 				</div>
 			</div>
-			{isFeaturedVisible && featuredMovie && (
-				<div className="TodayMovies_bottom">
-					<FeaturedMovie movie={featuredMovie} />
-				</div>
-			)}
 		</section>
 	);
 }
