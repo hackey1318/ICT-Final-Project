@@ -70,7 +70,7 @@ function SectionNewGoods() {
 			</div>
 
 			<div className="Goods_footer">
-				<a href="/goods" className="Goods_seeAll">모두 보기 {'>'}
+				<a href="/mdshop" className="Goods_seeAll">모두 보기 {'>'}
 				</a>
 			</div>
 		</section>
