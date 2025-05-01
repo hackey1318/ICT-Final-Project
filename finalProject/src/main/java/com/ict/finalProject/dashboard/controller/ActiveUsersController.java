@@ -19,7 +19,7 @@ public class ActiveUsersController {
 
     @GetMapping("/getDauList")
     public ActiveUsersSummaryResponse getDayActiveUsersList(){
-        LocalDate endDate = LocalDate.now().minusDays(1); //어제 날짜
+        LocalDate endDate = LocalDate.now(); //어제 날짜
         LocalDate startDate = endDate.minusMonths(1).plusDays(1); //한 달 전 날짜
 
         String start = startDate.toString();
@@ -41,10 +41,9 @@ public class ActiveUsersController {
         //1년 전의 해당 월 1일
         String startDate = LocalDate.now().minusYears(1).withDayOfMonth(1).toString();
         //지난달의 마지막 날
-        String endDate = LocalDate.now().minusMonths(1)
-                .withDayOfMonth(LocalDate.now().minusMonths(1).lengthOfMonth()).toString();
+        String endDate = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth()).toString();
 
-        List<ActiveUsersResponse> monthUsers = activeUsersService.getMonthActiveUsersList();
+        List<ActiveUsersResponse> monthUsers = activeUsersService.getMonthActiveUsersList(startDate, endDate);
 
         //활동인원수 총합계
         Long totalCount = activeUsersService.getTotalActiveUsers(startDate, endDate);

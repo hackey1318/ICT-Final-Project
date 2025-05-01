@@ -20,19 +20,19 @@ public interface ActiveUsersRepository extends JpaRepository<ActiveUsers, Intege
     //날짜별로 그룹화해서 해당 날짜 활동인원수 조회(일별)
     @Query(value = "SELECT DATE_FORMAT(created_at, '%Y-%m-%d') AS date, COUNT(*) AS user_count " +
             "FROM shopping.active_users " +
-            "WHERE created_at BETWEEN :startDate AND :endDate " +
+            "WHERE created_at BETWEEN :startDate AND DATE_ADD(:endDate, INTERVAL 1 DAY) " +
             "GROUP BY DATE_FORMAT(created_at, '%Y-%m-%d')", nativeQuery = true)
     List<ActiveUsersResponse> getDayActiveUsersList(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
     //월별로 그룹화해서 해당 월 활동인원수 조회(월별)
     @Query(value = "SELECT DATE_FORMAT(created_at, '%Y-%m') AS date, COUNT(*) AS user_count " +
             "FROM shopping.active_users " +
-            "WHERE created_at BETWEEN :startDate AND :endDate " +
+            "WHERE DATE_FORMAT(created_at, '%Y-%m') BETWEEN :startDate AND :endDate " +
             "GROUP BY DATE_FORMAT(created_at, '%Y-%m')", nativeQuery = true)
     List<ActiveUsersResponse> getMonthActiveUsersList(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
     //활동인원수 총합계(기간 적용)
-    @Query(value="SELECT COUNT(*) AS user_count FROM shopping.active_users WHERE created_at BETWEEN :startDate AND :endDate;", nativeQuery = true)
+    @Query(value="SELECT COUNT(*) AS user_count FROM shopping.active_users WHERE created_at BETWEEN :startDate AND DATE_ADD(:endDate, INTERVAL 1 DAY);", nativeQuery = true)
     Long getTotalActiveUsers(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
     boolean existsByUserNoAndActivityAndCreatedAtBetween(int userNo, Activity activity, LocalDateTime start, LocalDateTime end);

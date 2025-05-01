@@ -14,7 +14,7 @@ public interface ActiveUsersService {
     List<ActiveUsersResponse> getDayActiveUsersList(String start, String end);
 
     //활동인원수 리스트(월별)
-    List<ActiveUsersResponse> getMonthActiveUsersList();
+    List<ActiveUsersResponse> getMonthActiveUsersList(String firstDayOfLastYearMonth, String lastDayOfPrevMonth);
 
     //활동인원수 총합계
     Long getTotalActiveUsers(String startData, String endDate);
