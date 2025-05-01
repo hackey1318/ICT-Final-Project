@@ -57,7 +57,7 @@ export default function MdShop() {
                 <div className="mb-4">
                     <h1 className="h2 fw-bold">Merchandise Shop</h1>
                 </div>
-                <div className="d-flex justify-content-center mb-4">
+                <div className="d-flex justify-content-end mb-4" style={{ paddingBottom: '3rem', paddingTop: '1rem' }}>
                     {totalPages > 1 && (
                         <MoviePagination
                             page={page}
