@@ -58,7 +58,7 @@ export default function MdShop() {
                 <div className="mb-4">
                     <h1 className="h2 fw-bold">Merchandise Shop</h1>
                 </div>
-                <div className="d-flex justify-content-center mb-4">
+                <div className="d-flex justify-content-end mb-4" style={{ paddingBottom: '3rem', paddingTop: '1rem' }}>
                     {totalPages > 1 && (
                         <MoviePagination
                             page={page}
@@ -73,7 +73,7 @@ export default function MdShop() {
                         <div className="col-md-3" key={idx}>
                             <Link to={`/mdshop/${item.id}`} className="Goods_item_links">
                                 <div className="card h-100">
-                                    <img src={`${apiNoAccessClient.defaults.baseURL}/file-system/download/${item.imageUrls[0]}`} className="card-img-top" alt={item.name} />
+                                    <img src={`${apiNoAccessClient.defaults.baseURL}/file-system/download/${item.imageUrls[0]}`} className="card-img-top" style={{ height: "300px", objectFit: "cover" }} alt={item.name} />
                                     <div className="card-body py-1">
                                         <p className="card-title fw-bold text-truncate mb-0">{item.name}</p>
                                         <p className="card-text text-muted mb-0"><strong>Price: </strong>{item.price}</p>

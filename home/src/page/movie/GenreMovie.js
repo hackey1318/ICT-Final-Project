@@ -1,25 +1,26 @@
 import { useEffect, useState } from "react";
-import GenreFilter from "../../js/movie/Genre-filter"
+import GenreFilter from "../../js/movie/Genre-filter";
 import MoviePagination from "../../js/public/Pagination";
 import axios from "axios";
 import TypeFilter from "../../js/movie/MovieType";
 import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 
 function GenreMovie() {
-
     const [genre, setGenre] = useState({ id: "All", name: "전체" });
     const [type, setType] = useState('ALL');
     const [movies, setMovies] = useState([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
+    // 검색어 상태 추가
+    const [searchTerm, setSearchTerm] = useState('');
 
     function getAgeBadgeColor(grade) {
         switch (grade) {
-            case "15": return "#f39c12"  // 주황
-            case "12": return "#3498db"  // 파랑
-            case "All": return "#2ecc71" // 초록
-            case "18": return "#e74c3c" // 빨강
-            default: return "#7f8c8d"     // 회색
+            case "15": return "#f39c12";  // 주황
+            case "12": return "#3498db";  // 파랑
+            case "All": return "#2ecc71"; // 초록
+            case "18": return "#e74c3c"; // 빨강
+            default: return "#7f8c8d";     // 회색
         }
     }
 
@@ -37,7 +38,7 @@ function GenreMovie() {
     }, [genre]);
 
     useEffect(() => {
-        // 장르 선택 시 API 호출
+        // 장르, 타입, 페이지 변화 시 API 호출
         const fetchMovies = async () => {
             try {
                 const response = await apiNoAccessClient.get('/movies', {
@@ -59,9 +60,25 @@ function GenreMovie() {
         fetchMovies();
     }, [genre, type, page]); // ✅ 장르가 변경될 때마다 호출됨
 
+    // 클라이언트 사이드 필터링된 영화 리스트
+    const filteredMovies = movies.filter(movie =>
+        movie.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <main className="bg-white min-vh-100">
             <div className="container py-3">
+                {/* 검색창 추가 */}
+                <div className="mb-3">
+                    <input
+                        type="text"
+                        placeholder="영화 제목 검색"
+                        className="form-control"
+                        value={searchTerm}
+                        onChange={e => setSearchTerm(e.target.value)}
+                    />
+                </div>
+
                 {/* 장르 헤더 */}
                 <div className="mb-3">
                     <h1 className="h2 fw-bold">Genre : {genre.id}</h1>
@@ -78,14 +95,14 @@ function GenreMovie() {
 
                 {/* 영화 카드 영역 */}
                 <div className="row g-4">
-                    {movies.map((movie) => (
+                    {filteredMovies.map(movie => (
                         <div key={movie.no} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             <a href={`/movies/${movie.no}`} className="text-decoration-none text-dark">
                                 <div className="card h-100 shadow-sm position-relative">
                                     {/* 연령 뱃지 */}
                                     <span
                                         className="age-badge position-absolute top-0 start-0 m-2 px-2 py-1 text-white rounded"
-                                        style={{ backgroundColor: getAgeBadgeColor(movie.ageGrade)}}
+                                        style={{ backgroundColor: getAgeBadgeColor(movie.ageGrade) }}
                                     >
                                         {movie.ageGrade === "18" ? "19" : movie.ageGrade}
                                     </span>
@@ -110,7 +127,7 @@ function GenreMovie() {
                 </div>
             </div>
         </main>
-    )
+    );
 }
 
 export default GenreMovie;

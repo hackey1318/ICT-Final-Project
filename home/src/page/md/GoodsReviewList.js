@@ -54,22 +54,30 @@ export default function GoodsReviewList({ goodsId, refreshKey, onReviewsLoad, on
     catch (err) { console.error(err); alert('삭제 실패'); }
   };
 
+  // 신고 모달 열기 (작성자 본인 차단 로직 추가)
   const handleOpenReport = id => {
+    const review = reviews.find(r => r.id === id);
+    if (review.userNo === currentUserNo) {
+      alert('본인이 작성한 글은 신고할 수 없습니다.');
+      return;
+    }
     setCurrentReviewId(id);
-    setCurrentReview(reviews.find(r => r.id === id));
+    setCurrentReview(review);
     setReportData({ category: '', content: '' });
     setShowReportModal(true);
   };
 
+  // 신고 폼 변경 처리
   const handleReportChange = e => {
     const { name, value } = e.target;
-    setReportData(d => ({
-      ...d,
-      [name]: value,
-      content: name === 'category' && value !== 'ETC'
-        ? getDefaultReportContent(value)
-        : (name === 'category' ? '' : d.content)
-    }));
+    if (name === 'category') {
+      setReportData({
+        category: value,
+        content: value === 'ETC' ? '' : getDefaultReportContent(value)
+      });
+    } else if (name === 'content') {
+      setReportData(d => ({ ...d, content: value }));
+    }
   };
 
   const handleReportSubmit = async () => {
@@ -99,13 +107,14 @@ export default function GoodsReviewList({ goodsId, refreshKey, onReviewsLoad, on
 
   return (
     <>
-      {/* 리뷰가 없으면 메시지, 있으면 페이징 + 리스트 */}
+      {/* 리뷰 없으면 메시지 */}
       {reviews.length === 0 ? (
         <div className="GoodsReviewList_no-reviews" style={{ paddingBottom: '10%' }}>
           등록된 리뷰가 없습니다.
         </div>
       ) : (
-        <>  
+        <>
+          {/* 페이지 컨트롤 */}
           <div className="GoodsReviewList_review-header-top">
             <div className="GoodsReviewList_page-controls">
               <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>
@@ -118,7 +127,7 @@ export default function GoodsReviewList({ goodsId, refreshKey, onReviewsLoad, on
             </div>
           </div>
 
-          {/* 리뷰 리스트에 하단 padding 10% 추가 */}
+          {/* 리뷰 리스트 */}
           <div className="GoodsReviewList_goods-review-list" style={{ paddingBottom: '10%' }}>
             {paginated.map(r => (
               <div key={r.id} className="GoodsReviewList_review-card">
@@ -134,7 +143,7 @@ export default function GoodsReviewList({ goodsId, refreshKey, onReviewsLoad, on
                 <div className="GoodsReviewList_card-actions">
                   {currentUserNo === r.userNo && <button className="GoodsReviewList_btn-edit" onClick={() => onSelectReview(r)}>수정</button>}
                   {currentUserNo === r.userNo && <button className="GoodsReviewList_btn-delete" onClick={() => handleDeleteReview(r.id)}>삭제</button>}
-                  {currentUserNo && <button className="GoodsReviewList_btn-menu" onClick={() => handleOpenReport(r.id)}>⋮</button>}
+                  {currentUserNo && currentUserNo !== r.userNo && <button className="GoodsReviewList_btn-menu" onClick={() => handleOpenReport(r.id)}>⋮</button> }
                 </div>
               </div>
             ))}
@@ -169,9 +178,10 @@ export default function GoodsReviewList({ goodsId, refreshKey, onReviewsLoad, on
                 <label>내용:</label>
                 <textarea
                   name="content"
-                  value={reportData.category === 'ETC' ? reportData.content : getDefaultReportContent(reportData.category)}
+                  value={reportData.content}
                   onChange={handleReportChange}
                   disabled={reportData.category !== 'ETC'}
+                  placeholder={reportData.category === 'ETC' ? '신고 내용을 입력하세요' : ''}
                 />
               </div>
             </div>

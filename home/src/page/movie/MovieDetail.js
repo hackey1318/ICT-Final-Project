@@ -141,12 +141,13 @@ function MovieDetail() {
 						<h1 className="movie_detail_title">{movie.name}</h1>
 					</div>
 					<div className="movie_detail_actions col-2 d-flex justify-content-end">
-						<div onClick={toggleLike} style={{ cursor: 'pointer' }}>
+						<div style={{ cursor: 'pointer' }}>
 							{isLoggedIn && (
 								<Heart
 									className="movie_detail_icon"
 									color={liked ? 'red' : 'black'}
 									fill={liked ? 'red' : 'none'}
+									onClick={toggleLike}
 								/>
 							)}
 							<Share2 className="movie_detail_icon ms-2" onClick={handleCopyUrl} />
@@ -167,6 +168,7 @@ function MovieDetail() {
 					<h2 className="movie_detail_section_title mb-3">줄거리</h2>
 					<p className="movie_detail_description">{movie.description}</p>
 					<div className="movie_detail_buttons mt-4">
+						{/* 백엔드에서 받은 영화 링크로 이동하는 버튼 */}
 						<a
 							href={movie.externalLink}
 							target="_blank"
@@ -263,4 +265,4 @@ function MovieDetail() {
 	);
 }
 
-export default MovieDetail;
+export default MovieDetail

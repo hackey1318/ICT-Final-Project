@@ -122,11 +122,15 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
                     <button className="modal-back" onClick={onClose}>
                         <span>&larr;</span> Movie Review
                     </button>
-                    <button
-                        className="modal-options"
-                        onClick={handleReportBtn}
-                        title="신고하기"
-                    >🚨</button>
+                    {currentUserNo != null && review.userNo !== currentUserNo && (
+                        <button
+                            className="modal-options"
+                            onClick={handleReportBtn}
+                            title="신고하기"
+                        >
+                            🚨
+                        </button>
+                    )}
                 </div>
 
                 <div className="modal-body-container">
@@ -188,7 +192,7 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
                                     </div>
                                 )}
                             </div>
-                            
+
                             <div className="modal-review-content">
                                 <div className="review-header">
                                     <h3 className="review-title">
