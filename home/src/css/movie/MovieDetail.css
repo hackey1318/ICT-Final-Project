@@ -144,8 +144,8 @@
 
 .movie_detail_item_img {
     width: 100%;
-    max-width: 120px;
-    height: auto;
+    /* max-width: 120px; */
+    height: 200px;
     border-radius: 8px;
     margin-bottom: 8px;
     object-fit: cover;
