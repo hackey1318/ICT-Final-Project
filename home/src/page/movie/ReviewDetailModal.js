@@ -53,6 +53,11 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
     };
 
     const handleReportBtn = () => {
+        if(review.userNo === currentUserNo) {
+            alert("본인이 작성한 글은 신고할 수 없습니다.");
+            return;
+        }
+        
         if (!isReporting) {
             if (
                 window.confirm(

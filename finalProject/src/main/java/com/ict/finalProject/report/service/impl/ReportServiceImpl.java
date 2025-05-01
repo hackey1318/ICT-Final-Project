@@ -54,6 +54,11 @@ public class ReportServiceImpl implements ReportService {
         }
         log.debug("신고 대상자 ID 확인 : {}", targetUserId);
 
+        if (reporterNo == targetUserId) {
+            log.warn("자기 자신을 신고할 수 없습니다. reporterNo={}, targetUserId={}", reporterNo, targetUserId);
+            throw new IllegalArgumentException("자기 자신을 신고할 수 없습니다.");
+        }
+
         Report report = Report.builder()
                 .reporterNo(reporterNo)
                 .targetNo(targetUserId)
