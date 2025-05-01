@@ -141,7 +141,7 @@ export default function GoodsReviewList({ goodsId, refreshKey, onReviewsLoad, on
                 <div className="GoodsReviewList_card-actions">
                   {currentUserNo === r.userNo && <button className="GoodsReviewList_btn-edit" onClick={() => onSelectReview(r)}>수정</button>}
                   {currentUserNo === r.userNo && <button className="GoodsReviewList_btn-delete" onClick={() => handleDeleteReview(r.id)}>삭제</button>}
-                  {currentUserNo && <button className="GoodsReviewList_btn-menu" onClick={() => handleOpenReport(r.id)}>⋮</button>}
+                  {currentUserNo && currentUserNo !== r.userNo && <button className="GoodsReviewList_btn-menu" onClick={() => handleOpenReport(r.id)}>⋮</button> }
                 </div>
               </div>
             ))}
