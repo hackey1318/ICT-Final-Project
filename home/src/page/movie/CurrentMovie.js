@@ -83,16 +83,6 @@ function CurrentMovie() {
     return (
         <main className="bg-white min-vh-100">
             <div className="container py-3">
-                {/* 검색창 추가 */}
-                <div className="mb-3">
-                    <input
-                        type="text"
-                        placeholder="영화 제목 검색"
-                        className="form-control"
-                        value={searchTerm}
-                        onChange={e => setSearchTerm(e.target.value)}
-                    />
-                </div>
 
                 {/* 헤더 */}
                 <div className="mb-4"> {/* 하단 마진 증가 */}
@@ -109,6 +99,14 @@ function CurrentMovie() {
                         />
                     )}
                 </div>
+                {/* 검색창 추가 */}
+                <input
+                    type="text"
+                    placeholder="영화 제목 검색"
+                    className="form-control"
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                />
 
                 {/* 영화 카드 그리드 */}
                 <div className="row g-4">

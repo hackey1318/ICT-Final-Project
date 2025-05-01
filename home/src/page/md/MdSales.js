@@ -424,7 +424,7 @@ function MdSales() {
 
 
     // date차트
-    const dateChartHeight = resultByGoodsName.length * 75;
+    const dateChartHeight = resultByDate.length * 75;
 
     const dateOptions = {
         indexAxis: 'y',
@@ -490,7 +490,7 @@ function MdSales() {
             {
                 label: '매출',
                 data: resultByDate.slice().reverse().map(item => item.totalSale),
-                backgroundColor: 'rgb(201, 201, 201)',
+                backgroundColor: 'rgb(180, 180, 180)',
             }
         ],
     };

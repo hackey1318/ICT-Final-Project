@@ -205,7 +205,7 @@ function InquiryReplyView() {
                     </div>
                 </>
             }
-            <InquiryComment writerUserNo={writerUserNo}/>
+            <InquiryComment/>
         </div>
     );
 }
