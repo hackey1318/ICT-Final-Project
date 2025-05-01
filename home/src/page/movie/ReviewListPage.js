@@ -34,7 +34,9 @@ function ReviewListPage({ movieNo, currentUserNo }) {
   useEffect(() => {
     getReviews(movieNo)
       .then(res => {
-        res.data.postImage = storedPoster;
+        res.data.forEach(item => {
+          item.postImage = storedPoster;
+        });
         const sorted = res.data
           .slice()
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
