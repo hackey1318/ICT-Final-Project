@@ -72,7 +72,7 @@ export default function MdShop() {
                         <div className="col-md-3" key={idx}>
                             <Link to={`/mdshop/${item.id}`} className="Goods_item_links">
                                 <div className="card h-100">
-                                    <img src={`http://localhost:9988/file-system/download/${item.imageUrls[0]}`} className="card-img-top" alt={item.name} />
+                                    <img src={`http://localhost:9988/file-system/download/${item.imageUrls[0]}`} className="card-img-top" style={{ height: "300px", objectFit: "cover" }} alt={item.name} />
                                     <div className="card-body py-1">
                                         <p className="card-title fw-bold text-truncate mb-0">{item.name}</p>
                                         <p className="card-text text-muted mb-0"><strong>Price: </strong>{item.price}</p>
