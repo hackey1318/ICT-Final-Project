@@ -17,6 +17,8 @@
   width: 400px;
   max-width: 800px;
   transition: width 0.3s ease;
+  background-color: white;
+  border-radius: 10px;
 }
 
 #review-modal-content.reporting-active {
