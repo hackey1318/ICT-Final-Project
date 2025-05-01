@@ -32,7 +32,7 @@ public class CGVMovieCrawler {
     private final MoviesRepository moviesRepository;
     private final MovieStillCutsRepository movieStillCutsRepository;
 
-//    @PostConstruct
+    //@PostConstruct
     @Scheduled(cron = "0 10 0 * * *")
     public void crawlAndSyncAllMovies() {
         Map<Integer, Movies> allMoviesMap = moviesRepository.findAll()
@@ -40,23 +40,28 @@ public class CGVMovieCrawler {
                 .collect(Collectors.toMap(Movies::getCode, m -> m));
 
         Map<Integer, Movies> existingMoviesMap = allMoviesMap.values().stream()
-                .filter(m -> m.getOpenStatus() == MovieStatus.ACTIVE)
+                .filter(m -> m.getOpenStatus() == MovieStatus.ACTIVE || m.getOpenStatus() == MovieStatus.PENDING)
                 .collect(Collectors.toMap(Movies::getCode, m -> m));
-
 
         Set<Integer> updatedMovieCodes = new HashSet<>();
 
         crawlAndSyncMovies(existingMoviesMap, updatedMovieCodes, allMoviesMap);
         getMovieMore(existingMoviesMap, updatedMovieCodes, allMoviesMap);
 
-
-        // CLOSE 처리
+        // 처리
         for (Integer code : allMoviesMap.keySet()) {
-            if (!updatedMovieCodes.contains(code)) {
-                Movies movie = allMoviesMap.get(code);
+            Movies movie = allMoviesMap.get(code);
+            // ACTIVE인데 크롤러가 가져온 영화에 포함되지 않으면 CLOSE 상태로 변경
+            if (movie.getOpenStatus() == MovieStatus.ACTIVE && !updatedMovieCodes.contains(code)) {
                 movie.updateStatus(MovieStatus.CLOSE);
                 moviesRepository.save(movie);
                 log.info("🔒 CLOSED: {}", movie.getName());
+            }
+            // PENDING인 영화가 조회되면 ACTIVE로 상태 변경
+            if (movie.getOpenStatus() == MovieStatus.PENDING && updatedMovieCodes.contains(code)) {
+                movie.updateStatus(MovieStatus.ACTIVE);
+                moviesRepository.save(movie);
+                log.info("🔄 ACTIVE: {}", movie.getName());
             }
         }
     }
