@@ -66,16 +66,21 @@ public class AdminServiceImpl implements AdminService {
                 pageable
         );
 
-        return usersPage.map(user -> UserResponse.builder()
-                .no(user.getNo())
-                .id(user.getId())
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .gender(user.getGender().name())
-                .status(user.getStatus().name())
-                .role(user.getRole().name())
-                .phone(user.getPhone())
-                .build());
+        return usersPage.map(user -> {
+            boolean isDeleted = user.getStatus() == StatusInfo.DELETE;
+            String masked = "****";
+
+            return UserResponse.builder()
+                    .no(user.getNo())
+                    .id(isDeleted ? masked : user.getId())
+                    .nickname(isDeleted ? masked : user.getNickname())
+                    .email(isDeleted ? masked : user.getEmail())
+                    .gender(isDeleted ? masked : user.getGender().name())
+                    .status(user.getStatus().name())
+                    .role(user.getRole().name())
+                    .phone(isDeleted ? masked : user.getPhone())
+                    .build();
+        });
     }
 
     //관리자 비활성화
