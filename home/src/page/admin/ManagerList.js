@@ -122,7 +122,7 @@ function ManagerList() {
                                     <td>{item.id}</td>
                                     <td>{item.nickname}</td>
                                     <td>{item.email}</td>
-                                    <td>010-0000-0000</td>
+                                    <td>{item.phone}</td>
                                     {item.role === "ADMIN" ? (
                                         <>
                                             <td>관리자</td>

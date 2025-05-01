@@ -39,7 +39,7 @@ function ManagerRegisterForm(){
                     <form onSubmit={handleSubmit} noValidate>
                         {/* 프로필 이미지 (선택) */}
                         <div className="mb-4 text-center">
-                            <label className="form-label d-block mb-2">프로필 이미지 (선택)</label>
+                            <label className="form-label d-block mb-2">프로필 이미지 (필수)</label>
                             <div className="d-inline-flex align-items-center">
                                 <div
                                     style={{
