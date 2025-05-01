@@ -189,13 +189,13 @@ function MovieDetail() {
 						<h1 className="movie_detail_title">{movie.name}</h1>
 					</div>
 					<div className="movie_detail_actions col-2 d-flex justify-content-end">
-						{/* 북마크 및 공유 아이콘 (기능 구현 필요) */}
-						<div onClick={toggleLike} style={{ cursor: 'pointer' }}>
+						<div style={{ cursor: 'pointer' }}>
 							{isLoggedIn && (
 								<Heart
 									className="movie_detail_icon"
 									color={liked ? 'red' : 'black'}
 									fill={liked ? 'red' : 'none'}
+									onClick={toggleLike}
 								/>
 							)}
 							<Share2 className="movie_detail_icon ms-2" onClick={handleCopyUrl} />
