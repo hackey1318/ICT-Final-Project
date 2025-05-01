@@ -142,10 +142,16 @@
     margin-bottom: 20px;
 }
 
+.image-wrapper {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
 .movie_detail_item_img {
     width: 100%;
-    /* max-width: 120px; */
-    height: 200px;
+    height: 100%;
     border-radius: 8px;
     margin-bottom: 8px;
     object-fit: cover;

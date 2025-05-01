@@ -277,15 +277,17 @@ function MovieDetail() {
 						{relatedGoods.map((item) => (
 							<div key={item.id} className="movie_detail_item col-6 col-sm-3 mb-3">
 								<Link to={`/mdshop/${item.id}`} className="Goods_item_links">
-									<img
-										src={item.imageUrls ? `${BASE_URL}${item.imageUrls[0]}` : "/placeholder.svg"}
-										alt={item.name}
-										className="movie_detail_item_img img-fluid rounded mb-2"
-										onError={(e) => {
-											e.target.onerror = null;
-											e.target.src = "/placeholder.svg";
-										}}
-									/>
+									<div className="image-wrapper mb-2">
+										<img
+											src={item.imageUrls ? `${BASE_URL}${item.imageUrls[0]}` : "/placeholder.svg"}
+											alt={item.name}
+											className="movie_detail_item_img img-fluid rounded mb-2"
+											onError={(e) => {
+												e.target.onerror = null;
+												e.target.src = "/placeholder.svg";
+											}}
+										/>
+									</div>
 								</Link>
 								<span className="movie_detail_item_name d-block">{item.name}</span>
 								<span className="movie_detail_item_price fw-bold">{item.price.toLocaleString()}원</span>
