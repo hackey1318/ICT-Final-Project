@@ -46,7 +46,8 @@ function MyCinemates(){
                 currentMemberCount: cinemate.currentMemberCount, //이거 추가함
                 maxMemberCount: cinemate.maxMemberCount,
                 content: cinemate.content,
-                userNo: cinemate.userNo
+                userNo: cinemate.userNo,
+                postImage: cinemate.postImage,
             };
 
 			navigation(`/cinemate/movies/${cinemate.movieNo}/room/${cinemate.no}`, { state: { movie } });
