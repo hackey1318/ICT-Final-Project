@@ -52,18 +52,23 @@ export default function GoodsReviewList({ goodsId, refreshKey, onReviewsLoad, on
     catch (err) { console.error(err); alert('삭제 실패'); }
   };
 
+  // 신고 모달 열기 (작성자 본인 차단 로직 추가)
   const handleOpenReport = id => {
+    const review = reviews.find(r => r.id === id);
+    if (review.userNo === currentUserNo) {
+      alert('본인이 작성한 글은 신고할 수 없습니다.');
+      return;
+    }
     setCurrentReviewId(id);
-    setCurrentReview(reviews.find(r => r.id === id));
+    setCurrentReview(review);
     setReportData({ category: '', content: '' });
     setShowReportModal(true);
   };
 
-  // **신고 폼 변경 처리**
+  // 신고 폼 변경 처리
   const handleReportChange = e => {
     const { name, value } = e.target;
     if (name === 'category') {
-      // ETC 선택 시 빈 문자열, 아니면 기본 메시지
       setReportData({
         category: value,
         content: value === 'ETC' ? '' : getDefaultReportContent(value)
