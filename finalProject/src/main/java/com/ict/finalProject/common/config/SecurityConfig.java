@@ -80,7 +80,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:3000", "http://192.168.1.252:3000", "http://cinemate.shop", "http://www.cinemate.shop", "http://223.130.159.159:3000"));
+                    config.setAllowedOrigins(List.of("http://localhost:3000", "http://192.168.1.252:3000", "http://cinemate.shop", "http://www.cinemate.shop", "http://223.130.159.159:3000", "https://cinemate.shop", "https://www.cinemate.shop"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setExposedHeaders(List.of("accessToken", "Content-Disposition")); // accessToken 노출
