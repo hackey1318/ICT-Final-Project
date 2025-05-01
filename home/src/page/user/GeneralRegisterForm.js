@@ -90,7 +90,7 @@ const GeneralRegisterForm = () => {
                             <label htmlFor="id" className="form-label">
                                 아이디 <span className="text-danger">*</span>
                             </label>
-                            <div className="input-group">
+                            <div className="input-group" style={{alignItems: "center"}}>
                                 <input
                                     type="text"
                                     id="id"
@@ -111,6 +111,7 @@ const GeneralRegisterForm = () => {
                                     className="btn btn-outline-secondary"
                                     onClick={handleIdCheck}
                                     disabled={idCheckLoading || formData.id.length < 4 || loading}
+                                    style={{height:"45.5px"}}
                                 >
                                     {idCheckLoading
                                         ? <Spinner animation="border" size="sm" />
@@ -240,7 +241,7 @@ const GeneralRegisterForm = () => {
                           <label htmlFor="phone1" className="form-label">
                             연락처 <span className="text-danger">*</span>
                           </label>
-                            <div className={`input-group ${errors.phone ? 'is-invalid' : ''}`}>
+                            <div className={`input-group ${errors.phone ? 'is-invalid' : ''}`} style={{alignItems:"center"}}>
                                 <input
                                     type="tel"
                                     name="phone1"
@@ -252,7 +253,7 @@ const GeneralRegisterForm = () => {
                                     style={{ flex: "0 0 80px" }}
                                     disabled={loading}
                                 />
-                                <span className="input-group-text">-</span>
+                                <span className="input-group-text" style={{height:"46px"}}>-</span>
                                 <input
                                     type="tel"
                                     name="phone2"
@@ -263,7 +264,7 @@ const GeneralRegisterForm = () => {
                                     className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
                                     disabled={loading}  
                                 />
-                                <span className="input-group-text">-</span>
+                                <span className="input-group-text" style={{height:"46px"}}>-</span>
                                 <input
                                     type="tel"
                                     name="phone3"
@@ -281,6 +282,7 @@ const GeneralRegisterForm = () => {
                                           className="btn btn-outline-secondary"
                                           onClick={handlePhoneCheck}
                                           disabled={phoneCheckLoading || errors.phone}
+                                          style={{height:"45.5px"}}
                                         >
                                           {phoneCheckLoading ? '확인 중…' : '중복 확인'}
                                         </button>

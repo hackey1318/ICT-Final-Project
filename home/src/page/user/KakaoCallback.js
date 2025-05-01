@@ -145,7 +145,7 @@ const KakaoCallback = () => {
                         {/* 아이디 + 중복 확인 버튼 */}
                         <div className="mb-3">
                             <label htmlFor="id" className="form-label">아이디 <span className="text-danger">*</span></label>
-                            <div className="input-group">
+                            <div className="input-group" style={{alignItems: "center"}}>
                                 <input
                                     type="text"
                                     className={`form-control ${(errors.id || idCheckStatus === 'duplicate' || idCheckStatus === 'invalid') ? 'is-invalid' : (idCheckStatus === 'available' ? 'is-valid' : '')}`}
@@ -163,6 +163,7 @@ const KakaoCallback = () => {
                                     type="button"
                                     onClick={handleIdCheck}
                                     disabled={idCheckLoading || formData.id.length < 4 || loading} // 아이디 길이 조건 추가, 전체 폼 제출 중 비활성화
+                                    style={{height:"45.5px"}}
                                 >
                                     {idCheckLoading ? (
                                         <><Spinner animation="border" size="sm" className="me-1" /> 확인 중</>
@@ -259,13 +260,13 @@ const KakaoCallback = () => {
                          {/* 연락처 */}
                          <div className="mb-3">
                             <label className="form-label">연락처<span className="text-danger">*</span></label>
-                            <div className={`input-group ${errors.phone ? 'is-invalid' : ''}`}>
+                            <div className={`input-group ${errors.phone ? 'is-invalid' : ''}`} style={{alignItems:"center"}}>
                                 <input type="tel" name="phone1" value={formData.phone1} onChange={handleChange} maxLength={3} className={`form-control ${errors.phone ? 'is-invalid' : ''}`} />
-                                <span className="input-group-text">-</span>
+                                <span className="input-group-text" style={{height:"46px"}}>-</span>
                                 <input type="tel" name="phone2" value={formData.phone2} onChange={handleChange} maxLength={4} className={`form-control ${errors.phone ? 'is-invalid' : ''}`} />
-                                <span className="input-group-text">-</span>
+                                <span className="input-group-text" style={{height:"46px"}}>-</span>
                                 <input type="tel" name="phone3" value={formData.phone3} onChange={handleChange} maxLength={4} className={`form-control ${errors.phone ? 'is-invalid' : ''}`} />
-                                <button type="button" className="btn btn-outline-secondary" onClick={handlePhoneCheck} disabled={phoneCheckLoading || errors.phone || !formData.phone1 || !formData.phone2 || !formData.phone3}>
+                                <button type="button" className="btn btn-outline-secondary" onClick={handlePhoneCheck} disabled={phoneCheckLoading || errors.phone || !formData.phone1 || !formData.phone2 || !formData.phone3} style={{height:"45.5px"}}>
                                 {phoneCheckLoading ? '확인 중…' : '중복 확인'}
                                 </button>
                             </div>
