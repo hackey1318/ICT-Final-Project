@@ -32,6 +32,8 @@ const MypageSidebar = () => {
             setActiveMenu("후기내역");
         } else if (path.includes("/mypage/inquiries")) {
             setActiveMenu("문의내역");
+        } else if (path.includes("/mypage/notification-list")) {
+            setActiveMenu("사용자 알림 내역");
         } else if (path.includes("/mypage/edit")) {
             setActiveMenu("회원정보수정");
         } else if (path.includes("/mypage/withdraw")) {
@@ -121,6 +123,15 @@ const MypageSidebar = () => {
                 <div className="sidebar-section">
                     <h3 className="section-title">나의 정보 조회</h3>
                     <ul className="menu-list">
+                        <li>
+                            <Link
+                                to="/mypage/notification-list"
+                                className={`menu-item-link ${activeMenu === "사용자 알림 내역" ? "active" : ""}`}
+                                onClick={() => handleMenuClick("사용자 알림 내역")}
+                            >
+                                <span className="bullet">•</span>사용자 알림 내역
+                            </Link>
+                        </li>
                         <li>
                             <Link
                                 to="/mypage/edit"
