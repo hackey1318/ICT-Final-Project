@@ -73,7 +73,7 @@ import MovieLikeChart from './page/admin/like/MovieLikeChart';
 import GoodsLikeChart from './page/admin/like/GoodsLikeChart';
 import UserEditPage from './page/user/mypage/UserEditPage';
 import InquiryHistory from './page/user/mypage/InquiryHistory';
-import NotificationList from 'page/user/mypage/NotificationList';
+import NotificationList from './page/user/mypage/NotificationList';
 
 
 
