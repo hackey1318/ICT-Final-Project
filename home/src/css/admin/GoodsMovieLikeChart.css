@@ -1,8 +1,8 @@
 .goods-movie-like-chart-wrapper {
     display: flex;
     flex-direction: column;
-    /* 부모에서 높이를 받도록 100% 설정 */
-    height: 100%;
+    /* 부모에서 높이를 받도록 100% 설정
+    height: 100%; */
     padding: 16px;
     box-sizing: border-box;
   }

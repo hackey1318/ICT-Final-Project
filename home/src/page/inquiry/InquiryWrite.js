@@ -249,7 +249,7 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
                                 value={password}
                                 onChange={handlePasswordChange}
                                 style={passwordInputStyle}
-                                maxLength={10} // 비밀번호 길이 제한 (선택 사항)
+                                maxLength={8} // 비밀번호 길이 제한 (선택 사항)
                                 autoComplete="new-password"
                             />
                             <input
