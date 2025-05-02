@@ -14,6 +14,8 @@ function Admin(){
         if(path.includes("/home/dau")) return "dau"
         if(path.includes("/home/member-list")) return "member-list"
         if(path.includes("/home/manager-list")) return "manager-list"
+        if(path.includes("/home/inquiry")) return "inquiry"
+        if(path.includes("/home/reportPage")) return "reportPage"
         if(path.includes("/home/blacklist")) return "blacklist"
         if(path.includes("/home/gender")) return "gender"
         if(path.includes("/home/mdlists")) return "mdlists"
