@@ -236,6 +236,8 @@ public class ReportServiceImpl implements ReportService {
 
             reportRepository.save(report);
             log.info("신고 처리 완료 - 신고번호: {}, 블랙리스트처리: {}", no, isBlacklisted);
+            String message = "[신고접수(%d) %s] %s에 대한 신고 결과".formatted(no, ReportStatus.ACCEPTED.equals(report.getStatus()) ? "처리" : "반려", report.getType().getDescription());
+            notificationService.generateNotification(reportedUser.getNo(), message);
             return isBlacklisted;
         } catch (Exception e) {
             log.error("신고 처리 중 오류 발생: ", e);
