@@ -1,0 +1,40 @@
+.report-list-selector__container {
+    padding: 20px 40px 0 40px;
+    min-width: 800px;
+}
+
+.report-list-selector__tab-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    position: relative;
+}
+
+.report-list-selector__tab-button {
+    flex: 1;
+    padding: 12px 20px;
+    font-size: 16px;
+    background: #f9f9f9;
+    border: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.3s ease;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.05) inset;
+}
+
+.report-list-selector__tab-button:not(:last-child) {
+    border-right: 1px solid #ddd;
+}
+
+.report-list-selector__tab-button.active {
+    background: white;
+    color: #000;
+    font-weight: bold;
+    border-bottom: 2px solid white;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1;
+}
