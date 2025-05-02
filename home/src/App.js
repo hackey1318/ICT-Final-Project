@@ -73,6 +73,7 @@ import MovieLikeChart from './page/admin/like/MovieLikeChart';
 import GoodsLikeChart from './page/admin/like/GoodsLikeChart';
 import UserEditPage from './page/user/mypage/UserEditPage';
 import InquiryHistory from './page/user/mypage/InquiryHistory';
+import NotificationList from 'page/user/mypage/NotificationList';
 
 
 
@@ -144,6 +145,7 @@ function App() {
 					<Route path='order/detail' element={<OrderDetail />} />
 					<Route path='cart' element={<Cart />} />
 					<Route path="reviews" element={<ReviewHistory />} />
+					<Route path="notification-list" element={<NotificationList />} />
 					<Route path="/mypage/withdraw" element={<WithdrawPage />} />
 					<Route path="edit" element={<UserEditPage />} />
 					<Route path="inquiries" element={<InquiryHistory />} />
