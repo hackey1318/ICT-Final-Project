@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchNotifications, markNotificationAsRead } from "../notification/NotificationService";
+import { fetchNotifications, markNotificationAsRead } from '../notification/NotificationService';
 import { X } from "lucide-react";
 import moment from "moment";
 import '../../../css/user/notification/NotificationPage.css';
