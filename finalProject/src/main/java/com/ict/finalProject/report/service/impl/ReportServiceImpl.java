@@ -4,6 +4,7 @@ import com.ict.finalProject.common.exception.custom.NotFoundException;
 import com.ict.finalProject.domain.constant.ReportBoard;
 import com.ict.finalProject.domain.constant.ReportStatus;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.notification.service.NotificationService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.report.controller.request.ReportRequest;
 import com.ict.finalProject.report.controller.response.ReportResponse;
@@ -41,6 +42,7 @@ public class ReportServiceImpl implements ReportService {
     private final MovieReviewRepository movieReviewRepository;
     private final GoodsReviewRepository goodsReviewRepository;
     private final BlacklistEmailServiceImpl emailService;
+    private final NotificationService notificationService;
 
     //신고하기
     @Override
@@ -85,6 +87,8 @@ public class ReportServiceImpl implements ReportService {
             throw new RuntimeException("신고 처리 결과 생성 중 오류가 발생했습니다.");
         }
         log.info("신고 생성 서비스 종료 - reportNo: {}", reportResponse.getNo());
+        String message = "[신고접수(%d)] %s님의 %s에 신고가 접수되었습니다.".formatted(reportResponse.getNo(), reportResponse.getTargetNickname(), reportResponse.getType().getDescription());
+        notificationService.generateNotification(targetUserId, message);
         return reportResponse;
     }
 
@@ -232,6 +236,8 @@ public class ReportServiceImpl implements ReportService {
 
             reportRepository.save(report);
             log.info("신고 처리 완료 - 신고번호: {}, 블랙리스트처리: {}", no, isBlacklisted);
+            String message = "[신고접수(%d) %s] %s에 대한 신고 결과".formatted(no, ReportStatus.ACCEPTED.equals(report.getStatus()) ? "처리" : "반려", report.getType().getDescription());
+            notificationService.generateNotification(reportedUser.getNo(), message);
             return isBlacklisted;
         } catch (Exception e) {
             log.error("신고 처리 중 오류 발생: ", e);

@@ -86,7 +86,7 @@ public class FindUserServiceImpl implements FindUserService {
                 + "<h2 style='text-align: center; color: #4CAF50;'>비밀번호 재설정</h2>"
                 + "<p style='text-align: center;'>안녕하세요. 아래 버튼을 클릭하여 비밀번호를 재설정하세요.</p>"
                 + "<div style='text-align: center; margin-top: 20px;'>"
-                + "<a href='http://localhost:3000/"+ url +"?token=" + token + "&userNo=" + userno + "' "
+                + "<a href='https://cinemate.shop/"+ url +"?token=" + token + "&userNo=" + userno + "' "
                 + "style='background-color: #4CAF50; color: white; padding: 14px 20px; font-size: 16px; text-decoration: none; border-radius: 5px; cursor: pointer; display: inline-block;'>"
                 + "비밀번호 재설정</a>"
                 + "</div>"
