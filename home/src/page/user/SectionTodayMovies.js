@@ -32,11 +32,9 @@ const FeaturedMovie = ({ movie }) => (
 	<div className="FeaturedMovie_container">
 
 		{/* ⭐ 상세 보기 링크 추가 */}
-		{movie.movieUrl && ( // movieUrl이 있을 때만 링크 표시
-			<a href={movie.movieUrl} className="TodayMovies_info_detail" title={`${movie.name} 상세 보기`}>
-				{'>'}
-			</a>
-		)}
+		<a href={`/movies/${movie.no}`} className="TodayMovies_info_detail" title={`${movie.name} 상세 보기`}>
+			{'>'}
+		</a>
 
 		<div className="FeaturedMovie_poster-container">
 			<img src={movie.postImage} alt={movie.name} className="FeaturedMovie_poster" />
