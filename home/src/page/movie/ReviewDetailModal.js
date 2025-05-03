@@ -236,6 +236,7 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
                                                     ? "기타 사유를 자세히 입력해주세요."
                                                     : "상세 내용을 입력해주세요."
                                             }
+                                            disabled={selectedCategory !== 'ETC'}
                                             style={{
                                                 margin: '10px auto',
                                                 height: '200px',
@@ -248,6 +249,7 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
                                     )}
                                     <div className="report-form-actions" style={{ textAlign: 'right' }}>
                                         <button
+                                            className="btn btn-primary"
                                             type="submit"
                                             disabled={isSubmitting}
                                             style={{ marginRight: '20px' }}
@@ -255,6 +257,7 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
                                             {isSubmitting ? '신고 중...' : '신고 제출'}
                                         </button>
                                         <button
+                                            className="btn btn-danger"
                                             type="button"
                                             onClick={() => setIsReporting(false)}
                                             disabled={isSubmitting}
