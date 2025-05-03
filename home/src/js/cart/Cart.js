@@ -193,7 +193,7 @@ function Cart() {
             return;
         }
 
-        if (!theaterData.includes(theaterName)) {
+        if (!theaterData.some(theater => theater.name === theaterName)) {
             alert("올바른 영화관을 선택해주세요.");
             return;
         }
