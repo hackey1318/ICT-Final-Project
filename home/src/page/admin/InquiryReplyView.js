@@ -13,6 +13,8 @@ function InquiryReplyView() {
     const [selectedImageIdx, setSelectedImageIdx] = useState(0);
     const [isUpdateStatus, setIsUpdateStatus] = useState(false);
     const [writerUserNo, setWriterUserNo] = useState(null);
+    const [loginRole, setLoginRole] = useState(null);
+    const [loginUserNo, setLoginUserNo] = useState(null);
 
     let [inquiryVO, setInquiryVO] = useState({
         no: null,
@@ -205,7 +207,7 @@ function InquiryReplyView() {
                     </div>
                 </>
             }
-            <InquiryComment/>
+            <InquiryComment forceShowCommentInput={true}/>
         </div>
     );
 }

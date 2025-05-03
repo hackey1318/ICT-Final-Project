@@ -3,6 +3,7 @@ import '../../css/cart/Cart.css';
 import checkMark from '../../img/checkMark.png';
 import TossPayment from "./../payment/TossPayment";
 import { deleteGoodsList, getGoodsList, getTheaterList } from "./CartApi";
+import KakaoMap from '../api/KakaoMap';
 import apiClient from '../public/axiosConfig';
 import apiNoAccessClient from '../public/axiosConfigNoAccess';
 
@@ -188,7 +189,7 @@ function Cart() {
             return;
         }
 
-        if (!theaterData.includes(theaterName)) {
+        if (!theaterData.some(theater => theater.name === theaterName)) {
             alert("올바른 영화관을 선택해주세요.");
             return;
         }
@@ -214,7 +215,6 @@ function Cart() {
             goods: selectedGoods
         })
             .then((response) => {
-
                 if (response.data !== "success" && response.data !== "fail") { // 기존 주문번호 존재할 경우
                     setOrderNumber(response.data);
                 }
@@ -234,7 +234,7 @@ function Cart() {
     const searchTheater = () => {
         const keyword = theaterName.toLowerCase();  // 소문자로 변환하여 필터링
         const filtered = theaterData.filter(theater =>
-            theater.toLowerCase().includes(keyword)  // 입력된 키워드를 포함하는 영화관만 필터링
+            theater.name.toLowerCase().includes(keyword.toLowerCase())  // 입력된 키워드를 포함하는 영화관만 필터링
         );
         setFilteredTheaters(filtered);
     };
@@ -330,7 +330,7 @@ function Cart() {
                 </div>
             </div>
 
-            <div className="order_info_container">
+            <div className={`order_info_container ${theaterName.trim() ? 'expanded' : ''}`}>
                 <p>결제 정보</p>
                 <hr />
                 <div className="order_info">
@@ -364,14 +364,20 @@ function Cart() {
                         </div>
                         {theaterSuggestion && (
                             <div id="theaterSuggestion">
-                                {filteredTheaters.length !== 0 ? filteredTheaters.map((name, idx) => (
-                                    <div key={idx} onMouseDown={() => selectTheater(name)} style={{ cursor: 'pointer' }}>{name}</div>
+                                {filteredTheaters.length !== 0 ? filteredTheaters.map((theater, idx) => (
+                                    <div key={idx} onMouseDown={() => selectTheater(theater.name)} style={{ cursor: 'pointer' }}>{theater.name}</div>
                                 )) : <div>결과가 없습니다.</div>}
                             </div>
                         )}
                     </div>
                     <button id="orderButton" onClick={order}>주문하기</button>
                 </div>
+                {theaterName.trim() !== "" && (
+                    <span>
+                        <label style={{marginTop:'20px', fontSize:'0.9em'}}>영화관 위치({theaterName})</label>
+                        <KakaoMap theaterName={theaterName} />
+                    </span>
+                )}
             </div>
 
             {paymentModalOpen && (

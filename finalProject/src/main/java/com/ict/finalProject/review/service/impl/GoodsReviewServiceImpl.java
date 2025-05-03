@@ -22,6 +22,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -145,25 +146,43 @@ public class GoodsReviewServiceImpl implements GoodsReviewService {
         existing.setTitle(request.getTitle());
         existing.setContent(request.getContent());
         existing.setRating(request.getRating());
-        // (orderNo, goodsId, userNo는 바뀌면 안 되므로 건드리지 않습니다)
 
-        // 3) PENDING 레코드 생성 (이미지 다시 편집할 때 대비)
-        fileSystemService.createPendingImageInfos(
-                request.getImageIds(),
+        // — 여기서부터 수정 —
+        // 3) 기존에 ACTIVE 상태인 이미지 ID들 조회
+        List<String> oldIds = imageInfoRepo.findImageIdsByBoardNoAndTypeAndStatus(
                 existing.getId().intValue(),
-                ImageWriteType.GOODSREVIEW
+                ImageWriteType.GOODSREVIEW,
+                StatusInfo.ACTIVE
         );
 
-        // 4) PENDING → ACTIVE 링크 (새로 남긴 이미지들도 활성화)
-        if (request.getImageIds() != null && !request.getImageIds().isEmpty()) {
-            imageInfoRepo.linkImagesToReview(
-                    request.getImageIds(),
+        // 4) 요청으로 들어온 전체 ID 중, 신규로 추가된 ID만 골라내기
+        List<String> newIds = request.getImageIds() == null
+                ? Collections.emptyList()
+                : request.getImageIds();
+        List<String> addedIds = newIds.stream()
+                .filter(id -> !oldIds.contains(id))
+                .toList();
+
+        // 5) PENDING 레코드 생성 (오직 새로 추가된 ID만)
+        if (!addedIds.isEmpty()) {
+            fileSystemService.createPendingImageInfos(
+                    addedIds,
                     existing.getId().intValue(),
                     ImageWriteType.GOODSREVIEW
             );
         }
 
-        // 5) DTO 변환 & ACTIVE 이미지 조회
+        // 6) ACTIVE 링크도 새로 추가된 ID만
+        if (!addedIds.isEmpty()) {
+            imageInfoRepo.linkImagesToReview(
+                    addedIds,
+                    existing.getId().intValue(),
+                    ImageWriteType.GOODSREVIEW
+            );
+        }
+        // — 여기까지 수정 —
+
+        // 7) DTO 변환 & ACTIVE 이미지 조회
         GoodsReviewResponse dto = modelMapper.map(existing, GoodsReviewResponse.class);
         List<String> activeIds = imageInfoRepo.findImageIdsByBoardNoAndTypeAndStatus(
                 existing.getId().intValue(),
@@ -174,6 +193,7 @@ public class GoodsReviewServiceImpl implements GoodsReviewService {
 
         return dto;
     }
+
 
     @Override
     @Transactional

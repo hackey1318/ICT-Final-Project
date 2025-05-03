@@ -199,7 +199,13 @@
     margin-top: 0; /* 기존 margin-top 제거 */
     position: sticky; /* 스크롤해도 고정하려면 */
     top: 100px;
+    transition: all 0.500s;
 }
+
+.order_info_container.expanded {
+    height: 581px;
+    transition: all 0.500s;
+  }
 
 .order_info_container > p {
     font-size: 1.2em;

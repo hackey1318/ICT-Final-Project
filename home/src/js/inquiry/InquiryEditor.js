@@ -66,7 +66,7 @@ const InquiryEditor = ({onChange, initialContent}) => {
 
     return (
         <div className='inquiry-write-page'>
-            <div id="inquiry-box" ref={editorRef} style={{height: '400px', fontSize: '1.2em'}} onChange={handleContentChange} />
+            <div id="inquiry-box" ref={editorRef} style={{height: '270px', fontSize: '1.2em'}} onChange={handleContentChange} />
             {/* 필요하다면 에디터 내용 미리보기 */}
             {/* <div dangerouslySetInnerHTML={{ __html: content }} /> */}
         </div>
