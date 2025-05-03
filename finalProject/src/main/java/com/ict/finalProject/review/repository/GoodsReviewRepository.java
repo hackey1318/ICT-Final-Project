@@ -1,6 +1,7 @@
 package com.ict.finalProject.review.repository;
 
 import com.ict.finalProject.review.repository.domain.GoodsReview;
+import com.ict.finalProject.review.service.dto.MovieReviewDto;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +19,4 @@ public interface GoodsReviewRepository extends JpaRepository<GoodsReview, Long> 
     List<Long> findReviewedOrderNos(@Param("goodsId") Long goodsId, @Param("userNo") Long userNo);
 
     List<GoodsReview> findByUserNo(Long userNo);
-
-
-
 }

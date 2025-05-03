@@ -1,10 +1,15 @@
 package com.ict.finalProject.review.service.impl;
 
+import com.ict.finalProject.common.exception.custom.NotFoundException;
 import com.ict.finalProject.domain.constant.ImageWriteType;
 import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.domain.constant.StatusInfo;
 import com.ict.finalProject.fileSystem.repository.ImageInfoRepository;
 import com.ict.finalProject.fileSystem.service.FileSystemService;
+import com.ict.finalProject.mdShop.repository.GoodsStockRepository;
+import com.ict.finalProject.mdShop.repository.MdShopRepository;
+import com.ict.finalProject.mdShop.repository.domain.Goods;
+import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.orders.repository.OrderItemRepository;
 import com.ict.finalProject.orders.repository.OrdersRepository;
 import com.ict.finalProject.orders.repository.domain.OrderItem;
@@ -226,12 +231,16 @@ public class GoodsReviewServiceImpl implements GoodsReviewService {
                 .map(entity -> {
                     // 엔티티 → DTO
                     GoodsReviewResponse dto = modelMapper.map(entity, GoodsReviewResponse.class);
+
+                    List<String> imageList = imageInfoRepo.findImageIdsByBoardNoAndTypeAndStatus(Math.toIntExact(dto.getGoodsId()), ImageWriteType.GOODS, StatusInfo.ACTIVE);
+
                     // 관련 이미지 IDs 설정
                     List<String> imageIds = imageInfoRepo.findImageIdsByBoardNoAndTypeAndStatus(
                             entity.getId().intValue(),
                             ImageWriteType.GOODSREVIEW,
                             StatusInfo.ACTIVE
                     );
+                    dto.setPostImage(imageList.get(0));
                     dto.setImageIds(imageIds);
                     return dto;
                 })
