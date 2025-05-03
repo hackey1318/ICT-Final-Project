@@ -66,22 +66,22 @@ export default function ReviewHistory() {
   useEffect(() => {
     // location.state에서 값이 있다면 우선적으로 'goods'로 설정
     if (location.state?.from === 'goods') {
-        setFilterType('goods');
+      setFilterType('goods');
     } else {
-        // location.state가 없으면 sessionStorage에서 값을 가져옴
-        const savedFilterType = sessionStorage.getItem('filterType');
-        if (savedFilterType) {
-            setFilterType(savedFilterType);
-        } else {
-            setFilterType('movie'); // 기본값 'movie'
-        }
+      // location.state가 없으면 sessionStorage에서 값을 가져옴
+      const savedFilterType = sessionStorage.getItem('filterType');
+      if (savedFilterType) {
+        setFilterType(savedFilterType);
+      } else {
+        setFilterType('movie'); // 기본값 'movie'
+      }
     }
-}, [location.state]);
+  }, [location.state]);
 
-useEffect(() => {
-  // filterType이 변경될 때마다 sessionStorage에 저장
-  sessionStorage.setItem('filterType', filterType);
-}, [filterType]);
+  useEffect(() => {
+    // filterType이 변경될 때마다 sessionStorage에 저장
+    sessionStorage.setItem('filterType', filterType);
+  }, [filterType]);
 
   // 클릭 시 영화 상세 정보 API 호출 후 세션에 저장, 이후 리스트 페이지로 이동
   const handleClick = async (rev) => {
@@ -107,7 +107,7 @@ useEffect(() => {
 
   const maxPerRow = 6; // 한 줄에 보여줄 카드 개수
   const columns = Math.min(displayed.length, maxPerRow); // 한 줄에 보여줄 카드 개수
- 
+
   return (
     <div className='review-history-container">'>
       <h2 className="page-title">내 후기</h2>
@@ -150,13 +150,13 @@ useEffect(() => {
 
       {/* 카드 그리드 */}
       <div className="MypageReview_card-grid"
-          ref={gridRef}
-          style={{
+        ref={gridRef}
+        style={{
           display: 'grid',
           gridTemplateColumns: `repeat(auto-fit, minmax(${MIN_CARD_WIDTH}px, 1fr))`,
           gap: '16px',
           justifyContent: 'center'
-         }}
+        }}
       >
         {displayed.map((rev) => (
           <div
@@ -166,9 +166,11 @@ useEffect(() => {
           >
             <img
               src={
-                rev.imageIds?.[0]
-                  ? `${apiClient.defaults.baseURL}/file-system/download/${rev.imageIds[0]}`
-                  : 'https://via.placeholder.com/200x120'
+                rev.imageIds && rev.imageIds.length > 0
+                ? `${apiClient.defaults.baseURL}/file-system/download/${rev.imageIds[0]}`
+                : filterType === 'movie'
+                  ? rev.postImage || 'https://via.placeholder.com/300x450?text=No+Image'
+                  : `${apiClient.defaults.baseURL}/file-system/download/${rev.postImage}`
               }
               alt=""
             />
@@ -186,7 +188,7 @@ useEffect(() => {
           </div>
         ))}
         {allReviews.length === 0 && (
-          <p style={{width:'200%',fontSize:'2rem', fontWeight:'bold'}}>작성된 {filterType === 'movie' ? '영화' : '굿즈'} 후기가 없습니다.</p>
+          <p style={{ width: '200%', fontSize: '2rem', fontWeight: 'bold' }}>작성된 {filterType === 'movie' ? '영화' : '굿즈'} 후기가 없습니다.</p>
         )}
       </div>
     </div>

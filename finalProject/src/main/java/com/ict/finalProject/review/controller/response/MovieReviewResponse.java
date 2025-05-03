@@ -18,7 +18,6 @@ public class MovieReviewResponse {
     private LocalDateTime updatedAt;
 
 
-
     @Column(name = "post_image")
     private String postImage;
 
@@ -28,8 +27,4 @@ public class MovieReviewResponse {
     private String userProfileImage;   // 추가
 
     private List<String> imageIds;    // ← 추가
-
-
-
-
 }

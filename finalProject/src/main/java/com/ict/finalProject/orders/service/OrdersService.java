@@ -20,5 +20,7 @@ public interface OrdersService {
     void cancelOrders(int orderNo);
     void failOrders(int orderNo);
     List<OrdersDto> getTotalOrders();
-    Page<OrderManageResponse> getOrderManageResponse(Pageable pageable, OrdersStatus status);
+    Page<OrderManageResponse> getOrderManageResponse(Pageable pageable, Integer theaterNo, OrdersStatus status);
+
+    boolean pickUpOrder(Integer orderNo);
 }

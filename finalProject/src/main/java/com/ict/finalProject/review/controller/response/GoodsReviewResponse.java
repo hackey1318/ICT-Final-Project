@@ -13,6 +13,7 @@ public class GoodsReviewResponse {
     private String title;
     private String content;
     private Integer rating;
+    private String postImage;
     private List<String> imageIds;      // 첨부된 이미지 ID
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

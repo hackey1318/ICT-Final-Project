@@ -1,6 +1,7 @@
 package com.ict.finalProject.orders.repository.domain;
 
 import com.ict.finalProject.domain.constant.OrdersStatus;
+import com.ict.finalProject.orders.repository.domain.constant.PickUpStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,6 +43,10 @@ public class Orders {
     @Column(nullable = false)
     private int totalPrice;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PickUpStatus pickUpStatus = PickUpStatus.BEFORE;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -57,6 +62,7 @@ public class Orders {
     )
     private List<OrderItem> items = new ArrayList<>();
 
-
-
+    public void pickUp() {
+        this.pickUpStatus = PickUpStatus.PICKUP;
+    }
 }

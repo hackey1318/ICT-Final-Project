@@ -21,8 +21,9 @@ public interface OrdersRepository extends JpaRepository<Orders, Integer> {
     Orders findByOrderNumber(String orderNumber);
     Orders findByUserNoAndStatus(int userNo, OrdersStatus status);
     boolean existsByIdAndStatusAndUserNo(Integer id, OrdersStatus status, int userNo);
-    Page<Orders> findByStatusIn(List<OrdersStatus> ordersStatusList, Pageable pageable);
 
+    @Query("SELECT o FROM Orders o WHERE o.status IN :ordersStatusList AND (:theaterNo IS NULL OR o.theaterNo = :theaterNo)")
+    Page<Orders> findByStatusInAndTheaterNo(@Param("ordersStatusList") List<OrdersStatus> ordersStatusList, @Param("theaterNo") Integer theaterNo, Pageable pageable);
     @Query("""
       SELECT o
         FROM Orders o

@@ -1,15 +1,19 @@
 package com.ict.finalProject.orders.service.impl;
 
+import com.ict.finalProject.common.exception.custom.NotFoundException;
 import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.oauth.repository.UsersRepository;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.orders.controller.response.OrderManageResponse;
 import com.ict.finalProject.orders.repository.OrdersRepository;
+import com.ict.finalProject.orders.repository.domain.OrderItem;
 import com.ict.finalProject.orders.repository.domain.Orders;
+import com.ict.finalProject.orders.repository.domain.constant.PickUpStatus;
 import com.ict.finalProject.orders.service.OrdersService;
 import com.ict.finalProject.orders.service.dto.OrdersDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.query.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -20,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrdersServiceImpl implements OrdersService {
@@ -101,30 +106,47 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public Page<OrderManageResponse> getOrderManageResponse(Pageable pageable, OrdersStatus status) {
-        List<OrdersStatus> ordersStatusList = null;
-        if(status == null)
-            ordersStatusList = List.of(OrdersStatus.PAID, OrdersStatus.CANCELLED);
-        else if(status == OrdersStatus.CANCELLED)
-            ordersStatusList = List.of(OrdersStatus.CANCELLED);
-        else if(status == OrdersStatus.PAID)
-            ordersStatusList = List.of(OrdersStatus.PAID);
-        Page<Orders> ordersPage = ordersRepository.findByStatusIn(ordersStatusList, pageable);
+    public Page<OrderManageResponse> getOrderManageResponse(Pageable pageable, Integer theaterNo, OrdersStatus status) {
+        List<OrdersStatus> ordersStatusList = List.of(OrdersStatus.PAID, OrdersStatus.CANCELLED);
+        if(status == OrdersStatus.CANCELLED){
+            ordersStatusList.remove(OrdersStatus.PAID);
+        } else if(status == OrdersStatus.PAID) {
+            ordersStatusList.remove(OrdersStatus.CANCELLED);
+        }
 
-        Page<OrderManageResponse> orderManageResponsePage = ordersPage.map(orders -> {
+        Page<Orders> ordersPage = ordersRepository.findByStatusInAndTheaterNo(ordersStatusList, theaterNo == 0 ? null : theaterNo, pageable);
+
+        return ordersPage.map(orders -> {
             Users users = userRepository.findById(orders.getUserNo()).orElseThrow(() -> new RuntimeException("사용자가 없습니다."));
-            List<String> orderItemNameList = orders.getItems().stream().map(item -> item.getName()).collect(Collectors.toList());
+            List<String> orderItemNameList = orders.getItems().stream().map(OrderItem::getName).collect(Collectors.toList());
             return OrderManageResponse.builder()
+                    .orderNo(orders.getId())
                     .userNickname(users.getNickname())
+                    .theaterNo(orders.getTheaterNo())
                     .orderItemNameList(orderItemNameList)
                     .createdAt(orders.getCreatedAt())
                     .updatedAt(orders.getUpdatedAt())
                     .ordersStatus(orders.getStatus())
+                    .pickUpStatus(orders.getPickUpStatus())
                     .orderNumber(orders.getOrderNumber())
                     .build();
         });
+    }
 
-        return orderManageResponsePage;
+    @Override
+    @Transactional
+    public boolean pickUpOrder(Integer orderNo) {
+
+        Orders order = ordersRepository.findById(orderNo).orElseThrow(() -> new NotFoundException("주문을 찾을 수 없습니다."));
+        try {
+            order.pickUp();
+            ordersRepository.save(order);
+        } catch (Exception e) {
+
+            log.error("pick up Error[{}]", e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     private String convertStatusToText(OrdersStatus status) {
