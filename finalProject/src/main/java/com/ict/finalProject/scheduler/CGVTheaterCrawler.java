@@ -1,5 +1,6 @@
 package com.ict.finalProject.scheduler;
 
+import com.ict.finalProject.movie.controller.response.TheaterResponse;
 import com.ict.finalProject.movie.repository.domain.Theaters;
 import com.ict.finalProject.movie.service.TheatersService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -36,7 +38,10 @@ public class CGVTheaterCrawler {
         String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=";
 
         List<Theaters> newTheaterList = new ArrayList<>();
-        List<String> dbTheaterNameList = theatersService.getAllTheaterNames();
+        List<TheaterResponse> dbTheaterNameList = theatersService.getAllTheaterNames();
+        List<String> theaterNames = dbTheaterNameList.stream()
+                .map(TheaterResponse::getName)
+                .collect(Collectors.toList());
         for (String theaterName : theaterNameList) {
 
             if (theaterName.contains("(임시휴업)")) {
@@ -46,7 +51,7 @@ public class CGVTheaterCrawler {
             } else if (theaterName.contains("CGV고덕강일")) {
                 theaterName = theaterName.replace("강일", "점");
             }
-            if (dbTheaterNameList.contains(theaterName)) {
+            if (theaterNames.contains(theaterName)) {
                 continue;
             }
             try {
