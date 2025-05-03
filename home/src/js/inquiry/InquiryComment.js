@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import apiClient from "../public/axiosConfig";
 import '../../css/inquiry/inquiry.css';
 
-function InquiryComment({writerUserNo}) {
+function InquiryComment({writerUserNo, forceShowCommentInput=false}) {
     const [isLoading, setIsLoading] = useState(false);
     const [commentList, setCommentList] = useState([]);
     const [comment, setComment] = useState('');
@@ -131,7 +131,7 @@ function InquiryComment({writerUserNo}) {
             {console.log("Debug - writerUserNo:", writerUserNo, "loginUserNo:", loginUserNo)}
             {
                 loginUserNo !== null && writerUserNo !== null &&
-                parseInt(loginUserNo) === parseInt(writerUserNo) &&
+                parseInt(loginUserNo) === parseInt(writerUserNo) || forceShowCommentInput &&
                 <div style={{width: '100%', margin: '0 auto'}}>
                     <label htmlFor="comment">내용 :</label>
                     <textarea className="form-control" 

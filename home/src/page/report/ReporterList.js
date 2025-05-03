@@ -119,7 +119,7 @@ function ReporterList() {
                             <li>{reporter.email}</li>
                             <li>{reporter.reportCount}</li>
                             <li>{formatDate(reporter.lastReportDate)}</li>
-                            <li style={{color: reporter.status==='ACTIVE' ? 'blue' : 'orange', fontWeight: 'bold'}}>
+                            <li style={{color: reporter.status==='ACTIVE' ? 'skyblue' : 'orange', fontWeight: 'bold'}}>
                                 {statusMap[reporter.status] || reporter.status}
                             </li>
                             <li>

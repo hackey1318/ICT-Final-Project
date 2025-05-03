@@ -15,7 +15,7 @@ export const addGoodsToCart = (id, quantity, act) => {
     });
 };
 
-export const getTheaterList = () => {
+export const getTheaterList = () => {  //영화관 전부의 정보 가져오게 수정하기
     const accessToken = sessionStorage.getItem("accessToken");
     return axios.post("http://localhost:9988/order/theaterList", {}, {
         headers: {

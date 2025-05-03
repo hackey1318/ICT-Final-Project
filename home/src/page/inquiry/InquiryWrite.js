@@ -266,7 +266,7 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
                 </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{ display: 'flex', textAlign: 'left' }}>
                     <input type='file' multiple ref={runfile} style={{ display: 'none' }} accept='image/*'/>
                     <div id='addImgDiv' onClick={addImgClick}><img src={addFile} id='addFile' style={{ cursor: 'pointer', width: '20px' }} /></div>

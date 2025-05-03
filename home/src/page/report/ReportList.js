@@ -113,7 +113,7 @@ function ReportList() {
                                         <li>{reportTypeMap[item.type || item.type]}</li>
                                         <li>{item.boardNo}</li>
                                         <li>{formattedDate}</li>
-                                        <li style={{ color: isFinished ? 'blue' : 'orange', fontWeight: 'bold' }}>
+                                        <li style={{ color: isFinished ? 'skyblue' : 'orange', fontWeight: 'bold' }}>
                                             {reportStatusMap[item.status] || item.status}
                                         </li>
                                         <li>
