@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getTheaterList } from "../cart/CartApi";
 
-const KakaoMap = ({ theaterName }) => {
+const KakaoMap = ({ theaterName, latitude, longitude, height = "200px" }) => {
     const mapRef = useRef(null);
     const [theaterList, setTheaterList] = useState([]);
 
@@ -36,27 +36,26 @@ const KakaoMap = ({ theaterName }) => {
         };
 
         const renderMap = () => {
+            const selectedTheater = theaterList.find((theater) => theater.name === theaterName);
+            if (!selectedTheater) return;
+            const { latitude, longitude } = selectedTheater;
+            const coords = new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
             const mapContainer = mapRef.current;
+
             const map = new window.kakao.maps.Map(mapContainer, {
-                center: new window.kakao.maps.LatLng(37.5665, 126.9780),
+                center: coords,
                 level: 5
             });
 
-            const selectedTheater = theaterList.find((theater) => theater.name === theaterName);
-            if (selectedTheater) {
-                const { latitude, longitude } = selectedTheater;
-                const coords = new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
-                const marker = new window.kakao.maps.Marker({
-                    map: map,
-                    position: coords
-                });
-                map.setCenter(coords); 
-
-                window.kakao.maps.event.addListener(marker, 'click', () => {
-                    const kakaoMapUrl = `https://map.kakao.com/link/map/${encodeURIComponent(theaterName)},${latitude},${longitude}`;
-                    window.open(kakaoMapUrl, '_blank'); 
-                });
-            }
+            const marker = new window.kakao.maps.Marker({
+                map: map,
+                position: coords
+            });
+        
+            window.kakao.maps.event.addListener(marker, 'click', () => {
+                const kakaoMapUrl = `https://map.kakao.com/link/map/${encodeURIComponent(theaterName)},${latitude},${longitude}`;
+                window.open(kakaoMapUrl, '_blank');
+            });
         };
 
         if (window.kakao && window.kakao.maps) {
@@ -66,7 +65,7 @@ const KakaoMap = ({ theaterName }) => {
         }
     }, [theaterName, theaterList]);
 
-    return <div ref={mapRef} style={{ width: '95%', height: '200px', margin: '10px auto 0', border: '1px solid #ddd'}} />;
+    return <div ref={mapRef} style={{ width: '95%', height: height, margin: '10px auto 0', border: '1px solid #ddd'}} />;
 };
 
 export default KakaoMap;

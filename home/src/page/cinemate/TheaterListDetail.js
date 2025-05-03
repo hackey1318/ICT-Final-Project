@@ -92,6 +92,8 @@ function TheaterListDetail() {
             });
     };
 
+    const theater = theaters[0];
+
     return (
         <div className="movie_detail_container container">
             {/* 헤더 섹션 */}
@@ -129,9 +131,13 @@ function TheaterListDetail() {
 
             {/* 해당 영화관에 관련된 시네메이트 신청 정보 */}
             <div className="row">
-                <div>
-                    {/* <label>{theater}</label> */}
-                    <KakaoMap />
+                <div style={{textAlign:'center', width:'60%', margin:'0 auto 20px'}}>
+                    <label style={{fontSize:'1.5em', fontWeight:'bold'}}>{theater.theaterName}</label>
+                    <KakaoMap 
+                        theaterName={theater.theaterName}
+                        latitude={theater.latitude}
+                        longitude={theater.longitude}
+                    />
                 </div>
                 {
                     theaters.map((theater, index) => {

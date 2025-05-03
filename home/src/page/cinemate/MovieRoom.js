@@ -4,6 +4,7 @@ import { useLocation, useParams } from "react-router-dom";
 import JoinedUsersBadgeModal from "./JoinedUsersModal";
 import ChatBox from "./ChatBox"; // 채팅 컴포넌트를 분리해서 가져옵니다.
 import '../../css/cinemate/MovieRoom.css';
+import KakaoMap from "../../js/api/KakaoMap";
 
 const accessToken = sessionStorage.getItem("accessToken");
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
@@ -100,34 +101,48 @@ export default function MovieRoom() {
         <div className="container my-4">
             <h2 className="mb-4">{movie ? movie.movieName : theater.movieName}</h2>
 
-            <div className="mb-3">
-                <strong>작성자:</strong> {movie? movie.userName : theater.userName} | <strong>작성일:</strong> {movie? movie.createdAt?.split("T")[0] : theater.createdAt?.split("T")[0]}
-            </div>
+            <div style={{display:'flex'}}>
+                <div style={{width:'50%'}}>
+                    <div className="mb-3">
+                        <strong>작성자:</strong> {movie? movie.userName : theater.userName} | <strong>작성일:</strong> {movie? movie.createdAt?.split("T")[0] : theater.createdAt?.split("T")[0]}
+                    </div>
 
-            <div className="mb-2">
-                <span className="badge bg-secondary p-2">모집 시간: {movie? movie.meetingDate?.replace("T", " ").slice(0, 16) : theater.meetingDate?.replace("T", " ").slice(0, 16)}</span>
-            </div>
+                    <div className="mb-2">
+                        <span className="badge bg-secondary p-2">모집 시간: {movie? movie.meetingDate?.replace("T", " ").slice(0, 16) : theater.meetingDate?.replace("T", " ").slice(0, 16)}</span>
+                    </div>
 
-            <div className="mb-2" style={{ position: "relative", display: "inline-block" }}>
-                <span
-                    ref={badgeRef}
-                    className="badge bg-warning text-dark p-2"
-                    onClick={fetchJoinedUsers}
-                >
-                    총 인원: {participantCount} / {movie? movie.maxMemberCount : theater.maxMemberCount}
-                </span>
+                    <div className="mb-2" style={{ position: "relative", display: "inline-block" }}>
+                        <span
+                            ref={badgeRef}
+                            className="badge bg-warning text-dark p-2"
+                            onClick={fetchJoinedUsers}
+                        >
+                            총 인원: {participantCount} / {movie? movie.maxMemberCount : theater.maxMemberCount}
+                        </span>
 
-                {showJoinedModal && (
-                    <JoinedUsersBadgeModal
-                        show={true}
-                        onClose={handleCloseJoinedModal}
-                        users={joinedUsers}
+                        {showJoinedModal && (
+                            <JoinedUsersBadgeModal
+                                show={true}
+                                onClose={handleCloseJoinedModal}
+                                users={joinedUsers}
+                            />
+                        )}
+                    </div>
+
+                    <div className="mb-3">
+                        <img src={movie.postImage} alt="Movie Poster" className="img-fluid" style={{ maxWidth: "300px", borderRadius: "8px" }} />
+                    </div>
+                </div>
+
+                <div style={{width:'50%', textAlign:'center'}}>
+                    <label>모집장소 : <span style={{fontSize:'1.3em', fontWeight:'bold'}}>{movie.theaterName}</span></label>
+                    <KakaoMap
+                        theaterName={movie ? movie.theaterName : theater.theaterName}
+                        latitude={movie ? movie.latitude : theater.latitude}
+                        longitude={movie ? movie.longitude : theater.longitude}
+                        height="320px"
                     />
-                )}
-            </div>
-
-            <div className="mb-3">
-                <img src={movie.postImage} alt="Movie Poster" className="img-fluid" style={{ maxWidth: "300px", borderRadius: "8px" }} />
+                </div>
             </div>
 
             <div className="mb-4" style={{ background: "#f8f9fa", padding: "15px", borderRadius: "8px" }}>
