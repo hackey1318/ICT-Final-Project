@@ -27,7 +27,7 @@ function ReviewListPage({ movieNo, currentUserNo }) {
     if(cameFromReviewHistory) {
       navigate('/mypage/reviews');
     } else {
-      navigate(`/movies/${movieNo}/reviews`);  
+      navigate(`/movies/${movieNo}`);  
     }
   };
 
