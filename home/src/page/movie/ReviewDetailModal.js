@@ -64,11 +64,31 @@ function ReviewDetailModal({ review, onClose, onDelete, currentUserNo }) {
         }
     };
 
-    const handleCategoryChange = (e) => {
-        setSelectedCategory(e.target.value);
-        if (e.target.value !== 'ETC') setErrorMessage('');
+    const getDefaultReportContent = cat => {
+        switch (cat) {
+            case 'ABUSE': return '욕설이 포함되어 있습니다.';
+            case 'CHEAT': return '사기성 내용입니다.';
+            case 'ILLEGALAD': return '불법광고를 포함하고 있습니다.';
+            case 'PORNOGRAPHY': return '음란물을 포함하고 있습니다.';
+            case 'BADSPORT': return '비매너적인 내용을 포함하고 있습니다.';
+            default: return '';
+        }
     };
 
+    const handleCategoryChange = (e) => {
+        const selected = e.target.value;
+        setSelectedCategory(selected);
+    
+        if (selected === 'ETC') {
+            setReportedContent(""); // ETC는 비워둬야 직접 입력 가능
+        } else {
+            const defaultContent = getDefaultReportContent(selected);
+            setReportedContent(defaultContent); // 선택된 카테고리의 기본 메시지 설정
+        }
+    
+        if (selected !== 'ETC') setErrorMessage(''); // ETC 아닐 땐 오류 메시지 초기화
+    };
+    
     const handleContentChange = (e) => {
         setReportedContent(e.target.value);
         if (selectedCategory === 'ETC' && e.target.value.trim() && errorMessage.includes('기타')) {
