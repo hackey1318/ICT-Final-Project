@@ -130,7 +130,7 @@ export default function MovieRoom() {
                     </div>
 
                     <div className="mb-3">
-                        <img src={movie.postImage} alt="Movie Poster" className="img-fluid" style={{ maxWidth: "300px", borderRadius: "8px" }} />
+                        <img src={movie? movie.postImage : theater.postImage} alt="Movie Poster" className="img-fluid" style={{ maxWidth: "300px", borderRadius: "8px" }} />
                     </div>
                 </div>
 
