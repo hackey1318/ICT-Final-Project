@@ -1,6 +1,7 @@
 package com.ict.finalProject.orders.controller;
 
 import com.ict.finalProject.common.config.JwtTokenProvider;
+import com.ict.finalProject.common.response.SuccessOfFailResponse;
 import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
@@ -275,13 +276,20 @@ public class OrderController {
     public ResponseEntity<Page<OrderManageResponse>> orderManage(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) int theaterNo,
             @RequestParam(required = false) String state)  {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "updatedAt"));
         Page<OrderManageResponse> orderManageResponsePage = null;
         if(state.isEmpty()) {
-            orderManageResponsePage = ordersService.getOrderManageResponse(pageable,null);
+            orderManageResponsePage = ordersService.getOrderManageResponse(pageable, theaterNo, null);
         }
-        else orderManageResponsePage = ordersService.getOrderManageResponse(pageable,OrdersStatus.valueOf(state));
+        else orderManageResponsePage = ordersService.getOrderManageResponse(pageable, theaterNo, OrdersStatus.valueOf(state));
         return ResponseEntity.ok(orderManageResponsePage);
+    }
+
+    @PostMapping("/pick-up/{orderNo}")
+    public SuccessOfFailResponse pickup(@PathVariable("orderNo") int orderNo) {
+
+        return SuccessOfFailResponse.builder().result(ordersService.pickUpOrder(orderNo)).build();
     }
 }
