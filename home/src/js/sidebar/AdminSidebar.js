@@ -100,7 +100,7 @@ function AdminSidebar({ activeMenu }) {
                         <div className="top-menu-div" onClick={() => toggleMenu(2)}>영화 조회</div>
                         {adminOpenMenus[2] && (
                             <ul className="admin-sub-menu">
-                                <li><Link to="/manager/home/banner" className={`admin-nav-link ${activeMenu === 'banner' ? 'active' : ''}`}>배너 목록 조회</Link></li>
+                                <li><Link to="/manager/home/banner" className={`admin-nav-link ${activeMenu === 'banner' ? 'active' : ''}`}>배너 관리</Link></li>
                                 <li><Link to="/manager/home/movie-like" className={`admin-nav-link ${activeMenu === 'movie-like' ? 'active' : ''}`}>영화 장르별 찜</Link></li>
                             </ul>
                         )}
@@ -124,8 +124,11 @@ function AdminSidebar({ activeMenu }) {
                         {managerOpenMenus[1] && (
                             <ul className="admin-sub-menu">
                                 <li><Link to="/manager/home/member-list" className={`admin-nav-link ${activeMenu === 'member-list' ? 'active' : ''}`}>회원 목록 조회</Link></li>
+                                <li><Link to="/manager/home/inquiry" className={`admin-nav-link ${activeMenu === 'inquiry' ? 'active' : ''}`}>문의 내역 조회</Link></li>
                                 <li><Link to="/manager/home/reportPage" className={`admin-nav-link ${activeMenu === 'reportPage' ? 'active' : ''}`}>신고 목록 조회</Link></li>
                                 <li><Link to="/manager/home/blacklist" className={`admin-nav-link ${activeMenu === 'blacklist' ? 'active' : ''}`}>블랙리스트 조회</Link></li>
+                                <li><Link to="/manager/home/gender" className={`admin-nav-link ${activeMenu === 'gender' ? 'active' : ''}`}>회원 성별 비율 차트</Link></li>
+                                <li><Link to="/manager/home/dau" className={`admin-nav-link ${activeMenu === 'dau' ? 'active' : ''}`}>일별/월별 활동 정보 차트</Link></li>
                             </ul>
                         )}
                     </li>
@@ -144,7 +147,7 @@ function AdminSidebar({ activeMenu }) {
                         <div className="top-menu-div" onClick={() => toggleMenu(3)}>영화 조회</div>
                         {managerOpenMenus[3] && (
                             <ul className="admin-sub-menu">
-                                <li><Link to="/manager/home/banner" className={`admin-nav-link ${activeMenu === 'banner' ? 'active' : ''}`}>배너</Link></li>
+                                <li><Link to="/manager/home/banner" className={`admin-nav-link ${activeMenu === 'banner' ? 'active' : ''}`}>배너 관리</Link></li>
                                 <li><Link to="/manager/home/movie-like" className={`admin-nav-link ${activeMenu === 'movie-like' ? 'active' : ''}`}>영화 장르별 찜</Link></li>
                             </ul>
                         )}

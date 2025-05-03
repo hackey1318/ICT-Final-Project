@@ -19,9 +19,9 @@ const LoginForm = () => {
     // const navigate = useNavigate(); // 페이지 이동이 필요하면 사용
 
     return (
-        <div className="container">
-            <div className="row justify-content-center">
-                <div className="col-md-6 col-lg-4">
+        <div className="container mt-5">
+            <div className="row justify-content-center mt-5">
+                <div className="col-md-6 col-lg-4 mt-5">
                     <h1 className="mb-4 text-center">로그인</h1> {/* text-center 추가 */}
 
                     {/* --- 로그인 에러 메시지 표시 --- */}
