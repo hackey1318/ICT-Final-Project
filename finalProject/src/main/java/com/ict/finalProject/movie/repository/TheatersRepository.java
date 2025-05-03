@@ -16,6 +16,6 @@ public interface TheatersRepository extends JpaRepository<Theaters, Integer> {
     Theaters findByName(String theaterName);
     Theaters findById(int theaterNo);
 
-    @Query("SELECT new com.ict.finalProject.movie.controller.response.TheaterResponse(t.no, t.name) FROM Theaters t WHERE LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    @Query("SELECT new com.ict.finalProject.movie.controller.response.TheaterResponse(t.no, t.name, t.latitude, t.longitude) FROM Theaters t WHERE LOWER(t.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<TheaterResponse> findTheaterNamesByKeyword(@Param("keyword") String keyword, Pageable pageable);
 }

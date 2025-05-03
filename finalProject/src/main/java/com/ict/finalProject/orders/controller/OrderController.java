@@ -4,8 +4,8 @@ import com.ict.finalProject.common.config.JwtTokenProvider;
 import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.domain.constant.UserRole;
 import com.ict.finalProject.mdShop.repository.domain.Goods;
-import com.ict.finalProject.mdShop.repository.domain.GoodsStocks;
 import com.ict.finalProject.mdShop.service.MdShopService;
+import com.ict.finalProject.movie.controller.response.TheaterResponse;
 import com.ict.finalProject.movie.service.TheatersService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.oauth.service.UserService;
@@ -49,7 +49,7 @@ public class OrderController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/theaterList")
-    public List<String> theaterList() {
+    public List<TheaterResponse> theaterList() {
         return theatersService.getAllTheaterNames();
     }
 
