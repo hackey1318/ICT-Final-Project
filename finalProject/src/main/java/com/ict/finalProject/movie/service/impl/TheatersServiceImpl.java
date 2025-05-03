@@ -18,10 +18,14 @@ public class TheatersServiceImpl implements TheatersService {
 
     private final TheatersRepository theatersRepository;
 
-    public List<String> getAllTheaterNames() {
+    public List<TheaterResponse> getAllTheaterNames() {
         return theatersRepository.findAll()
                 .stream()
-                .map(Theaters::getName)
+                .map(theaters -> TheaterResponse.builder()
+                        .no(theaters.getNo())
+                        .name(theaters.getName())
+                        .latitude(theaters.getLatitude())
+                        .longitude(theaters.getLongitude()).build())
                 .collect(Collectors.toList());
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TheatersService {
 
-    List<String> getAllTheaterNames();
+    List<TheaterResponse> getAllTheaterNames();
 
     void saveTheaterList(List<Theaters> theaters);
 

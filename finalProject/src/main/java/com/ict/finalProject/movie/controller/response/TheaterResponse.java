@@ -13,4 +13,6 @@ public class TheaterResponse {
 
     private Integer no;
     private String name;
+    private String latitude;
+    private String longitude;
 }
