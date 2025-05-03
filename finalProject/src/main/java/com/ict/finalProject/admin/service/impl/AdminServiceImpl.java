@@ -28,7 +28,7 @@ public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsersRepository usersRepository;
-    @Value("${app.base-url:http://localhost:9988}")
+    @Value("${app.base-url:http://cinemate.shop/api}")
     private String appBaseUrl;
 
     //관리자 등록

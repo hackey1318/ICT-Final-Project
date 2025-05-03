@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UsersRepository usersRepository;
-    @Value("${app.base-url:http://localhost:9988}")
+    @Value("${app.base-url:http://cinemate.shop/api}")
     private String appBaseUrl;
 
     @Transactional
