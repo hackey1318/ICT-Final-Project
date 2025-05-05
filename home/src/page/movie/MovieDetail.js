@@ -7,6 +7,7 @@ import LikeType from "../../js/common/LikeType";
 import RecruitMovieModal from "./RecruitMovieModal";
 import RelatedMovie from './RelatedMovie';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
+import { handleUserLogout } from 'js/api/UserLogout';
 
 const BASE_URL = `${apiNoAccessClient.defaults.baseURL}/file-system/download/`;
 const accessToken = sessionStorage.getItem("accessToken");
@@ -110,6 +111,9 @@ function MovieDetail() {
 			setLiked(likeData.status === "ACTIVE");
 		} catch (err) {
 			console.error("좋아요 처리 중 오류:", err);
+			if (err.response.status === 423) {
+				handleUserLogout();
+			}
 		}
 	};
 

@@ -3,6 +3,7 @@ import "../../css/movie/RecruitMovie.css"
 import { searchTheaters } from './../../js/movie/TheaterAPI';
 import { generateCineMate } from './../../js/movie/CineMate';
 import { max } from "lodash";
+import { handleUserLogout } from "js/api/UserLogout";
 
 export default function RecruitMovieModal({ movie, closeModal }) {
 
@@ -89,6 +90,9 @@ export default function RecruitMovieModal({ movie, closeModal }) {
             })
             .catch((error) => {
                 console.error("모집글 등록 실패:", error)
+                if (error.response.status === 423) {
+                    handleUserLogout();
+                }
                 alert("모집글 등록에 실패했습니다.")
             })
         closeModal()

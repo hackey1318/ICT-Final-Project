@@ -6,6 +6,7 @@ import './../../css/md/GoodsReportModal.css';
 import { createReport } from '../../js/api/reportApi';
 import apiClient from '../../js/public/axiosConfig';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
+import { handleUserLogout } from 'js/api/UserLogout';
 
 const currentUserNo = JSON.parse(sessionStorage.getItem('userInfo'))?.userNo;
 
@@ -33,7 +34,7 @@ export default function GoodsReviewWriteModal({
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportData, setReportData] = useState({ category: '', content: '' });
   const [currentReviewId, setCurrentReviewId] = useState(null);
-  const baseURL = axios.defaults.baseURL;
+  const baseURL = apiClient.defaults.baseURL;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -74,6 +75,9 @@ export default function GoodsReviewWriteModal({
         setReviewedOrderNos(doneSet);
       } catch (err) {
         console.error('주문 목록 조회 오류', err);
+        if (err.response.status === 423) {
+          handleUserLogout();
+        }
       }
     })();
   }, [isOpen, goodsId, userNo, review, isEditing]);
@@ -96,6 +100,9 @@ export default function GoodsReviewWriteModal({
       setFormData(f => ({ ...f, imageIds: [...f.imageIds, ...uploaded] }));
     } catch (err) {
       console.error('이미지 업로드 오류', err);
+      if (err.response.status === 423) {
+        handleUserLogout();
+      }
       alert('이미지 업로드에 실패했습니다.');
     } finally { e.target.value = ''; }
   };
@@ -107,6 +114,9 @@ export default function GoodsReviewWriteModal({
       setFormData(f => ({ ...f, imageIds: f.imageIds.filter(x => x !== id) }));
     } catch (err) {
       console.error('이미지 삭제 오류', err);
+      if (err.response.status === 423) {
+        handleUserLogout();
+      }
       alert('이미지 삭제에 실패했습니다.');
     }
   };
@@ -130,7 +140,12 @@ export default function GoodsReviewWriteModal({
       await createReport({ boardNo: currentReviewId, category: reportData.category, content: reportData.content, type: 'GOODSREVIEW' });
       setShowReportModal(false);
       alert('신고 완료');
-    } catch { alert('신고 실패'); }
+    } catch(err) {
+      if (err.response.status === 423) {
+        handleUserLogout();
+      }
+      alert('신고 실패');
+    }
   };
   const getDefaultReportContent = cat => {
     switch (cat) {
@@ -148,9 +163,14 @@ export default function GoodsReviewWriteModal({
     setLoading(true);
     try {
       if (isEditing) await apiClient.put(`/goods/${goodsId}/reviews/${formData.id}`, { ...formData, userNo });
-      else await axios.post(`/goods/${goodsId}/reviews`, { ...formData, userNo });
+      else await apiClient.post(`/goods/${goodsId}/reviews`, { ...formData, userNo });
       onSubmitSuccess(); onClose();
-    } catch (err) { alert(err.response?.data?.message || '오류 발생'); }
+    } catch (err) {
+      if (err.response.status === 423) {
+        handleUserLogout();
+      }
+      alert(err.response?.data?.message || '오류 발생');
+    }
     finally { setLoading(false); }
   };
 

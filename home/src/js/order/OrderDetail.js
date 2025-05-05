@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from "react-router-dom";
 import apiClient from './../public/axiosConfig';
 import apiNoAccessClient from '../public/axiosConfigNoAccess';
+import { handleUserLogout } from 'js/api/UserLogout';
 
 function OrderDetail() {
 
@@ -31,6 +32,9 @@ function OrderDetail() {
                 setLoading(false);
             })
             .catch((error) => {
+                if (error.response.status === 423) {
+                    handleUserLogout();
+                }
                 window.location.href = "/order/error";
             })
     }, []);

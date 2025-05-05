@@ -6,6 +6,7 @@ import InquiryImageModal from '../../js/inquiry/InquiryImageModal';
 import styled from 'styled-components';
 import InquiryComment from '../../js/inquiry/InquiryComment';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
+import { handleUserLogout } from 'js/api/UserLogout';
 
 function InquiryView() {
     const {no} = useParams();
@@ -65,6 +66,9 @@ function InquiryView() {
         })
         .catch(function(error) {
             console.log(error);
+            if (error.response.status === 423) {
+                handleUserLogout();
+            }
         })
     }, [no]);
 
@@ -84,6 +88,9 @@ function InquiryView() {
             })
             .catch(function(error){
                 console.log(error);
+                if (error.response.status === 423) {
+                    handleUserLogout();
+                }
             });
         }
     }

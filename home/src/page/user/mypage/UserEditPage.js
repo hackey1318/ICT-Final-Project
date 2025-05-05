@@ -4,6 +4,7 @@ import axios from '../../../js/public/axiosConfig';
 import '../../../css/user/mypage/UserEditPage.css';
 import apiClient from '../../../js/public/axiosConfig';
 import apiNoAccessClient from '../../../js/public/axiosConfigNoAccess';
+import { handleUserLogout } from 'js/api/UserLogout';
 
 export default function UserEditPage() {
   const [form, setForm] = useState({
@@ -24,7 +25,7 @@ export default function UserEditPage() {
 
   // 초기 데이터 로드 및 원본 저장
   useEffect(() => {
-    axios.get('/user')
+    apiClient.get('/user')
       .then(({ data }) => {
         const init = {
           id: data.id || '',
@@ -87,7 +88,10 @@ export default function UserEditPage() {
       const imageId = res.data[0].imageId;
       const imageUrl = `${apiNoAccessClient.defaults.baseURL}/file-system/download/${imageId}`;
       setForm(prev => ({ ...prev, profileImageUrl: imageUrl }));
-    } catch {
+    } catch(error) {
+      if (error.response.status === 423) {
+        handleUserLogout();
+      }
       setError('프로필 이미지를 업로드하는 중 오류가 발생했습니다.');
     }
   };
@@ -97,7 +101,7 @@ export default function UserEditPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.put('/user', {
+      const res = await apiClient.put('/user', {
         email: form.email,
         nickname: form.nickname,
         phone: form.phone,
@@ -112,7 +116,10 @@ export default function UserEditPage() {
         profileImageUrl: res.data.profileImageUrl
       }));
       window.location.href = '/mypage';
-    } catch {
+    } catch (error) {
+      if (error.response.status === 423) {
+        handleUserLogout();
+      }
       setError('회원정보 수정에 실패했습니다. 입력값을 확인해주세요.');
     } finally {
       setLoading(false);

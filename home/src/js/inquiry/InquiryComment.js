@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import apiClient from "../public/axiosConfig";
 import '../../css/inquiry/inquiry.css';
+import { handleManagerLogout, handleUserLogout } from "js/api/UserLogout";
 
 function InquiryComment({writerUserNo, forceShowCommentInput=false}) {
     const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +33,15 @@ function InquiryComment({writerUserNo, forceShowCommentInput=false}) {
             setCommentList(response.data || []);
         } catch(err) {
             console.error("댓글로딩실패 : ", err);
+            if (err.response.status === 423) {
+                const userInfoString = sessionStorage.getItem("userInfo"); // 1. sessionStorage에서 "userInfo" 키로 값을 가져옴
+                const userInfo = JSON.parse(userInfoString);
+                if (userInfo.role === "MANAGER" || userInfo.role === "ADMIN") {
+                    handleManagerLogout();
+                } else {
+                    handleUserLogout();
+                }
+            }
             setCommentList([]);
         } finally {
             setIsLoading(false);
@@ -96,6 +106,15 @@ function InquiryComment({writerUserNo, forceShowCommentInput=false}) {
         })
         .catch(error => {
             console.log(error);
+            if (error.response.status === 423) {
+                const userInfoString = sessionStorage.getItem("userInfo"); // 1. sessionStorage에서 "userInfo" 키로 값을 가져옴
+                const userInfo = JSON.parse(userInfoString);
+                if (userInfo.role === "MANAGER" || userInfo.role === "ADMIN") {
+                    handleManagerLogout();
+                } else {
+                    handleUserLogout();
+                }
+            }
         })
     }
     console.log("writerUserNo:", writerUserNo);

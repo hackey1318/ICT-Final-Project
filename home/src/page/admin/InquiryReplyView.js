@@ -5,6 +5,7 @@ import InquiryImageModal from "../../js/inquiry/InquiryImageModal";
 import InquiryComment from "../../js/inquiry/InquiryComment";
 import apiClient from "../../js/public/axiosConfig";
 import apiNoAccessClient from './../../js/public/axiosConfigNoAccess';
+import { handleManagerLogout } from "js/api/UserLogout";
 
 function InquiryReplyView() {
     const {no} = useParams();
@@ -69,6 +70,9 @@ function InquiryReplyView() {
         })
         .catch(function(error) {
             console.log(error);
+            if (error.response.status === 423) {
+                handleManagerLogout();
+            }
         })
     }, [no]);
 
@@ -107,6 +111,9 @@ function InquiryReplyView() {
         })
         .catch(error => {
             console.error("상태 변경 API 오류:", error.response ? error.response.data : error.message);
+            if (error.response.status === 423) {
+                handleManagerLogout();
+            }
             alert(error.response?.data?.message || "상태 변경 중 오류가 발생했습니다.");
             event.target.value = inquiryVO.proceed;
         })

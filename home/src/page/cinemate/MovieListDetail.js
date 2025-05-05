@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 import apiClient from "../../js/public/axiosConfig";
+import { handleUserLogout } from "js/api/UserLogout";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -70,6 +71,9 @@ function MovieListDetail() {
 			}
 		} catch (err) {
 			console.error("좋아요 처리 중 오류:", err);
+			if (err.response.status === 423) {
+				handleUserLogout();
+			}
 		}
 	};
 

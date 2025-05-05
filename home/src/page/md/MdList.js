@@ -4,6 +4,7 @@ import MdRegisterModal from "./MdRegisterModal";
 import "../../css/md/MdList.css";
 import Button from '../../js/common/Buttons.js';
 import apiClient from "../../js/public/axiosConfig.js";
+import { handleUserLogout } from "js/api/UserLogout";
 
 function MdList() {
   const [mdList, setMdList] = useState([]);
@@ -39,7 +40,12 @@ function MdList() {
         setMdList(res.data.content);
         setTotalPages(res.data.totalPages);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err)
+        if (err.response.status === 423) {
+          handleUserLogout();
+        }
+      });
   };
 
   const handlePageChange = (newPage) => {
@@ -64,6 +70,9 @@ function MdList() {
     } catch (err) {
       console.error("삭제 실패", err);
       alert("삭제 중 오류 발생");
+      if (err.response.status === 423) {
+        handleUserLogout();
+      }
     }
   };
 

@@ -3,6 +3,7 @@ import apiClient from "../../../js/public/axiosConfig";
 import Pagination from "../../../js/public/Pagination";
 import '../../../css/cinemate/myCinemates.css';
 import { useNavigate } from "react-router-dom";
+import { handleUserLogout } from "js/api/UserLogout";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -26,6 +27,9 @@ function MyCinemates(){
             setTotalPages(response.data.totalPages);
         }).catch((error)=>{
             console.log(error);
+            if (error.response.status === 423) {
+                handleUserLogout();
+            }
             setTotalPages(0);
         });
     },[currentPage]);

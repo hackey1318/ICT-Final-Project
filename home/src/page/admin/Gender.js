@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import GenderChart from "../../js/dashboard/GenderChart";
 import apiClient from "../../js/public/axiosConfig";
+import { handleManagerLogout } from "js/api/UserLogout";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -15,6 +16,9 @@ function Gender(){
             console.log(response.data);
             setData(response.data);
         }).catch((error)=>{
+            if (error.response.status === 423) {
+                handleManagerLogout();
+            }
             console.log(error);
         });
     },[]);

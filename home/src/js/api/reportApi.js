@@ -1,4 +1,5 @@
 import apiClient from "../public/axiosConfig";
+import { handleUserLogout } from "./UserLogout";
 
 export const createReport = async (reportData) => {
     try {
@@ -105,6 +106,9 @@ export const createReport = async (reportData) => {
       const response = await apiClient.put(`/report/deactiveBadReporter/${reporterNo}`);
       return response.data;
     } catch(error) {
+      if (error.response.status === 423) {
+        handleUserLogout();
+      }
       throw new Error(error.response?.data?.message || '유저 상태 변경 실패');
     }
   };

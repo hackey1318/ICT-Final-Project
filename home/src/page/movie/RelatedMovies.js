@@ -6,6 +6,7 @@ import 'swiper/css/pagination';
 import { Link } from "react-router-dom";
 import apiClient from '../../js/public/axiosConfig'; // apiClient import
 import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
+import { handleUserLogout } from "js/api/UserLogout";
 
 export default function RelatedMovies({ movieNo }) {
 	const [relatedMovies, setRelatedMovies] = useState([]);
@@ -14,7 +15,12 @@ export default function RelatedMovies({ movieNo }) {
 		// 관련 영화 데이터를 API로 가져옵니다.
 		apiClient.get(`/relate-movie?no=${movieNo}`)
 			.then(response => setRelatedMovies(response.data.content))  // Page<MovieCardResponse>의 'content' 필드
-			.catch(error => console.error("Error fetching related movies:", error));
+			.catch(error => {
+        console.error("Error fetching related movies:", error)
+        if (error.response.status === 423) {
+          handleUserLogout();
+        }
+    });
 	}, [movieNo]);
 
 	return (

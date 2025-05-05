@@ -5,6 +5,7 @@ import { getReviews, updateReview } from '../../js/api/reviewApi';
 import './../../css/movie/ReviewWritePage.css';
 import apiClient from '../../js/public/axiosConfig';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
+import { handleUserLogout } from 'js/api/UserLogout';
 
 function ReviewEditPage() {
   // 라우트에서 :id 로 선언된 파라미터를 movieNo로 사용
@@ -60,6 +61,9 @@ function ReviewEditPage() {
       ]);
     } catch (err) {
       console.error('이미지 업로드 실패:', err);
+      if (err.response.status === 423) {
+        handleUserLogout();
+      }
     }
   };
 

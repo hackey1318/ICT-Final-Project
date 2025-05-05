@@ -4,6 +4,7 @@ import { deactiveBadReporter, getReporterList, getReporterReports } from "../../
 import { FaSearch } from 'react-icons/fa';
 import '../../css/admin/ReportDetail.css';
 import ReporterDetail from "./ReporterDetail";
+import { handleUserLogout } from "js/api/UserLogout";
 
 const formatDate = (dateString) => {
     try {
@@ -68,6 +69,9 @@ function ReporterList() {
                 const reports = await getReporterReports(reporterNo);
                 setUserReports(prev => ({...prev, [reporterNo]: reports}));
             } catch (err) {
+                if (err.response.status === 423) {
+                    handleUserLogout();
+                }
                 console.error('신고 내역을 불러오는데 실패했습니다:', err);
             }
         }

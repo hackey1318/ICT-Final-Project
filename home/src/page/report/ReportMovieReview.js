@@ -1,3 +1,5 @@
+import { createReport } from "js/api/reportApi";
+import { handleUserLogout } from "js/api/UserLogout";
 import { useEffect, useState } from "react";
 
 function ReportMovieReview({ isOpen, onClose, targetType, targetContentId, targetTitle }) {
@@ -53,10 +55,10 @@ function ReportMovieReview({ isOpen, onClose, targetType, targetContentId, targe
         setIsSubmitting(true);
         try {
             const reportData = {
-                type: type,
-                boardId: boardId,
-                category: category,
-                content: content
+                type: targetType,
+                boardId: targetContentId,
+                category: selectedCategory,
+                content: reportedContent,
             };
 
             await createReport(reportData);
@@ -64,6 +66,9 @@ function ReportMovieReview({ isOpen, onClose, targetType, targetContentId, targe
             onClose();
         } catch(error) {
             setErrorMessage(error.message || "신고 처리 중 오류가 발생했습니다.");
+            if (error.response.status === 423) {
+                handleUserLogout();
+            }
         } finally {
             setIsSubmitting(false);
         }

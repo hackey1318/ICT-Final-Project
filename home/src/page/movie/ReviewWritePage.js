@@ -5,6 +5,7 @@ import { postReview } from '../../js/api/reviewApi';
 import './../../css/movie/ReviewWritePage.css';
 import apiClient from '../../js/public/axiosConfig';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
+import { handleUserLogout } from 'js/api/UserLogout';
 
 function ReviewWritePage() {
 
@@ -50,6 +51,9 @@ function ReviewWritePage() {
       ]);
     } catch (err) {
       console.error('이미지 업로드 실패:', err);
+      if (err.response.status === 423) {
+        handleUserLogout();
+      }
     }
   };
 
@@ -62,6 +66,9 @@ function ReviewWritePage() {
           });
     } catch (err) {
       console.warn('서버 이미지 삭제 실패:', err);
+      if (err.response.status === 423) {
+        handleUserLogout();
+      }
     }
   
     // 프론트 상태도 제거
@@ -84,7 +91,12 @@ function ReviewWritePage() {
 
     postReview(movieNo, payload)
       .then(() => navigate(`/movies/${movieNo}/reviews`))
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        if (err.response.status === 423) {
+          handleUserLogout();
+        }
+        console.error(err)}
+      );
   };
 
   

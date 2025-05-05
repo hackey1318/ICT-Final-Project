@@ -5,11 +5,12 @@ import { useParams } from "react-router-dom";
 import arrow from '../../img/arrow.png';
 import RelatedMovie from "../movie/RelatedMovie";
 import LikeType from "../../js/common/LikeType";
-import { Heart, Share } from "lucide-react";
+import { Heart, Share2 } from "lucide-react";
 import GoodsReviewList from "./GoodsReviewList";
 import GoodsReviewWriteModal from "./GoodsReviewWriteModal";
 import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 import apiClient from "../../js/public/axiosConfig";
+import { handleUserLogout } from "js/api/UserLogout";
 
 const getUserNoFromToken = () => {
   const token = sessionStorage.getItem('accessToken');
@@ -108,6 +109,9 @@ const GoodsDetail = () => {
 			setLiked(likeData.status === "ACTIVE");
 		} catch (err) {
 			console.error("좋아요 처리 중 오류:", err);
+      if (err.response.status === 423) {
+        handleUserLogout();
+      }
 		}
 	};
 
@@ -151,7 +155,7 @@ const GoodsDetail = () => {
               onClick={toggleLike}
             />
             )}
-            <Share
+            <Share2
               className="movie_detail_icon ms-2"
               onClick={handleCopyUrl}
             />

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Button from '../../js/common/Buttons.js';
 import '../../css/dashboard/AdminList.css';
 import apiClient from "../../js/public/axiosConfig.js";
+import { handleManagerLogout } from "js/api/UserLogout.js";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -37,7 +38,12 @@ function ManagerList() {
                 data.content.forEach(item => { initial[item.no] = item.role; });
                 setSelectStates(initial);
             })
-            .catch(err => console.error("관리자 리스트 조회 실패:", err));
+            .catch(err => {
+                console.error("관리자 리스트 조회 실패:", err)
+                if (err.response.status === 423) {
+                    handleManagerLogout();
+                }
+            });
     };
 
     // 초기 로드 및 페이지 변경
@@ -62,7 +68,12 @@ function ManagerList() {
             if (!window.confirm(`MANAGER ${userNo}번을 삭제하시겠습니까?`)) return;
             apiClient.post(`/manager/home/manager-delete/${userNo}`, {},)
                 .then(() => getManagerList(page))
-                .catch(err => console.error(err));
+                .catch(err => {
+                    console.error(err)
+                    if (err.response.status === 423) {
+                        handleManagerLogout();
+                    }
+                });
         }
     };
 

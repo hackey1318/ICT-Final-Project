@@ -6,6 +6,7 @@ import ChatBox from "./ChatBox"; // 채팅 컴포넌트를 분리해서 가져�
 import '../../css/cinemate/MovieRoom.css';
 import apiClient from "../../js/public/axiosConfig";
 import KakaoMap from "../../js/api/KakaoMap";
+import { handleUserLogout } from "js/api/UserLogout";
 
 const accessToken = sessionStorage.getItem("accessToken");
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
@@ -28,14 +29,26 @@ export default function MovieRoom() {
     }, [no, isJoined]);
 
     const fetctParticipantCount = async () => {
-        const res = await apiClient.get(`/cinemate/movies/${movieNo}/room/${no}/members/count`,);
-        setParticipantCount(res.data)
-
+        try {
+            const res = await apiClient.get(`/cinemate/movies/${movieNo}/room/${no}/members/count`,);
+            setParticipantCount(res.data)
+        } catch (error) {
+            console.error("참여자 수 불러오기 실패:", error);
+            if (error.response.status === 423) {
+                handleUserLogout();
+            }
+        }
     }
 
     const fetchMovieRoomJoinStatus = async () => {
-        const res = await apiClient.get(`/cinemate/movies/${movieNo}/room/${no}`, );
-        setIsJoined(res.data.result);
+        try {
+            const res = await apiClient.get(`/cinemate/movies/${movieNo}/room/${no}`, );
+            setIsJoined(res.data.result);
+        } catch (error) {
+            if (error.response.status === 423) {
+                handleUserLogout();
+            }
+        }
     };
 
     const fetchJoinedUsers = async () => {
@@ -46,6 +59,9 @@ export default function MovieRoom() {
             setShowJoinedModal(true);
         } catch (error) {
             console.error("참여자 목록 불러오기 실패:", error);
+            if (error.response.status === 423) {
+                handleUserLogout();
+            }
         }
     };
 
@@ -64,12 +80,21 @@ export default function MovieRoom() {
             fetctParticipantCount();
         }catch(error){
             alert("참여 중 오류 발생");
+            if (error.response.status === 423) {
+                handleUserLogout();
+            }
         }
     };
 
     const handleCancel = async () => {
-        await apiClient.delete(`/cinemate/movies/${movieNo}/room/${no}`, );
-        setIsJoined(false);
+        try {
+            await apiClient.delete(`/cinemate/movies/${movieNo}/room/${no}`, );
+            setIsJoined(false);
+        } catch (error) {
+            if (error.response.status === 423) {
+                handleUserLogout();
+            }
+        }
     };
 
     if (!movie && !theater) return <div>로딩 중...</div>;

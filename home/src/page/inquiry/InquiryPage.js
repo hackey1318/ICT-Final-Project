@@ -7,6 +7,7 @@ import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
 import apiClient from '../../js/public/axiosConfig';
 import InquiryPwdModal from '../../js/inquiry/InquiryPwdModal';
 import Pagination from '../../js/public/Pagination';
+import { handleUserLogout } from 'js/api/UserLogout';
 
 function InquiryPage() {
     let [inquiryModalOpen, setInquiryModalOpen] = useState(false);
@@ -115,6 +116,8 @@ function InquiryPage() {
             let errorMsg = "비밀번호 확인 중 에러 발생";
             if(error.response?.status === 401) {
                 errorMsg = "비밀번호가 일치하지않습니다.";
+            } else if (error.response.status === 423) {
+                handleUserLogout();
             } else if(error.response?.data?.message) {
                 errorMsg = error.response.data.message;
             }

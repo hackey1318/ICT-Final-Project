@@ -4,6 +4,7 @@ import addFile from '../../img/plus.jpg';
 import InquiryEditor from '../../js/inquiry/InquiryEditor.js';
 import  apiClient from '../../js/public/axiosConfig.js';
 import axios from 'axios';
+import { handleUserLogout } from 'js/api/UserLogout';
 
 const InquiryWrite = ({ onClose, onSuccess }) => {
     let [subject, setSubject] = useState();
@@ -127,6 +128,9 @@ const InquiryWrite = ({ onClose, onSuccess }) => {
             })
             .catch(function (error) {
                 console.log("문의전송실패 = ", error);
+                if (error.response.status === 423) {
+                    handleUserLogout();
+                }
                 alert("문의작성을 실패하였습니다.")
                 return;
             })

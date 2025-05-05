@@ -4,6 +4,7 @@ import Button from '../../js/common/Buttons.js';
 
 import { useEffect, useState } from "react";
 import apiClient from '../../js/public/axiosConfig.js';
+import { handleUserLogout } from 'js/api/UserLogout';
 const accessToken = sessionStorage.getItem("accessToken");
 
 function MemberList(){
@@ -45,6 +46,9 @@ function MemberList(){
 
         }).catch((error)=>{
             console.log(error);
+            if (error.response.status === 423) {
+                handleUserLogout();
+            }
         });
     };
 

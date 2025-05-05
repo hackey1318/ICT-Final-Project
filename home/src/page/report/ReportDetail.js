@@ -2,6 +2,7 @@ import '../../css/admin/ReportDetail.css';
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getReportByNo, updateReportStatus } from "../../js/api/reportApi";
+import { handleUserLogout } from 'js/api/UserLogout';
 
 
 const reportCategoryMap = {
@@ -47,6 +48,9 @@ function ReportDetail() {
             setReport(data);
             setCurrentStatus(data.status || '');
         } catch(err) {
+            if (err.response.status === 423) {
+                handleUserLogout();
+            }
             setError(err.message);
         } finally {
             setIsLoading(false);
@@ -75,6 +79,9 @@ function ReportDetail() {
             alert(`신고처리가 ${currentStatus}로 변경되었습니다.`)
             await fetchReportDetail();
         } catch (err) {
+            if (err.response.status === 423) {
+                    handleUserLogout();
+            }
             setError(err.message);
             alert(`신고 처리 중 오류 발생 : ${err.message}`);
         } finally {

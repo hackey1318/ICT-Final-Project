@@ -114,18 +114,25 @@ function OrderList() {
                                     }
                                 </div>
                                 <div className="orderList_actions">
-                                    {
-                                        order?.statusText !== "결제 대기" &&
+                                    {order?.statusText === "결제 대기" ? (
+                                        <span className="orderList_link" onClick={() => window.location.href = `/mypage/cart`}>
+                                            <b>{"장바구니로 이동 >"}</b>
+                                        </span>
+                                    ) : (
                                         <div>
-                                            <span className="orderList_link" onClick={() => window.location.href = `/mypage/order/detail?orderNumber=${order.orderNumber}`}><b>{"상세 보기 >"}</b></span>
+                                            <span className="orderList_link" onClick={() => window.location.href = `/mypage/order/detail?orderNumber=${order.orderNumber}`}>
+                                                <b>{"상세 보기 >"}</b>
+                                            </span>
                                             <br />
-                                            {
-                                                order?.statusText === "결제 완료" &&
-                                                <span className="orderList_link" onClick={() => cancelOrder(paymentKeyList[orderIndex], order.id)}><b>{"주문 취소 >"}</b></span>
-                                            }
+                                            {order?.statusText === "결제 완료" && (
+                                                <span className="orderList_link" onClick={() => cancelOrder(paymentKeyList[orderIndex], order.id)}>
+                                                    <b>{"주문 취소 >"}</b>
+                                                </span>
+                                            )}
                                         </div>
-                                    }
+                                    )}
                                 </div>
+
                             </div>
                             <div className="orderItem_container">
                                 {orderItemList[orderIndex].map((item, itemIndex) => {
