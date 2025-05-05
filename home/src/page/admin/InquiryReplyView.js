@@ -5,7 +5,7 @@ import InquiryImageModal from "../../js/inquiry/InquiryImageModal";
 import InquiryComment from "../../js/inquiry/InquiryComment";
 import apiClient from "../../js/public/axiosConfig";
 import apiNoAccessClient from './../../js/public/axiosConfigNoAccess';
-import { handleManagerLogout } from "js/api/UserLogout";
+import { handleManagerLogout } from "./../../js/api/UserLogout";
 
 function InquiryReplyView() {
     const {no} = useParams();

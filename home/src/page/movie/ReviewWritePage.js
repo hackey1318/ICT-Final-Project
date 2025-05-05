@@ -5,7 +5,7 @@ import { postReview } from '../../js/api/reviewApi';
 import './../../css/movie/ReviewWritePage.css';
 import apiClient from '../../js/public/axiosConfig';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
-import { handleUserLogout } from 'js/api/UserLogout';
+import { handleUserLogout } from '../../js/api/UserLogout';
 
 function ReviewWritePage() {
 

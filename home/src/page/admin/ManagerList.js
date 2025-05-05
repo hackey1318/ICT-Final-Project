@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Button from '../../js/common/Buttons.js';
 import '../../css/dashboard/AdminList.css';
 import apiClient from "../../js/public/axiosConfig.js";
-import { handleManagerLogout } from "js/api/UserLogout.js";
+import { handleManagerLogout } from "../../js/api/UserLogout.js";
 
 const accessToken = sessionStorage.getItem("accessToken");
 

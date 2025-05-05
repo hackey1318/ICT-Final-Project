@@ -6,7 +6,7 @@ import { deleteGoodsList, getGoodsList, getTheaterList } from "./CartApi";
 import KakaoMap from '../api/KakaoMap';
 import apiClient from '../public/axiosConfig';
 import apiNoAccessClient from '../public/axiosConfigNoAccess';
-import { handleUserLogout } from 'js/api/UserLogout';
+import { handleUserLogout } from '../api/UserLogout';
 
 function Cart() {
     const [goods, setGoods] = useState([]);

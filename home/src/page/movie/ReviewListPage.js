@@ -9,7 +9,7 @@ import '../../css/movie/ReviewListPage.css';
 import MoviePagination from '../../js/public/Pagination';
 import noreviewig from '../../img/logout.png';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
-import { handleUserLogout } from 'js/api/UserLogout';
+import { handleUserLogout } from '../../js/api/UserLogout';
 
 function ReviewListPage({ movieNo, currentUserNo }) {
   const [reviews, setReviews] = useState([]);

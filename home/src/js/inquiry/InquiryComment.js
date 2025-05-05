@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import apiClient from "../public/axiosConfig";
 import '../../css/inquiry/inquiry.css';
-import { handleManagerLogout, handleUserLogout } from "js/api/UserLogout";
+import { handleManagerLogout, handleUserLogout } from "../api/UserLogout";
 
 function InquiryComment({writerUserNo, forceShowCommentInput=false}) {
     const [isLoading, setIsLoading] = useState(false);

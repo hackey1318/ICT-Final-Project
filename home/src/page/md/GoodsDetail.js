@@ -10,7 +10,7 @@ import GoodsReviewList from "./GoodsReviewList";
 import GoodsReviewWriteModal from "./GoodsReviewWriteModal";
 import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 import apiClient from "../../js/public/axiosConfig";
-import { handleUserLogout } from "js/api/UserLogout";
+import { handleUserLogout } from "../../js/api/UserLogout";
 
 const getUserNoFromToken = () => {
   const token = sessionStorage.getItem('accessToken');

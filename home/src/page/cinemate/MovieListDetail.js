@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 import apiClient from "../../js/public/axiosConfig";
-import { handleUserLogout } from "js/api/UserLogout";
+import { handleUserLogout } from "../../js/api/UserLogout";
 
 const accessToken = sessionStorage.getItem("accessToken");
 

@@ -4,7 +4,7 @@ import MdRegisterModal from "./MdRegisterModal";
 import "../../css/md/MdList.css";
 import Button from '../../js/common/Buttons.js';
 import apiClient from "../../js/public/axiosConfig.js";
-import { handleUserLogout } from "js/api/UserLogout";
+import { handleUserLogout } from "../../js/api/UserLogout";
 
 function MdList() {
   const [mdList, setMdList] = useState([]);

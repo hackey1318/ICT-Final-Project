@@ -4,7 +4,7 @@ import Button from '../../js/common/Buttons.js';
 
 import { useEffect, useState } from "react";
 import apiClient from '../../js/public/axiosConfig.js';
-import { handleUserLogout } from 'js/api/UserLogout';
+import { handleUserLogout } from '../../js/api/UserLogout';
 const accessToken = sessionStorage.getItem("accessToken");
 
 function MemberList(){

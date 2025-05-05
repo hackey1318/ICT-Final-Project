@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import GenderChart from "../../js/dashboard/GenderChart";
 import apiClient from "../../js/public/axiosConfig";
-import { handleManagerLogout } from "js/api/UserLogout";
+import { handleManagerLogout } from "../../js/api/UserLogout";
 
 const accessToken = sessionStorage.getItem("accessToken");
 

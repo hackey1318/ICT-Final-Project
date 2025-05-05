@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from "react-router-dom";
 import apiClient from './../public/axiosConfig';
 import apiNoAccessClient from '../public/axiosConfigNoAccess';
-import { handleUserLogout } from 'js/api/UserLogout';
+import { handleUserLogout } from '../api/UserLogout';
 
 function OrderDetail() {
 

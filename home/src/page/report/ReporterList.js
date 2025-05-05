@@ -4,7 +4,7 @@ import { deactiveBadReporter, getReporterList, getReporterReports } from "../../
 import { FaSearch } from 'react-icons/fa';
 import '../../css/admin/ReportDetail.css';
 import ReporterDetail from "./ReporterDetail";
-import { handleUserLogout } from "js/api/UserLogout";
+import { handleUserLogout } from "../../js/api/UserLogout";
 
 const formatDate = (dateString) => {
     try {

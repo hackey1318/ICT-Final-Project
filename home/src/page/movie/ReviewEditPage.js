@@ -5,7 +5,7 @@ import { getReviews, updateReview } from '../../js/api/reviewApi';
 import './../../css/movie/ReviewWritePage.css';
 import apiClient from '../../js/public/axiosConfig';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
-import { handleUserLogout } from 'js/api/UserLogout';
+import { handleUserLogout } from '../../js/api/UserLogout';
 
 function ReviewEditPage() {
   // 라우트에서 :id 로 선언된 파라미터를 movieNo로 사용

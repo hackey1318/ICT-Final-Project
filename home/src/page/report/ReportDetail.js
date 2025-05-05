@@ -2,7 +2,7 @@ import '../../css/admin/ReportDetail.css';
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getReportByNo, updateReportStatus } from "../../js/api/reportApi";
-import { handleUserLogout } from 'js/api/UserLogout';
+import { handleUserLogout } from '../../js/api/UserLogout';
 
 
 const reportCategoryMap = {

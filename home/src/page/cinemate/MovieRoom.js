@@ -6,7 +6,7 @@ import ChatBox from "./ChatBox"; // 채팅 컴포넌트를 분리해서 가져�
 import '../../css/cinemate/MovieRoom.css';
 import apiClient from "../../js/public/axiosConfig";
 import KakaoMap from "../../js/api/KakaoMap";
-import { handleUserLogout } from "js/api/UserLogout";
+import { handleUserLogout } from "../../js/api/UserLogout";
 
 const accessToken = sessionStorage.getItem("accessToken");
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));

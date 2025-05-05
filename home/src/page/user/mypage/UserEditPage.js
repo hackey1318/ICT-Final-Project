@@ -4,7 +4,7 @@ import axios from '../../../js/public/axiosConfig';
 import '../../../css/user/mypage/UserEditPage.css';
 import apiClient from '../../../js/public/axiosConfig';
 import apiNoAccessClient from '../../../js/public/axiosConfigNoAccess';
-import { handleUserLogout } from 'js/api/UserLogout';
+import { handleUserLogout } from '../../../js/api/UserLogout';
 
 export default function UserEditPage() {
   const [form, setForm] = useState({

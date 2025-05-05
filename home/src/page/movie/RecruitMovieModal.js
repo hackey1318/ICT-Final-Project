@@ -3,7 +3,7 @@ import "../../css/movie/RecruitMovie.css"
 import { searchTheaters } from './../../js/movie/TheaterAPI';
 import { generateCineMate } from './../../js/movie/CineMate';
 import { max } from "lodash";
-import { handleUserLogout } from "js/api/UserLogout";
+import { handleUserLogout } from "./../../js/api/UserLogout";
 
 export default function RecruitMovieModal({ movie, closeModal }) {
 

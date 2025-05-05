@@ -6,7 +6,7 @@ import 'swiper/css/pagination';
 import { Link } from "react-router-dom";
 import apiClient from '../../js/public/axiosConfig'; // apiClient import
 import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
-import { handleUserLogout } from "js/api/UserLogout";
+import { handleUserLogout } from "../../js/api/UserLogout";
 
 export default function RelatedMovies({ movieNo }) {
 	const [relatedMovies, setRelatedMovies] = useState([]);

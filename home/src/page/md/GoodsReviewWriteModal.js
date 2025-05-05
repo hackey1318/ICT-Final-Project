@@ -6,7 +6,7 @@ import './../../css/md/GoodsReportModal.css';
 import { createReport } from '../../js/api/reportApi';
 import apiClient from '../../js/public/axiosConfig';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
-import { handleUserLogout } from 'js/api/UserLogout';
+import { handleUserLogout } from '../../js/api/UserLogout';
 
 const currentUserNo = JSON.parse(sessionStorage.getItem('userInfo'))?.userNo;
 
