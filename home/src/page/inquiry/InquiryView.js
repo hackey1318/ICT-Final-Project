@@ -6,7 +6,7 @@ import InquiryImageModal from '../../js/inquiry/InquiryImageModal';
 import styled from 'styled-components';
 import InquiryComment from '../../js/inquiry/InquiryComment';
 import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
-import { handleUserLogout } from 'js/api/UserLogout';
+import { handleUserLogout } from '../../js/api/UserLogout';
 
 function InquiryView() {
     const {no} = useParams();

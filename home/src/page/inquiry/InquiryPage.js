@@ -7,7 +7,7 @@ import apiNoAccessClient from '../../js/public/axiosConfigNoAccess';
 import apiClient from '../../js/public/axiosConfig';
 import InquiryPwdModal from '../../js/inquiry/InquiryPwdModal';
 import Pagination from '../../js/public/Pagination';
-import { handleUserLogout } from 'js/api/UserLogout';
+import { handleUserLogout } from '../../js/api/UserLogout';
 
 function InquiryPage() {
     let [inquiryModalOpen, setInquiryModalOpen] = useState(false);

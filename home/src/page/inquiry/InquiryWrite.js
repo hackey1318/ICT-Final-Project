@@ -4,7 +4,7 @@ import addFile from '../../img/plus.jpg';
 import InquiryEditor from '../../js/inquiry/InquiryEditor.js';
 import  apiClient from '../../js/public/axiosConfig.js';
 import axios from 'axios';
-import { handleUserLogout } from 'js/api/UserLogout';
+import { handleUserLogout } from '../../js/api/UserLogout';
 
 const InquiryWrite = ({ onClose, onSuccess }) => {
     let [subject, setSubject] = useState();
