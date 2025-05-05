@@ -79,11 +79,11 @@ export default function NotificationList () {
         <div className="notification-page-container">
             <div className="notification-page-header">
                 <h2>알림 목록</h2>
-                {allNotifications.length > 0 && (
+                {/* {allNotifications.length > 0 && (
                     <button className="notification-page-readall-btn" onClick={handleMarkAllAsRead}>
                         전체 읽음
                     </button>
-                )}
+                )} */}
             </div>
     
             {loading && allNotifications.length === 0 ? (
@@ -97,13 +97,13 @@ export default function NotificationList () {
                                     <p className="notification-page-message">{notification.content}</p>
                                     <div className="notification-page-time-actions">
                                         <span className="notification-page-time">{moment(notification.createdAt).fromNow()}</span>
-                                        <button
+                                        {/* <button
                                             className="notification-page-delete-btn"
                                             onClick={() => handleMarkAsRead(notification.id)}
                                             aria-label="읽음 표시"
                                         >
                                             <X size={16} />
-                                        </button>
+                                        </button> */}
                                     </div>
                                 </div>
                             </li>

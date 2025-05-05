@@ -2,6 +2,7 @@ package com.ict.finalProject.orders.service.dto;
 
 import com.ict.finalProject.domain.constant.OrdersStatus;
 import com.ict.finalProject.orders.repository.domain.Orders;
+import com.ict.finalProject.orders.repository.domain.constant.PickUpStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class OrdersDto {
     private OrdersStatus status;
     private String statusText;
     private int totalPrice;
+    private PickUpStatus pickUpStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -28,6 +30,7 @@ public class OrdersDto {
         this.orderNumber = orders.getOrderNumber();
         this.status = orders.getStatus();
         this.statusText = "";
+        this.pickUpStatus = orders.getPickUpStatus();
         this.totalPrice = orders.getTotalPrice();
         this.createdAt = orders.getCreatedAt();
         this.updatedAt = orders.getUpdatedAt();
