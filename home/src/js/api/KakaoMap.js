@@ -24,7 +24,7 @@ const KakaoMap = ({ theaterName, latitude, longitude, height = "200px" }) => {
                 renderMap();
             } else {
                 const script = document.createElement("script");
-                script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=529a138dc67ecb47c984fcda3ff98a50&autoload=false&libraries=services";
+                script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=24b0f63fb963a2c72fe0aeb661df2b31&autoload=false&libraries=services";
                 script.async = true;
                 script.onload = () => {
                     window.kakao.maps.load(() => {

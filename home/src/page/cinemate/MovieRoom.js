@@ -135,7 +135,7 @@ export default function MovieRoom() {
                 </div>
 
                 <div style={{width:'50%', textAlign:'center'}}>
-                    <label>모집장소 : <span style={{fontSize:'1.3em', fontWeight:'bold'}}>{movie.theaterName}</span></label>
+                    <label>모집장소 : <span style={{fontSize:'1.3em', fontWeight:'bold'}}>{movie ? movie.theaterName : theater.theaterName}</span></label>
                     <KakaoMap
                         theaterName={movie ? movie.theaterName : theater.theaterName}
                         latitude={movie ? movie.latitude : theater.latitude}
