@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,6 +18,7 @@ public class MovieDetailResponse {
     private String postImage;
     private String description;
     private String externalLink;
+    private List<String> stillCutList;
     private String name;
     private LocalDate openDate;
     private MovieStatus openStatus;

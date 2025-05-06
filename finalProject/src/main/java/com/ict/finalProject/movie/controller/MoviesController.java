@@ -88,7 +88,7 @@ public class MoviesController {
             MovieDetailResponse responseDto = modelMapper.map(movieEntity, MovieDetailResponse.class);
 
             responseDto.setExternalLink(movieEntity.getExternalLink());
-
+            responseDto.setStillCutList(moviesService.getStillCuts(movieNo));
 
             // 3. 성공 응답 (HTTP 200 OK)과 DTO 반환
             return ResponseEntity.ok(responseDto);

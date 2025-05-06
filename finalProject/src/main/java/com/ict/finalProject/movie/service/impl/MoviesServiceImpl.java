@@ -2,6 +2,7 @@ package com.ict.finalProject.movie.service.impl;
 
 import com.ict.finalProject.common.exception.custom.NotFoundException;
 import com.ict.finalProject.domain.constant.StatusInfo;
+import com.ict.finalProject.movie.repository.MovieStillCutsRepository;
 import com.ict.finalProject.movie.repository.MoviesCustomRepository;
 import com.ict.finalProject.movie.repository.MoviesRepository;
 import com.ict.finalProject.movie.repository.constant.movie.MovieStatus;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 public class MoviesServiceImpl implements MoviesService {
 
     private final MoviesRepository moviesRepository;
+    private final MovieStillCutsRepository movieStillCutsRepository;
     private final LikesRepository likesRepository;
 
     private final MoviesCustomRepository moviesCustomRepository;
@@ -77,5 +79,10 @@ public class MoviesServiceImpl implements MoviesService {
     @Override
     public Page<Movies> searchMovieByBanner(Pageable pageable, String name) {
         return moviesRepository.searchMoviesByBanner(name, List.of(MovieStatus.ACTIVE, MovieStatus.PENDING), pageable);
+    }
+
+    @Override
+    public List<String> getStillCuts(Integer movieNo) {
+        return movieStillCutsRepository.findImageLinksByMovieNo(movieNo);
     }
 }
