@@ -29,7 +29,7 @@ services:
     image: mysql:8
     container_name: mysql-db
     environment:
-      MYSQL_ROOT_PASSWORD: 5678  # MySQL root 비밀번호
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # MySQL root 비밀번호
       MYSQL_DATABASE: shopping   # 사용할 DB 이름
     ports:
       - "3306:3306"  # MySQL 포트

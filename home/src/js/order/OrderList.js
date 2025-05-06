@@ -124,7 +124,7 @@ function OrderList() {
                                                 <b>{"상세 보기 >"}</b>
                                             </span>
                                             <br />
-                                            {order?.statusText === "결제 완료" && order?.pickUpStatus === 'BEFORE' (
+                                            {order?.statusText === "결제 완료" && order?.pickUpStatus === 'BEFORE' && (
                                                 <span className="orderList_link" onClick={() => cancelOrder(paymentKeyList[orderIndex], order.id)}>
                                                     <b>{"주문 취소 >"}</b>
                                                 </span>
