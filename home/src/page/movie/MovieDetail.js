@@ -7,6 +7,14 @@ import LikeType from "../../js/common/LikeType"
 import RecruitMovieModal from "./RecruitMovieModal"
 import RelatedMovie from './RelatedMovie';
 
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/autoplay';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+
 const BASE_URL = 'http://192.168.1.252:9988/file-system/download/';
 const accessToken = sessionStorage.getItem("accessToken") // 세션 스토리지에서 accessToken을 가져옵니다.
 
@@ -298,6 +306,42 @@ function MovieDetail() {
 					<div className="text-center text-muted mt-3">
 						관련 상품이 존재하지 않습니다.
 					</div>
+				)}
+			</div>
+
+			{/* === 스틸컷 섹션 === */}
+			<div className="movie_detail_stillcuts_section mt-5">
+				<h2 className="movie_detail_section_title">스틸컷</h2>
+
+				{movie.stillCutList && movie.stillCutList.length > 0 ? (
+					<Swiper
+						modules={[Navigation, Pagination, Autoplay]}
+						navigation
+						pagination={{ clickable: true }}
+						autoplay={{ delay: 3000 }}
+						loop
+						spaceBetween={10}
+						slidesPerView={1}
+						style={{ width: '100%', height: 'auto' }}
+					>
+						{movie.stillCutList.map((imageUrl, index) => (
+							<SwiperSlide key={index}>
+								<div className="movie_detail_stillcut_slide">
+									<img
+										src={imageUrl}
+										alt={`스틸컷 ${index + 1}`}
+										className="movie_detail_stillcut_img img-fluid rounded"
+										onError={(e) => {
+											e.target.onerror = null;
+											e.target.src = "/placeholder.jpg";
+										}}
+									/>
+								</div>
+							</SwiperSlide>
+						))}
+					</Swiper>
+				) : (
+					<p className="text-muted">스틸컷이 없습니다.</p>
 				)}
 			</div>
 

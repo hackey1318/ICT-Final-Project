@@ -24,4 +24,6 @@ public interface MoviesService {
     List<Movies> getRecommendationMovie(Integer userNo, int count);
 
     Page<Movies> searchMovieByBanner(Pageable pageable, String name);
+
+    List<String> getStillCuts(Integer movieNo);
 }
