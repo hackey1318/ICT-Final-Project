@@ -28,7 +28,7 @@ public interface ActiveUsersRepository extends JpaRepository<ActiveUsers, Intege
     @Query(value = "SELECT DATE_FORMAT(created_at, '%Y-%m') AS date, COUNT(*) AS user_count " +
             "FROM shopping.active_users " +
             "WHERE DATE_FORMAT(created_at, '%Y-%m') BETWEEN :startDate AND :endDate " +
-            "GROUP BY DATE_FORMAT(created_at, '%Y-%m')", nativeQuery = true)
+            "GROUP BY DATE_FORMAT(created_at, '%Y-%m') ORDER BY DATE_FORMAT(created_at, '%Y-%m')", nativeQuery = true)
     List<ActiveUsersResponse> getMonthActiveUsersList(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
     //활동인원수 총합계(기간 적용)
