@@ -8,6 +8,7 @@ services:
       - "9988:9988"  # BE 서버 포트
     environment:
       - SPRING_PROFILES_ACTIVE=prod  # 프로덕션 프로파일 활성화 (선택사항)
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     networks:
       - app-network
     volumes:
