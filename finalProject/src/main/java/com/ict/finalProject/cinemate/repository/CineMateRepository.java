@@ -17,8 +17,8 @@ public interface CineMateRepository extends JpaRepository<CineMates, Integer> {
 
     //시네메이트 영화 목록
     @Query(
-            value = "SELECT DISTINCT c.movie_no, m.name, m.open_date, m.post_image, m.age_grade FROM cine_mates AS c LEFT JOIN movies AS m ON c.movie_no = m.no;",
-            countQuery = "SELECT COUNT(DISTINCT c.movie_no) FROM cine_mates c",
+            value = "SELECT DISTINCT c.movie_no, m.name, m.open_date, m.post_image, m.age_grade FROM cine_mates AS c LEFT JOIN movies AS m ON c.movie_no = m.no WHERE c.status = 'ACTIVE'",
+            countQuery = "SELECT COUNT(DISTINCT c.movie_no) FROM cine_mates c WHERE c.status = 'ACTIVE'",
             nativeQuery = true
     )
     Page<Object[]> findDistinctMovieInfo(Pageable pageable);
@@ -28,7 +28,7 @@ public interface CineMateRepository extends JpaRepository<CineMates, Integer> {
             value="select c.no, c.created_at, c.max_member_count, c.meeting_date, c.movie_no, c.theater_no, c.updated_at, c.user_no, c.content, " +
             "m.age_grade, m.description, m.director, m.name, m.open_date, m.post_image, m.genre, c.user_no " +
             "from cine_mates c left join movies m on c.movie_no = m.no " +
-            "where c.movie_no = :movieNo",
+            "where c.movie_no = :movieNo AND c.status = 'ACTIVE'",
             nativeQuery = true
     )
     List<Object[]> getMovieDetail(@Param("movieNo") Integer movieNo);
@@ -36,7 +36,7 @@ public interface CineMateRepository extends JpaRepository<CineMates, Integer> {
     //시네메이트 영화관 목록
     @Query(value="SELECT c.theater_no, t.name " +
             "FROM cine_mates c " +
-            "LEFT JOIN theaters t ON c.theater_no = t.no " +
+            "LEFT JOIN theaters t ON c.theater_no = t.no WHERE c.status = 'ACTIVE' " +
             "GROUP BY c.theater_no, t.name;",
             nativeQuery = true)
     Page<Object[]> findDistinctTheaterInfo(Pageable pageable);
@@ -48,7 +48,7 @@ public interface CineMateRepository extends JpaRepository<CineMates, Integer> {
             "from cine_mates c " +
             "left join movies m on c.movie_no = m.no " +
             "left join users u on c.user_no = u.no " +
-            "where c.theater_no = :theaterNo;",
+            "where c.theater_no = :theaterNo AND c.status = 'ACTIVE';",
             nativeQuery = true
     )
     List<Object[]> getTheaterDetail(@Param("theaterNo") Integer theaterNo);
