@@ -32,7 +32,7 @@ export default function UserAnnounceDetail() {
             <h3>{announce.title}</h3>
             <p className="text-muted">{new Date(announce.createdAt).toLocaleString()}</p>
             <hr />
-            <p>{announce.content}</p>
+            <p dangerouslySetInnerHTML={{ __html: announce.content }} />
             <Link to="/announcements" className="btn btn-secondary mt-3">← 목록으로</Link>
         </div>
     );
