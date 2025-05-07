@@ -35,7 +35,7 @@ export default function NotificationList () {
 
     const handleMarkAsRead = async (notificationId) => {
         try {
-            const updatedNotifications = allNotifications.filter((notification) => notification.id !== notificationId);
+            const updatedNotifications = allNotifications.filter((notification) => notification.no !== notificationId);
             setAllNotifications(updatedNotifications);
             setNotificationCount((prev) => Math.max(0, prev - 1));
             await markNotificationAsRead(notificationId);
@@ -56,7 +56,7 @@ export default function NotificationList () {
 
     const handleMarkAllAsRead = async () => {
         try {
-            const notificationIds = allNotifications.map((notification) => notification.id);
+            const notificationIds = allNotifications.map((notification) => notification.no);
             await markNotificationAsRead(notificationIds);
             setAllNotifications([]);
             setNotificationCount(0);

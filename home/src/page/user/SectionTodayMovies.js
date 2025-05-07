@@ -19,7 +19,7 @@ const MovieGridItem = ({ movie, onClickItem }) => (
 						: 'N/A'}`
 				}
 			</div>
-			<div className="TodayMovies_title">{movie.name} | {movie.openStatus}</div>
+			<div className="TodayMovies_title">{movie.name}</div>
 			{/* shortDesc 대신 description을 사용하고 CSS로 말줄임 처리하는 것이 더 일반적 */}
 			{/* CSS에서 .TodayMovies_shortDesc 스타일 유지 */}
 			<div className="TodayMovies_shortDesc">{movie.description}</div>

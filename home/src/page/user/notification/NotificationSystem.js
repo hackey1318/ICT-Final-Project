@@ -50,7 +50,7 @@ export default function NotificationSystem() {
     const handleMarkAsRead = async (notificationId) => {
         try {
             // 읽음 처리 전에 UI 업데이트 (로컬 상태에서 제거)
-            const updatedNotifications = allNotifications.filter((notification) => notification.id !== notificationId);
+            const updatedNotifications = allNotifications.filter((notification) => notification.no !== notificationId);
             setAllNotifications(updatedNotifications);
     
             // 알림 카운트 업데이트
@@ -78,7 +78,7 @@ export default function NotificationSystem() {
 
     const handleMarkAllAsRead = async () => {
         try {
-            const notificationIds = allNotifications.map((notification) => notification.id)
+            const notificationIds = allNotifications.map((notification) => notification.no)
 
             await markNotificationAsRead(notificationIds)
 
