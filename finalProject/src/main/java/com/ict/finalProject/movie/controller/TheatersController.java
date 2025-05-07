@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -24,5 +21,10 @@ public class TheatersController {
     public Page<TheaterResponse> searchTheaters(@PageableDefault(page = 0, size = 10, sort = {"name"}) Pageable pageable,
                                                 @RequestParam String keyword) {
         return theatersService.getTheaterNames(keyword, pageable);
+    }
+
+    @GetMapping("/{theaterNo}")
+    public TheaterResponse getTheater(@PathVariable("theaterNo") Integer theaterNo) {
+        return theatersService.getTheaterInfo(theaterNo);
     }
 }

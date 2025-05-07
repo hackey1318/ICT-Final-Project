@@ -11,6 +11,8 @@ public interface TheatersService {
 
     List<TheaterResponse> getAllTheaterNames();
 
+    TheaterResponse getTheaterInfo(Integer theaterNo);
+
     void saveTheaterList(List<Theaters> theaters);
 
     int getTheaterNo(String theaterName);

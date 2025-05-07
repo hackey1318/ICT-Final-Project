@@ -302,7 +302,8 @@ public class CineMateServiceImpl implements CineMateService {
                 .createdAt((result[11] != null ? ((Timestamp) result[11]).toLocalDateTime() : null))
                 .content((String) result[12])
                 .userNo((Integer) result[13])
-                .postImage((String) result[14]).build();
+                .postImage((String) result[14])
+                .theaterNo((Integer) result[15]).build();
         });
     }
 }

@@ -5,6 +5,7 @@ import com.ict.finalProject.movie.repository.TheatersRepository;
 import com.ict.finalProject.movie.repository.domain.Theaters;
 import com.ict.finalProject.movie.service.TheatersService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class TheatersServiceImpl implements TheatersService {
 
     private final TheatersRepository theatersRepository;
 
+    private final ModelMapper modelMapper;
+
     public List<TheaterResponse> getAllTheaterNames() {
         return theatersRepository.findAll()
                 .stream()
@@ -27,6 +30,11 @@ public class TheatersServiceImpl implements TheatersService {
                         .latitude(theaters.getLatitude())
                         .longitude(theaters.getLongitude()).build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public TheaterResponse getTheaterInfo(Integer theaterNo) {
+        return modelMapper.map(theatersRepository.findById(theaterNo), TheaterResponse.class);
     }
 
     public void saveTheaterList(List<Theaters> theaters) {
