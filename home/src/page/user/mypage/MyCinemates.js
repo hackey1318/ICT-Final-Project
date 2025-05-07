@@ -43,6 +43,8 @@ function MyCinemates(){
 
             const movie = {
                 movieNo: cinemate.movieNo,
+                theaterNo: cinemate.theaterNo,
+                theaterName: cinemate.theaterName,
                 movieName: cinemate.movieName,
                 userName: cinemate.userName,
                 createdAt: cinemate.createdAt,
@@ -54,28 +56,7 @@ function MyCinemates(){
                 postImage: cinemate.postImage,
             };
 
-            // 영화관 조회
-            const theater = {
-                theaterNo: 0,
-                theaterName: '',
-                latitude: '',
-                longitude: ''
-            };
-            apiClient.get(`/theaters/${cinemate.theaterNo}`)
-            .then((response) => {
-                theater.theaterNo = response.data.theaterNo;
-                theater.theaterName = response.data.theaterName;
-                theater.latitude = response.data.latitude;
-                theater.longitude = response.data.longitude;
-            })
-            .catch((error) => {
-                console.error("영화관 조회 실패:", error);
-                if (error.response.status === 423) {
-                    handleUserLogout();
-                }
-            });
-
-			navigation(`/cinemate/movies/${cinemate.movieNo}/room/${cinemate.no}`, { state: { movie, theater } });
+			navigation(`/cinemate/movies/${cinemate.movieNo}/room/${cinemate.no}`, { state: { movie } });
 		} else {
 			alert("로그인이 필요합니다.");
             navigation("/login");
