@@ -1,4 +1,4 @@
-import { useEffect, useState,useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import apiNoAccessClient from "../../js/public/axiosConfigNoAccess";
 import { useNavigate } from "react-router-dom";
 import '../../css/admin/InquiryReply.css';
@@ -20,12 +20,12 @@ function InquiryReply() {
 
     // 검색어
     const handleSearch = e => {
-        e.preventDefault();      
+        e.preventDefault();
         setCurrentPage(0);
         getInquiryList();
-      };
+    };
 
-      const getInquiryList = useCallback(async (page = 0) => {
+    const getInquiryList = useCallback(async (page = 0) => {
         setIsLoading(true);
         try {
             const params = {
@@ -61,7 +61,7 @@ function InquiryReply() {
         }
         setUpdateStatus(prevMap => ({ ...prevMap, [inquiryNo]: true }));
 
-        apiClient.patch(`/inquiry/${inquiryNo}/proceedStatus`, {proceed: newStatus})
+        apiClient.patch(`/inquiry/${inquiryNo}/proceedStatus`, { proceed: newStatus })
             .then(response => {
                 if (response.data?.result === true) {
                     setInquiryList(prevList =>
@@ -71,10 +71,13 @@ function InquiryReply() {
                                 : item
                         )
                     );
-            } else {
-                alert(response.data?.message || "상태 변경에 실패했습니다.");
-            }
-        })
+                } else {
+                    alert(response.data?.message || "상태 변경에 실패했습니다.");
+                }
+            }).catch(error => {
+                console.error("상태 변경 실패:", error);
+                alert("상태 변경에 실패했습니다.");
+            });
     }
 
     const inquiryReplyView = (no) => {
@@ -94,9 +97,9 @@ function InquiryReply() {
             <form className="d-flex justify-content-end mb-3" onSubmit={handleSearch}>
                 <div className="inquiryreply_search-container">
                     <select value={searchType}
-                            onChange={(e) => setSearchType(e.target.value)}
-                            style={{ padding: '12px' }}
-                            className="inquiryreply_dropdown">
+                        onChange={(e) => setSearchType(e.target.value)}
+                        style={{ padding: '12px' }}
+                        className="inquiryreply_dropdown">
                         <option value="inquiryreplySubject">제목</option>
                         <option value="inquiryreplyNickname">작성자</option>
                     </select>
@@ -107,8 +110,8 @@ function InquiryReply() {
                         style={{ padding: '10px' }}
                         placeholder="검색어를 입력하세요"
                     />
-                    <Button variant='primary' 
-                            type='submit'
+                    <Button variant='primary'
+                        type='submit'
                     >
                         검색
                     </Button>
@@ -133,7 +136,7 @@ function InquiryReply() {
                                 return (
                                     <tr className="inquiryreplylist" key={item.no}>
                                         <td>{item.no}</td>
-                                        <td onClick={() => inquiryReplyView(item.no)} style={{cursor:'pointer'}}>{item.subject}</td>
+                                        <td onClick={() => inquiryReplyView(item.no)} style={{ cursor: 'pointer' }}>{item.subject}</td>
                                         <td>{item.nickname}</td>
                                         <td>{new Date(item.createdAt).toLocaleDateString()}</td>
                                         <td>
