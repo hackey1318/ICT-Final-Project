@@ -359,12 +359,18 @@ public class InquiryServiceImpl implements InquiryService {
 
             log.info("문의 상태 변경 시도: inquiryNo={}, 현재 상태={}, 변경할 상태={}",
                     inquiryNo, inquiry.getProceed(), newStatus);
+            if (Proceed.PROCEEDING.equals(inquiry.getProceed()) && (Proceed.BEFORE.equals(newStatus) || Proceed.PROCEEDING.equals(newStatus))) {
+                throw new IllegalArgumentException("변경할 수 없는 상태입니다.");
+            } else if (Proceed.CLOSED.equals(inquiry.getProceed()) && (Proceed.BEFORE.equals(newStatus)  || Proceed.PROCEEDING.equals(newStatus)  || Proceed.CLOSED.equals(newStatus))) {
+                throw new IllegalArgumentException("변경할 수 없는 상태입니다.");
+            }
             inquiry.setProceed(newStatus);
 
             inquiryRepository.save(inquiry);
             log.info("문의 상태 변경 완료: inquiryNo={}, 변경된 상태={}", inquiryNo, newStatus);
 
-            notificationService.generateNotification(inquiry.getUserNo(), "관리자가 문의[" + inquiry.getSubject() + "]를 접수하였습니다.");
+            String processMsg = Proceed.PROCEEDING.equals(newStatus) ? "접수 상태" : Proceed.CLOSED.equals(newStatus) ? "처리 완료 상태" : "";
+            notificationService.generateNotification(inquiry.getUserNo(), "문의[" + inquiry.getSubject() + "] 접수 상태가 " + processMsg + "로 변경되었습니다.");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
