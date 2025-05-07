@@ -324,10 +324,16 @@ public class InquiryServiceImpl implements InquiryService {
             entityManager.persist(comment);
             log.info("새 댓글 저장됨. inquiryNo: {}, commentId: {}, userNo: {}", no, comment.getNo(), comment.getUserNo());
 
-            if (inquiry.getProceed() == Proceed.BEFORE && (UserRole.ADMIN.equals(currentRole) || UserRole.MANAGER.equals(currentRole))) {
-                inquiry.setProceed(Proceed.PROCEEDING);
-                inquiryRepository.save(inquiry);
-                log.info("문의글(No: {}) 상태가 '처리중'으로 변경되었습니다.", no);
+            if ((UserRole.ADMIN.equals(currentRole) || UserRole.MANAGER.equals(currentRole))) {
+
+                if (inquiry.getProceed() == Proceed.BEFORE) {
+                    notificationService.generateNotification(inquiry.getUserNo(), "관리자가 문의[" + inquiry.getSubject() + "]를 접수 후 답변을 남겼습니다.");
+                    inquiry.setProceed(Proceed.PROCEEDING);
+                    inquiryRepository.save(inquiry);
+                    log.info("문의글(No: {}) 상태가 '처리중'으로 변경되었습니다.", no);
+                } else {
+                    notificationService.generateNotification(inquiry.getUserNo(), "관리자가 문의에 답변을 남겼습니다.");
+                }
             }
 
             return true;
