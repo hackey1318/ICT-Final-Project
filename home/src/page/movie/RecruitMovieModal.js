@@ -133,7 +133,7 @@ export default function RecruitMovieModal({ movie, closeModal }) {
         <div className="md_modal-overlay">
             <div className="md_modal-wrapper" style={{ maxWidth: "800px" }}>
                 <div className="md_modal-content">
-                    <div className="md_modal-header">
+                    <div className="md_modal-header md_flex-row justify-between mb-3">
                         <h2 className="md_modal-title">같이 볼 사람 구하기</h2>
                         <button className="md_close-btn" onClick={closeModal}>
                             &times;
