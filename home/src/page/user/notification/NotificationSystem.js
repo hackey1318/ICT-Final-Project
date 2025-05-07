@@ -29,7 +29,8 @@ export default function NotificationSystem() {
     const loadNotifications = async (pageNumber, pageSize) => {
         setLoading(true)
         try {
-            const data = await fetchNotifications(pageNumber, pageSize)
+            const status = "READABLE"
+            const data = await fetchNotifications(pageNumber, pageSize, status)
             setAllNotifications(data.content)  // 현재 페이지의 알림 목록
             setTotalPages(data.totalPages)  // 전체 페이지 수
         } catch (error) {
@@ -132,7 +133,7 @@ export default function NotificationSystem() {
                             <ul className="notification-list">
                                 {allNotifications.map(function (notification) {
                                     return (
-                                    <li key={notification.id} className="notification-item">
+                                    <li key={notification.no} className="notification-item">
                                         <div className="notification-content">
                                             <div className="notification-message-container">
                                                 <p className="notification-message">{notification.content}</p>
@@ -141,7 +142,7 @@ export default function NotificationSystem() {
                                                 <span className="notification-time">{moment(notification.createdAt).fromNow()}
                                                 <button
                                                     className="delete-button"
-                                                    onClick={() => handleMarkAsRead(notification.id)}
+                                                    onClick={() => handleMarkAsRead(notification.no)}
                                                     aria-label="읽음 표시"
                                                 >
                                                     <X className="w-1 h-1" />

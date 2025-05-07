@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotificationResponse {
-    private int id;
+    private int no;
     private String title;
     private String content;
     private NotificationStatus status;

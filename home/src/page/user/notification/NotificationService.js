@@ -11,9 +11,8 @@ export async function fetchNotificationCount() {
     }
 }
 
-export async function fetchNotifications(page, size) {
+export async function fetchNotifications(page, size, status) {
     try {
-        const status = "READABLE"
         const response = await apiClient.get(`/noti/${status}`, {
             params: {
                 page: page,  // 페이지 번호

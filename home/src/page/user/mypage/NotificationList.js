@@ -22,7 +22,8 @@ export default function NotificationList () {
     const loadNotifications = async (pageNumber, pageSize) => {
         setLoading(true);
         try {
-            const data = await fetchNotifications(pageNumber, pageSize);
+            const status = "ALL"
+            const data = await fetchNotifications(pageNumber, pageSize, status);
             setAllNotifications(data.content);
             setTotalPages(data.totalPages);
         } catch (error) {
@@ -92,7 +93,7 @@ export default function NotificationList () {
                 <>
                     <ul className="notification-page-list">
                         {allNotifications.map((notification) => (
-                            <li key={notification.id} className="notification-page-item">
+                            <li key={notification.no} className="notification-page-item">
                                 <div className="notification-page-content">
                                     <p className="notification-page-message">{notification.content}</p>
                                     <div className="notification-page-time-actions">
