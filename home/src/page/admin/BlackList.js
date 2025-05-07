@@ -123,8 +123,8 @@ function BlackList() {
                     value={selectStatus[item.no] || item.status}
                     onChange={e => handleStatusChange(e, item.no)}
                   >
-                    <option value={item.status}>{item.status}</option>
-                    <option value="active">ACTIVE</option>
+                    <option value={item.status}>비활성화</option>
+                    <option value="active">활성화</option>
                   </select>
                 </td>
               </tr>

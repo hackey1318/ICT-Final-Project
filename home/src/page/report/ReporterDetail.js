@@ -11,6 +11,15 @@ const ReporterDetail = ({ reports }) => {
         setDisplayedReports(prev => prev + 4); // 4개씩 더 보여주기
     };
 
+    const reportCategoryMap = {
+        ABUSE: "욕설",
+        CHEAT: "사기",
+        ILLEGALAD: "불법광고",
+        PORNOGRAPHY: "음란물게시",
+        BADSPORT: "비매너행위",
+        ETC: "기타"
+    };
+
     const visibleReports = reports.slice(0, displayedReports);
 
     return (
@@ -29,7 +38,7 @@ const ReporterDetail = ({ reports }) => {
                             }}>
                                 <p>신고 번호: {report.no}</p>
                                 <p>게시글 번호: {report.boardNo}</p>
-                                <p>신고 카테고리: {report.category}</p>
+                                <p>신고 카테고리: {reportCategoryMap[report.category]}</p>
                                 <p>신고 내용: {report.content}</p>
                                 <p>신고 대상: {report.targetNickname}</p>
                             </div>

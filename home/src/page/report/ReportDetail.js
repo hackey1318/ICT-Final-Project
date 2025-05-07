@@ -101,7 +101,7 @@ function ReportDetail() {
     const isFinished = report.status === 'ACCEPTED' || report.status === 'REJECTED';
 
     return (
-        <div>
+        <div className='m-5'>
             <h3>{report.reporterNickname}님의 신고글</h3>
 
             <div className="detail-section">
