@@ -13,6 +13,7 @@ function InquiryView() {
     const IMAGE_BASE_URL = `${apiNoAccessClient.defaults.baseURL}/file-system/showImage/`;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImageIdx, setSelectedImageIdx] = useState(0);
+    const [forceShowCommentInput, setForceShowCommentInput] = useState(false);
 
     let [inquiryVO, setInquiryVO] = useState({
         no: null,
@@ -63,6 +64,7 @@ function InquiryView() {
                 role: response.data.inquiry.role
             });
             console.log(inquiryVO)
+            setForceShowCommentInput(loginUserId != null && response.data.inquiry.userNo != null && parseInt(loginUserId) === parseInt(response.data.inquiry.userNo));
         })
         .catch(function(error) {
             console.log(error);
@@ -119,6 +121,7 @@ function InquiryView() {
     const closeModal = useCallback(() => {
         setIsModalOpen(false);
     }, []);
+
 
     return (
         <div className='inquiry-container'>
@@ -186,7 +189,7 @@ function InquiryView() {
                     </div>
                 </>
             }
-            <InquiryComment writerUserNo={inquiryVO.userNo}/>
+            <InquiryComment writerUserNo={inquiryVO.userNo} forceShowCommentInput={forceShowCommentInput}/>
         </div>
     )
 }

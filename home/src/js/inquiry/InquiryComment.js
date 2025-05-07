@@ -149,8 +149,7 @@ function InquiryComment({writerUserNo, forceShowCommentInput=false}) {
         <br/>
             {console.log("Debug - writerUserNo:", writerUserNo, "loginUserNo:", loginUserNo)}
             {
-                loginUserNo !== null && writerUserNo !== null &&
-                parseInt(loginUserNo) === parseInt(writerUserNo) || forceShowCommentInput &&
+                forceShowCommentInput &&
                 <div style={{width: '100%', margin: '0 auto'}}>
                     <label htmlFor="comment">내용 :</label>
                     <textarea className="form-control" 
