@@ -8,19 +8,17 @@ import com.ict.finalProject.orders.controller.response.OrderManageResponse;
 import com.ict.finalProject.orders.repository.OrdersRepository;
 import com.ict.finalProject.orders.repository.domain.OrderItem;
 import com.ict.finalProject.orders.repository.domain.Orders;
-import com.ict.finalProject.orders.repository.domain.constant.PickUpStatus;
 import com.ict.finalProject.orders.service.OrdersService;
 import com.ict.finalProject.orders.service.dto.OrdersDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -107,10 +105,10 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public Page<OrderManageResponse> getOrderManageResponse(Pageable pageable, Integer theaterNo, OrdersStatus status) {
-        List<OrdersStatus> ordersStatusList = List.of(OrdersStatus.PAID, OrdersStatus.CANCELLED);
-        if(status == OrdersStatus.CANCELLED){
+        List<OrdersStatus> ordersStatusList = new ArrayList<>(List.of(OrdersStatus.PAID, OrdersStatus.CANCELLED));
+        if (status == OrdersStatus.CANCELLED) {
             ordersStatusList.remove(OrdersStatus.PAID);
-        } else if(status == OrdersStatus.PAID) {
+        } else if (status == OrdersStatus.PAID) {
             ordersStatusList.remove(OrdersStatus.CANCELLED);
         }
 
@@ -151,11 +149,16 @@ public class OrdersServiceImpl implements OrdersService {
 
     private String convertStatusToText(OrdersStatus status) {
         switch (status) {
-            case PAID: return "결제 완료";
-            case PENDING: return "결제 대기";
-            case CANCELLED: return "결제 취소";
-            case FAILED: return "결제 실패";
-            default: return "기타";
+            case PAID:
+                return "결제 완료";
+            case PENDING:
+                return "결제 대기";
+            case CANCELLED:
+                return "결제 취소";
+            case FAILED:
+                return "결제 실패";
+            default:
+                return "기타";
         }
     }
 }

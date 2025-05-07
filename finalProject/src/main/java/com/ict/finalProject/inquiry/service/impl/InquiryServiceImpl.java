@@ -15,6 +15,7 @@ import com.ict.finalProject.inquiry.repository.InquiryRepository;
 import com.ict.finalProject.inquiry.repository.domain.Inquiry;
 import com.ict.finalProject.inquiry.repository.domain.InquiryComment;
 import com.ict.finalProject.inquiry.service.InquiryService;
+import com.ict.finalProject.notification.service.NotificationService;
 import com.ict.finalProject.oauth.repository.domain.Users;
 import com.ict.finalProject.user.service.FindUserService;
 import jakarta.persistence.EntityManager;
@@ -43,6 +44,8 @@ public class InquiryServiceImpl implements InquiryService {
     private final FindUserService findUserService;
     private final PasswordEncoder passwordEncoder;
     private final EntityManager entityManager;
+
+    private final NotificationService notificationService;
 
     //문의등록
     @Override
@@ -321,7 +324,7 @@ public class InquiryServiceImpl implements InquiryService {
             entityManager.persist(comment);
             log.info("새 댓글 저장됨. inquiryNo: {}, commentId: {}, userNo: {}", no, comment.getNo(), comment.getUserNo());
 
-            if (inquiry.getProceed() == Proceed.BEFORE && currentRole == UserRole.ADMIN) {
+            if (inquiry.getProceed() == Proceed.BEFORE && (UserRole.ADMIN.equals(currentRole) || UserRole.MANAGER.equals(currentRole))) {
                 inquiry.setProceed(Proceed.PROCEEDING);
                 inquiryRepository.save(inquiry);
                 log.info("문의글(No: {}) 상태가 '처리중'으로 변경되었습니다.", no);
@@ -354,6 +357,8 @@ public class InquiryServiceImpl implements InquiryService {
 
             inquiryRepository.save(inquiry);
             log.info("문의 상태 변경 완료: inquiryNo={}, 변경된 상태={}", inquiryNo, newStatus);
+
+            notificationService.generateNotification(inquiry.getUserNo(), "관리자가 문의[" + inquiry.getSubject() + "]를 접수하였습니다.");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
