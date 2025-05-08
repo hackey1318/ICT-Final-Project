@@ -63,11 +63,14 @@ function AdminFindPwd(){
                 setPwdFound(true);  //일치하는 정보 찾기 성공 상태로 변경
             }else if(response.data.status === "userDelete"){
                 //탈퇴한 사용자의 경우
-                alert("퇴사한 사용자입니다. 관리자에게 문의하세요.");
+                alert("탈퇴한 관리자입니다. 다른 관리자에게 문의하세요.");
                 window.location.href = "/manager";
             }else if(response.data.status === "userNone"){
                 //일치하는 정보 없을 때
                 alert("일치하는 정보가 없습니다.");
+            } else {
+                alert("비활성화된 사용자입니다. 관리자에게 문의하세요.");
+                window.location.href = "/manager";
             }
         }).catch(function(error){
             console.log(error);

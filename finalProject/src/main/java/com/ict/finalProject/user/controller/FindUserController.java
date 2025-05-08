@@ -49,7 +49,7 @@ public class FindUserController {
         response =  handleUserStatus(response, result);
 
         //아이디 마스킹 처리
-        if(result != null && StatusInfo.ACTIVE == result.getStatus()){
+        if(result != null && StatusInfo.ACTIVE.equals(result.getStatus())) {
             String maskedId = findUserService.maskId(result.getId());
             response.setId(maskedId);
         }
@@ -99,13 +99,15 @@ public class FindUserController {
         }
 
         //일치하는 정보가 있을 때
-        if (StatusInfo.ACTIVE == result.getStatus()) {
+        if (StatusInfo.ACTIVE.equals(result.getStatus())) {
             //아이디가 존재하고 활성 상태일 때
             response.setStatus("userActive");
             response.setId(result.getId());
-        } else if (StatusInfo.DELETE == result.getStatus()) {
+        } else if (StatusInfo.DELETE.equals(result.getStatus())) {
             //아이디가 존재하고 비활성 상태일 때
             response.setStatus("userDelete");
+        } else {
+            response.setStatus("userDeactive");
         }
 
         return response;

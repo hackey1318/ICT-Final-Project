@@ -68,6 +68,8 @@ function FindPwd(){
             }else if(response.data.status === "userNone"){
                 //일치하는 정보 없을 때
                 alert("일치하는 정보가 없습니다.");
+            } else {
+                alert("비활성화된 사용자입니다. 관리자에게 문의하세요.");
             }
         }).catch(function(error){
             console.log(error);
