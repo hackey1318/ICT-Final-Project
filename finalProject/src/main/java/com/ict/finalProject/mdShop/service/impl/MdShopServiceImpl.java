@@ -85,7 +85,7 @@ public class MdShopServiceImpl implements MdShopService {
 
     @Override
     public List<MdShopDto> getGoodsInfoByMovieNo(Integer movieNo) {
-        List<GoodsStocks> goodsStocks = goodsStockRepository.findByGoods_MovieNo(movieNo);
+        List<GoodsStocks> goodsStocks = goodsStockRepository.findByMovieNoAndStatus(movieNo, StatusInfo.ACTIVE);
         return goodsStocks.stream().map(good -> {
             List<String> imageIds = imageInfoRepository.findImageIdsByBoardNoAndTypeAndStatus(
                     good.getGoodsNo(), ImageWriteType.GOODS, StatusInfo.ACTIVE);
